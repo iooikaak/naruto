@@ -1,0 +1,19 @@
+//
+// Created by 王振奎 on 2020/9/1.
+//
+
+#ifndef NARUTO_MESSAGE_TYPE_H
+#define NARUTO_MESSAGE_TYPE_H
+
+#define COMMAND_HMGET 1
+
+// pack 常量定义
+#define PACK_HEAD_LEN (PACK_SIZE_LEN + PACK_VERSION_LEN + PACK_FLAG_LEN + PACK_MSG_TYPE_LEN)
+#define PACK_SIZE_LEN 4
+#define PACK_VERSION_LEN 1
+#define PACK_FLAG_LEN 1
+#define PACK_MSG_TYPE_LEN 2
+
+#define PACK_VERSION 1
+
+#endif //NARUTO_MESSAGE_TYPE_H

@@ -1,0 +1,3 @@
+/Users/wangzhenkui/cproj/naruto/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/wangzhenkui/cproj/naruto/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/wangzhenkui/cproj/naruto/cmake-build-debug/CMakeFiles/naruto.dir

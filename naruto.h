@@ -1,0 +1,114 @@
+//
+// Created by 王振奎 on 2020/8/14.
+//
+
+#ifndef NARUTO__NARUTO_H
+#define NARUTO__NARUTO_H
+
+#include <ev++.h>
+#include <string>
+#include <list>
+#include <gflags/gflags.h>
+#include <unistd.h>
+#include <netinet/in.h>
+
+#include "global.h"
+#include "types.h"
+#include "s_connect.h"
+#include "connect_worker.h"
+
+//DEFINE_string(host,"","host");
+
+namespace naruto{
+
+class Naruto{
+public:
+    explicit Naruto(int port = 7290, int tcp_backlog = 521);
+    ~Naruto();
+
+    void onAccept(ev::io&, int);
+    static void onSignal(ev::sig&, int);
+    void run();
+
+private:
+
+    void _init_workers();
+    void _init_signal();
+    void _listen();
+
+    int _set_socket(int);
+
+    // 处理信号，任务线程执行频率
+    int _hz;
+    int _cron_loops;
+
+    // 实际工作线程，数量为 _worker_num
+    ConnectWorker* _workers;
+    int _worker_num;
+
+    ev::io _accept_watcher;
+    ev::sig _sigint;
+    ev::sig _sigterm;
+    ev::sig _sigkill;
+    ev::timer _timer_watcher;
+    ev::default_loop _loop;
+
+    // 本服务器运行时的ID，每次重启都会变化，运行中则不会变
+    // 唯一标识一个运行中的实例
+    std::string _run_id;
+
+    // TCP
+    int _port;
+    int _fd;
+    int _tcp_backlog;
+    std::string _bind_addr;
+    int _bind_add_count;
+
+    // Client
+    // 一个链表，保存了所有客户端状态结构
+    std::list<std::shared_ptr<naruto::Connect>> _clents;
+
+    // 链表，保存了所有待关闭的客户端
+    std::list<std::shared_ptr<naruto::Connect>> _slaves;
+
+    bool _clients_paused; // 暂停客户端
+    mstime_t _clients_pause_end_time;
+
+    // RDB / AOF
+    bool _loading;
+    off_t _loading_total_bytes;
+    off_t _loading_loaded_bytes;
+
+    time_t _loading_start_time;
+    off_t _loading_process_events_interval_bytes;
+
+    // stat
+    int _connect_nums;
+    // 服务器启动时间
+    time_t _stat_start_time;
+    // 已处理命令的数量
+    long long _stat_num_commands;
+    // 服务器接到的连接请求数量
+    long long _stat_num_connections;
+    // 已过期的键数量
+    long long _stat_expire_keys;
+    // 成功查找键的次数
+    long long _stat_keyspace_hits;
+    // 查找键失败的次数
+    long long _stat_keyspace_miss;
+    // 已使用内存峰值
+    size_t _stat_peak_memory;
+    // 服务器因为客户端数量过多而拒绝客户端连接的次数
+    long long _stat_rejected_conn;
+    // 执行 full sync 的次数
+    long long _stat_sync_full;
+    // PSYNC 成功执行的次数
+    long long _stat_sync_partial_ok;
+    // PSYNC 执行失败的次数
+    long long _stat_sync_partial_err;
+
+};
+
+}
+
+#endif //NARUTO__NARUTO_H
