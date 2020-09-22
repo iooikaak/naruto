@@ -1,15 +1,37 @@
 syntax="proto3";
 package protocol;
 
+// 消息发送者信息
 message cluster_header{
+    // 消息发送者的配置纪元
     int64 current_epoch = 1;
+
+    // 如果消息发送者是一个主节点，那么这里记录的是消息发送者的配置纪元
+    // 如果消息发送者是一个从节点，那么这里记录的是消息发送者正在复制的主节点的配置纪元
     int64 config_epoch = 2;
+
+    // 节点的复制偏移量
+    // 如果是 主节点 则为复制偏移量
+    // 如果是从节点 则为已经处理的 复制偏移量
     int64 offset = 3;
+
+    // 消息发送者的名字（ID）
     string sender_name = 4;
+
+    // 如果消息发送者是一个从节点，那么这里记录的是消息发送者正在复制的主节点的名字
+    // 如果消息发送者是一个主节点，那么这里记录的是 REDIS_NODE_NULL_NAME
     string slaveof_name = 5;
+
+    // 消息发送者目前的槽指派信息
     repeated bool myslots = 6; // 16384
+
+    // 消息发送者的端口号
     int32 port = 7;
+
+    // 消息发送者的标识值
     int32 flags = 8;
+
+    // 消息发送者所处集群的状态
     int32 state = 9;
 }
 

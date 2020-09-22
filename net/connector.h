@@ -81,6 +81,10 @@ public:
 
     bool broken() const noexcept;
 
+    std::string errmsg() const;
+
+    int fd() const ;
+
 public:
 
     void _set_error(int type, const std::string& prefix);

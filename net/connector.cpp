@@ -158,5 +158,9 @@ std::string Connector::_remote_addr() {
     return std::string(str) + ":" + std::to_string(in->sin_port);
 }
 
+std::string Connector::errmsg() const { return _errmsg; }
+
+int Connector::fd() const { return _fd; }
+
 }
 }

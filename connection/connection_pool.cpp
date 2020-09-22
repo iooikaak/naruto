@@ -6,10 +6,10 @@
 #include "utils/errors.h"
 
 namespace naruto{
-namespace client{
+namespace connection{
 
 ConnectionPool::ConnectionPool(const ConnectionPoolOptions &pool_opts,
-        const naruto::net::ConnectOptions &opts) : _pool_opts(pool_opts), _opts(opts) {
+                               const naruto::net::ConnectOptions &opts) : _pool_opts(pool_opts), _opts(opts) {
     if (_pool_opts.max_conns == 0){
         naruto::utils::throw_err(CONNECT_ERROR_OTHER, "can not create an empty pool");
     }
@@ -91,11 +91,11 @@ void ConnectionPool::_wait_for_connect(std::unique_lock<std::mutex>& lock) {
             return !(this->_pool.empty());
         })){
             naruto::utils::throw_err(CONNECT_ERROR_OTHER, "fetch a connection time out in " +
-            std::to_string(timeout.count()) + " milliseconds");
+                                                          std::to_string(timeout.count()) + " milliseconds");
         }
     }else{
         _cv.wait(lock, [this] {
-                return !(this->_pool.empty());
+            return !(this->_pool.empty());
         });
     }
 }

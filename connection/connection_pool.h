@@ -12,7 +12,7 @@
 #include "connection.h"
 
 namespace naruto{
-namespace client{
+namespace connection{
 
 
 struct ConnectionPoolOptions {

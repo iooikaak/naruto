@@ -8,7 +8,7 @@
 #include "net/connector.h"
 
 namespace naruto{
-namespace client{
+namespace connection{
 
 class Connect {
 public:
@@ -31,6 +31,8 @@ public:
 
     using ConnectorPtr = std::unique_ptr<naruto::net::Connector>;
     ConnectorPtr connector;
+
+    long long reploff;
 
 private:
 

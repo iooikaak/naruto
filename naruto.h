@@ -16,6 +16,7 @@
 #include "types.h"
 #include "s_connect.h"
 #include "connect_worker.h"
+#include "cluster.h"
 
 //DEFINE_string(host,"","host");
 
@@ -28,15 +29,18 @@ public:
 
     void onAccept(ev::io&, int);
     static void onSignal(ev::sig&, int);
+
+    // 向集群中的所有断线或者未连接节点发送消息
+    // 遍历所有节点，检查是否需要将某个节点标记为下线
+    static void onClusterTimer(ev::timer&, int);
     void run();
 
 private:
 
     void _init_workers();
+    void _init_cluster();
     void _init_signal();
     void _listen();
-
-    int _set_socket(int);
 
     // 处理信号，任务线程执行频率
     int _hz;
@@ -45,13 +49,14 @@ private:
     // 实际工作线程，数量为 _worker_num
     ConnectWorker* _workers;
     int _worker_num;
-
+    bool _cluster_enable;
     ev::io _accept_watcher;
     ev::sig _sigint;
     ev::sig _sigterm;
     ev::sig _sigkill;
     ev::timer _timer_watcher;
     ev::default_loop _loop;
+    Cluster _cluster;
 
     // 本服务器运行时的ID，每次重启都会变化，运行中则不会变
     // 唯一标识一个运行中的实例

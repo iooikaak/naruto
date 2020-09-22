@@ -15,6 +15,9 @@ extern int exit_success_workers;
 extern std::mutex mux;
 extern std::condition_variable cond;
 
+
+extern std::string charset;
+
 }
 
 #endif //NARUTO_GLOBAL_H

@@ -11,4 +11,6 @@ int exit_success_workers = 0;
 std::mutex mux = {};
 std::condition_variable cond = {};
 
+std::string charset = "0123456789abcdef";
+
 }

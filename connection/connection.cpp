@@ -20,7 +20,7 @@
 #include "connection.h"
 
 namespace naruto{
-namespace client{
+namespace connection{
 
 Connect::Connect(const naruto::net::ConnectOptions & opts) : connector(new naruto::net::Connector(opts)) {}
 
@@ -42,7 +42,7 @@ int Connect::connect() {
         return CONNECT_RT_ERR;
     }
 
-retry:
+    retry:
     if (::connect(client_fd, (sockaddr*)&addr, sizeof(addr)) < 0){
         if (errno == EHOSTUNREACH){
             connector->closeConnect();
@@ -89,7 +89,7 @@ void Connect::reconnect(){
 }
 
 auto Connect::last_active() const ->
-    std::chrono::time_point<std::chrono::steady_clock> { return _last_active; }
+std::chrono::time_point<std::chrono::steady_clock> { return _last_active; }
 
 void Connect::update_last_active() noexcept { _last_active = std::chrono::steady_clock::now(); }
 
@@ -159,16 +159,16 @@ int Connect::_check_connect_done(int* completed){
     }
 
     switch (errno){
-    case EISCONN:
-        *completed = 1;
-        break;
-    case EALREADY:
-    case EINPROGRESS:
-    case EWOULDBLOCK:
-        *completed = 0;
-        return CONNECT_RT_OK;
-    default:
-        return CONNECT_RT_ERR;
+        case EISCONN:
+            *completed = 1;
+            break;
+        case EALREADY:
+        case EINPROGRESS:
+        case EWOULDBLOCK:
+            *completed = 0;
+            return CONNECT_RT_OK;
+        default:
+            return CONNECT_RT_ERR;
     }
     return CONNECT_RT_OK;
 }

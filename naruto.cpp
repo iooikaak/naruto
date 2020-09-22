@@ -9,11 +9,12 @@
 
 #include "naruto.h"
 #include "s_connect.h"
+#include "utils/net.h"
 
 namespace naruto{
 
 Naruto::Naruto(int port, int tcp_backlog) : _port(port), _tcp_backlog(tcp_backlog),
-                                            _loop(){
+                                            _loop(), _cluster(port, tcp_backlog){
     // 统计信息初始化
     _stat_start_time = 0;
     _stat_num_commands = 0;
@@ -27,7 +28,7 @@ Naruto::Naruto(int port, int tcp_backlog) : _port(port), _tcp_backlog(tcp_backlo
     _stat_sync_partial_ok = 0;
     _stat_sync_partial_err = 0;
     _connect_nums = 0;
-
+    _cluster_enable = true;
     // RDB / AOF
     _loading = false;
     _loading_total_bytes = 0;
@@ -79,6 +80,9 @@ void Naruto::onSignal(ev::sig& signal, int) {
     signal.stop();
     // 关闭工作线程
     for (int i = 0; i < s->_worker_num; ++i)  s->_workers[i].stop();
+    // 关闭cluster工作线程
+    s->_cluster.stop();
+
     LOG(INFO) << "onSignal...";
     std::unique_lock<std::mutex> lck(mux);
     while (exit_success_workers < s->_worker_num){
@@ -101,9 +105,16 @@ void Naruto::run() {
 void Naruto::_init_workers() {
     LOG(INFO) << "_init_workers...";
     _worker_num = (int)(sysconf(_SC_NPROCESSORS_CONF) *2);
-    _workers = new ConnectWorker[_worker_num];
+    int client_worker_num;
+    if (_cluster_enable){
+        client_worker_num = _worker_num-1;
+    }else{
+        client_worker_num = _worker_num;
+    }
 
-    for (int i = 0; i < _worker_num; ++i) {
+    _workers = new ConnectWorker[client_worker_num];
+
+    for (int i = 0; i < client_worker_num; ++i) {
         _workers[i].async_watcher.set<&ConnectWorker::onAsync>(&_workers[i]);
         _workers[i].async_watcher.set(_workers[i].loop);
         _workers[i].async_watcher.start();
@@ -114,12 +125,14 @@ void Naruto::_init_workers() {
     }
 
     // run workers in thread
-    for (int j = 0; j < _worker_num; ++j) {
+    for (int j = 0; j < client_worker_num; ++j) {
         auto worker = &_workers[j];
         std::thread([worker,j](){
             worker->run(j);
         }).detach();
     }
+
+    if (_cluster_enable) _init_cluster();
 
     // 等待 worker 线程初始化完毕
     std::unique_lock<std::mutex> lck(mux);
@@ -130,41 +143,13 @@ void Naruto::_init_workers() {
 }
 
 void Naruto::_listen() {
-    LOG(INFO) << "_listen...";
-
-    struct sockaddr_in addr{};
-    int addr_len = sizeof(addr);
-    int sd;
-    if ((sd = socket(PF_INET, SOCK_STREAM, 0)) < 0){
-        LOG(ERROR) << "_listen:" << strerror(errno);
+    if ((_fd = naruto::utils::Net::listen(_port, _tcp_backlog)) == -1){
         return;
     }
-
-    LOG(INFO) << "_listen bind sd:" << sd;
-    bzero(&addr, sizeof(addr));
-    addr.sin_family = AF_INET;
-    addr.sin_port = htons(_port);
-    addr.sin_addr.s_addr = INADDR_ANY;
-
-    if (_set_socket(sd) == -1){
-        LOG(ERROR) << "_listen _set_socket error:" << strerror(errno);
-        return;
-    }
-
-    if (bind(sd, (const struct sockaddr*)&addr, addr_len) != 0){
-        LOG(ERROR) << "_listen bind error:" << strerror(errno);
-        return;
-    }
-
-    if (listen(sd, _tcp_backlog) < 0){
-        LOG(ERROR) << "_listen error:" << strerror(errno);
-        return;
-    }
-    _fd = sd;
     _accept_watcher.set(_loop);
     _accept_watcher.set<Naruto, &Naruto::onAccept>(this);
-    _accept_watcher.start(sd, ev::READ);
-    LOG(INFO) << "_listen loop...";
+    _accept_watcher.start(_fd, ev::READ);
+    LOG(INFO) << "naruto listen loop start...";
     _loop.loop(0);
     LOG(INFO) << "_listen end...1";
 }
@@ -181,13 +166,13 @@ void Naruto::_init_signal() {
     _sigkill.start(SIGKILL);
 }
 
-int Naruto::_set_socket(int sd) {
-    int yes = 1;
-    if (setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)) == -1) return -1;
-    int flags;
-    if ((flags = fcntl(sd, F_GETFL)) == -1) return -1;
-    if (fcntl(sd, F_SETFL, flags | O_NONBLOCK) == -1) return -1;
-    return 0;
+void Naruto::_init_cluster() {
+    LOG(INFO) << "cluster run...";
+    std::unique_lock<std::mutex> lck(mux);
+    init_success_workers++;
+    cond.notify_one();
+    std::thread([this]{ _cluster.run(); });
+    lck.unlock();
 }
 
 }

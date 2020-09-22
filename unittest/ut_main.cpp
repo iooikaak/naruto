@@ -7,8 +7,8 @@
 //#include "ut_hiredis.h"
 //#include "ut_bytes.h"
 //#include "ut_cpp.h"
-#include "ut_cpp.h"
-//#include "ut_chrono.h"
+//#include "ut_cpp.h"
+#include "ut_chrono.h"
 
 int main(int argc, char* argv[]){
     ::testing::InitGoogleTest(&argc, argv);

@@ -497,3 +497,9 @@ message command_mhmmapdel{
     repeated string field = 1;
     map<string, keys_type> values = 2;
 }
+
+// ========================cluster meet==============================
+message command_cluster_meet{
+    string ip = 1;
+    int port = 2;
+}

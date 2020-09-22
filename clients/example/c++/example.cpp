@@ -6,8 +6,8 @@
 #include <chrono>
 #include <glog/logging.h>
 
-#include "clients/c++/connection_pool.h"
-#include "clients/c++/connection.h"
+#include "connection/connection_pool.h"
+#include "connection/connection.h"
 #include "protocol/message.pb.h"
 #include "protocol/message_type.h"
 
@@ -15,9 +15,9 @@
 int main(int argc, char* argv[]){
     naruto::net::ConnectOptions options;
     options.host = "127.0.0.1";
-    naruto::client::ConnectionPoolOptions pool_opts;
+    naruto::connection::ConnectionPoolOptions pool_opts;
 
-    naruto::client::ConnectionPool pool(pool_opts, options);
+    naruto::connection::ConnectionPool pool(pool_opts, options);
 
     std::string line;
     std::thread ts[5];

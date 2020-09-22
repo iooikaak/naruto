@@ -4,7 +4,6 @@
 
 
 #include <glog/logging.h>
-#include <sys/socket.h>
 
 #include "utils/errors.h"
 #include "connect_worker.h"
@@ -64,10 +63,20 @@ void ConnectWorker::onEvents(ev::io& watcher, int events) {
     uint8_t flag = pack.get();
     uint16_t type = pack.getShort();
     LOG(INFO) <<" recv:" << c->_remote_addr() << " pack_size:" << pack_size << " version:" << (unsigned)version << " flag:" << (unsigned)flag << " type:" << (unsigned)type;
-    if (type == COMMAND_HMGET){
-        protocol::command_hmget cmd;
-        cmd.ParseFromArray(&pack.data()[PACK_HEAD_LEN], pack_size-PACK_HEAD_LEN);
-        LOG(INFO) << "cmd:" << cmd.DebugString();
+
+    switch (type){
+    case COMMAND_HMGET:
+        {
+            protocol::command_hmget cmd;
+            cmd.ParseFromArray(&pack.data()[PACK_HEAD_LEN], pack_size-PACK_HEAD_LEN);
+            LOG(INFO) << "cmd:" << cmd.DebugString();
+        }
+        break;
+    case COMMAND_CLUSTER_MEET:
+
+        break;
+    default:
+        break;
     }
 }
 
