@@ -13,6 +13,8 @@
 
 #include "global.h"
 #include "s_connect.h"
+#include "utils/bytes.h"
+
 // ConnectWorker 对应一个工作线程
 // 每个线程会并行处理客户端 io
 namespace naruto{
@@ -47,7 +49,7 @@ public:
 
 private:
     void _close_connect(ev::io& watcher, Connect* c);
-
+    naruto::utils::Bytes _aof_buf;
 };
 
 }

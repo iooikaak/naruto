@@ -111,7 +111,6 @@ private:
     long long _stat_sync_partial_ok;
     // PSYNC 执行失败的次数
     long long _stat_sync_partial_err;
-
 };
 
 }
