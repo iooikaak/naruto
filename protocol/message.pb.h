@@ -31,8 +31,8 @@
 #include <google/protobuf/map.h>  // IWYU pragma: export
 #include <google/protobuf/map_entry.h>
 #include <google/protobuf/map_field_inl.h>
-#include <google/protobuf/generated_enum_reflection.h>
 #include <google/protobuf/unknown_field_set.h>
+#include "data.pb.h"
 // @@protoc_insertion_point(includes)
 
 namespace protobuf_message_2eproto {
@@ -40,16 +40,12 @@ namespace protobuf_message_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[104];
+  static const ::google::protobuf::internal::ParseTable schema[103];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
 };
 void AddDescriptors();
-void InitDefaultsVALUE_KvsEntry_DoNotUseImpl();
-void InitDefaultsVALUE_KvsEntry_DoNotUse();
-void InitDefaultsVALUEImpl();
-void InitDefaultsVALUE();
 void InitDefaultscommand_replyImpl();
 void InitDefaultscommand_reply();
 void InitDefaultsvalues_typeImpl();
@@ -90,8 +86,8 @@ void InitDefaultscommand_hmget_replyImpl();
 void InitDefaultscommand_hmget_reply();
 void InitDefaultscommand_mhmgetImpl();
 void InitDefaultscommand_mhmget();
-void InitDefaultscommand_mhmget_reply_ReplyEntry_DoNotUseImpl();
-void InitDefaultscommand_mhmget_reply_ReplyEntry_DoNotUse();
+void InitDefaultscommand_mhmget_reply_DataEntry_DoNotUseImpl();
+void InitDefaultscommand_mhmget_reply_DataEntry_DoNotUse();
 void InitDefaultscommand_mhmget_replyImpl();
 void InitDefaultscommand_mhmget_reply();
 void InitDefaultscommand_delImpl();
@@ -254,9 +250,9 @@ void InitDefaultscommand_mhmmapdel_ValuesEntry_DoNotUseImpl();
 void InitDefaultscommand_mhmmapdel_ValuesEntry_DoNotUse();
 void InitDefaultscommand_mhmmapdelImpl();
 void InitDefaultscommand_mhmmapdel();
+void InitDefaultscommand_meetImpl();
+void InitDefaultscommand_meet();
 inline void InitDefaults() {
-  InitDefaultsVALUE_KvsEntry_DoNotUse();
-  InitDefaultsVALUE();
   InitDefaultscommand_reply();
   InitDefaultsvalues_type();
   InitDefaultskeys_type();
@@ -277,7 +273,7 @@ inline void InitDefaults() {
   InitDefaultscommand_hmget();
   InitDefaultscommand_hmget_reply();
   InitDefaultscommand_mhmget();
-  InitDefaultscommand_mhmget_reply_ReplyEntry_DoNotUse();
+  InitDefaultscommand_mhmget_reply_DataEntry_DoNotUse();
   InitDefaultscommand_mhmget_reply();
   InitDefaultscommand_del();
   InitDefaultscommand_mdel();
@@ -359,15 +355,10 @@ inline void InitDefaults() {
   InitDefaultscommand_hmmapdel();
   InitDefaultscommand_mhmmapdel_ValuesEntry_DoNotUse();
   InitDefaultscommand_mhmmapdel();
+  InitDefaultscommand_meet();
 }
 }  // namespace protobuf_message_2eproto
-namespace protocol {
-class VALUE;
-class VALUEDefaultTypeInternal;
-extern VALUEDefaultTypeInternal _VALUE_default_instance_;
-class VALUE_KvsEntry_DoNotUse;
-class VALUE_KvsEntry_DoNotUseDefaultTypeInternal;
-extern VALUE_KvsEntry_DoNotUseDefaultTypeInternal _VALUE_KvsEntry_DoNotUse_default_instance_;
+namespace client {
 class command_del;
 class command_delDefaultTypeInternal;
 extern command_delDefaultTypeInternal _command_del_default_instance_;
@@ -533,6 +524,9 @@ extern command_mapsetDefaultTypeInternal _command_mapset_default_instance_;
 class command_mdel;
 class command_mdelDefaultTypeInternal;
 extern command_mdelDefaultTypeInternal _command_mdel_default_instance_;
+class command_meet;
+class command_meetDefaultTypeInternal;
+extern command_meetDefaultTypeInternal _command_meet_default_instance_;
 class command_mget;
 class command_mgetDefaultTypeInternal;
 extern command_mgetDefaultTypeInternal _command_mget_default_instance_;
@@ -548,9 +542,9 @@ extern command_mhmgetDefaultTypeInternal _command_mhmget_default_instance_;
 class command_mhmget_reply;
 class command_mhmget_replyDefaultTypeInternal;
 extern command_mhmget_replyDefaultTypeInternal _command_mhmget_reply_default_instance_;
-class command_mhmget_reply_ReplyEntry_DoNotUse;
-class command_mhmget_reply_ReplyEntry_DoNotUseDefaultTypeInternal;
-extern command_mhmget_reply_ReplyEntry_DoNotUseDefaultTypeInternal _command_mhmget_reply_ReplyEntry_DoNotUse_default_instance_;
+class command_mhmget_reply_DataEntry_DoNotUse;
+class command_mhmget_reply_DataEntry_DoNotUseDefaultTypeInternal;
+extern command_mhmget_reply_DataEntry_DoNotUseDefaultTypeInternal _command_mhmget_reply_DataEntry_DoNotUse_default_instance_;
 class command_mhmincr;
 class command_mhmincrDefaultTypeInternal;
 extern command_mhmincrDefaultTypeInternal _command_mhmincr_default_instance_;
@@ -674,232 +668,12 @@ extern keys_typeDefaultTypeInternal _keys_type_default_instance_;
 class values_type;
 class values_typeDefaultTypeInternal;
 extern values_typeDefaultTypeInternal _values_type_default_instance_;
-}  // namespace protocol
-namespace protocol {
+}  // namespace client
+namespace client {
 
-enum TYPE {
-  UNKNOW = 0,
-  NUMBER = 1,
-  NUMBER_LIST = 2,
-  STRING = 3,
-  STRING_LIST = 4,
-  MAP = 5,
-  TYPE_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  TYPE_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool TYPE_IsValid(int value);
-const TYPE TYPE_MIN = UNKNOW;
-const TYPE TYPE_MAX = MAP;
-const int TYPE_ARRAYSIZE = TYPE_MAX + 1;
-
-const ::google::protobuf::EnumDescriptor* TYPE_descriptor();
-inline const ::std::string& TYPE_Name(TYPE value) {
-  return ::google::protobuf::internal::NameOfEnum(
-    TYPE_descriptor(), value);
-}
-inline bool TYPE_Parse(
-    const ::std::string& name, TYPE* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<TYPE>(
-    TYPE_descriptor(), name, value);
-}
 // ===================================================================
 
-class VALUE_KvsEntry_DoNotUse : public ::google::protobuf::internal::MapEntry<VALUE_KvsEntry_DoNotUse, 
-    ::std::string, ::std::string,
-    ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
-    ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
-    0 > {
-public:
-  typedef ::google::protobuf::internal::MapEntry<VALUE_KvsEntry_DoNotUse, 
-    ::std::string, ::std::string,
-    ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
-    ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
-    0 > SuperType;
-  VALUE_KvsEntry_DoNotUse();
-  VALUE_KvsEntry_DoNotUse(::google::protobuf::Arena* arena);
-  void MergeFrom(const VALUE_KvsEntry_DoNotUse& other);
-  static const VALUE_KvsEntry_DoNotUse* internal_default_instance() { return reinterpret_cast<const VALUE_KvsEntry_DoNotUse*>(&_VALUE_KvsEntry_DoNotUse_default_instance_); }
-  void MergeFrom(const ::google::protobuf::Message& other) PROTOBUF_FINAL;
-  ::google::protobuf::Metadata GetMetadata() const;
-};
-
-// -------------------------------------------------------------------
-
-class VALUE : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.VALUE) */ {
- public:
-  VALUE();
-  virtual ~VALUE();
-
-  VALUE(const VALUE& from);
-
-  inline VALUE& operator=(const VALUE& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  VALUE(VALUE&& from) noexcept
-    : VALUE() {
-    *this = ::std::move(from);
-  }
-
-  inline VALUE& operator=(VALUE&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const VALUE& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const VALUE* internal_default_instance() {
-    return reinterpret_cast<const VALUE*>(
-               &_VALUE_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    1;
-
-  void Swap(VALUE* other);
-  friend void swap(VALUE& a, VALUE& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline VALUE* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  VALUE* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
-  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
-  void CopyFrom(const VALUE& from);
-  void MergeFrom(const VALUE& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
-      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const PROTOBUF_FINAL;
-  void InternalSwap(VALUE* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-
-  // accessors -------------------------------------------------------
-
-  // repeated int64 number_list = 3;
-  int number_list_size() const;
-  void clear_number_list();
-  static const int kNumberListFieldNumber = 3;
-  ::google::protobuf::int64 number_list(int index) const;
-  void set_number_list(int index, ::google::protobuf::int64 value);
-  void add_number_list(::google::protobuf::int64 value);
-  const ::google::protobuf::RepeatedField< ::google::protobuf::int64 >&
-      number_list() const;
-  ::google::protobuf::RepeatedField< ::google::protobuf::int64 >*
-      mutable_number_list();
-
-  // repeated string str_list = 5;
-  int str_list_size() const;
-  void clear_str_list();
-  static const int kStrListFieldNumber = 5;
-  const ::std::string& str_list(int index) const;
-  ::std::string* mutable_str_list(int index);
-  void set_str_list(int index, const ::std::string& value);
-  #if LANG_CXX11
-  void set_str_list(int index, ::std::string&& value);
-  #endif
-  void set_str_list(int index, const char* value);
-  void set_str_list(int index, const char* value, size_t size);
-  ::std::string* add_str_list();
-  void add_str_list(const ::std::string& value);
-  #if LANG_CXX11
-  void add_str_list(::std::string&& value);
-  #endif
-  void add_str_list(const char* value);
-  void add_str_list(const char* value, size_t size);
-  const ::google::protobuf::RepeatedPtrField< ::std::string>& str_list() const;
-  ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_str_list();
-
-  // map<string, string> kvs = 6;
-  int kvs_size() const;
-  void clear_kvs();
-  static const int kKvsFieldNumber = 6;
-  const ::google::protobuf::Map< ::std::string, ::std::string >&
-      kvs() const;
-  ::google::protobuf::Map< ::std::string, ::std::string >*
-      mutable_kvs();
-
-  // string str = 4;
-  void clear_str();
-  static const int kStrFieldNumber = 4;
-  const ::std::string& str() const;
-  void set_str(const ::std::string& value);
-  #if LANG_CXX11
-  void set_str(::std::string&& value);
-  #endif
-  void set_str(const char* value);
-  void set_str(const char* value, size_t size);
-  ::std::string* mutable_str();
-  ::std::string* release_str();
-  void set_allocated_str(::std::string* str);
-
-  // int64 number = 2;
-  void clear_number();
-  static const int kNumberFieldNumber = 2;
-  ::google::protobuf::int64 number() const;
-  void set_number(::google::protobuf::int64 value);
-
-  // .protocol.TYPE type = 1;
-  void clear_type();
-  static const int kTypeFieldNumber = 1;
-  ::protocol::TYPE type() const;
-  void set_type(::protocol::TYPE value);
-
-  // @@protoc_insertion_point(class_scope:protocol.VALUE)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedField< ::google::protobuf::int64 > number_list_;
-  mutable int _number_list_cached_byte_size_;
-  ::google::protobuf::RepeatedPtrField< ::std::string> str_list_;
-  ::google::protobuf::internal::MapField<
-      VALUE_KvsEntry_DoNotUse,
-      ::std::string, ::std::string,
-      ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
-      ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
-      0 > kvs_;
-  ::google::protobuf::internal::ArenaStringPtr str_;
-  ::google::protobuf::int64 number_;
-  int type_;
-  mutable int _cached_size_;
-  friend struct ::protobuf_message_2eproto::TableStruct;
-  friend void ::protobuf_message_2eproto::InitDefaultsVALUEImpl();
-};
-// -------------------------------------------------------------------
-
-class command_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_reply) */ {
+class command_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_reply) */ {
  public:
   command_reply();
   virtual ~command_reply();
@@ -934,7 +708,7 @@ class command_reply : public ::google::protobuf::Message /* @@protoc_insertion_p
                &_command_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    2;
+    0;
 
   void Swap(command_reply* other);
   friend void swap(command_reply& a, command_reply& b) {
@@ -1001,7 +775,7 @@ class command_reply : public ::google::protobuf::Message /* @@protoc_insertion_p
   ::google::protobuf::int32 errcode() const;
   void set_errcode(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_reply)
+  // @@protoc_insertion_point(class_scope:client.command_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -1013,7 +787,7 @@ class command_reply : public ::google::protobuf::Message /* @@protoc_insertion_p
 };
 // -------------------------------------------------------------------
 
-class values_type : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.values_type) */ {
+class values_type : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.values_type) */ {
  public:
   values_type();
   virtual ~values_type();
@@ -1048,7 +822,7 @@ class values_type : public ::google::protobuf::Message /* @@protoc_insertion_poi
                &_values_type_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    3;
+    1;
 
   void Swap(values_type* other);
   friend void swap(values_type& a, values_type& b) {
@@ -1095,30 +869,30 @@ class values_type : public ::google::protobuf::Message /* @@protoc_insertion_poi
 
   // accessors -------------------------------------------------------
 
-  // repeated .protocol.VALUE value = 1;
+  // repeated .data.VALUE value = 1;
   int value_size() const;
   void clear_value();
   static const int kValueFieldNumber = 1;
-  const ::protocol::VALUE& value(int index) const;
-  ::protocol::VALUE* mutable_value(int index);
-  ::protocol::VALUE* add_value();
-  ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >*
+  const ::data::VALUE& value(int index) const;
+  ::data::VALUE* mutable_value(int index);
+  ::data::VALUE* add_value();
+  ::google::protobuf::RepeatedPtrField< ::data::VALUE >*
       mutable_value();
-  const ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >&
+  const ::google::protobuf::RepeatedPtrField< ::data::VALUE >&
       value() const;
 
-  // @@protoc_insertion_point(class_scope:protocol.values_type)
+  // @@protoc_insertion_point(class_scope:client.values_type)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::protocol::VALUE > value_;
+  ::google::protobuf::RepeatedPtrField< ::data::VALUE > value_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultsvalues_typeImpl();
 };
 // -------------------------------------------------------------------
 
-class keys_type : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.keys_type) */ {
+class keys_type : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.keys_type) */ {
  public:
   keys_type();
   virtual ~keys_type();
@@ -1153,7 +927,7 @@ class keys_type : public ::google::protobuf::Message /* @@protoc_insertion_point
                &_keys_type_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    4;
+    2;
 
   void Swap(keys_type* other);
   friend void swap(keys_type& a, keys_type& b) {
@@ -1222,7 +996,7 @@ class keys_type : public ::google::protobuf::Message /* @@protoc_insertion_point
   const ::google::protobuf::RepeatedPtrField< ::std::string>& value() const;
   ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_value();
 
-  // @@protoc_insertion_point(class_scope:protocol.keys_type)
+  // @@protoc_insertion_point(class_scope:client.keys_type)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -1233,7 +1007,7 @@ class keys_type : public ::google::protobuf::Message /* @@protoc_insertion_point
 };
 // -------------------------------------------------------------------
 
-class command_set : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_set) */ {
+class command_set : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_set) */ {
  public:
   command_set();
   virtual ~command_set();
@@ -1268,7 +1042,7 @@ class command_set : public ::google::protobuf::Message /* @@protoc_insertion_poi
                &_command_set_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    5;
+    3;
 
   void Swap(command_set* other);
   friend void swap(command_set& a, command_set& b) {
@@ -1329,21 +1103,21 @@ class command_set : public ::google::protobuf::Message /* @@protoc_insertion_poi
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
 
-  // .protocol.VALUE value = 2;
+  // .data.VALUE value = 2;
   bool has_value() const;
   void clear_value();
   static const int kValueFieldNumber = 2;
-  const ::protocol::VALUE& value() const;
-  ::protocol::VALUE* release_value();
-  ::protocol::VALUE* mutable_value();
-  void set_allocated_value(::protocol::VALUE* value);
+  const ::data::VALUE& value() const;
+  ::data::VALUE* release_value();
+  ::data::VALUE* mutable_value();
+  void set_allocated_value(::data::VALUE* value);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_set)
+  // @@protoc_insertion_point(class_scope:client.command_set)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr key_;
-  ::protocol::VALUE* value_;
+  ::data::VALUE* value_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_setImpl();
@@ -1351,13 +1125,13 @@ class command_set : public ::google::protobuf::Message /* @@protoc_insertion_poi
 // -------------------------------------------------------------------
 
 class command_mset_KvsEntry_DoNotUse : public ::google::protobuf::internal::MapEntry<command_mset_KvsEntry_DoNotUse, 
-    ::std::string, ::protocol::VALUE,
+    ::std::string, ::data::VALUE,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > {
 public:
   typedef ::google::protobuf::internal::MapEntry<command_mset_KvsEntry_DoNotUse, 
-    ::std::string, ::protocol::VALUE,
+    ::std::string, ::data::VALUE,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > SuperType;
@@ -1371,7 +1145,7 @@ public:
 
 // -------------------------------------------------------------------
 
-class command_mset : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mset) */ {
+class command_mset : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mset) */ {
  public:
   command_mset();
   virtual ~command_mset();
@@ -1406,7 +1180,7 @@ class command_mset : public ::google::protobuf::Message /* @@protoc_insertion_po
                &_command_mset_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    7;
+    5;
 
   void Swap(command_mset* other);
   friend void swap(command_mset& a, command_mset& b) {
@@ -1454,22 +1228,22 @@ class command_mset : public ::google::protobuf::Message /* @@protoc_insertion_po
 
   // accessors -------------------------------------------------------
 
-  // map<string, .protocol.VALUE> kvs = 1;
+  // map<string, .data.VALUE> kvs = 1;
   int kvs_size() const;
   void clear_kvs();
   static const int kKvsFieldNumber = 1;
-  const ::google::protobuf::Map< ::std::string, ::protocol::VALUE >&
+  const ::google::protobuf::Map< ::std::string, ::data::VALUE >&
       kvs() const;
-  ::google::protobuf::Map< ::std::string, ::protocol::VALUE >*
+  ::google::protobuf::Map< ::std::string, ::data::VALUE >*
       mutable_kvs();
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mset)
+  // @@protoc_insertion_point(class_scope:client.command_mset)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::MapField<
       command_mset_KvsEntry_DoNotUse,
-      ::std::string, ::protocol::VALUE,
+      ::std::string, ::data::VALUE,
       ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
       ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
       0 > kvs_;
@@ -1479,7 +1253,7 @@ class command_mset : public ::google::protobuf::Message /* @@protoc_insertion_po
 };
 // -------------------------------------------------------------------
 
-class command_hset : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hset) */ {
+class command_hset : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hset) */ {
  public:
   command_hset();
   virtual ~command_hset();
@@ -1514,7 +1288,7 @@ class command_hset : public ::google::protobuf::Message /* @@protoc_insertion_po
                &_command_hset_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    8;
+    6;
 
   void Swap(command_hset* other);
   friend void swap(command_hset& a, command_hset& b) {
@@ -1589,22 +1363,29 @@ class command_hset : public ::google::protobuf::Message /* @@protoc_insertion_po
   ::std::string* release_field();
   void set_allocated_field(::std::string* field);
 
-  // .protocol.VALUE value = 3;
+  // .data.VALUE value = 3;
   bool has_value() const;
   void clear_value();
   static const int kValueFieldNumber = 3;
-  const ::protocol::VALUE& value() const;
-  ::protocol::VALUE* release_value();
-  ::protocol::VALUE* mutable_value();
-  void set_allocated_value(::protocol::VALUE* value);
+  const ::data::VALUE& value() const;
+  ::data::VALUE* release_value();
+  ::data::VALUE* mutable_value();
+  void set_allocated_value(::data::VALUE* value);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hset)
+  // int64 ttl = 4;
+  void clear_ttl();
+  static const int kTtlFieldNumber = 4;
+  ::google::protobuf::int64 ttl() const;
+  void set_ttl(::google::protobuf::int64 value);
+
+  // @@protoc_insertion_point(class_scope:client.command_hset)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr key_;
   ::google::protobuf::internal::ArenaStringPtr field_;
-  ::protocol::VALUE* value_;
+  ::data::VALUE* value_;
+  ::google::protobuf::int64 ttl_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_hsetImpl();
@@ -1612,13 +1393,13 @@ class command_hset : public ::google::protobuf::Message /* @@protoc_insertion_po
 // -------------------------------------------------------------------
 
 class command_hmset_ValuesEntry_DoNotUse : public ::google::protobuf::internal::MapEntry<command_hmset_ValuesEntry_DoNotUse, 
-    ::std::string, ::protocol::VALUE,
+    ::std::string, ::data::VALUE,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > {
 public:
   typedef ::google::protobuf::internal::MapEntry<command_hmset_ValuesEntry_DoNotUse, 
-    ::std::string, ::protocol::VALUE,
+    ::std::string, ::data::VALUE,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > SuperType;
@@ -1632,7 +1413,7 @@ public:
 
 // -------------------------------------------------------------------
 
-class command_hmset : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hmset) */ {
+class command_hmset : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hmset) */ {
  public:
   command_hmset();
   virtual ~command_hmset();
@@ -1667,7 +1448,7 @@ class command_hmset : public ::google::protobuf::Message /* @@protoc_insertion_p
                &_command_hmset_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    10;
+    8;
 
   void Swap(command_hmset* other);
   friend void swap(command_hmset& a, command_hmset& b) {
@@ -1715,13 +1496,13 @@ class command_hmset : public ::google::protobuf::Message /* @@protoc_insertion_p
 
   // accessors -------------------------------------------------------
 
-  // map<string, .protocol.VALUE> values = 2;
+  // map<string, .data.VALUE> values = 2;
   int values_size() const;
   void clear_values();
   static const int kValuesFieldNumber = 2;
-  const ::google::protobuf::Map< ::std::string, ::protocol::VALUE >&
+  const ::google::protobuf::Map< ::std::string, ::data::VALUE >&
       values() const;
-  ::google::protobuf::Map< ::std::string, ::protocol::VALUE >*
+  ::google::protobuf::Map< ::std::string, ::data::VALUE >*
       mutable_values();
 
   // string key = 1;
@@ -1738,13 +1519,13 @@ class command_hmset : public ::google::protobuf::Message /* @@protoc_insertion_p
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hmset)
+  // @@protoc_insertion_point(class_scope:client.command_hmset)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::MapField<
       command_hmset_ValuesEntry_DoNotUse,
-      ::std::string, ::protocol::VALUE,
+      ::std::string, ::data::VALUE,
       ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
       ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
       0 > values_;
@@ -1756,13 +1537,13 @@ class command_hmset : public ::google::protobuf::Message /* @@protoc_insertion_p
 // -------------------------------------------------------------------
 
 class command_mhmset_ValuesEntry_DoNotUse : public ::google::protobuf::internal::MapEntry<command_mhmset_ValuesEntry_DoNotUse, 
-    ::std::string, ::protocol::values_type,
+    ::std::string, ::client::values_type,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > {
 public:
   typedef ::google::protobuf::internal::MapEntry<command_mhmset_ValuesEntry_DoNotUse, 
-    ::std::string, ::protocol::values_type,
+    ::std::string, ::client::values_type,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > SuperType;
@@ -1776,7 +1557,7 @@ public:
 
 // -------------------------------------------------------------------
 
-class command_mhmset : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mhmset) */ {
+class command_mhmset : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mhmset) */ {
  public:
   command_mhmset();
   virtual ~command_mhmset();
@@ -1811,7 +1592,7 @@ class command_mhmset : public ::google::protobuf::Message /* @@protoc_insertion_
                &_command_mhmset_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    12;
+    10;
 
   void Swap(command_mhmset* other);
   friend void swap(command_mhmset& a, command_mhmset& b) {
@@ -1881,23 +1662,23 @@ class command_mhmset : public ::google::protobuf::Message /* @@protoc_insertion_
   const ::google::protobuf::RepeatedPtrField< ::std::string>& fields() const;
   ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_fields();
 
-  // map<string, .protocol.values_type> values = 2;
+  // map<string, .client.values_type> values = 2;
   int values_size() const;
   void clear_values();
   static const int kValuesFieldNumber = 2;
-  const ::google::protobuf::Map< ::std::string, ::protocol::values_type >&
+  const ::google::protobuf::Map< ::std::string, ::client::values_type >&
       values() const;
-  ::google::protobuf::Map< ::std::string, ::protocol::values_type >*
+  ::google::protobuf::Map< ::std::string, ::client::values_type >*
       mutable_values();
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mhmset)
+  // @@protoc_insertion_point(class_scope:client.command_mhmset)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::RepeatedPtrField< ::std::string> fields_;
   ::google::protobuf::internal::MapField<
       command_mhmset_ValuesEntry_DoNotUse,
-      ::std::string, ::protocol::values_type,
+      ::std::string, ::client::values_type,
       ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
       ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
       0 > values_;
@@ -1907,7 +1688,7 @@ class command_mhmset : public ::google::protobuf::Message /* @@protoc_insertion_
 };
 // -------------------------------------------------------------------
 
-class command_get : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_get) */ {
+class command_get : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_get) */ {
  public:
   command_get();
   virtual ~command_get();
@@ -1942,7 +1723,7 @@ class command_get : public ::google::protobuf::Message /* @@protoc_insertion_poi
                &_command_get_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    13;
+    11;
 
   void Swap(command_get* other);
   friend void swap(command_get& a, command_get& b) {
@@ -2003,7 +1784,7 @@ class command_get : public ::google::protobuf::Message /* @@protoc_insertion_poi
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_get)
+  // @@protoc_insertion_point(class_scope:client.command_get)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -2014,7 +1795,7 @@ class command_get : public ::google::protobuf::Message /* @@protoc_insertion_poi
 };
 // -------------------------------------------------------------------
 
-class command_get_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_get_reply) */ {
+class command_get_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_get_reply) */ {
  public:
   command_get_reply();
   virtual ~command_get_reply();
@@ -2049,7 +1830,7 @@ class command_get_reply : public ::google::protobuf::Message /* @@protoc_inserti
                &_command_get_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    14;
+    12;
 
   void Swap(command_get_reply* other);
   friend void swap(command_get_reply& a, command_get_reply& b) {
@@ -2096,37 +1877,37 @@ class command_get_reply : public ::google::protobuf::Message /* @@protoc_inserti
 
   // accessors -------------------------------------------------------
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // .protocol.VALUE reply = 2;
-  bool has_reply() const;
-  void clear_reply();
-  static const int kReplyFieldNumber = 2;
-  const ::protocol::VALUE& reply() const;
-  ::protocol::VALUE* release_reply();
-  ::protocol::VALUE* mutable_reply();
-  void set_allocated_reply(::protocol::VALUE* reply);
+  // .data.VALUE data = 2;
+  bool has_data() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::data::VALUE& data() const;
+  ::data::VALUE* release_data();
+  ::data::VALUE* mutable_data();
+  void set_allocated_data(::data::VALUE* data);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_get_reply)
+  // @@protoc_insertion_point(class_scope:client.command_get_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::protocol::command_reply* state_;
-  ::protocol::VALUE* reply_;
+  ::client::command_reply* state_;
+  ::data::VALUE* data_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_get_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_mget : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mget) */ {
+class command_mget : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mget) */ {
  public:
   command_mget();
   virtual ~command_mget();
@@ -2161,7 +1942,7 @@ class command_mget : public ::google::protobuf::Message /* @@protoc_insertion_po
                &_command_mget_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    15;
+    13;
 
   void Swap(command_mget* other);
   friend void swap(command_mget& a, command_mget& b) {
@@ -2230,7 +2011,7 @@ class command_mget : public ::google::protobuf::Message /* @@protoc_insertion_po
   const ::google::protobuf::RepeatedPtrField< ::std::string>& keys() const;
   ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_keys();
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mget)
+  // @@protoc_insertion_point(class_scope:client.command_mget)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -2241,7 +2022,7 @@ class command_mget : public ::google::protobuf::Message /* @@protoc_insertion_po
 };
 // -------------------------------------------------------------------
 
-class command_mget_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mget_reply) */ {
+class command_mget_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mget_reply) */ {
  public:
   command_mget_reply();
   virtual ~command_mget_reply();
@@ -2276,7 +2057,7 @@ class command_mget_reply : public ::google::protobuf::Message /* @@protoc_insert
                &_command_mget_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    16;
+    14;
 
   void Swap(command_mget_reply* other);
   friend void swap(command_mget_reply& a, command_mget_reply& b) {
@@ -2323,40 +2104,40 @@ class command_mget_reply : public ::google::protobuf::Message /* @@protoc_insert
 
   // accessors -------------------------------------------------------
 
-  // repeated .protocol.VALUE reply = 2;
-  int reply_size() const;
-  void clear_reply();
-  static const int kReplyFieldNumber = 2;
-  const ::protocol::VALUE& reply(int index) const;
-  ::protocol::VALUE* mutable_reply(int index);
-  ::protocol::VALUE* add_reply();
-  ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >*
-      mutable_reply();
-  const ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >&
-      reply() const;
+  // repeated .data.VALUE data = 2;
+  int data_size() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::data::VALUE& data(int index) const;
+  ::data::VALUE* mutable_data(int index);
+  ::data::VALUE* add_data();
+  ::google::protobuf::RepeatedPtrField< ::data::VALUE >*
+      mutable_data();
+  const ::google::protobuf::RepeatedPtrField< ::data::VALUE >&
+      data() const;
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mget_reply)
+  // @@protoc_insertion_point(class_scope:client.command_mget_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::protocol::VALUE > reply_;
-  ::protocol::command_reply* state_;
+  ::google::protobuf::RepeatedPtrField< ::data::VALUE > data_;
+  ::client::command_reply* state_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_mget_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_hget : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hget) */ {
+class command_hget : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hget) */ {
  public:
   command_hget();
   virtual ~command_hget();
@@ -2391,7 +2172,7 @@ class command_hget : public ::google::protobuf::Message /* @@protoc_insertion_po
                &_command_hget_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    17;
+    15;
 
   void Swap(command_hget* other);
   friend void swap(command_hget& a, command_hget& b) {
@@ -2466,7 +2247,7 @@ class command_hget : public ::google::protobuf::Message /* @@protoc_insertion_po
   ::std::string* release_field();
   void set_allocated_field(::std::string* field);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hget)
+  // @@protoc_insertion_point(class_scope:client.command_hget)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -2478,7 +2259,7 @@ class command_hget : public ::google::protobuf::Message /* @@protoc_insertion_po
 };
 // -------------------------------------------------------------------
 
-class command_hget_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hget_reply) */ {
+class command_hget_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hget_reply) */ {
  public:
   command_hget_reply();
   virtual ~command_hget_reply();
@@ -2513,7 +2294,7 @@ class command_hget_reply : public ::google::protobuf::Message /* @@protoc_insert
                &_command_hget_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    18;
+    16;
 
   void Swap(command_hget_reply* other);
   friend void swap(command_hget_reply& a, command_hget_reply& b) {
@@ -2560,37 +2341,37 @@ class command_hget_reply : public ::google::protobuf::Message /* @@protoc_insert
 
   // accessors -------------------------------------------------------
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // .protocol.VALUE reply = 2;
-  bool has_reply() const;
-  void clear_reply();
-  static const int kReplyFieldNumber = 2;
-  const ::protocol::VALUE& reply() const;
-  ::protocol::VALUE* release_reply();
-  ::protocol::VALUE* mutable_reply();
-  void set_allocated_reply(::protocol::VALUE* reply);
+  // .data.VALUE data = 2;
+  bool has_data() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::data::VALUE& data() const;
+  ::data::VALUE* release_data();
+  ::data::VALUE* mutable_data();
+  void set_allocated_data(::data::VALUE* data);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hget_reply)
+  // @@protoc_insertion_point(class_scope:client.command_hget_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::protocol::command_reply* state_;
-  ::protocol::VALUE* reply_;
+  ::client::command_reply* state_;
+  ::data::VALUE* data_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_hget_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_hmget : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hmget) */ {
+class command_hmget : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hmget) */ {
  public:
   command_hmget();
   virtual ~command_hmget();
@@ -2625,7 +2406,7 @@ class command_hmget : public ::google::protobuf::Message /* @@protoc_insertion_p
                &_command_hmget_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    19;
+    17;
 
   void Swap(command_hmget* other);
   friend void swap(command_hmget& a, command_hmget& b) {
@@ -2708,7 +2489,7 @@ class command_hmget : public ::google::protobuf::Message /* @@protoc_insertion_p
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hmget)
+  // @@protoc_insertion_point(class_scope:client.command_hmget)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -2720,7 +2501,7 @@ class command_hmget : public ::google::protobuf::Message /* @@protoc_insertion_p
 };
 // -------------------------------------------------------------------
 
-class command_hmget_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hmget_reply) */ {
+class command_hmget_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hmget_reply) */ {
  public:
   command_hmget_reply();
   virtual ~command_hmget_reply();
@@ -2755,7 +2536,7 @@ class command_hmget_reply : public ::google::protobuf::Message /* @@protoc_inser
                &_command_hmget_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    20;
+    18;
 
   void Swap(command_hmget_reply* other);
   friend void swap(command_hmget_reply& a, command_hmget_reply& b) {
@@ -2802,40 +2583,40 @@ class command_hmget_reply : public ::google::protobuf::Message /* @@protoc_inser
 
   // accessors -------------------------------------------------------
 
-  // repeated .protocol.VALUE reply = 2;
-  int reply_size() const;
-  void clear_reply();
-  static const int kReplyFieldNumber = 2;
-  const ::protocol::VALUE& reply(int index) const;
-  ::protocol::VALUE* mutable_reply(int index);
-  ::protocol::VALUE* add_reply();
-  ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >*
-      mutable_reply();
-  const ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >&
-      reply() const;
+  // repeated .data.VALUE data = 2;
+  int data_size() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::data::VALUE& data(int index) const;
+  ::data::VALUE* mutable_data(int index);
+  ::data::VALUE* add_data();
+  ::google::protobuf::RepeatedPtrField< ::data::VALUE >*
+      mutable_data();
+  const ::google::protobuf::RepeatedPtrField< ::data::VALUE >&
+      data() const;
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hmget_reply)
+  // @@protoc_insertion_point(class_scope:client.command_hmget_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::protocol::VALUE > reply_;
-  ::protocol::command_reply* state_;
+  ::google::protobuf::RepeatedPtrField< ::data::VALUE > data_;
+  ::client::command_reply* state_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_hmget_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_mhmget : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mhmget) */ {
+class command_mhmget : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mhmget) */ {
  public:
   command_mhmget();
   virtual ~command_mhmget();
@@ -2870,7 +2651,7 @@ class command_mhmget : public ::google::protobuf::Message /* @@protoc_insertion_
                &_command_mhmget_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    21;
+    19;
 
   void Swap(command_mhmget* other);
   friend void swap(command_mhmget& a, command_mhmget& b) {
@@ -2961,7 +2742,7 @@ class command_mhmget : public ::google::protobuf::Message /* @@protoc_insertion_
   const ::google::protobuf::RepeatedPtrField< ::std::string>& fields() const;
   ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_fields();
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mhmget)
+  // @@protoc_insertion_point(class_scope:client.command_mhmget)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -2973,28 +2754,28 @@ class command_mhmget : public ::google::protobuf::Message /* @@protoc_insertion_
 };
 // -------------------------------------------------------------------
 
-class command_mhmget_reply_ReplyEntry_DoNotUse : public ::google::protobuf::internal::MapEntry<command_mhmget_reply_ReplyEntry_DoNotUse, 
-    ::std::string, ::protocol::values_type,
+class command_mhmget_reply_DataEntry_DoNotUse : public ::google::protobuf::internal::MapEntry<command_mhmget_reply_DataEntry_DoNotUse, 
+    ::std::string, ::client::values_type,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > {
 public:
-  typedef ::google::protobuf::internal::MapEntry<command_mhmget_reply_ReplyEntry_DoNotUse, 
-    ::std::string, ::protocol::values_type,
+  typedef ::google::protobuf::internal::MapEntry<command_mhmget_reply_DataEntry_DoNotUse, 
+    ::std::string, ::client::values_type,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > SuperType;
-  command_mhmget_reply_ReplyEntry_DoNotUse();
-  command_mhmget_reply_ReplyEntry_DoNotUse(::google::protobuf::Arena* arena);
-  void MergeFrom(const command_mhmget_reply_ReplyEntry_DoNotUse& other);
-  static const command_mhmget_reply_ReplyEntry_DoNotUse* internal_default_instance() { return reinterpret_cast<const command_mhmget_reply_ReplyEntry_DoNotUse*>(&_command_mhmget_reply_ReplyEntry_DoNotUse_default_instance_); }
+  command_mhmget_reply_DataEntry_DoNotUse();
+  command_mhmget_reply_DataEntry_DoNotUse(::google::protobuf::Arena* arena);
+  void MergeFrom(const command_mhmget_reply_DataEntry_DoNotUse& other);
+  static const command_mhmget_reply_DataEntry_DoNotUse* internal_default_instance() { return reinterpret_cast<const command_mhmget_reply_DataEntry_DoNotUse*>(&_command_mhmget_reply_DataEntry_DoNotUse_default_instance_); }
   void MergeFrom(const ::google::protobuf::Message& other) PROTOBUF_FINAL;
   ::google::protobuf::Metadata GetMetadata() const;
 };
 
 // -------------------------------------------------------------------
 
-class command_mhmget_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mhmget_reply) */ {
+class command_mhmget_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mhmget_reply) */ {
  public:
   command_mhmget_reply();
   virtual ~command_mhmget_reply();
@@ -3029,7 +2810,7 @@ class command_mhmget_reply : public ::google::protobuf::Message /* @@protoc_inse
                &_command_mhmget_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    23;
+    21;
 
   void Swap(command_mhmget_reply* other);
   friend void swap(command_mhmget_reply& a, command_mhmget_reply& b) {
@@ -3077,42 +2858,42 @@ class command_mhmget_reply : public ::google::protobuf::Message /* @@protoc_inse
 
   // accessors -------------------------------------------------------
 
-  // map<string, .protocol.values_type> reply = 2;
-  int reply_size() const;
-  void clear_reply();
-  static const int kReplyFieldNumber = 2;
-  const ::google::protobuf::Map< ::std::string, ::protocol::values_type >&
-      reply() const;
-  ::google::protobuf::Map< ::std::string, ::protocol::values_type >*
-      mutable_reply();
+  // map<string, .client.values_type> data = 2;
+  int data_size() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::google::protobuf::Map< ::std::string, ::client::values_type >&
+      data() const;
+  ::google::protobuf::Map< ::std::string, ::client::values_type >*
+      mutable_data();
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mhmget_reply)
+  // @@protoc_insertion_point(class_scope:client.command_mhmget_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::MapField<
-      command_mhmget_reply_ReplyEntry_DoNotUse,
-      ::std::string, ::protocol::values_type,
+      command_mhmget_reply_DataEntry_DoNotUse,
+      ::std::string, ::client::values_type,
       ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
       ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
-      0 > reply_;
-  ::protocol::command_reply* state_;
+      0 > data_;
+  ::client::command_reply* state_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_mhmget_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_del : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_del) */ {
+class command_del : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_del) */ {
  public:
   command_del();
   virtual ~command_del();
@@ -3147,7 +2928,7 @@ class command_del : public ::google::protobuf::Message /* @@protoc_insertion_poi
                &_command_del_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    24;
+    22;
 
   void Swap(command_del* other);
   friend void swap(command_del& a, command_del& b) {
@@ -3208,7 +2989,7 @@ class command_del : public ::google::protobuf::Message /* @@protoc_insertion_poi
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_del)
+  // @@protoc_insertion_point(class_scope:client.command_del)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -3219,7 +3000,7 @@ class command_del : public ::google::protobuf::Message /* @@protoc_insertion_poi
 };
 // -------------------------------------------------------------------
 
-class command_mdel : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mdel) */ {
+class command_mdel : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mdel) */ {
  public:
   command_mdel();
   virtual ~command_mdel();
@@ -3254,7 +3035,7 @@ class command_mdel : public ::google::protobuf::Message /* @@protoc_insertion_po
                &_command_mdel_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    25;
+    23;
 
   void Swap(command_mdel* other);
   friend void swap(command_mdel& a, command_mdel& b) {
@@ -3323,7 +3104,7 @@ class command_mdel : public ::google::protobuf::Message /* @@protoc_insertion_po
   const ::google::protobuf::RepeatedPtrField< ::std::string>& keys() const;
   ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_keys();
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mdel)
+  // @@protoc_insertion_point(class_scope:client.command_mdel)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -3334,7 +3115,7 @@ class command_mdel : public ::google::protobuf::Message /* @@protoc_insertion_po
 };
 // -------------------------------------------------------------------
 
-class command_hdel : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hdel) */ {
+class command_hdel : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hdel) */ {
  public:
   command_hdel();
   virtual ~command_hdel();
@@ -3369,7 +3150,7 @@ class command_hdel : public ::google::protobuf::Message /* @@protoc_insertion_po
                &_command_hdel_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    26;
+    24;
 
   void Swap(command_hdel* other);
   friend void swap(command_hdel& a, command_hdel& b) {
@@ -3444,7 +3225,7 @@ class command_hdel : public ::google::protobuf::Message /* @@protoc_insertion_po
   ::std::string* release_field();
   void set_allocated_field(::std::string* field);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hdel)
+  // @@protoc_insertion_point(class_scope:client.command_hdel)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -3456,7 +3237,7 @@ class command_hdel : public ::google::protobuf::Message /* @@protoc_insertion_po
 };
 // -------------------------------------------------------------------
 
-class command_hmdel : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hmdel) */ {
+class command_hmdel : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hmdel) */ {
  public:
   command_hmdel();
   virtual ~command_hmdel();
@@ -3491,7 +3272,7 @@ class command_hmdel : public ::google::protobuf::Message /* @@protoc_insertion_p
                &_command_hmdel_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    27;
+    25;
 
   void Swap(command_hmdel* other);
   friend void swap(command_hmdel& a, command_hmdel& b) {
@@ -3574,7 +3355,7 @@ class command_hmdel : public ::google::protobuf::Message /* @@protoc_insertion_p
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hmdel)
+  // @@protoc_insertion_point(class_scope:client.command_hmdel)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -3586,7 +3367,7 @@ class command_hmdel : public ::google::protobuf::Message /* @@protoc_insertion_p
 };
 // -------------------------------------------------------------------
 
-class command_mhmdel : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mhmdel) */ {
+class command_mhmdel : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mhmdel) */ {
  public:
   command_mhmdel();
   virtual ~command_mhmdel();
@@ -3621,7 +3402,7 @@ class command_mhmdel : public ::google::protobuf::Message /* @@protoc_insertion_
                &_command_mhmdel_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    28;
+    26;
 
   void Swap(command_mhmdel* other);
   friend void swap(command_mhmdel& a, command_mhmdel& b) {
@@ -3712,7 +3493,7 @@ class command_mhmdel : public ::google::protobuf::Message /* @@protoc_insertion_
   const ::google::protobuf::RepeatedPtrField< ::std::string>& fields() const;
   ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_fields();
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mhmdel)
+  // @@protoc_insertion_point(class_scope:client.command_mhmdel)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -3724,7 +3505,7 @@ class command_mhmdel : public ::google::protobuf::Message /* @@protoc_insertion_
 };
 // -------------------------------------------------------------------
 
-class command_incr : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_incr) */ {
+class command_incr : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_incr) */ {
  public:
   command_incr();
   virtual ~command_incr();
@@ -3759,7 +3540,7 @@ class command_incr : public ::google::protobuf::Message /* @@protoc_insertion_po
                &_command_incr_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    29;
+    27;
 
   void Swap(command_incr* other);
   friend void swap(command_incr& a, command_incr& b) {
@@ -3820,21 +3601,21 @@ class command_incr : public ::google::protobuf::Message /* @@protoc_insertion_po
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
 
-  // .protocol.VALUE value = 2;
+  // .data.VALUE value = 2;
   bool has_value() const;
   void clear_value();
   static const int kValueFieldNumber = 2;
-  const ::protocol::VALUE& value() const;
-  ::protocol::VALUE* release_value();
-  ::protocol::VALUE* mutable_value();
-  void set_allocated_value(::protocol::VALUE* value);
+  const ::data::VALUE& value() const;
+  ::data::VALUE* release_value();
+  ::data::VALUE* mutable_value();
+  void set_allocated_value(::data::VALUE* value);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_incr)
+  // @@protoc_insertion_point(class_scope:client.command_incr)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr key_;
-  ::protocol::VALUE* value_;
+  ::data::VALUE* value_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_incrImpl();
@@ -3842,13 +3623,13 @@ class command_incr : public ::google::protobuf::Message /* @@protoc_insertion_po
 // -------------------------------------------------------------------
 
 class command_mincr_KvsEntry_DoNotUse : public ::google::protobuf::internal::MapEntry<command_mincr_KvsEntry_DoNotUse, 
-    ::std::string, ::protocol::VALUE,
+    ::std::string, ::data::VALUE,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > {
 public:
   typedef ::google::protobuf::internal::MapEntry<command_mincr_KvsEntry_DoNotUse, 
-    ::std::string, ::protocol::VALUE,
+    ::std::string, ::data::VALUE,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > SuperType;
@@ -3862,7 +3643,7 @@ public:
 
 // -------------------------------------------------------------------
 
-class command_mincr : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mincr) */ {
+class command_mincr : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mincr) */ {
  public:
   command_mincr();
   virtual ~command_mincr();
@@ -3897,7 +3678,7 @@ class command_mincr : public ::google::protobuf::Message /* @@protoc_insertion_p
                &_command_mincr_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    31;
+    29;
 
   void Swap(command_mincr* other);
   friend void swap(command_mincr& a, command_mincr& b) {
@@ -3945,22 +3726,22 @@ class command_mincr : public ::google::protobuf::Message /* @@protoc_insertion_p
 
   // accessors -------------------------------------------------------
 
-  // map<string, .protocol.VALUE> kvs = 1;
+  // map<string, .data.VALUE> kvs = 1;
   int kvs_size() const;
   void clear_kvs();
   static const int kKvsFieldNumber = 1;
-  const ::google::protobuf::Map< ::std::string, ::protocol::VALUE >&
+  const ::google::protobuf::Map< ::std::string, ::data::VALUE >&
       kvs() const;
-  ::google::protobuf::Map< ::std::string, ::protocol::VALUE >*
+  ::google::protobuf::Map< ::std::string, ::data::VALUE >*
       mutable_kvs();
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mincr)
+  // @@protoc_insertion_point(class_scope:client.command_mincr)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::MapField<
       command_mincr_KvsEntry_DoNotUse,
-      ::std::string, ::protocol::VALUE,
+      ::std::string, ::data::VALUE,
       ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
       ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
       0 > kvs_;
@@ -3970,7 +3751,7 @@ class command_mincr : public ::google::protobuf::Message /* @@protoc_insertion_p
 };
 // -------------------------------------------------------------------
 
-class command_hincr : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hincr) */ {
+class command_hincr : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hincr) */ {
  public:
   command_hincr();
   virtual ~command_hincr();
@@ -4005,7 +3786,7 @@ class command_hincr : public ::google::protobuf::Message /* @@protoc_insertion_p
                &_command_hincr_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    32;
+    30;
 
   void Swap(command_hincr* other);
   friend void swap(command_hincr& a, command_hincr& b) {
@@ -4080,22 +3861,22 @@ class command_hincr : public ::google::protobuf::Message /* @@protoc_insertion_p
   ::std::string* release_field();
   void set_allocated_field(::std::string* field);
 
-  // .protocol.VALUE value = 3;
+  // .data.VALUE value = 3;
   bool has_value() const;
   void clear_value();
   static const int kValueFieldNumber = 3;
-  const ::protocol::VALUE& value() const;
-  ::protocol::VALUE* release_value();
-  ::protocol::VALUE* mutable_value();
-  void set_allocated_value(::protocol::VALUE* value);
+  const ::data::VALUE& value() const;
+  ::data::VALUE* release_value();
+  ::data::VALUE* mutable_value();
+  void set_allocated_value(::data::VALUE* value);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hincr)
+  // @@protoc_insertion_point(class_scope:client.command_hincr)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr key_;
   ::google::protobuf::internal::ArenaStringPtr field_;
-  ::protocol::VALUE* value_;
+  ::data::VALUE* value_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_hincrImpl();
@@ -4103,13 +3884,13 @@ class command_hincr : public ::google::protobuf::Message /* @@protoc_insertion_p
 // -------------------------------------------------------------------
 
 class command_hmincr_KvsEntry_DoNotUse : public ::google::protobuf::internal::MapEntry<command_hmincr_KvsEntry_DoNotUse, 
-    ::std::string, ::protocol::VALUE,
+    ::std::string, ::data::VALUE,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > {
 public:
   typedef ::google::protobuf::internal::MapEntry<command_hmincr_KvsEntry_DoNotUse, 
-    ::std::string, ::protocol::VALUE,
+    ::std::string, ::data::VALUE,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > SuperType;
@@ -4123,7 +3904,7 @@ public:
 
 // -------------------------------------------------------------------
 
-class command_hmincr : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hmincr) */ {
+class command_hmincr : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hmincr) */ {
  public:
   command_hmincr();
   virtual ~command_hmincr();
@@ -4158,7 +3939,7 @@ class command_hmincr : public ::google::protobuf::Message /* @@protoc_insertion_
                &_command_hmincr_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    34;
+    32;
 
   void Swap(command_hmincr* other);
   friend void swap(command_hmincr& a, command_hmincr& b) {
@@ -4206,13 +3987,13 @@ class command_hmincr : public ::google::protobuf::Message /* @@protoc_insertion_
 
   // accessors -------------------------------------------------------
 
-  // map<string, .protocol.VALUE> kvs = 2;
+  // map<string, .data.VALUE> kvs = 2;
   int kvs_size() const;
   void clear_kvs();
   static const int kKvsFieldNumber = 2;
-  const ::google::protobuf::Map< ::std::string, ::protocol::VALUE >&
+  const ::google::protobuf::Map< ::std::string, ::data::VALUE >&
       kvs() const;
-  ::google::protobuf::Map< ::std::string, ::protocol::VALUE >*
+  ::google::protobuf::Map< ::std::string, ::data::VALUE >*
       mutable_kvs();
 
   // string key = 1;
@@ -4229,13 +4010,13 @@ class command_hmincr : public ::google::protobuf::Message /* @@protoc_insertion_
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hmincr)
+  // @@protoc_insertion_point(class_scope:client.command_hmincr)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::MapField<
       command_hmincr_KvsEntry_DoNotUse,
-      ::std::string, ::protocol::VALUE,
+      ::std::string, ::data::VALUE,
       ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
       ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
       0 > kvs_;
@@ -4247,13 +4028,13 @@ class command_hmincr : public ::google::protobuf::Message /* @@protoc_insertion_
 // -------------------------------------------------------------------
 
 class command_mhmincr_KvsEntry_DoNotUse : public ::google::protobuf::internal::MapEntry<command_mhmincr_KvsEntry_DoNotUse, 
-    ::std::string, ::protocol::values_type,
+    ::std::string, ::client::values_type,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > {
 public:
   typedef ::google::protobuf::internal::MapEntry<command_mhmincr_KvsEntry_DoNotUse, 
-    ::std::string, ::protocol::values_type,
+    ::std::string, ::client::values_type,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > SuperType;
@@ -4267,7 +4048,7 @@ public:
 
 // -------------------------------------------------------------------
 
-class command_mhmincr : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mhmincr) */ {
+class command_mhmincr : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mhmincr) */ {
  public:
   command_mhmincr();
   virtual ~command_mhmincr();
@@ -4302,7 +4083,7 @@ class command_mhmincr : public ::google::protobuf::Message /* @@protoc_insertion
                &_command_mhmincr_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    36;
+    34;
 
   void Swap(command_mhmincr* other);
   friend void swap(command_mhmincr& a, command_mhmincr& b) {
@@ -4372,23 +4153,23 @@ class command_mhmincr : public ::google::protobuf::Message /* @@protoc_insertion
   const ::google::protobuf::RepeatedPtrField< ::std::string>& fields() const;
   ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_fields();
 
-  // map<string, .protocol.values_type> kvs = 2;
+  // map<string, .client.values_type> kvs = 2;
   int kvs_size() const;
   void clear_kvs();
   static const int kKvsFieldNumber = 2;
-  const ::google::protobuf::Map< ::std::string, ::protocol::values_type >&
+  const ::google::protobuf::Map< ::std::string, ::client::values_type >&
       kvs() const;
-  ::google::protobuf::Map< ::std::string, ::protocol::values_type >*
+  ::google::protobuf::Map< ::std::string, ::client::values_type >*
       mutable_kvs();
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mhmincr)
+  // @@protoc_insertion_point(class_scope:client.command_mhmincr)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::RepeatedPtrField< ::std::string> fields_;
   ::google::protobuf::internal::MapField<
       command_mhmincr_KvsEntry_DoNotUse,
-      ::std::string, ::protocol::values_type,
+      ::std::string, ::client::values_type,
       ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
       ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
       0 > kvs_;
@@ -4398,7 +4179,7 @@ class command_mhmincr : public ::google::protobuf::Message /* @@protoc_insertion
 };
 // -------------------------------------------------------------------
 
-class command_lpush : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_lpush) */ {
+class command_lpush : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_lpush) */ {
  public:
   command_lpush();
   virtual ~command_lpush();
@@ -4433,7 +4214,7 @@ class command_lpush : public ::google::protobuf::Message /* @@protoc_insertion_p
                &_command_lpush_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    37;
+    35;
 
   void Swap(command_lpush* other);
   friend void swap(command_lpush& a, command_lpush& b) {
@@ -4494,14 +4275,14 @@ class command_lpush : public ::google::protobuf::Message /* @@protoc_insertion_p
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
 
-  // .protocol.VALUE value = 2;
+  // .data.VALUE value = 2;
   bool has_value() const;
   void clear_value();
   static const int kValueFieldNumber = 2;
-  const ::protocol::VALUE& value() const;
-  ::protocol::VALUE* release_value();
-  ::protocol::VALUE* mutable_value();
-  void set_allocated_value(::protocol::VALUE* value);
+  const ::data::VALUE& value() const;
+  ::data::VALUE* release_value();
+  ::data::VALUE* mutable_value();
+  void set_allocated_value(::data::VALUE* value);
 
   // bool head = 3;
   void clear_head();
@@ -4509,12 +4290,12 @@ class command_lpush : public ::google::protobuf::Message /* @@protoc_insertion_p
   bool head() const;
   void set_head(bool value);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_lpush)
+  // @@protoc_insertion_point(class_scope:client.command_lpush)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr key_;
-  ::protocol::VALUE* value_;
+  ::data::VALUE* value_;
   bool head_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
@@ -4523,13 +4304,13 @@ class command_lpush : public ::google::protobuf::Message /* @@protoc_insertion_p
 // -------------------------------------------------------------------
 
 class command_mlpush_KvsEntry_DoNotUse : public ::google::protobuf::internal::MapEntry<command_mlpush_KvsEntry_DoNotUse, 
-    ::std::string, ::protocol::VALUE,
+    ::std::string, ::data::VALUE,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > {
 public:
   typedef ::google::protobuf::internal::MapEntry<command_mlpush_KvsEntry_DoNotUse, 
-    ::std::string, ::protocol::VALUE,
+    ::std::string, ::data::VALUE,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > SuperType;
@@ -4543,7 +4324,7 @@ public:
 
 // -------------------------------------------------------------------
 
-class command_mlpush : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mlpush) */ {
+class command_mlpush : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mlpush) */ {
  public:
   command_mlpush();
   virtual ~command_mlpush();
@@ -4578,7 +4359,7 @@ class command_mlpush : public ::google::protobuf::Message /* @@protoc_insertion_
                &_command_mlpush_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    39;
+    37;
 
   void Swap(command_mlpush* other);
   friend void swap(command_mlpush& a, command_mlpush& b) {
@@ -4626,13 +4407,13 @@ class command_mlpush : public ::google::protobuf::Message /* @@protoc_insertion_
 
   // accessors -------------------------------------------------------
 
-  // map<string, .protocol.VALUE> kvs = 1;
+  // map<string, .data.VALUE> kvs = 1;
   int kvs_size() const;
   void clear_kvs();
   static const int kKvsFieldNumber = 1;
-  const ::google::protobuf::Map< ::std::string, ::protocol::VALUE >&
+  const ::google::protobuf::Map< ::std::string, ::data::VALUE >&
       kvs() const;
-  ::google::protobuf::Map< ::std::string, ::protocol::VALUE >*
+  ::google::protobuf::Map< ::std::string, ::data::VALUE >*
       mutable_kvs();
 
   // bool head = 2;
@@ -4641,13 +4422,13 @@ class command_mlpush : public ::google::protobuf::Message /* @@protoc_insertion_
   bool head() const;
   void set_head(bool value);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mlpush)
+  // @@protoc_insertion_point(class_scope:client.command_mlpush)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::MapField<
       command_mlpush_KvsEntry_DoNotUse,
-      ::std::string, ::protocol::VALUE,
+      ::std::string, ::data::VALUE,
       ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
       ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
       0 > kvs_;
@@ -4658,7 +4439,7 @@ class command_mlpush : public ::google::protobuf::Message /* @@protoc_insertion_
 };
 // -------------------------------------------------------------------
 
-class command_hlpush : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hlpush) */ {
+class command_hlpush : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hlpush) */ {
  public:
   command_hlpush();
   virtual ~command_hlpush();
@@ -4693,7 +4474,7 @@ class command_hlpush : public ::google::protobuf::Message /* @@protoc_insertion_
                &_command_hlpush_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    40;
+    38;
 
   void Swap(command_hlpush* other);
   friend void swap(command_hlpush& a, command_hlpush& b) {
@@ -4768,22 +4549,22 @@ class command_hlpush : public ::google::protobuf::Message /* @@protoc_insertion_
   ::std::string* release_field();
   void set_allocated_field(::std::string* field);
 
-  // .protocol.VALUE value = 3;
+  // .data.VALUE value = 3;
   bool has_value() const;
   void clear_value();
   static const int kValueFieldNumber = 3;
-  const ::protocol::VALUE& value() const;
-  ::protocol::VALUE* release_value();
-  ::protocol::VALUE* mutable_value();
-  void set_allocated_value(::protocol::VALUE* value);
+  const ::data::VALUE& value() const;
+  ::data::VALUE* release_value();
+  ::data::VALUE* mutable_value();
+  void set_allocated_value(::data::VALUE* value);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hlpush)
+  // @@protoc_insertion_point(class_scope:client.command_hlpush)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr key_;
   ::google::protobuf::internal::ArenaStringPtr field_;
-  ::protocol::VALUE* value_;
+  ::data::VALUE* value_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_hlpushImpl();
@@ -4791,13 +4572,13 @@ class command_hlpush : public ::google::protobuf::Message /* @@protoc_insertion_
 // -------------------------------------------------------------------
 
 class command_hmlpush_KvsEntry_DoNotUse : public ::google::protobuf::internal::MapEntry<command_hmlpush_KvsEntry_DoNotUse, 
-    ::std::string, ::protocol::VALUE,
+    ::std::string, ::data::VALUE,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > {
 public:
   typedef ::google::protobuf::internal::MapEntry<command_hmlpush_KvsEntry_DoNotUse, 
-    ::std::string, ::protocol::VALUE,
+    ::std::string, ::data::VALUE,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > SuperType;
@@ -4811,7 +4592,7 @@ public:
 
 // -------------------------------------------------------------------
 
-class command_hmlpush : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hmlpush) */ {
+class command_hmlpush : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hmlpush) */ {
  public:
   command_hmlpush();
   virtual ~command_hmlpush();
@@ -4846,7 +4627,7 @@ class command_hmlpush : public ::google::protobuf::Message /* @@protoc_insertion
                &_command_hmlpush_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    42;
+    40;
 
   void Swap(command_hmlpush* other);
   friend void swap(command_hmlpush& a, command_hmlpush& b) {
@@ -4894,13 +4675,13 @@ class command_hmlpush : public ::google::protobuf::Message /* @@protoc_insertion
 
   // accessors -------------------------------------------------------
 
-  // map<string, .protocol.VALUE> kvs = 2;
+  // map<string, .data.VALUE> kvs = 2;
   int kvs_size() const;
   void clear_kvs();
   static const int kKvsFieldNumber = 2;
-  const ::google::protobuf::Map< ::std::string, ::protocol::VALUE >&
+  const ::google::protobuf::Map< ::std::string, ::data::VALUE >&
       kvs() const;
-  ::google::protobuf::Map< ::std::string, ::protocol::VALUE >*
+  ::google::protobuf::Map< ::std::string, ::data::VALUE >*
       mutable_kvs();
 
   // string key = 1;
@@ -4917,13 +4698,13 @@ class command_hmlpush : public ::google::protobuf::Message /* @@protoc_insertion
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hmlpush)
+  // @@protoc_insertion_point(class_scope:client.command_hmlpush)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::MapField<
       command_hmlpush_KvsEntry_DoNotUse,
-      ::std::string, ::protocol::VALUE,
+      ::std::string, ::data::VALUE,
       ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
       ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
       0 > kvs_;
@@ -4935,13 +4716,13 @@ class command_hmlpush : public ::google::protobuf::Message /* @@protoc_insertion
 // -------------------------------------------------------------------
 
 class command_mhmlpush_KvsEntry_DoNotUse : public ::google::protobuf::internal::MapEntry<command_mhmlpush_KvsEntry_DoNotUse, 
-    ::std::string, ::protocol::values_type,
+    ::std::string, ::client::values_type,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > {
 public:
   typedef ::google::protobuf::internal::MapEntry<command_mhmlpush_KvsEntry_DoNotUse, 
-    ::std::string, ::protocol::values_type,
+    ::std::string, ::client::values_type,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > SuperType;
@@ -4955,7 +4736,7 @@ public:
 
 // -------------------------------------------------------------------
 
-class command_mhmlpush : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mhmlpush) */ {
+class command_mhmlpush : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mhmlpush) */ {
  public:
   command_mhmlpush();
   virtual ~command_mhmlpush();
@@ -4990,7 +4771,7 @@ class command_mhmlpush : public ::google::protobuf::Message /* @@protoc_insertio
                &_command_mhmlpush_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    44;
+    42;
 
   void Swap(command_mhmlpush* other);
   friend void swap(command_mhmlpush& a, command_mhmlpush& b) {
@@ -5060,23 +4841,23 @@ class command_mhmlpush : public ::google::protobuf::Message /* @@protoc_insertio
   const ::google::protobuf::RepeatedPtrField< ::std::string>& fields() const;
   ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_fields();
 
-  // map<string, .protocol.values_type> kvs = 2;
+  // map<string, .client.values_type> kvs = 2;
   int kvs_size() const;
   void clear_kvs();
   static const int kKvsFieldNumber = 2;
-  const ::google::protobuf::Map< ::std::string, ::protocol::values_type >&
+  const ::google::protobuf::Map< ::std::string, ::client::values_type >&
       kvs() const;
-  ::google::protobuf::Map< ::std::string, ::protocol::values_type >*
+  ::google::protobuf::Map< ::std::string, ::client::values_type >*
       mutable_kvs();
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mhmlpush)
+  // @@protoc_insertion_point(class_scope:client.command_mhmlpush)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::RepeatedPtrField< ::std::string> fields_;
   ::google::protobuf::internal::MapField<
       command_mhmlpush_KvsEntry_DoNotUse,
-      ::std::string, ::protocol::values_type,
+      ::std::string, ::client::values_type,
       ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
       ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
       0 > kvs_;
@@ -5086,7 +4867,7 @@ class command_mhmlpush : public ::google::protobuf::Message /* @@protoc_insertio
 };
 // -------------------------------------------------------------------
 
-class command_lrange : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_lrange) */ {
+class command_lrange : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_lrange) */ {
  public:
   command_lrange();
   virtual ~command_lrange();
@@ -5121,7 +4902,7 @@ class command_lrange : public ::google::protobuf::Message /* @@protoc_insertion_
                &_command_lrange_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    45;
+    43;
 
   void Swap(command_lrange* other);
   friend void swap(command_lrange& a, command_lrange& b) {
@@ -5194,7 +4975,7 @@ class command_lrange : public ::google::protobuf::Message /* @@protoc_insertion_
   ::google::protobuf::int32 stop() const;
   void set_stop(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_lrange)
+  // @@protoc_insertion_point(class_scope:client.command_lrange)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -5207,7 +4988,7 @@ class command_lrange : public ::google::protobuf::Message /* @@protoc_insertion_
 };
 // -------------------------------------------------------------------
 
-class command_lrange_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_lrange_reply) */ {
+class command_lrange_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_lrange_reply) */ {
  public:
   command_lrange_reply();
   virtual ~command_lrange_reply();
@@ -5242,7 +5023,7 @@ class command_lrange_reply : public ::google::protobuf::Message /* @@protoc_inse
                &_command_lrange_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    46;
+    44;
 
   void Swap(command_lrange_reply* other);
   friend void swap(command_lrange_reply& a, command_lrange_reply& b) {
@@ -5289,37 +5070,37 @@ class command_lrange_reply : public ::google::protobuf::Message /* @@protoc_inse
 
   // accessors -------------------------------------------------------
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // .protocol.VALUE reply = 2;
-  bool has_reply() const;
-  void clear_reply();
-  static const int kReplyFieldNumber = 2;
-  const ::protocol::VALUE& reply() const;
-  ::protocol::VALUE* release_reply();
-  ::protocol::VALUE* mutable_reply();
-  void set_allocated_reply(::protocol::VALUE* reply);
+  // .data.VALUE data = 2;
+  bool has_data() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::data::VALUE& data() const;
+  ::data::VALUE* release_data();
+  ::data::VALUE* mutable_data();
+  void set_allocated_data(::data::VALUE* data);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_lrange_reply)
+  // @@protoc_insertion_point(class_scope:client.command_lrange_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::protocol::command_reply* state_;
-  ::protocol::VALUE* reply_;
+  ::client::command_reply* state_;
+  ::data::VALUE* data_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_lrange_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_mlrange : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mlrange) */ {
+class command_mlrange : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mlrange) */ {
  public:
   command_mlrange();
   virtual ~command_mlrange();
@@ -5354,7 +5135,7 @@ class command_mlrange : public ::google::protobuf::Message /* @@protoc_insertion
                &_command_mlrange_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    47;
+    45;
 
   void Swap(command_mlrange* other);
   friend void swap(command_mlrange& a, command_mlrange& b) {
@@ -5435,7 +5216,7 @@ class command_mlrange : public ::google::protobuf::Message /* @@protoc_insertion
   ::google::protobuf::int32 stop() const;
   void set_stop(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mlrange)
+  // @@protoc_insertion_point(class_scope:client.command_mlrange)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -5448,7 +5229,7 @@ class command_mlrange : public ::google::protobuf::Message /* @@protoc_insertion
 };
 // -------------------------------------------------------------------
 
-class command_mlrange_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mlrange_reply) */ {
+class command_mlrange_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mlrange_reply) */ {
  public:
   command_mlrange_reply();
   virtual ~command_mlrange_reply();
@@ -5483,7 +5264,7 @@ class command_mlrange_reply : public ::google::protobuf::Message /* @@protoc_ins
                &_command_mlrange_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    48;
+    46;
 
   void Swap(command_mlrange_reply* other);
   friend void swap(command_mlrange_reply& a, command_mlrange_reply& b) {
@@ -5530,40 +5311,40 @@ class command_mlrange_reply : public ::google::protobuf::Message /* @@protoc_ins
 
   // accessors -------------------------------------------------------
 
-  // repeated .protocol.VALUE reply = 2;
-  int reply_size() const;
-  void clear_reply();
-  static const int kReplyFieldNumber = 2;
-  const ::protocol::VALUE& reply(int index) const;
-  ::protocol::VALUE* mutable_reply(int index);
-  ::protocol::VALUE* add_reply();
-  ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >*
-      mutable_reply();
-  const ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >&
-      reply() const;
+  // repeated .data.VALUE data = 2;
+  int data_size() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::data::VALUE& data(int index) const;
+  ::data::VALUE* mutable_data(int index);
+  ::data::VALUE* add_data();
+  ::google::protobuf::RepeatedPtrField< ::data::VALUE >*
+      mutable_data();
+  const ::google::protobuf::RepeatedPtrField< ::data::VALUE >&
+      data() const;
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mlrange_reply)
+  // @@protoc_insertion_point(class_scope:client.command_mlrange_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::protocol::VALUE > reply_;
-  ::protocol::command_reply* state_;
+  ::google::protobuf::RepeatedPtrField< ::data::VALUE > data_;
+  ::client::command_reply* state_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_mlrange_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_hlrange : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hlrange) */ {
+class command_hlrange : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hlrange) */ {
  public:
   command_hlrange();
   virtual ~command_hlrange();
@@ -5598,7 +5379,7 @@ class command_hlrange : public ::google::protobuf::Message /* @@protoc_insertion
                &_command_hlrange_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    49;
+    47;
 
   void Swap(command_hlrange* other);
   friend void swap(command_hlrange& a, command_hlrange& b) {
@@ -5685,7 +5466,7 @@ class command_hlrange : public ::google::protobuf::Message /* @@protoc_insertion
   ::google::protobuf::int32 stop() const;
   void set_stop(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hlrange)
+  // @@protoc_insertion_point(class_scope:client.command_hlrange)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -5699,7 +5480,7 @@ class command_hlrange : public ::google::protobuf::Message /* @@protoc_insertion
 };
 // -------------------------------------------------------------------
 
-class command_hlrange_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hlrange_reply) */ {
+class command_hlrange_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hlrange_reply) */ {
  public:
   command_hlrange_reply();
   virtual ~command_hlrange_reply();
@@ -5734,7 +5515,7 @@ class command_hlrange_reply : public ::google::protobuf::Message /* @@protoc_ins
                &_command_hlrange_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    50;
+    48;
 
   void Swap(command_hlrange_reply* other);
   friend void swap(command_hlrange_reply& a, command_hlrange_reply& b) {
@@ -5781,37 +5562,37 @@ class command_hlrange_reply : public ::google::protobuf::Message /* @@protoc_ins
 
   // accessors -------------------------------------------------------
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // .protocol.VALUE value = 2;
+  // .data.VALUE value = 2;
   bool has_value() const;
   void clear_value();
   static const int kValueFieldNumber = 2;
-  const ::protocol::VALUE& value() const;
-  ::protocol::VALUE* release_value();
-  ::protocol::VALUE* mutable_value();
-  void set_allocated_value(::protocol::VALUE* value);
+  const ::data::VALUE& value() const;
+  ::data::VALUE* release_value();
+  ::data::VALUE* mutable_value();
+  void set_allocated_value(::data::VALUE* value);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hlrange_reply)
+  // @@protoc_insertion_point(class_scope:client.command_hlrange_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::protocol::command_reply* state_;
-  ::protocol::VALUE* value_;
+  ::client::command_reply* state_;
+  ::data::VALUE* value_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_hlrange_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_hmlrange : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hmlrange) */ {
+class command_hmlrange : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hmlrange) */ {
  public:
   command_hmlrange();
   virtual ~command_hmlrange();
@@ -5846,7 +5627,7 @@ class command_hmlrange : public ::google::protobuf::Message /* @@protoc_insertio
                &_command_hmlrange_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    51;
+    49;
 
   void Swap(command_hmlrange* other);
   friend void swap(command_hmlrange& a, command_hmlrange& b) {
@@ -5941,7 +5722,7 @@ class command_hmlrange : public ::google::protobuf::Message /* @@protoc_insertio
   ::google::protobuf::int32 stop() const;
   void set_stop(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hmlrange)
+  // @@protoc_insertion_point(class_scope:client.command_hmlrange)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -5955,7 +5736,7 @@ class command_hmlrange : public ::google::protobuf::Message /* @@protoc_insertio
 };
 // -------------------------------------------------------------------
 
-class command_hmlrange_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hmlrange_reply) */ {
+class command_hmlrange_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hmlrange_reply) */ {
  public:
   command_hmlrange_reply();
   virtual ~command_hmlrange_reply();
@@ -5990,7 +5771,7 @@ class command_hmlrange_reply : public ::google::protobuf::Message /* @@protoc_in
                &_command_hmlrange_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    52;
+    50;
 
   void Swap(command_hmlrange_reply* other);
   friend void swap(command_hmlrange_reply& a, command_hmlrange_reply& b) {
@@ -6037,40 +5818,40 @@ class command_hmlrange_reply : public ::google::protobuf::Message /* @@protoc_in
 
   // accessors -------------------------------------------------------
 
-  // repeated .protocol.VALUE reply = 2;
-  int reply_size() const;
-  void clear_reply();
-  static const int kReplyFieldNumber = 2;
-  const ::protocol::VALUE& reply(int index) const;
-  ::protocol::VALUE* mutable_reply(int index);
-  ::protocol::VALUE* add_reply();
-  ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >*
-      mutable_reply();
-  const ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >&
-      reply() const;
+  // repeated .data.VALUE data = 2;
+  int data_size() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::data::VALUE& data(int index) const;
+  ::data::VALUE* mutable_data(int index);
+  ::data::VALUE* add_data();
+  ::google::protobuf::RepeatedPtrField< ::data::VALUE >*
+      mutable_data();
+  const ::google::protobuf::RepeatedPtrField< ::data::VALUE >&
+      data() const;
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hmlrange_reply)
+  // @@protoc_insertion_point(class_scope:client.command_hmlrange_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::protocol::VALUE > reply_;
-  ::protocol::command_reply* state_;
+  ::google::protobuf::RepeatedPtrField< ::data::VALUE > data_;
+  ::client::command_reply* state_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_hmlrange_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_mhmlrange : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mhmlrange) */ {
+class command_mhmlrange : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mhmlrange) */ {
  public:
   command_mhmlrange();
   virtual ~command_mhmlrange();
@@ -6105,7 +5886,7 @@ class command_mhmlrange : public ::google::protobuf::Message /* @@protoc_inserti
                &_command_mhmlrange_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    53;
+    51;
 
   void Swap(command_mhmlrange* other);
   friend void swap(command_mhmlrange& a, command_mhmlrange& b) {
@@ -6196,7 +5977,7 @@ class command_mhmlrange : public ::google::protobuf::Message /* @@protoc_inserti
   const ::google::protobuf::RepeatedPtrField< ::std::string>& fields() const;
   ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_fields();
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mhmlrange)
+  // @@protoc_insertion_point(class_scope:client.command_mhmlrange)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -6208,7 +5989,7 @@ class command_mhmlrange : public ::google::protobuf::Message /* @@protoc_inserti
 };
 // -------------------------------------------------------------------
 
-class command_mhmlrange_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mhmlrange_reply) */ {
+class command_mhmlrange_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mhmlrange_reply) */ {
  public:
   command_mhmlrange_reply();
   virtual ~command_mhmlrange_reply();
@@ -6243,7 +6024,7 @@ class command_mhmlrange_reply : public ::google::protobuf::Message /* @@protoc_i
                &_command_mhmlrange_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    54;
+    52;
 
   void Swap(command_mhmlrange_reply* other);
   friend void swap(command_mhmlrange_reply& a, command_mhmlrange_reply& b) {
@@ -6290,40 +6071,40 @@ class command_mhmlrange_reply : public ::google::protobuf::Message /* @@protoc_i
 
   // accessors -------------------------------------------------------
 
-  // repeated .protocol.values_type values = 2;
-  int values_size() const;
-  void clear_values();
-  static const int kValuesFieldNumber = 2;
-  const ::protocol::values_type& values(int index) const;
-  ::protocol::values_type* mutable_values(int index);
-  ::protocol::values_type* add_values();
-  ::google::protobuf::RepeatedPtrField< ::protocol::values_type >*
-      mutable_values();
-  const ::google::protobuf::RepeatedPtrField< ::protocol::values_type >&
-      values() const;
+  // repeated .client.values_type data = 2;
+  int data_size() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::client::values_type& data(int index) const;
+  ::client::values_type* mutable_data(int index);
+  ::client::values_type* add_data();
+  ::google::protobuf::RepeatedPtrField< ::client::values_type >*
+      mutable_data();
+  const ::google::protobuf::RepeatedPtrField< ::client::values_type >&
+      data() const;
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mhmlrange_reply)
+  // @@protoc_insertion_point(class_scope:client.command_mhmlrange_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::protocol::values_type > values_;
-  ::protocol::command_reply* state_;
+  ::google::protobuf::RepeatedPtrField< ::client::values_type > data_;
+  ::client::command_reply* state_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_mhmlrange_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_lpop : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_lpop) */ {
+class command_lpop : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_lpop) */ {
  public:
   command_lpop();
   virtual ~command_lpop();
@@ -6358,7 +6139,7 @@ class command_lpop : public ::google::protobuf::Message /* @@protoc_insertion_po
                &_command_lpop_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    55;
+    53;
 
   void Swap(command_lpop* other);
   friend void swap(command_lpop& a, command_lpop& b) {
@@ -6425,7 +6206,7 @@ class command_lpop : public ::google::protobuf::Message /* @@protoc_insertion_po
   bool head() const;
   void set_head(bool value);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_lpop)
+  // @@protoc_insertion_point(class_scope:client.command_lpop)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -6437,7 +6218,7 @@ class command_lpop : public ::google::protobuf::Message /* @@protoc_insertion_po
 };
 // -------------------------------------------------------------------
 
-class command_lpop_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_lpop_reply) */ {
+class command_lpop_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_lpop_reply) */ {
  public:
   command_lpop_reply();
   virtual ~command_lpop_reply();
@@ -6472,7 +6253,7 @@ class command_lpop_reply : public ::google::protobuf::Message /* @@protoc_insert
                &_command_lpop_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    56;
+    54;
 
   void Swap(command_lpop_reply* other);
   friend void swap(command_lpop_reply& a, command_lpop_reply& b) {
@@ -6519,37 +6300,37 @@ class command_lpop_reply : public ::google::protobuf::Message /* @@protoc_insert
 
   // accessors -------------------------------------------------------
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // .protocol.VALUE reply = 2;
-  bool has_reply() const;
-  void clear_reply();
-  static const int kReplyFieldNumber = 2;
-  const ::protocol::VALUE& reply() const;
-  ::protocol::VALUE* release_reply();
-  ::protocol::VALUE* mutable_reply();
-  void set_allocated_reply(::protocol::VALUE* reply);
+  // .data.VALUE data = 2;
+  bool has_data() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::data::VALUE& data() const;
+  ::data::VALUE* release_data();
+  ::data::VALUE* mutable_data();
+  void set_allocated_data(::data::VALUE* data);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_lpop_reply)
+  // @@protoc_insertion_point(class_scope:client.command_lpop_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::protocol::command_reply* state_;
-  ::protocol::VALUE* reply_;
+  ::client::command_reply* state_;
+  ::data::VALUE* data_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_lpop_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_mlpop : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mlpop) */ {
+class command_mlpop : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mlpop) */ {
  public:
   command_mlpop();
   virtual ~command_mlpop();
@@ -6584,7 +6365,7 @@ class command_mlpop : public ::google::protobuf::Message /* @@protoc_insertion_p
                &_command_mlpop_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    57;
+    55;
 
   void Swap(command_mlpop* other);
   friend void swap(command_mlpop& a, command_mlpop& b) {
@@ -6659,7 +6440,7 @@ class command_mlpop : public ::google::protobuf::Message /* @@protoc_insertion_p
   bool head() const;
   void set_head(bool value);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mlpop)
+  // @@protoc_insertion_point(class_scope:client.command_mlpop)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -6671,7 +6452,7 @@ class command_mlpop : public ::google::protobuf::Message /* @@protoc_insertion_p
 };
 // -------------------------------------------------------------------
 
-class command_mlpop_repy : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mlpop_repy) */ {
+class command_mlpop_repy : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mlpop_repy) */ {
  public:
   command_mlpop_repy();
   virtual ~command_mlpop_repy();
@@ -6706,7 +6487,7 @@ class command_mlpop_repy : public ::google::protobuf::Message /* @@protoc_insert
                &_command_mlpop_repy_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    58;
+    56;
 
   void Swap(command_mlpop_repy* other);
   friend void swap(command_mlpop_repy& a, command_mlpop_repy& b) {
@@ -6753,40 +6534,40 @@ class command_mlpop_repy : public ::google::protobuf::Message /* @@protoc_insert
 
   // accessors -------------------------------------------------------
 
-  // repeated .protocol.VALUE reply = 2;
-  int reply_size() const;
-  void clear_reply();
-  static const int kReplyFieldNumber = 2;
-  const ::protocol::VALUE& reply(int index) const;
-  ::protocol::VALUE* mutable_reply(int index);
-  ::protocol::VALUE* add_reply();
-  ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >*
-      mutable_reply();
-  const ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >&
-      reply() const;
+  // repeated .data.VALUE data = 2;
+  int data_size() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::data::VALUE& data(int index) const;
+  ::data::VALUE* mutable_data(int index);
+  ::data::VALUE* add_data();
+  ::google::protobuf::RepeatedPtrField< ::data::VALUE >*
+      mutable_data();
+  const ::google::protobuf::RepeatedPtrField< ::data::VALUE >&
+      data() const;
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mlpop_repy)
+  // @@protoc_insertion_point(class_scope:client.command_mlpop_repy)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::protocol::VALUE > reply_;
-  ::protocol::command_reply* state_;
+  ::google::protobuf::RepeatedPtrField< ::data::VALUE > data_;
+  ::client::command_reply* state_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_mlpop_repyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_hlpop : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hlpop) */ {
+class command_hlpop : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hlpop) */ {
  public:
   command_hlpop();
   virtual ~command_hlpop();
@@ -6821,7 +6602,7 @@ class command_hlpop : public ::google::protobuf::Message /* @@protoc_insertion_p
                &_command_hlpop_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    59;
+    57;
 
   void Swap(command_hlpop* other);
   friend void swap(command_hlpop& a, command_hlpop& b) {
@@ -6896,7 +6677,7 @@ class command_hlpop : public ::google::protobuf::Message /* @@protoc_insertion_p
   ::std::string* release_field();
   void set_allocated_field(::std::string* field);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hlpop)
+  // @@protoc_insertion_point(class_scope:client.command_hlpop)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -6908,7 +6689,7 @@ class command_hlpop : public ::google::protobuf::Message /* @@protoc_insertion_p
 };
 // -------------------------------------------------------------------
 
-class command_hlpop_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hlpop_reply) */ {
+class command_hlpop_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hlpop_reply) */ {
  public:
   command_hlpop_reply();
   virtual ~command_hlpop_reply();
@@ -6943,7 +6724,7 @@ class command_hlpop_reply : public ::google::protobuf::Message /* @@protoc_inser
                &_command_hlpop_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    60;
+    58;
 
   void Swap(command_hlpop_reply* other);
   friend void swap(command_hlpop_reply& a, command_hlpop_reply& b) {
@@ -6990,37 +6771,37 @@ class command_hlpop_reply : public ::google::protobuf::Message /* @@protoc_inser
 
   // accessors -------------------------------------------------------
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // .protocol.VALUE reply = 2;
-  bool has_reply() const;
-  void clear_reply();
-  static const int kReplyFieldNumber = 2;
-  const ::protocol::VALUE& reply() const;
-  ::protocol::VALUE* release_reply();
-  ::protocol::VALUE* mutable_reply();
-  void set_allocated_reply(::protocol::VALUE* reply);
+  // .data.VALUE data = 2;
+  bool has_data() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::data::VALUE& data() const;
+  ::data::VALUE* release_data();
+  ::data::VALUE* mutable_data();
+  void set_allocated_data(::data::VALUE* data);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hlpop_reply)
+  // @@protoc_insertion_point(class_scope:client.command_hlpop_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::protocol::command_reply* state_;
-  ::protocol::VALUE* reply_;
+  ::client::command_reply* state_;
+  ::data::VALUE* data_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_hlpop_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_hmlpop : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hmlpop) */ {
+class command_hmlpop : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hmlpop) */ {
  public:
   command_hmlpop();
   virtual ~command_hmlpop();
@@ -7055,7 +6836,7 @@ class command_hmlpop : public ::google::protobuf::Message /* @@protoc_insertion_
                &_command_hmlpop_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    61;
+    59;
 
   void Swap(command_hmlpop* other);
   friend void swap(command_hmlpop& a, command_hmlpop& b) {
@@ -7138,7 +6919,7 @@ class command_hmlpop : public ::google::protobuf::Message /* @@protoc_insertion_
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hmlpop)
+  // @@protoc_insertion_point(class_scope:client.command_hmlpop)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -7150,7 +6931,7 @@ class command_hmlpop : public ::google::protobuf::Message /* @@protoc_insertion_
 };
 // -------------------------------------------------------------------
 
-class command_hmlpop_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hmlpop_reply) */ {
+class command_hmlpop_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hmlpop_reply) */ {
  public:
   command_hmlpop_reply();
   virtual ~command_hmlpop_reply();
@@ -7185,7 +6966,7 @@ class command_hmlpop_reply : public ::google::protobuf::Message /* @@protoc_inse
                &_command_hmlpop_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    62;
+    60;
 
   void Swap(command_hmlpop_reply* other);
   friend void swap(command_hmlpop_reply& a, command_hmlpop_reply& b) {
@@ -7232,40 +7013,40 @@ class command_hmlpop_reply : public ::google::protobuf::Message /* @@protoc_inse
 
   // accessors -------------------------------------------------------
 
-  // repeated .protocol.VALUE reply = 2;
-  int reply_size() const;
-  void clear_reply();
-  static const int kReplyFieldNumber = 2;
-  const ::protocol::VALUE& reply(int index) const;
-  ::protocol::VALUE* mutable_reply(int index);
-  ::protocol::VALUE* add_reply();
-  ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >*
-      mutable_reply();
-  const ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >&
-      reply() const;
+  // repeated .data.VALUE data = 2;
+  int data_size() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::data::VALUE& data(int index) const;
+  ::data::VALUE* mutable_data(int index);
+  ::data::VALUE* add_data();
+  ::google::protobuf::RepeatedPtrField< ::data::VALUE >*
+      mutable_data();
+  const ::google::protobuf::RepeatedPtrField< ::data::VALUE >&
+      data() const;
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hmlpop_reply)
+  // @@protoc_insertion_point(class_scope:client.command_hmlpop_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::protocol::VALUE > reply_;
-  ::protocol::command_reply* state_;
+  ::google::protobuf::RepeatedPtrField< ::data::VALUE > data_;
+  ::client::command_reply* state_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_hmlpop_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_mhmlpop : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mhmlpop) */ {
+class command_mhmlpop : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mhmlpop) */ {
  public:
   command_mhmlpop();
   virtual ~command_mhmlpop();
@@ -7300,7 +7081,7 @@ class command_mhmlpop : public ::google::protobuf::Message /* @@protoc_insertion
                &_command_mhmlpop_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    63;
+    61;
 
   void Swap(command_mhmlpop* other);
   friend void swap(command_mhmlpop& a, command_mhmlpop& b) {
@@ -7391,7 +7172,7 @@ class command_mhmlpop : public ::google::protobuf::Message /* @@protoc_insertion
   const ::google::protobuf::RepeatedPtrField< ::std::string>& fields() const;
   ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_fields();
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mhmlpop)
+  // @@protoc_insertion_point(class_scope:client.command_mhmlpop)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -7403,7 +7184,7 @@ class command_mhmlpop : public ::google::protobuf::Message /* @@protoc_insertion
 };
 // -------------------------------------------------------------------
 
-class command_mhmlpop_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mhmlpop_reply) */ {
+class command_mhmlpop_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mhmlpop_reply) */ {
  public:
   command_mhmlpop_reply();
   virtual ~command_mhmlpop_reply();
@@ -7438,7 +7219,7 @@ class command_mhmlpop_reply : public ::google::protobuf::Message /* @@protoc_ins
                &_command_mhmlpop_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    64;
+    62;
 
   void Swap(command_mhmlpop_reply* other);
   friend void swap(command_mhmlpop_reply& a, command_mhmlpop_reply& b) {
@@ -7485,40 +7266,40 @@ class command_mhmlpop_reply : public ::google::protobuf::Message /* @@protoc_ins
 
   // accessors -------------------------------------------------------
 
-  // repeated .protocol.values_type values = 2;
-  int values_size() const;
-  void clear_values();
-  static const int kValuesFieldNumber = 2;
-  const ::protocol::values_type& values(int index) const;
-  ::protocol::values_type* mutable_values(int index);
-  ::protocol::values_type* add_values();
-  ::google::protobuf::RepeatedPtrField< ::protocol::values_type >*
-      mutable_values();
-  const ::google::protobuf::RepeatedPtrField< ::protocol::values_type >&
-      values() const;
+  // repeated .client.values_type data = 2;
+  int data_size() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::client::values_type& data(int index) const;
+  ::client::values_type* mutable_data(int index);
+  ::client::values_type* add_data();
+  ::google::protobuf::RepeatedPtrField< ::client::values_type >*
+      mutable_data();
+  const ::google::protobuf::RepeatedPtrField< ::client::values_type >&
+      data() const;
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mhmlpop_reply)
+  // @@protoc_insertion_point(class_scope:client.command_mhmlpop_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::protocol::values_type > values_;
-  ::protocol::command_reply* state_;
+  ::google::protobuf::RepeatedPtrField< ::client::values_type > data_;
+  ::client::command_reply* state_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_mhmlpop_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_ltrim : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_ltrim) */ {
+class command_ltrim : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_ltrim) */ {
  public:
   command_ltrim();
   virtual ~command_ltrim();
@@ -7553,7 +7334,7 @@ class command_ltrim : public ::google::protobuf::Message /* @@protoc_insertion_p
                &_command_ltrim_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    65;
+    63;
 
   void Swap(command_ltrim* other);
   friend void swap(command_ltrim& a, command_ltrim& b) {
@@ -7626,7 +7407,7 @@ class command_ltrim : public ::google::protobuf::Message /* @@protoc_insertion_p
   ::google::protobuf::int32 stop() const;
   void set_stop(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_ltrim)
+  // @@protoc_insertion_point(class_scope:client.command_ltrim)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -7639,7 +7420,7 @@ class command_ltrim : public ::google::protobuf::Message /* @@protoc_insertion_p
 };
 // -------------------------------------------------------------------
 
-class command_mltrim : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mltrim) */ {
+class command_mltrim : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mltrim) */ {
  public:
   command_mltrim();
   virtual ~command_mltrim();
@@ -7674,7 +7455,7 @@ class command_mltrim : public ::google::protobuf::Message /* @@protoc_insertion_
                &_command_mltrim_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    66;
+    64;
 
   void Swap(command_mltrim* other);
   friend void swap(command_mltrim& a, command_mltrim& b) {
@@ -7755,7 +7536,7 @@ class command_mltrim : public ::google::protobuf::Message /* @@protoc_insertion_
   ::google::protobuf::int32 stop() const;
   void set_stop(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mltrim)
+  // @@protoc_insertion_point(class_scope:client.command_mltrim)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -7768,7 +7549,7 @@ class command_mltrim : public ::google::protobuf::Message /* @@protoc_insertion_
 };
 // -------------------------------------------------------------------
 
-class command_hltrim : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hltrim) */ {
+class command_hltrim : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hltrim) */ {
  public:
   command_hltrim();
   virtual ~command_hltrim();
@@ -7803,7 +7584,7 @@ class command_hltrim : public ::google::protobuf::Message /* @@protoc_insertion_
                &_command_hltrim_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    67;
+    65;
 
   void Swap(command_hltrim* other);
   friend void swap(command_hltrim& a, command_hltrim& b) {
@@ -7890,7 +7671,7 @@ class command_hltrim : public ::google::protobuf::Message /* @@protoc_insertion_
   ::google::protobuf::int32 stop() const;
   void set_stop(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hltrim)
+  // @@protoc_insertion_point(class_scope:client.command_hltrim)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -7904,7 +7685,7 @@ class command_hltrim : public ::google::protobuf::Message /* @@protoc_insertion_
 };
 // -------------------------------------------------------------------
 
-class command_hmltrim : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hmltrim) */ {
+class command_hmltrim : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hmltrim) */ {
  public:
   command_hmltrim();
   virtual ~command_hmltrim();
@@ -7939,7 +7720,7 @@ class command_hmltrim : public ::google::protobuf::Message /* @@protoc_insertion
                &_command_hmltrim_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    68;
+    66;
 
   void Swap(command_hmltrim* other);
   friend void swap(command_hmltrim& a, command_hmltrim& b) {
@@ -8034,7 +7815,7 @@ class command_hmltrim : public ::google::protobuf::Message /* @@protoc_insertion
   ::google::protobuf::int32 stop() const;
   void set_stop(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hmltrim)
+  // @@protoc_insertion_point(class_scope:client.command_hmltrim)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -8048,7 +7829,7 @@ class command_hmltrim : public ::google::protobuf::Message /* @@protoc_insertion
 };
 // -------------------------------------------------------------------
 
-class command_mhmltrim : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mhmltrim) */ {
+class command_mhmltrim : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mhmltrim) */ {
  public:
   command_mhmltrim();
   virtual ~command_mhmltrim();
@@ -8083,7 +7864,7 @@ class command_mhmltrim : public ::google::protobuf::Message /* @@protoc_insertio
                &_command_mhmltrim_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    69;
+    67;
 
   void Swap(command_mhmltrim* other);
   friend void swap(command_mhmltrim& a, command_mhmltrim& b) {
@@ -8186,7 +7967,7 @@ class command_mhmltrim : public ::google::protobuf::Message /* @@protoc_insertio
   ::google::protobuf::int32 stop() const;
   void set_stop(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mhmltrim)
+  // @@protoc_insertion_point(class_scope:client.command_mhmltrim)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -8200,7 +7981,7 @@ class command_mhmltrim : public ::google::protobuf::Message /* @@protoc_insertio
 };
 // -------------------------------------------------------------------
 
-class command_llen : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_llen) */ {
+class command_llen : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_llen) */ {
  public:
   command_llen();
   virtual ~command_llen();
@@ -8235,7 +8016,7 @@ class command_llen : public ::google::protobuf::Message /* @@protoc_insertion_po
                &_command_llen_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    70;
+    68;
 
   void Swap(command_llen* other);
   friend void swap(command_llen& a, command_llen& b) {
@@ -8296,7 +8077,7 @@ class command_llen : public ::google::protobuf::Message /* @@protoc_insertion_po
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_llen)
+  // @@protoc_insertion_point(class_scope:client.command_llen)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -8307,7 +8088,7 @@ class command_llen : public ::google::protobuf::Message /* @@protoc_insertion_po
 };
 // -------------------------------------------------------------------
 
-class command_llen_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_llen_reply) */ {
+class command_llen_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_llen_reply) */ {
  public:
   command_llen_reply();
   virtual ~command_llen_reply();
@@ -8342,7 +8123,7 @@ class command_llen_reply : public ::google::protobuf::Message /* @@protoc_insert
                &_command_llen_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    71;
+    69;
 
   void Swap(command_llen_reply* other);
   friend void swap(command_llen_reply& a, command_llen_reply& b) {
@@ -8389,37 +8170,37 @@ class command_llen_reply : public ::google::protobuf::Message /* @@protoc_insert
 
   // accessors -------------------------------------------------------
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // .protocol.VALUE reply = 2;
-  bool has_reply() const;
-  void clear_reply();
-  static const int kReplyFieldNumber = 2;
-  const ::protocol::VALUE& reply() const;
-  ::protocol::VALUE* release_reply();
-  ::protocol::VALUE* mutable_reply();
-  void set_allocated_reply(::protocol::VALUE* reply);
+  // .data.VALUE data = 2;
+  bool has_data() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::data::VALUE& data() const;
+  ::data::VALUE* release_data();
+  ::data::VALUE* mutable_data();
+  void set_allocated_data(::data::VALUE* data);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_llen_reply)
+  // @@protoc_insertion_point(class_scope:client.command_llen_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::protocol::command_reply* state_;
-  ::protocol::VALUE* reply_;
+  ::client::command_reply* state_;
+  ::data::VALUE* data_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_llen_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_mllen : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mllen) */ {
+class command_mllen : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mllen) */ {
  public:
   command_mllen();
   virtual ~command_mllen();
@@ -8454,7 +8235,7 @@ class command_mllen : public ::google::protobuf::Message /* @@protoc_insertion_p
                &_command_mllen_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    72;
+    70;
 
   void Swap(command_mllen* other);
   friend void swap(command_mllen& a, command_mllen& b) {
@@ -8523,7 +8304,7 @@ class command_mllen : public ::google::protobuf::Message /* @@protoc_insertion_p
   const ::google::protobuf::RepeatedPtrField< ::std::string>& keys() const;
   ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_keys();
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mllen)
+  // @@protoc_insertion_point(class_scope:client.command_mllen)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -8534,7 +8315,7 @@ class command_mllen : public ::google::protobuf::Message /* @@protoc_insertion_p
 };
 // -------------------------------------------------------------------
 
-class command_mllen_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mllen_reply) */ {
+class command_mllen_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mllen_reply) */ {
  public:
   command_mllen_reply();
   virtual ~command_mllen_reply();
@@ -8569,7 +8350,7 @@ class command_mllen_reply : public ::google::protobuf::Message /* @@protoc_inser
                &_command_mllen_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    73;
+    71;
 
   void Swap(command_mllen_reply* other);
   friend void swap(command_mllen_reply& a, command_mllen_reply& b) {
@@ -8616,40 +8397,40 @@ class command_mllen_reply : public ::google::protobuf::Message /* @@protoc_inser
 
   // accessors -------------------------------------------------------
 
-  // repeated .protocol.VALUE reply = 2;
-  int reply_size() const;
-  void clear_reply();
-  static const int kReplyFieldNumber = 2;
-  const ::protocol::VALUE& reply(int index) const;
-  ::protocol::VALUE* mutable_reply(int index);
-  ::protocol::VALUE* add_reply();
-  ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >*
-      mutable_reply();
-  const ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >&
-      reply() const;
+  // repeated .data.VALUE data = 2;
+  int data_size() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::data::VALUE& data(int index) const;
+  ::data::VALUE* mutable_data(int index);
+  ::data::VALUE* add_data();
+  ::google::protobuf::RepeatedPtrField< ::data::VALUE >*
+      mutable_data();
+  const ::google::protobuf::RepeatedPtrField< ::data::VALUE >&
+      data() const;
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mllen_reply)
+  // @@protoc_insertion_point(class_scope:client.command_mllen_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::protocol::VALUE > reply_;
-  ::protocol::command_reply* state_;
+  ::google::protobuf::RepeatedPtrField< ::data::VALUE > data_;
+  ::client::command_reply* state_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_mllen_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_hllen : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hllen) */ {
+class command_hllen : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hllen) */ {
  public:
   command_hllen();
   virtual ~command_hllen();
@@ -8684,7 +8465,7 @@ class command_hllen : public ::google::protobuf::Message /* @@protoc_insertion_p
                &_command_hllen_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    74;
+    72;
 
   void Swap(command_hllen* other);
   friend void swap(command_hllen& a, command_hllen& b) {
@@ -8759,7 +8540,7 @@ class command_hllen : public ::google::protobuf::Message /* @@protoc_insertion_p
   ::std::string* release_field();
   void set_allocated_field(::std::string* field);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hllen)
+  // @@protoc_insertion_point(class_scope:client.command_hllen)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -8771,7 +8552,7 @@ class command_hllen : public ::google::protobuf::Message /* @@protoc_insertion_p
 };
 // -------------------------------------------------------------------
 
-class command_hllen_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hllen_reply) */ {
+class command_hllen_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hllen_reply) */ {
  public:
   command_hllen_reply();
   virtual ~command_hllen_reply();
@@ -8806,7 +8587,7 @@ class command_hllen_reply : public ::google::protobuf::Message /* @@protoc_inser
                &_command_hllen_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    75;
+    73;
 
   void Swap(command_hllen_reply* other);
   friend void swap(command_hllen_reply& a, command_hllen_reply& b) {
@@ -8853,37 +8634,37 @@ class command_hllen_reply : public ::google::protobuf::Message /* @@protoc_inser
 
   // accessors -------------------------------------------------------
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // .protocol.VALUE reply = 2;
-  bool has_reply() const;
-  void clear_reply();
-  static const int kReplyFieldNumber = 2;
-  const ::protocol::VALUE& reply() const;
-  ::protocol::VALUE* release_reply();
-  ::protocol::VALUE* mutable_reply();
-  void set_allocated_reply(::protocol::VALUE* reply);
+  // .data.VALUE data = 2;
+  bool has_data() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::data::VALUE& data() const;
+  ::data::VALUE* release_data();
+  ::data::VALUE* mutable_data();
+  void set_allocated_data(::data::VALUE* data);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hllen_reply)
+  // @@protoc_insertion_point(class_scope:client.command_hllen_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::protocol::command_reply* state_;
-  ::protocol::VALUE* reply_;
+  ::client::command_reply* state_;
+  ::data::VALUE* data_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_hllen_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_hmllen : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hmllen) */ {
+class command_hmllen : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hmllen) */ {
  public:
   command_hmllen();
   virtual ~command_hmllen();
@@ -8918,7 +8699,7 @@ class command_hmllen : public ::google::protobuf::Message /* @@protoc_insertion_
                &_command_hmllen_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    76;
+    74;
 
   void Swap(command_hmllen* other);
   friend void swap(command_hmllen& a, command_hmllen& b) {
@@ -9001,7 +8782,7 @@ class command_hmllen : public ::google::protobuf::Message /* @@protoc_insertion_
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hmllen)
+  // @@protoc_insertion_point(class_scope:client.command_hmllen)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -9013,7 +8794,7 @@ class command_hmllen : public ::google::protobuf::Message /* @@protoc_insertion_
 };
 // -------------------------------------------------------------------
 
-class command_hmllen_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hmllen_reply) */ {
+class command_hmllen_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hmllen_reply) */ {
  public:
   command_hmllen_reply();
   virtual ~command_hmllen_reply();
@@ -9048,7 +8829,7 @@ class command_hmllen_reply : public ::google::protobuf::Message /* @@protoc_inse
                &_command_hmllen_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    77;
+    75;
 
   void Swap(command_hmllen_reply* other);
   friend void swap(command_hmllen_reply& a, command_hmllen_reply& b) {
@@ -9095,40 +8876,40 @@ class command_hmllen_reply : public ::google::protobuf::Message /* @@protoc_inse
 
   // accessors -------------------------------------------------------
 
-  // repeated .protocol.VALUE reply = 2;
-  int reply_size() const;
-  void clear_reply();
-  static const int kReplyFieldNumber = 2;
-  const ::protocol::VALUE& reply(int index) const;
-  ::protocol::VALUE* mutable_reply(int index);
-  ::protocol::VALUE* add_reply();
-  ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >*
-      mutable_reply();
-  const ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >&
-      reply() const;
+  // repeated .data.VALUE data = 2;
+  int data_size() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::data::VALUE& data(int index) const;
+  ::data::VALUE* mutable_data(int index);
+  ::data::VALUE* add_data();
+  ::google::protobuf::RepeatedPtrField< ::data::VALUE >*
+      mutable_data();
+  const ::google::protobuf::RepeatedPtrField< ::data::VALUE >&
+      data() const;
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hmllen_reply)
+  // @@protoc_insertion_point(class_scope:client.command_hmllen_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::protocol::VALUE > reply_;
-  ::protocol::command_reply* state_;
+  ::google::protobuf::RepeatedPtrField< ::data::VALUE > data_;
+  ::client::command_reply* state_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_hmllen_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_mhmllen : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mhmllen) */ {
+class command_mhmllen : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mhmllen) */ {
  public:
   command_mhmllen();
   virtual ~command_mhmllen();
@@ -9163,7 +8944,7 @@ class command_mhmllen : public ::google::protobuf::Message /* @@protoc_insertion
                &_command_mhmllen_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    78;
+    76;
 
   void Swap(command_mhmllen* other);
   friend void swap(command_mhmllen& a, command_mhmllen& b) {
@@ -9254,7 +9035,7 @@ class command_mhmllen : public ::google::protobuf::Message /* @@protoc_insertion
   const ::google::protobuf::RepeatedPtrField< ::std::string>& fields() const;
   ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_fields();
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mhmllen)
+  // @@protoc_insertion_point(class_scope:client.command_mhmllen)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -9266,7 +9047,7 @@ class command_mhmllen : public ::google::protobuf::Message /* @@protoc_insertion
 };
 // -------------------------------------------------------------------
 
-class command_mhmllen_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mhmllen_reply) */ {
+class command_mhmllen_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mhmllen_reply) */ {
  public:
   command_mhmllen_reply();
   virtual ~command_mhmllen_reply();
@@ -9301,7 +9082,7 @@ class command_mhmllen_reply : public ::google::protobuf::Message /* @@protoc_ins
                &_command_mhmllen_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    79;
+    77;
 
   void Swap(command_mhmllen_reply* other);
   friend void swap(command_mhmllen_reply& a, command_mhmllen_reply& b) {
@@ -9348,40 +9129,40 @@ class command_mhmllen_reply : public ::google::protobuf::Message /* @@protoc_ins
 
   // accessors -------------------------------------------------------
 
-  // repeated .protocol.values_type reply = 2;
-  int reply_size() const;
-  void clear_reply();
-  static const int kReplyFieldNumber = 2;
-  const ::protocol::values_type& reply(int index) const;
-  ::protocol::values_type* mutable_reply(int index);
-  ::protocol::values_type* add_reply();
-  ::google::protobuf::RepeatedPtrField< ::protocol::values_type >*
-      mutable_reply();
-  const ::google::protobuf::RepeatedPtrField< ::protocol::values_type >&
-      reply() const;
+  // repeated .client.values_type data = 2;
+  int data_size() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::client::values_type& data(int index) const;
+  ::client::values_type* mutable_data(int index);
+  ::client::values_type* add_data();
+  ::google::protobuf::RepeatedPtrField< ::client::values_type >*
+      mutable_data();
+  const ::google::protobuf::RepeatedPtrField< ::client::values_type >&
+      data() const;
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mhmllen_reply)
+  // @@protoc_insertion_point(class_scope:client.command_mhmllen_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::protocol::values_type > reply_;
-  ::protocol::command_reply* state_;
+  ::google::protobuf::RepeatedPtrField< ::client::values_type > data_;
+  ::client::command_reply* state_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_mhmllen_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_mapget : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mapget) */ {
+class command_mapget : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mapget) */ {
  public:
   command_mapget();
   virtual ~command_mapget();
@@ -9416,7 +9197,7 @@ class command_mapget : public ::google::protobuf::Message /* @@protoc_insertion_
                &_command_mapget_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    80;
+    78;
 
   void Swap(command_mapget* other);
   friend void swap(command_mapget& a, command_mapget& b) {
@@ -9477,7 +9258,7 @@ class command_mapget : public ::google::protobuf::Message /* @@protoc_insertion_
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mapget)
+  // @@protoc_insertion_point(class_scope:client.command_mapget)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -9488,7 +9269,7 @@ class command_mapget : public ::google::protobuf::Message /* @@protoc_insertion_
 };
 // -------------------------------------------------------------------
 
-class command_mapget_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mapget_reply) */ {
+class command_mapget_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mapget_reply) */ {
  public:
   command_mapget_reply();
   virtual ~command_mapget_reply();
@@ -9523,7 +9304,7 @@ class command_mapget_reply : public ::google::protobuf::Message /* @@protoc_inse
                &_command_mapget_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    81;
+    79;
 
   void Swap(command_mapget_reply* other);
   friend void swap(command_mapget_reply& a, command_mapget_reply& b) {
@@ -9570,37 +9351,37 @@ class command_mapget_reply : public ::google::protobuf::Message /* @@protoc_inse
 
   // accessors -------------------------------------------------------
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // .protocol.VALUE value = 2;
-  bool has_value() const;
-  void clear_value();
-  static const int kValueFieldNumber = 2;
-  const ::protocol::VALUE& value() const;
-  ::protocol::VALUE* release_value();
-  ::protocol::VALUE* mutable_value();
-  void set_allocated_value(::protocol::VALUE* value);
+  // .data.VALUE data = 2;
+  bool has_data() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::data::VALUE& data() const;
+  ::data::VALUE* release_data();
+  ::data::VALUE* mutable_data();
+  void set_allocated_data(::data::VALUE* data);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mapget_reply)
+  // @@protoc_insertion_point(class_scope:client.command_mapget_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::protocol::command_reply* state_;
-  ::protocol::VALUE* value_;
+  ::client::command_reply* state_;
+  ::data::VALUE* data_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_mapget_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_mmapget : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mmapget) */ {
+class command_mmapget : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mmapget) */ {
  public:
   command_mmapget();
   virtual ~command_mmapget();
@@ -9635,7 +9416,7 @@ class command_mmapget : public ::google::protobuf::Message /* @@protoc_insertion
                &_command_mmapget_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    82;
+    80;
 
   void Swap(command_mmapget* other);
   friend void swap(command_mmapget& a, command_mmapget& b) {
@@ -9704,7 +9485,7 @@ class command_mmapget : public ::google::protobuf::Message /* @@protoc_insertion
   const ::google::protobuf::RepeatedPtrField< ::std::string>& keys() const;
   ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_keys();
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mmapget)
+  // @@protoc_insertion_point(class_scope:client.command_mmapget)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -9715,7 +9496,7 @@ class command_mmapget : public ::google::protobuf::Message /* @@protoc_insertion
 };
 // -------------------------------------------------------------------
 
-class command_mmapget_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mmapget_reply) */ {
+class command_mmapget_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mmapget_reply) */ {
  public:
   command_mmapget_reply();
   virtual ~command_mmapget_reply();
@@ -9750,7 +9531,7 @@ class command_mmapget_reply : public ::google::protobuf::Message /* @@protoc_ins
                &_command_mmapget_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    83;
+    81;
 
   void Swap(command_mmapget_reply* other);
   friend void swap(command_mmapget_reply& a, command_mmapget_reply& b) {
@@ -9797,40 +9578,40 @@ class command_mmapget_reply : public ::google::protobuf::Message /* @@protoc_ins
 
   // accessors -------------------------------------------------------
 
-  // repeated .protocol.VALUE values = 2;
-  int values_size() const;
-  void clear_values();
-  static const int kValuesFieldNumber = 2;
-  const ::protocol::VALUE& values(int index) const;
-  ::protocol::VALUE* mutable_values(int index);
-  ::protocol::VALUE* add_values();
-  ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >*
-      mutable_values();
-  const ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >&
-      values() const;
+  // repeated .data.VALUE data = 2;
+  int data_size() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::data::VALUE& data(int index) const;
+  ::data::VALUE* mutable_data(int index);
+  ::data::VALUE* add_data();
+  ::google::protobuf::RepeatedPtrField< ::data::VALUE >*
+      mutable_data();
+  const ::google::protobuf::RepeatedPtrField< ::data::VALUE >&
+      data() const;
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mmapget_reply)
+  // @@protoc_insertion_point(class_scope:client.command_mmapget_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::protocol::VALUE > values_;
-  ::protocol::command_reply* state_;
+  ::google::protobuf::RepeatedPtrField< ::data::VALUE > data_;
+  ::client::command_reply* state_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_mmapget_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_hmapget : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hmapget) */ {
+class command_hmapget : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hmapget) */ {
  public:
   command_hmapget();
   virtual ~command_hmapget();
@@ -9865,7 +9646,7 @@ class command_hmapget : public ::google::protobuf::Message /* @@protoc_insertion
                &_command_hmapget_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    84;
+    82;
 
   void Swap(command_hmapget* other);
   friend void swap(command_hmapget& a, command_hmapget& b) {
@@ -9940,7 +9721,7 @@ class command_hmapget : public ::google::protobuf::Message /* @@protoc_insertion
   ::std::string* release_field();
   void set_allocated_field(::std::string* field);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hmapget)
+  // @@protoc_insertion_point(class_scope:client.command_hmapget)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -9952,7 +9733,7 @@ class command_hmapget : public ::google::protobuf::Message /* @@protoc_insertion
 };
 // -------------------------------------------------------------------
 
-class command_hmapget_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hmapget_reply) */ {
+class command_hmapget_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hmapget_reply) */ {
  public:
   command_hmapget_reply();
   virtual ~command_hmapget_reply();
@@ -9987,7 +9768,7 @@ class command_hmapget_reply : public ::google::protobuf::Message /* @@protoc_ins
                &_command_hmapget_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    85;
+    83;
 
   void Swap(command_hmapget_reply* other);
   friend void swap(command_hmapget_reply& a, command_hmapget_reply& b) {
@@ -10034,37 +9815,37 @@ class command_hmapget_reply : public ::google::protobuf::Message /* @@protoc_ins
 
   // accessors -------------------------------------------------------
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // .protocol.VALUE values = 2;
-  bool has_values() const;
-  void clear_values();
-  static const int kValuesFieldNumber = 2;
-  const ::protocol::VALUE& values() const;
-  ::protocol::VALUE* release_values();
-  ::protocol::VALUE* mutable_values();
-  void set_allocated_values(::protocol::VALUE* values);
+  // .data.VALUE data = 2;
+  bool has_data() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::data::VALUE& data() const;
+  ::data::VALUE* release_data();
+  ::data::VALUE* mutable_data();
+  void set_allocated_data(::data::VALUE* data);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hmapget_reply)
+  // @@protoc_insertion_point(class_scope:client.command_hmapget_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::protocol::command_reply* state_;
-  ::protocol::VALUE* values_;
+  ::client::command_reply* state_;
+  ::data::VALUE* data_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_hmapget_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_hmmapget : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hmmapget) */ {
+class command_hmmapget : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hmmapget) */ {
  public:
   command_hmmapget();
   virtual ~command_hmmapget();
@@ -10099,7 +9880,7 @@ class command_hmmapget : public ::google::protobuf::Message /* @@protoc_insertio
                &_command_hmmapget_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    86;
+    84;
 
   void Swap(command_hmmapget* other);
   friend void swap(command_hmmapget& a, command_hmmapget& b) {
@@ -10182,7 +9963,7 @@ class command_hmmapget : public ::google::protobuf::Message /* @@protoc_insertio
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hmmapget)
+  // @@protoc_insertion_point(class_scope:client.command_hmmapget)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -10194,7 +9975,7 @@ class command_hmmapget : public ::google::protobuf::Message /* @@protoc_insertio
 };
 // -------------------------------------------------------------------
 
-class command_hmmapget_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hmmapget_reply) */ {
+class command_hmmapget_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hmmapget_reply) */ {
  public:
   command_hmmapget_reply();
   virtual ~command_hmmapget_reply();
@@ -10229,7 +10010,7 @@ class command_hmmapget_reply : public ::google::protobuf::Message /* @@protoc_in
                &_command_hmmapget_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    87;
+    85;
 
   void Swap(command_hmmapget_reply* other);
   friend void swap(command_hmmapget_reply& a, command_hmmapget_reply& b) {
@@ -10276,40 +10057,40 @@ class command_hmmapget_reply : public ::google::protobuf::Message /* @@protoc_in
 
   // accessors -------------------------------------------------------
 
-  // repeated .protocol.VALUE values = 2;
-  int values_size() const;
-  void clear_values();
-  static const int kValuesFieldNumber = 2;
-  const ::protocol::VALUE& values(int index) const;
-  ::protocol::VALUE* mutable_values(int index);
-  ::protocol::VALUE* add_values();
-  ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >*
-      mutable_values();
-  const ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >&
-      values() const;
+  // repeated .data.VALUE data = 2;
+  int data_size() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::data::VALUE& data(int index) const;
+  ::data::VALUE* mutable_data(int index);
+  ::data::VALUE* add_data();
+  ::google::protobuf::RepeatedPtrField< ::data::VALUE >*
+      mutable_data();
+  const ::google::protobuf::RepeatedPtrField< ::data::VALUE >&
+      data() const;
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hmmapget_reply)
+  // @@protoc_insertion_point(class_scope:client.command_hmmapget_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::protocol::VALUE > values_;
-  ::protocol::command_reply* state_;
+  ::google::protobuf::RepeatedPtrField< ::data::VALUE > data_;
+  ::client::command_reply* state_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_hmmapget_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_mhmmapget : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mhmmapget) */ {
+class command_mhmmapget : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mhmmapget) */ {
  public:
   command_mhmmapget();
   virtual ~command_mhmmapget();
@@ -10344,7 +10125,7 @@ class command_mhmmapget : public ::google::protobuf::Message /* @@protoc_inserti
                &_command_mhmmapget_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    88;
+    86;
 
   void Swap(command_mhmmapget* other);
   friend void swap(command_mhmmapget& a, command_mhmmapget& b) {
@@ -10435,7 +10216,7 @@ class command_mhmmapget : public ::google::protobuf::Message /* @@protoc_inserti
   const ::google::protobuf::RepeatedPtrField< ::std::string>& fields() const;
   ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_fields();
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mhmmapget)
+  // @@protoc_insertion_point(class_scope:client.command_mhmmapget)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -10447,7 +10228,7 @@ class command_mhmmapget : public ::google::protobuf::Message /* @@protoc_inserti
 };
 // -------------------------------------------------------------------
 
-class command_mhmmapget_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mhmmapget_reply) */ {
+class command_mhmmapget_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mhmmapget_reply) */ {
  public:
   command_mhmmapget_reply();
   virtual ~command_mhmmapget_reply();
@@ -10482,7 +10263,7 @@ class command_mhmmapget_reply : public ::google::protobuf::Message /* @@protoc_i
                &_command_mhmmapget_reply_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    89;
+    87;
 
   void Swap(command_mhmmapget_reply* other);
   friend void swap(command_mhmmapget_reply& a, command_mhmmapget_reply& b) {
@@ -10529,40 +10310,40 @@ class command_mhmmapget_reply : public ::google::protobuf::Message /* @@protoc_i
 
   // accessors -------------------------------------------------------
 
-  // repeated .protocol.values_type values = 2;
-  int values_size() const;
-  void clear_values();
-  static const int kValuesFieldNumber = 2;
-  const ::protocol::values_type& values(int index) const;
-  ::protocol::values_type* mutable_values(int index);
-  ::protocol::values_type* add_values();
-  ::google::protobuf::RepeatedPtrField< ::protocol::values_type >*
-      mutable_values();
-  const ::google::protobuf::RepeatedPtrField< ::protocol::values_type >&
-      values() const;
+  // repeated .client.values_type data = 2;
+  int data_size() const;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::client::values_type& data(int index) const;
+  ::client::values_type* mutable_data(int index);
+  ::client::values_type* add_data();
+  ::google::protobuf::RepeatedPtrField< ::client::values_type >*
+      mutable_data();
+  const ::google::protobuf::RepeatedPtrField< ::client::values_type >&
+      data() const;
 
-  // .protocol.command_reply state = 1;
+  // .client.command_reply state = 1;
   bool has_state() const;
   void clear_state();
   static const int kStateFieldNumber = 1;
-  const ::protocol::command_reply& state() const;
-  ::protocol::command_reply* release_state();
-  ::protocol::command_reply* mutable_state();
-  void set_allocated_state(::protocol::command_reply* state);
+  const ::client::command_reply& state() const;
+  ::client::command_reply* release_state();
+  ::client::command_reply* mutable_state();
+  void set_allocated_state(::client::command_reply* state);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mhmmapget_reply)
+  // @@protoc_insertion_point(class_scope:client.command_mhmmapget_reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::protocol::values_type > values_;
-  ::protocol::command_reply* state_;
+  ::google::protobuf::RepeatedPtrField< ::client::values_type > data_;
+  ::client::command_reply* state_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_mhmmapget_replyImpl();
 };
 // -------------------------------------------------------------------
 
-class command_mapset : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mapset) */ {
+class command_mapset : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mapset) */ {
  public:
   command_mapset();
   virtual ~command_mapset();
@@ -10597,7 +10378,7 @@ class command_mapset : public ::google::protobuf::Message /* @@protoc_insertion_
                &_command_mapset_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    90;
+    88;
 
   void Swap(command_mapset* other);
   friend void swap(command_mapset& a, command_mapset& b) {
@@ -10658,21 +10439,21 @@ class command_mapset : public ::google::protobuf::Message /* @@protoc_insertion_
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
 
-  // .protocol.VALUE value = 2;
+  // .data.VALUE value = 2;
   bool has_value() const;
   void clear_value();
   static const int kValueFieldNumber = 2;
-  const ::protocol::VALUE& value() const;
-  ::protocol::VALUE* release_value();
-  ::protocol::VALUE* mutable_value();
-  void set_allocated_value(::protocol::VALUE* value);
+  const ::data::VALUE& value() const;
+  ::data::VALUE* release_value();
+  ::data::VALUE* mutable_value();
+  void set_allocated_value(::data::VALUE* value);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mapset)
+  // @@protoc_insertion_point(class_scope:client.command_mapset)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr key_;
-  ::protocol::VALUE* value_;
+  ::data::VALUE* value_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_mapsetImpl();
@@ -10680,13 +10461,13 @@ class command_mapset : public ::google::protobuf::Message /* @@protoc_insertion_
 // -------------------------------------------------------------------
 
 class command_mmapset_KvsEntry_DoNotUse : public ::google::protobuf::internal::MapEntry<command_mmapset_KvsEntry_DoNotUse, 
-    ::std::string, ::protocol::VALUE,
+    ::std::string, ::data::VALUE,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > {
 public:
   typedef ::google::protobuf::internal::MapEntry<command_mmapset_KvsEntry_DoNotUse, 
-    ::std::string, ::protocol::VALUE,
+    ::std::string, ::data::VALUE,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > SuperType;
@@ -10700,7 +10481,7 @@ public:
 
 // -------------------------------------------------------------------
 
-class command_mmapset : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mmapset) */ {
+class command_mmapset : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mmapset) */ {
  public:
   command_mmapset();
   virtual ~command_mmapset();
@@ -10735,7 +10516,7 @@ class command_mmapset : public ::google::protobuf::Message /* @@protoc_insertion
                &_command_mmapset_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    92;
+    90;
 
   void Swap(command_mmapset* other);
   friend void swap(command_mmapset& a, command_mmapset& b) {
@@ -10783,22 +10564,22 @@ class command_mmapset : public ::google::protobuf::Message /* @@protoc_insertion
 
   // accessors -------------------------------------------------------
 
-  // map<string, .protocol.VALUE> kvs = 1;
+  // map<string, .data.VALUE> kvs = 1;
   int kvs_size() const;
   void clear_kvs();
   static const int kKvsFieldNumber = 1;
-  const ::google::protobuf::Map< ::std::string, ::protocol::VALUE >&
+  const ::google::protobuf::Map< ::std::string, ::data::VALUE >&
       kvs() const;
-  ::google::protobuf::Map< ::std::string, ::protocol::VALUE >*
+  ::google::protobuf::Map< ::std::string, ::data::VALUE >*
       mutable_kvs();
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mmapset)
+  // @@protoc_insertion_point(class_scope:client.command_mmapset)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::MapField<
       command_mmapset_KvsEntry_DoNotUse,
-      ::std::string, ::protocol::VALUE,
+      ::std::string, ::data::VALUE,
       ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
       ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
       0 > kvs_;
@@ -10808,7 +10589,7 @@ class command_mmapset : public ::google::protobuf::Message /* @@protoc_insertion
 };
 // -------------------------------------------------------------------
 
-class command_hmapset : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hmapset) */ {
+class command_hmapset : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hmapset) */ {
  public:
   command_hmapset();
   virtual ~command_hmapset();
@@ -10843,7 +10624,7 @@ class command_hmapset : public ::google::protobuf::Message /* @@protoc_insertion
                &_command_hmapset_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    93;
+    91;
 
   void Swap(command_hmapset* other);
   friend void swap(command_hmapset& a, command_hmapset& b) {
@@ -10918,22 +10699,22 @@ class command_hmapset : public ::google::protobuf::Message /* @@protoc_insertion
   ::std::string* release_field();
   void set_allocated_field(::std::string* field);
 
-  // .protocol.VALUE value = 3;
+  // .data.VALUE value = 3;
   bool has_value() const;
   void clear_value();
   static const int kValueFieldNumber = 3;
-  const ::protocol::VALUE& value() const;
-  ::protocol::VALUE* release_value();
-  ::protocol::VALUE* mutable_value();
-  void set_allocated_value(::protocol::VALUE* value);
+  const ::data::VALUE& value() const;
+  ::data::VALUE* release_value();
+  ::data::VALUE* mutable_value();
+  void set_allocated_value(::data::VALUE* value);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hmapset)
+  // @@protoc_insertion_point(class_scope:client.command_hmapset)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr key_;
   ::google::protobuf::internal::ArenaStringPtr field_;
-  ::protocol::VALUE* value_;
+  ::data::VALUE* value_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_hmapsetImpl();
@@ -10941,13 +10722,13 @@ class command_hmapset : public ::google::protobuf::Message /* @@protoc_insertion
 // -------------------------------------------------------------------
 
 class command_hmmapset_ValuesEntry_DoNotUse : public ::google::protobuf::internal::MapEntry<command_hmmapset_ValuesEntry_DoNotUse, 
-    ::std::string, ::protocol::VALUE,
+    ::std::string, ::data::VALUE,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > {
 public:
   typedef ::google::protobuf::internal::MapEntry<command_hmmapset_ValuesEntry_DoNotUse, 
-    ::std::string, ::protocol::VALUE,
+    ::std::string, ::data::VALUE,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > SuperType;
@@ -10961,7 +10742,7 @@ public:
 
 // -------------------------------------------------------------------
 
-class command_hmmapset : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hmmapset) */ {
+class command_hmmapset : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hmmapset) */ {
  public:
   command_hmmapset();
   virtual ~command_hmmapset();
@@ -10996,7 +10777,7 @@ class command_hmmapset : public ::google::protobuf::Message /* @@protoc_insertio
                &_command_hmmapset_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    95;
+    93;
 
   void Swap(command_hmmapset* other);
   friend void swap(command_hmmapset& a, command_hmmapset& b) {
@@ -11044,13 +10825,13 @@ class command_hmmapset : public ::google::protobuf::Message /* @@protoc_insertio
 
   // accessors -------------------------------------------------------
 
-  // map<string, .protocol.VALUE> values = 2;
+  // map<string, .data.VALUE> values = 2;
   int values_size() const;
   void clear_values();
   static const int kValuesFieldNumber = 2;
-  const ::google::protobuf::Map< ::std::string, ::protocol::VALUE >&
+  const ::google::protobuf::Map< ::std::string, ::data::VALUE >&
       values() const;
-  ::google::protobuf::Map< ::std::string, ::protocol::VALUE >*
+  ::google::protobuf::Map< ::std::string, ::data::VALUE >*
       mutable_values();
 
   // string key = 1;
@@ -11067,13 +10848,13 @@ class command_hmmapset : public ::google::protobuf::Message /* @@protoc_insertio
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hmmapset)
+  // @@protoc_insertion_point(class_scope:client.command_hmmapset)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::MapField<
       command_hmmapset_ValuesEntry_DoNotUse,
-      ::std::string, ::protocol::VALUE,
+      ::std::string, ::data::VALUE,
       ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
       ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
       0 > values_;
@@ -11085,13 +10866,13 @@ class command_hmmapset : public ::google::protobuf::Message /* @@protoc_insertio
 // -------------------------------------------------------------------
 
 class command_mhmmapset_ValuesEntry_DoNotUse : public ::google::protobuf::internal::MapEntry<command_mhmmapset_ValuesEntry_DoNotUse, 
-    ::std::string, ::protocol::VALUE,
+    ::std::string, ::data::VALUE,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > {
 public:
   typedef ::google::protobuf::internal::MapEntry<command_mhmmapset_ValuesEntry_DoNotUse, 
-    ::std::string, ::protocol::VALUE,
+    ::std::string, ::data::VALUE,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > SuperType;
@@ -11105,7 +10886,7 @@ public:
 
 // -------------------------------------------------------------------
 
-class command_mhmmapset : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mhmmapset) */ {
+class command_mhmmapset : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mhmmapset) */ {
  public:
   command_mhmmapset();
   virtual ~command_mhmmapset();
@@ -11140,7 +10921,7 @@ class command_mhmmapset : public ::google::protobuf::Message /* @@protoc_inserti
                &_command_mhmmapset_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    97;
+    95;
 
   void Swap(command_mhmmapset* other);
   friend void swap(command_mhmmapset& a, command_mhmmapset& b) {
@@ -11210,23 +10991,23 @@ class command_mhmmapset : public ::google::protobuf::Message /* @@protoc_inserti
   const ::google::protobuf::RepeatedPtrField< ::std::string>& fields() const;
   ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_fields();
 
-  // map<string, .protocol.VALUE> values = 2;
+  // map<string, .data.VALUE> values = 2;
   int values_size() const;
   void clear_values();
   static const int kValuesFieldNumber = 2;
-  const ::google::protobuf::Map< ::std::string, ::protocol::VALUE >&
+  const ::google::protobuf::Map< ::std::string, ::data::VALUE >&
       values() const;
-  ::google::protobuf::Map< ::std::string, ::protocol::VALUE >*
+  ::google::protobuf::Map< ::std::string, ::data::VALUE >*
       mutable_values();
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mhmmapset)
+  // @@protoc_insertion_point(class_scope:client.command_mhmmapset)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::RepeatedPtrField< ::std::string> fields_;
   ::google::protobuf::internal::MapField<
       command_mhmmapset_ValuesEntry_DoNotUse,
-      ::std::string, ::protocol::VALUE,
+      ::std::string, ::data::VALUE,
       ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
       ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
       0 > values_;
@@ -11236,7 +11017,7 @@ class command_mhmmapset : public ::google::protobuf::Message /* @@protoc_inserti
 };
 // -------------------------------------------------------------------
 
-class command_mapdel : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mapdel) */ {
+class command_mapdel : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mapdel) */ {
  public:
   command_mapdel();
   virtual ~command_mapdel();
@@ -11271,7 +11052,7 @@ class command_mapdel : public ::google::protobuf::Message /* @@protoc_insertion_
                &_command_mapdel_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    98;
+    96;
 
   void Swap(command_mapdel* other);
   friend void swap(command_mapdel& a, command_mapdel& b) {
@@ -11354,7 +11135,7 @@ class command_mapdel : public ::google::protobuf::Message /* @@protoc_insertion_
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mapdel)
+  // @@protoc_insertion_point(class_scope:client.command_mapdel)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -11366,7 +11147,7 @@ class command_mapdel : public ::google::protobuf::Message /* @@protoc_insertion_
 };
 // -------------------------------------------------------------------
 
-class command_mmapdel : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mmapdel) */ {
+class command_mmapdel : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mmapdel) */ {
  public:
   command_mmapdel();
   virtual ~command_mmapdel();
@@ -11401,7 +11182,7 @@ class command_mmapdel : public ::google::protobuf::Message /* @@protoc_insertion
                &_command_mmapdel_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    99;
+    97;
 
   void Swap(command_mmapdel* other);
   friend void swap(command_mmapdel& a, command_mmapdel& b) {
@@ -11492,7 +11273,7 @@ class command_mmapdel : public ::google::protobuf::Message /* @@protoc_insertion
   const ::google::protobuf::RepeatedPtrField< ::std::string>& mapkeys() const;
   ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_mapkeys();
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mmapdel)
+  // @@protoc_insertion_point(class_scope:client.command_mmapdel)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -11504,7 +11285,7 @@ class command_mmapdel : public ::google::protobuf::Message /* @@protoc_insertion
 };
 // -------------------------------------------------------------------
 
-class command_hmapdel : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hmapdel) */ {
+class command_hmapdel : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hmapdel) */ {
  public:
   command_hmapdel();
   virtual ~command_hmapdel();
@@ -11539,7 +11320,7 @@ class command_hmapdel : public ::google::protobuf::Message /* @@protoc_insertion
                &_command_hmapdel_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    100;
+    98;
 
   void Swap(command_hmapdel* other);
   friend void swap(command_hmapdel& a, command_hmapdel& b) {
@@ -11636,7 +11417,7 @@ class command_hmapdel : public ::google::protobuf::Message /* @@protoc_insertion
   ::std::string* release_field();
   void set_allocated_field(::std::string* field);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hmapdel)
+  // @@protoc_insertion_point(class_scope:client.command_hmapdel)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -11649,7 +11430,7 @@ class command_hmapdel : public ::google::protobuf::Message /* @@protoc_insertion
 };
 // -------------------------------------------------------------------
 
-class command_hmmapdel : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_hmmapdel) */ {
+class command_hmmapdel : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_hmmapdel) */ {
  public:
   command_hmmapdel();
   virtual ~command_hmmapdel();
@@ -11684,7 +11465,7 @@ class command_hmmapdel : public ::google::protobuf::Message /* @@protoc_insertio
                &_command_hmmapdel_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    101;
+    99;
 
   void Swap(command_hmmapdel* other);
   friend void swap(command_hmmapdel& a, command_hmmapdel& b) {
@@ -11789,7 +11570,7 @@ class command_hmmapdel : public ::google::protobuf::Message /* @@protoc_insertio
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
 
-  // @@protoc_insertion_point(class_scope:protocol.command_hmmapdel)
+  // @@protoc_insertion_point(class_scope:client.command_hmmapdel)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -11803,13 +11584,13 @@ class command_hmmapdel : public ::google::protobuf::Message /* @@protoc_insertio
 // -------------------------------------------------------------------
 
 class command_mhmmapdel_ValuesEntry_DoNotUse : public ::google::protobuf::internal::MapEntry<command_mhmmapdel_ValuesEntry_DoNotUse, 
-    ::std::string, ::protocol::keys_type,
+    ::std::string, ::client::keys_type,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > {
 public:
   typedef ::google::protobuf::internal::MapEntry<command_mhmmapdel_ValuesEntry_DoNotUse, 
-    ::std::string, ::protocol::keys_type,
+    ::std::string, ::client::keys_type,
     ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
     ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
     0 > SuperType;
@@ -11823,7 +11604,7 @@ public:
 
 // -------------------------------------------------------------------
 
-class command_mhmmapdel : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.command_mhmmapdel) */ {
+class command_mhmmapdel : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_mhmmapdel) */ {
  public:
   command_mhmmapdel();
   virtual ~command_mhmmapdel();
@@ -11858,7 +11639,7 @@ class command_mhmmapdel : public ::google::protobuf::Message /* @@protoc_inserti
                &_command_mhmmapdel_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    103;
+    101;
 
   void Swap(command_mhmmapdel* other);
   friend void swap(command_mhmmapdel& a, command_mhmmapdel& b) {
@@ -11928,29 +11709,143 @@ class command_mhmmapdel : public ::google::protobuf::Message /* @@protoc_inserti
   const ::google::protobuf::RepeatedPtrField< ::std::string>& field() const;
   ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_field();
 
-  // map<string, .protocol.keys_type> values = 2;
+  // map<string, .client.keys_type> values = 2;
   int values_size() const;
   void clear_values();
   static const int kValuesFieldNumber = 2;
-  const ::google::protobuf::Map< ::std::string, ::protocol::keys_type >&
+  const ::google::protobuf::Map< ::std::string, ::client::keys_type >&
       values() const;
-  ::google::protobuf::Map< ::std::string, ::protocol::keys_type >*
+  ::google::protobuf::Map< ::std::string, ::client::keys_type >*
       mutable_values();
 
-  // @@protoc_insertion_point(class_scope:protocol.command_mhmmapdel)
+  // @@protoc_insertion_point(class_scope:client.command_mhmmapdel)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::RepeatedPtrField< ::std::string> field_;
   ::google::protobuf::internal::MapField<
       command_mhmmapdel_ValuesEntry_DoNotUse,
-      ::std::string, ::protocol::keys_type,
+      ::std::string, ::client::keys_type,
       ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
       ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
       0 > values_;
   mutable int _cached_size_;
   friend struct ::protobuf_message_2eproto::TableStruct;
   friend void ::protobuf_message_2eproto::InitDefaultscommand_mhmmapdelImpl();
+};
+// -------------------------------------------------------------------
+
+class command_meet : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_meet) */ {
+ public:
+  command_meet();
+  virtual ~command_meet();
+
+  command_meet(const command_meet& from);
+
+  inline command_meet& operator=(const command_meet& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  command_meet(command_meet&& from) noexcept
+    : command_meet() {
+    *this = ::std::move(from);
+  }
+
+  inline command_meet& operator=(command_meet&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const command_meet& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const command_meet* internal_default_instance() {
+    return reinterpret_cast<const command_meet*>(
+               &_command_meet_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    102;
+
+  void Swap(command_meet* other);
+  friend void swap(command_meet& a, command_meet& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline command_meet* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  command_meet* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const command_meet& from);
+  void MergeFrom(const command_meet& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(command_meet* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string ip = 1;
+  void clear_ip();
+  static const int kIpFieldNumber = 1;
+  const ::std::string& ip() const;
+  void set_ip(const ::std::string& value);
+  #if LANG_CXX11
+  void set_ip(::std::string&& value);
+  #endif
+  void set_ip(const char* value);
+  void set_ip(const char* value, size_t size);
+  ::std::string* mutable_ip();
+  ::std::string* release_ip();
+  void set_allocated_ip(::std::string* ip);
+
+  // int64 port = 2;
+  void clear_port();
+  static const int kPortFieldNumber = 2;
+  ::google::protobuf::int64 port() const;
+  void set_port(::google::protobuf::int64 value);
+
+  // @@protoc_insertion_point(class_scope:client.command_meet)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr ip_;
+  ::google::protobuf::int64 port_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_message_2eproto::TableStruct;
+  friend void ::protobuf_message_2eproto::InitDefaultscommand_meetImpl();
 };
 // ===================================================================
 
@@ -11961,210 +11856,6 @@ class command_mhmmapdel : public ::google::protobuf::Message /* @@protoc_inserti
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// -------------------------------------------------------------------
-
-// VALUE
-
-// .protocol.TYPE type = 1;
-inline void VALUE::clear_type() {
-  type_ = 0;
-}
-inline ::protocol::TYPE VALUE::type() const {
-  // @@protoc_insertion_point(field_get:protocol.VALUE.type)
-  return static_cast< ::protocol::TYPE >(type_);
-}
-inline void VALUE::set_type(::protocol::TYPE value) {
-  
-  type_ = value;
-  // @@protoc_insertion_point(field_set:protocol.VALUE.type)
-}
-
-// int64 number = 2;
-inline void VALUE::clear_number() {
-  number_ = GOOGLE_LONGLONG(0);
-}
-inline ::google::protobuf::int64 VALUE::number() const {
-  // @@protoc_insertion_point(field_get:protocol.VALUE.number)
-  return number_;
-}
-inline void VALUE::set_number(::google::protobuf::int64 value) {
-  
-  number_ = value;
-  // @@protoc_insertion_point(field_set:protocol.VALUE.number)
-}
-
-// repeated int64 number_list = 3;
-inline int VALUE::number_list_size() const {
-  return number_list_.size();
-}
-inline void VALUE::clear_number_list() {
-  number_list_.Clear();
-}
-inline ::google::protobuf::int64 VALUE::number_list(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.VALUE.number_list)
-  return number_list_.Get(index);
-}
-inline void VALUE::set_number_list(int index, ::google::protobuf::int64 value) {
-  number_list_.Set(index, value);
-  // @@protoc_insertion_point(field_set:protocol.VALUE.number_list)
-}
-inline void VALUE::add_number_list(::google::protobuf::int64 value) {
-  number_list_.Add(value);
-  // @@protoc_insertion_point(field_add:protocol.VALUE.number_list)
-}
-inline const ::google::protobuf::RepeatedField< ::google::protobuf::int64 >&
-VALUE::number_list() const {
-  // @@protoc_insertion_point(field_list:protocol.VALUE.number_list)
-  return number_list_;
-}
-inline ::google::protobuf::RepeatedField< ::google::protobuf::int64 >*
-VALUE::mutable_number_list() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.VALUE.number_list)
-  return &number_list_;
-}
-
-// string str = 4;
-inline void VALUE::clear_str() {
-  str_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& VALUE::str() const {
-  // @@protoc_insertion_point(field_get:protocol.VALUE.str)
-  return str_.GetNoArena();
-}
-inline void VALUE::set_str(const ::std::string& value) {
-  
-  str_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.VALUE.str)
-}
-#if LANG_CXX11
-inline void VALUE::set_str(::std::string&& value) {
-  
-  str_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.VALUE.str)
-}
-#endif
-inline void VALUE::set_str(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  str_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.VALUE.str)
-}
-inline void VALUE::set_str(const char* value, size_t size) {
-  
-  str_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.VALUE.str)
-}
-inline ::std::string* VALUE::mutable_str() {
-  
-  // @@protoc_insertion_point(field_mutable:protocol.VALUE.str)
-  return str_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* VALUE::release_str() {
-  // @@protoc_insertion_point(field_release:protocol.VALUE.str)
-  
-  return str_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void VALUE::set_allocated_str(::std::string* str) {
-  if (str != NULL) {
-    
-  } else {
-    
-  }
-  str_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), str);
-  // @@protoc_insertion_point(field_set_allocated:protocol.VALUE.str)
-}
-
-// repeated string str_list = 5;
-inline int VALUE::str_list_size() const {
-  return str_list_.size();
-}
-inline void VALUE::clear_str_list() {
-  str_list_.Clear();
-}
-inline const ::std::string& VALUE::str_list(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.VALUE.str_list)
-  return str_list_.Get(index);
-}
-inline ::std::string* VALUE::mutable_str_list(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.VALUE.str_list)
-  return str_list_.Mutable(index);
-}
-inline void VALUE::set_str_list(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.VALUE.str_list)
-  str_list_.Mutable(index)->assign(value);
-}
-#if LANG_CXX11
-inline void VALUE::set_str_list(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.VALUE.str_list)
-  str_list_.Mutable(index)->assign(std::move(value));
-}
-#endif
-inline void VALUE::set_str_list(int index, const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  str_list_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.VALUE.str_list)
-}
-inline void VALUE::set_str_list(int index, const char* value, size_t size) {
-  str_list_.Mutable(index)->assign(
-    reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.VALUE.str_list)
-}
-inline ::std::string* VALUE::add_str_list() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.VALUE.str_list)
-  return str_list_.Add();
-}
-inline void VALUE::add_str_list(const ::std::string& value) {
-  str_list_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.VALUE.str_list)
-}
-#if LANG_CXX11
-inline void VALUE::add_str_list(::std::string&& value) {
-  str_list_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.VALUE.str_list)
-}
-#endif
-inline void VALUE::add_str_list(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  str_list_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.VALUE.str_list)
-}
-inline void VALUE::add_str_list(const char* value, size_t size) {
-  str_list_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.VALUE.str_list)
-}
-inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
-VALUE::str_list() const {
-  // @@protoc_insertion_point(field_list:protocol.VALUE.str_list)
-  return str_list_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::std::string>*
-VALUE::mutable_str_list() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.VALUE.str_list)
-  return &str_list_;
-}
-
-// map<string, string> kvs = 6;
-inline int VALUE::kvs_size() const {
-  return kvs_.size();
-}
-inline void VALUE::clear_kvs() {
-  kvs_.Clear();
-}
-inline const ::google::protobuf::Map< ::std::string, ::std::string >&
-VALUE::kvs() const {
-  // @@protoc_insertion_point(field_map:protocol.VALUE.kvs)
-  return kvs_.GetMap();
-}
-inline ::google::protobuf::Map< ::std::string, ::std::string >*
-VALUE::mutable_kvs() {
-  // @@protoc_insertion_point(field_mutable_map:protocol.VALUE.kvs)
-  return kvs_.MutableMap();
-}
-
-// -------------------------------------------------------------------
-
 // command_reply
 
 // int32 errcode = 1;
@@ -12172,13 +11863,13 @@ inline void command_reply::clear_errcode() {
   errcode_ = 0;
 }
 inline ::google::protobuf::int32 command_reply::errcode() const {
-  // @@protoc_insertion_point(field_get:protocol.command_reply.errcode)
+  // @@protoc_insertion_point(field_get:client.command_reply.errcode)
   return errcode_;
 }
 inline void command_reply::set_errcode(::google::protobuf::int32 value) {
   
   errcode_ = value;
-  // @@protoc_insertion_point(field_set:protocol.command_reply.errcode)
+  // @@protoc_insertion_point(field_set:client.command_reply.errcode)
 }
 
 // string errmsg = 2;
@@ -12186,41 +11877,41 @@ inline void command_reply::clear_errmsg() {
   errmsg_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_reply::errmsg() const {
-  // @@protoc_insertion_point(field_get:protocol.command_reply.errmsg)
+  // @@protoc_insertion_point(field_get:client.command_reply.errmsg)
   return errmsg_.GetNoArena();
 }
 inline void command_reply::set_errmsg(const ::std::string& value) {
   
   errmsg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_reply.errmsg)
+  // @@protoc_insertion_point(field_set:client.command_reply.errmsg)
 }
 #if LANG_CXX11
 inline void command_reply::set_errmsg(::std::string&& value) {
   
   errmsg_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_reply.errmsg)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_reply.errmsg)
 }
 #endif
 inline void command_reply::set_errmsg(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   errmsg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_reply.errmsg)
+  // @@protoc_insertion_point(field_set_char:client.command_reply.errmsg)
 }
 inline void command_reply::set_errmsg(const char* value, size_t size) {
   
   errmsg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_reply.errmsg)
+  // @@protoc_insertion_point(field_set_pointer:client.command_reply.errmsg)
 }
 inline ::std::string* command_reply::mutable_errmsg() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_reply.errmsg)
+  // @@protoc_insertion_point(field_mutable:client.command_reply.errmsg)
   return errmsg_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_reply::release_errmsg() {
-  // @@protoc_insertion_point(field_release:protocol.command_reply.errmsg)
+  // @@protoc_insertion_point(field_release:client.command_reply.errmsg)
   
   return errmsg_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -12231,40 +11922,37 @@ inline void command_reply::set_allocated_errmsg(::std::string* errmsg) {
     
   }
   errmsg_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), errmsg);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_reply.errmsg)
+  // @@protoc_insertion_point(field_set_allocated:client.command_reply.errmsg)
 }
 
 // -------------------------------------------------------------------
 
 // values_type
 
-// repeated .protocol.VALUE value = 1;
+// repeated .data.VALUE value = 1;
 inline int values_type::value_size() const {
   return value_.size();
 }
-inline void values_type::clear_value() {
-  value_.Clear();
-}
-inline const ::protocol::VALUE& values_type::value(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.values_type.value)
+inline const ::data::VALUE& values_type::value(int index) const {
+  // @@protoc_insertion_point(field_get:client.values_type.value)
   return value_.Get(index);
 }
-inline ::protocol::VALUE* values_type::mutable_value(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.values_type.value)
+inline ::data::VALUE* values_type::mutable_value(int index) {
+  // @@protoc_insertion_point(field_mutable:client.values_type.value)
   return value_.Mutable(index);
 }
-inline ::protocol::VALUE* values_type::add_value() {
-  // @@protoc_insertion_point(field_add:protocol.values_type.value)
+inline ::data::VALUE* values_type::add_value() {
+  // @@protoc_insertion_point(field_add:client.values_type.value)
   return value_.Add();
 }
-inline ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >*
+inline ::google::protobuf::RepeatedPtrField< ::data::VALUE >*
 values_type::mutable_value() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.values_type.value)
+  // @@protoc_insertion_point(field_mutable_list:client.values_type.value)
   return &value_;
 }
-inline const ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >&
+inline const ::google::protobuf::RepeatedPtrField< ::data::VALUE >&
 values_type::value() const {
-  // @@protoc_insertion_point(field_list:protocol.values_type.value)
+  // @@protoc_insertion_point(field_list:client.values_type.value)
   return value_;
 }
 
@@ -12280,64 +11968,64 @@ inline void keys_type::clear_value() {
   value_.Clear();
 }
 inline const ::std::string& keys_type::value(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.keys_type.value)
+  // @@protoc_insertion_point(field_get:client.keys_type.value)
   return value_.Get(index);
 }
 inline ::std::string* keys_type::mutable_value(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.keys_type.value)
+  // @@protoc_insertion_point(field_mutable:client.keys_type.value)
   return value_.Mutable(index);
 }
 inline void keys_type::set_value(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.keys_type.value)
+  // @@protoc_insertion_point(field_set:client.keys_type.value)
   value_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void keys_type::set_value(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.keys_type.value)
+  // @@protoc_insertion_point(field_set:client.keys_type.value)
   value_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void keys_type::set_value(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   value_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.keys_type.value)
+  // @@protoc_insertion_point(field_set_char:client.keys_type.value)
 }
 inline void keys_type::set_value(int index, const char* value, size_t size) {
   value_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.keys_type.value)
+  // @@protoc_insertion_point(field_set_pointer:client.keys_type.value)
 }
 inline ::std::string* keys_type::add_value() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.keys_type.value)
+  // @@protoc_insertion_point(field_add_mutable:client.keys_type.value)
   return value_.Add();
 }
 inline void keys_type::add_value(const ::std::string& value) {
   value_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.keys_type.value)
+  // @@protoc_insertion_point(field_add:client.keys_type.value)
 }
 #if LANG_CXX11
 inline void keys_type::add_value(::std::string&& value) {
   value_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.keys_type.value)
+  // @@protoc_insertion_point(field_add:client.keys_type.value)
 }
 #endif
 inline void keys_type::add_value(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   value_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.keys_type.value)
+  // @@protoc_insertion_point(field_add_char:client.keys_type.value)
 }
 inline void keys_type::add_value(const char* value, size_t size) {
   value_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.keys_type.value)
+  // @@protoc_insertion_point(field_add_pointer:client.keys_type.value)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 keys_type::value() const {
-  // @@protoc_insertion_point(field_list:protocol.keys_type.value)
+  // @@protoc_insertion_point(field_list:client.keys_type.value)
   return value_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 keys_type::mutable_value() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.keys_type.value)
+  // @@protoc_insertion_point(field_mutable_list:client.keys_type.value)
   return &value_;
 }
 
@@ -12350,41 +12038,41 @@ inline void command_set::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_set::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_set.key)
+  // @@protoc_insertion_point(field_get:client.command_set.key)
   return key_.GetNoArena();
 }
 inline void command_set::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_set.key)
+  // @@protoc_insertion_point(field_set:client.command_set.key)
 }
 #if LANG_CXX11
 inline void command_set::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_set.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_set.key)
 }
 #endif
 inline void command_set::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_set.key)
+  // @@protoc_insertion_point(field_set_char:client.command_set.key)
 }
 inline void command_set::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_set.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_set.key)
 }
 inline ::std::string* command_set::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_set.key)
+  // @@protoc_insertion_point(field_mutable:client.command_set.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_set::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_set.key)
+  // @@protoc_insertion_point(field_release:client.command_set.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -12395,44 +12083,38 @@ inline void command_set::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_set.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_set.key)
 }
 
-// .protocol.VALUE value = 2;
+// .data.VALUE value = 2;
 inline bool command_set::has_value() const {
   return this != internal_default_instance() && value_ != NULL;
 }
-inline void command_set::clear_value() {
-  if (GetArenaNoVirtual() == NULL && value_ != NULL) {
-    delete value_;
-  }
-  value_ = NULL;
+inline const ::data::VALUE& command_set::value() const {
+  const ::data::VALUE* p = value_;
+  // @@protoc_insertion_point(field_get:client.command_set.value)
+  return p != NULL ? *p : *reinterpret_cast<const ::data::VALUE*>(
+      &::data::_VALUE_default_instance_);
 }
-inline const ::protocol::VALUE& command_set::value() const {
-  const ::protocol::VALUE* p = value_;
-  // @@protoc_insertion_point(field_get:protocol.command_set.value)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::VALUE*>(
-      &::protocol::_VALUE_default_instance_);
-}
-inline ::protocol::VALUE* command_set::release_value() {
-  // @@protoc_insertion_point(field_release:protocol.command_set.value)
+inline ::data::VALUE* command_set::release_value() {
+  // @@protoc_insertion_point(field_release:client.command_set.value)
   
-  ::protocol::VALUE* temp = value_;
+  ::data::VALUE* temp = value_;
   value_ = NULL;
   return temp;
 }
-inline ::protocol::VALUE* command_set::mutable_value() {
+inline ::data::VALUE* command_set::mutable_value() {
   
   if (value_ == NULL) {
-    value_ = new ::protocol::VALUE;
+    value_ = new ::data::VALUE;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_set.value)
+  // @@protoc_insertion_point(field_mutable:client.command_set.value)
   return value_;
 }
-inline void command_set::set_allocated_value(::protocol::VALUE* value) {
+inline void command_set::set_allocated_value(::data::VALUE* value) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
-    delete value_;
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(value_);
   }
   if (value) {
     ::google::protobuf::Arena* submessage_arena = NULL;
@@ -12445,7 +12127,7 @@ inline void command_set::set_allocated_value(::protocol::VALUE* value) {
     
   }
   value_ = value;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_set.value)
+  // @@protoc_insertion_point(field_set_allocated:client.command_set.value)
 }
 
 // -------------------------------------------------------------------
@@ -12454,21 +12136,18 @@ inline void command_set::set_allocated_value(::protocol::VALUE* value) {
 
 // command_mset
 
-// map<string, .protocol.VALUE> kvs = 1;
+// map<string, .data.VALUE> kvs = 1;
 inline int command_mset::kvs_size() const {
   return kvs_.size();
 }
-inline void command_mset::clear_kvs() {
-  kvs_.Clear();
-}
-inline const ::google::protobuf::Map< ::std::string, ::protocol::VALUE >&
+inline const ::google::protobuf::Map< ::std::string, ::data::VALUE >&
 command_mset::kvs() const {
-  // @@protoc_insertion_point(field_map:protocol.command_mset.kvs)
+  // @@protoc_insertion_point(field_map:client.command_mset.kvs)
   return kvs_.GetMap();
 }
-inline ::google::protobuf::Map< ::std::string, ::protocol::VALUE >*
+inline ::google::protobuf::Map< ::std::string, ::data::VALUE >*
 command_mset::mutable_kvs() {
-  // @@protoc_insertion_point(field_mutable_map:protocol.command_mset.kvs)
+  // @@protoc_insertion_point(field_mutable_map:client.command_mset.kvs)
   return kvs_.MutableMap();
 }
 
@@ -12481,41 +12160,41 @@ inline void command_hset::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hset::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hset.key)
+  // @@protoc_insertion_point(field_get:client.command_hset.key)
   return key_.GetNoArena();
 }
 inline void command_hset::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hset.key)
+  // @@protoc_insertion_point(field_set:client.command_hset.key)
 }
 #if LANG_CXX11
 inline void command_hset::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hset.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hset.key)
 }
 #endif
 inline void command_hset::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hset.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hset.key)
 }
 inline void command_hset::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hset.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hset.key)
 }
 inline ::std::string* command_hset::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hset.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hset.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hset::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hset.key)
+  // @@protoc_insertion_point(field_release:client.command_hset.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -12526,7 +12205,7 @@ inline void command_hset::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hset.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hset.key)
 }
 
 // string field = 2;
@@ -12534,41 +12213,41 @@ inline void command_hset::clear_field() {
   field_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hset::field() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hset.field)
+  // @@protoc_insertion_point(field_get:client.command_hset.field)
   return field_.GetNoArena();
 }
 inline void command_hset::set_field(const ::std::string& value) {
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hset.field)
+  // @@protoc_insertion_point(field_set:client.command_hset.field)
 }
 #if LANG_CXX11
 inline void command_hset::set_field(::std::string&& value) {
   
   field_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hset.field)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hset.field)
 }
 #endif
 inline void command_hset::set_field(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hset.field)
+  // @@protoc_insertion_point(field_set_char:client.command_hset.field)
 }
 inline void command_hset::set_field(const char* value, size_t size) {
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hset.field)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hset.field)
 }
 inline ::std::string* command_hset::mutable_field() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hset.field)
+  // @@protoc_insertion_point(field_mutable:client.command_hset.field)
   return field_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hset::release_field() {
-  // @@protoc_insertion_point(field_release:protocol.command_hset.field)
+  // @@protoc_insertion_point(field_release:client.command_hset.field)
   
   return field_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -12579,44 +12258,38 @@ inline void command_hset::set_allocated_field(::std::string* field) {
     
   }
   field_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), field);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hset.field)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hset.field)
 }
 
-// .protocol.VALUE value = 3;
+// .data.VALUE value = 3;
 inline bool command_hset::has_value() const {
   return this != internal_default_instance() && value_ != NULL;
 }
-inline void command_hset::clear_value() {
-  if (GetArenaNoVirtual() == NULL && value_ != NULL) {
-    delete value_;
-  }
-  value_ = NULL;
+inline const ::data::VALUE& command_hset::value() const {
+  const ::data::VALUE* p = value_;
+  // @@protoc_insertion_point(field_get:client.command_hset.value)
+  return p != NULL ? *p : *reinterpret_cast<const ::data::VALUE*>(
+      &::data::_VALUE_default_instance_);
 }
-inline const ::protocol::VALUE& command_hset::value() const {
-  const ::protocol::VALUE* p = value_;
-  // @@protoc_insertion_point(field_get:protocol.command_hset.value)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::VALUE*>(
-      &::protocol::_VALUE_default_instance_);
-}
-inline ::protocol::VALUE* command_hset::release_value() {
-  // @@protoc_insertion_point(field_release:protocol.command_hset.value)
+inline ::data::VALUE* command_hset::release_value() {
+  // @@protoc_insertion_point(field_release:client.command_hset.value)
   
-  ::protocol::VALUE* temp = value_;
+  ::data::VALUE* temp = value_;
   value_ = NULL;
   return temp;
 }
-inline ::protocol::VALUE* command_hset::mutable_value() {
+inline ::data::VALUE* command_hset::mutable_value() {
   
   if (value_ == NULL) {
-    value_ = new ::protocol::VALUE;
+    value_ = new ::data::VALUE;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_hset.value)
+  // @@protoc_insertion_point(field_mutable:client.command_hset.value)
   return value_;
 }
-inline void command_hset::set_allocated_value(::protocol::VALUE* value) {
+inline void command_hset::set_allocated_value(::data::VALUE* value) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
-    delete value_;
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(value_);
   }
   if (value) {
     ::google::protobuf::Arena* submessage_arena = NULL;
@@ -12629,7 +12302,21 @@ inline void command_hset::set_allocated_value(::protocol::VALUE* value) {
     
   }
   value_ = value;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hset.value)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hset.value)
+}
+
+// int64 ttl = 4;
+inline void command_hset::clear_ttl() {
+  ttl_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 command_hset::ttl() const {
+  // @@protoc_insertion_point(field_get:client.command_hset.ttl)
+  return ttl_;
+}
+inline void command_hset::set_ttl(::google::protobuf::int64 value) {
+  
+  ttl_ = value;
+  // @@protoc_insertion_point(field_set:client.command_hset.ttl)
 }
 
 // -------------------------------------------------------------------
@@ -12643,41 +12330,41 @@ inline void command_hmset::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hmset::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmset.key)
+  // @@protoc_insertion_point(field_get:client.command_hmset.key)
   return key_.GetNoArena();
 }
 inline void command_hmset::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hmset.key)
+  // @@protoc_insertion_point(field_set:client.command_hmset.key)
 }
 #if LANG_CXX11
 inline void command_hmset::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hmset.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hmset.key)
 }
 #endif
 inline void command_hmset::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmset.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hmset.key)
 }
 inline void command_hmset::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmset.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmset.key)
 }
 inline ::std::string* command_hmset::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmset.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hmset.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hmset::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmset.key)
+  // @@protoc_insertion_point(field_release:client.command_hmset.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -12688,24 +12375,21 @@ inline void command_hmset::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmset.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmset.key)
 }
 
-// map<string, .protocol.VALUE> values = 2;
+// map<string, .data.VALUE> values = 2;
 inline int command_hmset::values_size() const {
   return values_.size();
 }
-inline void command_hmset::clear_values() {
-  values_.Clear();
-}
-inline const ::google::protobuf::Map< ::std::string, ::protocol::VALUE >&
+inline const ::google::protobuf::Map< ::std::string, ::data::VALUE >&
 command_hmset::values() const {
-  // @@protoc_insertion_point(field_map:protocol.command_hmset.values)
+  // @@protoc_insertion_point(field_map:client.command_hmset.values)
   return values_.GetMap();
 }
-inline ::google::protobuf::Map< ::std::string, ::protocol::VALUE >*
+inline ::google::protobuf::Map< ::std::string, ::data::VALUE >*
 command_hmset::mutable_values() {
-  // @@protoc_insertion_point(field_mutable_map:protocol.command_hmset.values)
+  // @@protoc_insertion_point(field_mutable_map:client.command_hmset.values)
   return values_.MutableMap();
 }
 
@@ -12723,82 +12407,82 @@ inline void command_mhmset::clear_fields() {
   fields_.Clear();
 }
 inline const ::std::string& command_mhmset::fields(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmset.fields)
+  // @@protoc_insertion_point(field_get:client.command_mhmset.fields)
   return fields_.Get(index);
 }
 inline ::std::string* command_mhmset::mutable_fields(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmset.fields)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmset.fields)
   return fields_.Mutable(index);
 }
 inline void command_mhmset::set_fields(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmset.fields)
+  // @@protoc_insertion_point(field_set:client.command_mhmset.fields)
   fields_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mhmset::set_fields(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmset.fields)
+  // @@protoc_insertion_point(field_set:client.command_mhmset.fields)
   fields_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mhmset::set_fields(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mhmset.fields)
+  // @@protoc_insertion_point(field_set_char:client.command_mhmset.fields)
 }
 inline void command_mhmset::set_fields(int index, const char* value, size_t size) {
   fields_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mhmset.fields)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mhmset.fields)
 }
 inline ::std::string* command_mhmset::add_fields() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mhmset.fields)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mhmset.fields)
   return fields_.Add();
 }
 inline void command_mhmset::add_fields(const ::std::string& value) {
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mhmset.fields)
+  // @@protoc_insertion_point(field_add:client.command_mhmset.fields)
 }
 #if LANG_CXX11
 inline void command_mhmset::add_fields(::std::string&& value) {
   fields_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mhmset.fields)
+  // @@protoc_insertion_point(field_add:client.command_mhmset.fields)
 }
 #endif
 inline void command_mhmset::add_fields(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mhmset.fields)
+  // @@protoc_insertion_point(field_add_char:client.command_mhmset.fields)
 }
 inline void command_mhmset::add_fields(const char* value, size_t size) {
   fields_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mhmset.fields)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mhmset.fields)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mhmset::fields() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mhmset.fields)
+  // @@protoc_insertion_point(field_list:client.command_mhmset.fields)
   return fields_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mhmset::mutable_fields() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mhmset.fields)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mhmset.fields)
   return &fields_;
 }
 
-// map<string, .protocol.values_type> values = 2;
+// map<string, .client.values_type> values = 2;
 inline int command_mhmset::values_size() const {
   return values_.size();
 }
 inline void command_mhmset::clear_values() {
   values_.Clear();
 }
-inline const ::google::protobuf::Map< ::std::string, ::protocol::values_type >&
+inline const ::google::protobuf::Map< ::std::string, ::client::values_type >&
 command_mhmset::values() const {
-  // @@protoc_insertion_point(field_map:protocol.command_mhmset.values)
+  // @@protoc_insertion_point(field_map:client.command_mhmset.values)
   return values_.GetMap();
 }
-inline ::google::protobuf::Map< ::std::string, ::protocol::values_type >*
+inline ::google::protobuf::Map< ::std::string, ::client::values_type >*
 command_mhmset::mutable_values() {
-  // @@protoc_insertion_point(field_mutable_map:protocol.command_mhmset.values)
+  // @@protoc_insertion_point(field_mutable_map:client.command_mhmset.values)
   return values_.MutableMap();
 }
 
@@ -12811,41 +12495,41 @@ inline void command_get::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_get::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_get.key)
+  // @@protoc_insertion_point(field_get:client.command_get.key)
   return key_.GetNoArena();
 }
 inline void command_get::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_get.key)
+  // @@protoc_insertion_point(field_set:client.command_get.key)
 }
 #if LANG_CXX11
 inline void command_get::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_get.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_get.key)
 }
 #endif
 inline void command_get::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_get.key)
+  // @@protoc_insertion_point(field_set_char:client.command_get.key)
 }
 inline void command_get::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_get.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_get.key)
 }
 inline ::std::string* command_get::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_get.key)
+  // @@protoc_insertion_point(field_mutable:client.command_get.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_get::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_get.key)
+  // @@protoc_insertion_point(field_release:client.command_get.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -12856,14 +12540,14 @@ inline void command_get::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_get.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_get.key)
 }
 
 // -------------------------------------------------------------------
 
 // command_get_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_get_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -12873,28 +12557,28 @@ inline void command_get_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_get_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_get_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_get_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_get_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_get_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_get_reply.state)
+inline ::client::command_reply* command_get_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_get_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_get_reply::mutable_state() {
+inline ::client::command_reply* command_get_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_get_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_get_reply.state)
   return state_;
 }
-inline void command_get_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_get_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -12910,57 +12594,51 @@ inline void command_get_reply::set_allocated_state(::protocol::command_reply* st
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_get_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_get_reply.state)
 }
 
-// .protocol.VALUE reply = 2;
-inline bool command_get_reply::has_reply() const {
-  return this != internal_default_instance() && reply_ != NULL;
+// .data.VALUE data = 2;
+inline bool command_get_reply::has_data() const {
+  return this != internal_default_instance() && data_ != NULL;
 }
-inline void command_get_reply::clear_reply() {
-  if (GetArenaNoVirtual() == NULL && reply_ != NULL) {
-    delete reply_;
-  }
-  reply_ = NULL;
+inline const ::data::VALUE& command_get_reply::data() const {
+  const ::data::VALUE* p = data_;
+  // @@protoc_insertion_point(field_get:client.command_get_reply.data)
+  return p != NULL ? *p : *reinterpret_cast<const ::data::VALUE*>(
+      &::data::_VALUE_default_instance_);
 }
-inline const ::protocol::VALUE& command_get_reply::reply() const {
-  const ::protocol::VALUE* p = reply_;
-  // @@protoc_insertion_point(field_get:protocol.command_get_reply.reply)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::VALUE*>(
-      &::protocol::_VALUE_default_instance_);
-}
-inline ::protocol::VALUE* command_get_reply::release_reply() {
-  // @@protoc_insertion_point(field_release:protocol.command_get_reply.reply)
+inline ::data::VALUE* command_get_reply::release_data() {
+  // @@protoc_insertion_point(field_release:client.command_get_reply.data)
   
-  ::protocol::VALUE* temp = reply_;
-  reply_ = NULL;
+  ::data::VALUE* temp = data_;
+  data_ = NULL;
   return temp;
 }
-inline ::protocol::VALUE* command_get_reply::mutable_reply() {
+inline ::data::VALUE* command_get_reply::mutable_data() {
   
-  if (reply_ == NULL) {
-    reply_ = new ::protocol::VALUE;
+  if (data_ == NULL) {
+    data_ = new ::data::VALUE;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_get_reply.reply)
-  return reply_;
+  // @@protoc_insertion_point(field_mutable:client.command_get_reply.data)
+  return data_;
 }
-inline void command_get_reply::set_allocated_reply(::protocol::VALUE* reply) {
+inline void command_get_reply::set_allocated_data(::data::VALUE* data) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
-    delete reply_;
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(data_);
   }
-  if (reply) {
+  if (data) {
     ::google::protobuf::Arena* submessage_arena = NULL;
     if (message_arena != submessage_arena) {
-      reply = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, reply, submessage_arena);
+      data = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, data, submessage_arena);
     }
     
   } else {
     
   }
-  reply_ = reply;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_get_reply.reply)
+  data_ = data;
+  // @@protoc_insertion_point(field_set_allocated:client.command_get_reply.data)
 }
 
 // -------------------------------------------------------------------
@@ -12975,64 +12653,64 @@ inline void command_mget::clear_keys() {
   keys_.Clear();
 }
 inline const ::std::string& command_mget::keys(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mget.keys)
+  // @@protoc_insertion_point(field_get:client.command_mget.keys)
   return keys_.Get(index);
 }
 inline ::std::string* command_mget::mutable_keys(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mget.keys)
+  // @@protoc_insertion_point(field_mutable:client.command_mget.keys)
   return keys_.Mutable(index);
 }
 inline void command_mget::set_keys(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mget.keys)
+  // @@protoc_insertion_point(field_set:client.command_mget.keys)
   keys_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mget::set_keys(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mget.keys)
+  // @@protoc_insertion_point(field_set:client.command_mget.keys)
   keys_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mget::set_keys(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mget.keys)
+  // @@protoc_insertion_point(field_set_char:client.command_mget.keys)
 }
 inline void command_mget::set_keys(int index, const char* value, size_t size) {
   keys_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mget.keys)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mget.keys)
 }
 inline ::std::string* command_mget::add_keys() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mget.keys)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mget.keys)
   return keys_.Add();
 }
 inline void command_mget::add_keys(const ::std::string& value) {
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mget.keys)
+  // @@protoc_insertion_point(field_add:client.command_mget.keys)
 }
 #if LANG_CXX11
 inline void command_mget::add_keys(::std::string&& value) {
   keys_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mget.keys)
+  // @@protoc_insertion_point(field_add:client.command_mget.keys)
 }
 #endif
 inline void command_mget::add_keys(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mget.keys)
+  // @@protoc_insertion_point(field_add_char:client.command_mget.keys)
 }
 inline void command_mget::add_keys(const char* value, size_t size) {
   keys_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mget.keys)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mget.keys)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mget::keys() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mget.keys)
+  // @@protoc_insertion_point(field_list:client.command_mget.keys)
   return keys_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mget::mutable_keys() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mget.keys)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mget.keys)
   return &keys_;
 }
 
@@ -13040,7 +12718,7 @@ command_mget::mutable_keys() {
 
 // command_mget_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_mget_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -13050,28 +12728,28 @@ inline void command_mget_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_mget_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_mget_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_mget_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_mget_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_mget_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_mget_reply.state)
+inline ::client::command_reply* command_mget_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_mget_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_mget_reply::mutable_state() {
+inline ::client::command_reply* command_mget_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_mget_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_mget_reply.state)
   return state_;
 }
-inline void command_mget_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_mget_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -13087,37 +12765,34 @@ inline void command_mget_reply::set_allocated_state(::protocol::command_reply* s
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_mget_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_mget_reply.state)
 }
 
-// repeated .protocol.VALUE reply = 2;
-inline int command_mget_reply::reply_size() const {
-  return reply_.size();
+// repeated .data.VALUE data = 2;
+inline int command_mget_reply::data_size() const {
+  return data_.size();
 }
-inline void command_mget_reply::clear_reply() {
-  reply_.Clear();
+inline const ::data::VALUE& command_mget_reply::data(int index) const {
+  // @@protoc_insertion_point(field_get:client.command_mget_reply.data)
+  return data_.Get(index);
 }
-inline const ::protocol::VALUE& command_mget_reply::reply(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mget_reply.reply)
-  return reply_.Get(index);
+inline ::data::VALUE* command_mget_reply::mutable_data(int index) {
+  // @@protoc_insertion_point(field_mutable:client.command_mget_reply.data)
+  return data_.Mutable(index);
 }
-inline ::protocol::VALUE* command_mget_reply::mutable_reply(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mget_reply.reply)
-  return reply_.Mutable(index);
+inline ::data::VALUE* command_mget_reply::add_data() {
+  // @@protoc_insertion_point(field_add:client.command_mget_reply.data)
+  return data_.Add();
 }
-inline ::protocol::VALUE* command_mget_reply::add_reply() {
-  // @@protoc_insertion_point(field_add:protocol.command_mget_reply.reply)
-  return reply_.Add();
+inline ::google::protobuf::RepeatedPtrField< ::data::VALUE >*
+command_mget_reply::mutable_data() {
+  // @@protoc_insertion_point(field_mutable_list:client.command_mget_reply.data)
+  return &data_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >*
-command_mget_reply::mutable_reply() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mget_reply.reply)
-  return &reply_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >&
-command_mget_reply::reply() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mget_reply.reply)
-  return reply_;
+inline const ::google::protobuf::RepeatedPtrField< ::data::VALUE >&
+command_mget_reply::data() const {
+  // @@protoc_insertion_point(field_list:client.command_mget_reply.data)
+  return data_;
 }
 
 // -------------------------------------------------------------------
@@ -13129,41 +12804,41 @@ inline void command_hget::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hget::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hget.key)
+  // @@protoc_insertion_point(field_get:client.command_hget.key)
   return key_.GetNoArena();
 }
 inline void command_hget::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hget.key)
+  // @@protoc_insertion_point(field_set:client.command_hget.key)
 }
 #if LANG_CXX11
 inline void command_hget::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hget.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hget.key)
 }
 #endif
 inline void command_hget::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hget.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hget.key)
 }
 inline void command_hget::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hget.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hget.key)
 }
 inline ::std::string* command_hget::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hget.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hget.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hget::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hget.key)
+  // @@protoc_insertion_point(field_release:client.command_hget.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -13174,7 +12849,7 @@ inline void command_hget::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hget.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hget.key)
 }
 
 // string field = 2;
@@ -13182,41 +12857,41 @@ inline void command_hget::clear_field() {
   field_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hget::field() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hget.field)
+  // @@protoc_insertion_point(field_get:client.command_hget.field)
   return field_.GetNoArena();
 }
 inline void command_hget::set_field(const ::std::string& value) {
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hget.field)
+  // @@protoc_insertion_point(field_set:client.command_hget.field)
 }
 #if LANG_CXX11
 inline void command_hget::set_field(::std::string&& value) {
   
   field_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hget.field)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hget.field)
 }
 #endif
 inline void command_hget::set_field(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hget.field)
+  // @@protoc_insertion_point(field_set_char:client.command_hget.field)
 }
 inline void command_hget::set_field(const char* value, size_t size) {
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hget.field)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hget.field)
 }
 inline ::std::string* command_hget::mutable_field() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hget.field)
+  // @@protoc_insertion_point(field_mutable:client.command_hget.field)
   return field_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hget::release_field() {
-  // @@protoc_insertion_point(field_release:protocol.command_hget.field)
+  // @@protoc_insertion_point(field_release:client.command_hget.field)
   
   return field_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -13227,14 +12902,14 @@ inline void command_hget::set_allocated_field(::std::string* field) {
     
   }
   field_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), field);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hget.field)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hget.field)
 }
 
 // -------------------------------------------------------------------
 
 // command_hget_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_hget_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -13244,28 +12919,28 @@ inline void command_hget_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_hget_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_hget_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_hget_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_hget_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_hget_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_hget_reply.state)
+inline ::client::command_reply* command_hget_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_hget_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_hget_reply::mutable_state() {
+inline ::client::command_reply* command_hget_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_hget_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_hget_reply.state)
   return state_;
 }
-inline void command_hget_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_hget_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -13281,57 +12956,51 @@ inline void command_hget_reply::set_allocated_state(::protocol::command_reply* s
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hget_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hget_reply.state)
 }
 
-// .protocol.VALUE reply = 2;
-inline bool command_hget_reply::has_reply() const {
-  return this != internal_default_instance() && reply_ != NULL;
+// .data.VALUE data = 2;
+inline bool command_hget_reply::has_data() const {
+  return this != internal_default_instance() && data_ != NULL;
 }
-inline void command_hget_reply::clear_reply() {
-  if (GetArenaNoVirtual() == NULL && reply_ != NULL) {
-    delete reply_;
-  }
-  reply_ = NULL;
+inline const ::data::VALUE& command_hget_reply::data() const {
+  const ::data::VALUE* p = data_;
+  // @@protoc_insertion_point(field_get:client.command_hget_reply.data)
+  return p != NULL ? *p : *reinterpret_cast<const ::data::VALUE*>(
+      &::data::_VALUE_default_instance_);
 }
-inline const ::protocol::VALUE& command_hget_reply::reply() const {
-  const ::protocol::VALUE* p = reply_;
-  // @@protoc_insertion_point(field_get:protocol.command_hget_reply.reply)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::VALUE*>(
-      &::protocol::_VALUE_default_instance_);
-}
-inline ::protocol::VALUE* command_hget_reply::release_reply() {
-  // @@protoc_insertion_point(field_release:protocol.command_hget_reply.reply)
+inline ::data::VALUE* command_hget_reply::release_data() {
+  // @@protoc_insertion_point(field_release:client.command_hget_reply.data)
   
-  ::protocol::VALUE* temp = reply_;
-  reply_ = NULL;
+  ::data::VALUE* temp = data_;
+  data_ = NULL;
   return temp;
 }
-inline ::protocol::VALUE* command_hget_reply::mutable_reply() {
+inline ::data::VALUE* command_hget_reply::mutable_data() {
   
-  if (reply_ == NULL) {
-    reply_ = new ::protocol::VALUE;
+  if (data_ == NULL) {
+    data_ = new ::data::VALUE;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_hget_reply.reply)
-  return reply_;
+  // @@protoc_insertion_point(field_mutable:client.command_hget_reply.data)
+  return data_;
 }
-inline void command_hget_reply::set_allocated_reply(::protocol::VALUE* reply) {
+inline void command_hget_reply::set_allocated_data(::data::VALUE* data) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
-    delete reply_;
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(data_);
   }
-  if (reply) {
+  if (data) {
     ::google::protobuf::Arena* submessage_arena = NULL;
     if (message_arena != submessage_arena) {
-      reply = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, reply, submessage_arena);
+      data = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, data, submessage_arena);
     }
     
   } else {
     
   }
-  reply_ = reply;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hget_reply.reply)
+  data_ = data;
+  // @@protoc_insertion_point(field_set_allocated:client.command_hget_reply.data)
 }
 
 // -------------------------------------------------------------------
@@ -13343,41 +13012,41 @@ inline void command_hmget::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hmget::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmget.key)
+  // @@protoc_insertion_point(field_get:client.command_hmget.key)
   return key_.GetNoArena();
 }
 inline void command_hmget::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hmget.key)
+  // @@protoc_insertion_point(field_set:client.command_hmget.key)
 }
 #if LANG_CXX11
 inline void command_hmget::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hmget.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hmget.key)
 }
 #endif
 inline void command_hmget::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmget.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hmget.key)
 }
 inline void command_hmget::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmget.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmget.key)
 }
 inline ::std::string* command_hmget::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmget.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hmget.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hmget::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmget.key)
+  // @@protoc_insertion_point(field_release:client.command_hmget.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -13388,7 +13057,7 @@ inline void command_hmget::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmget.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmget.key)
 }
 
 // repeated string fields = 2;
@@ -13399,64 +13068,64 @@ inline void command_hmget::clear_fields() {
   fields_.Clear();
 }
 inline const ::std::string& command_hmget::fields(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmget.fields)
+  // @@protoc_insertion_point(field_get:client.command_hmget.fields)
   return fields_.Get(index);
 }
 inline ::std::string* command_hmget::mutable_fields(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmget.fields)
+  // @@protoc_insertion_point(field_mutable:client.command_hmget.fields)
   return fields_.Mutable(index);
 }
 inline void command_hmget::set_fields(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_hmget.fields)
+  // @@protoc_insertion_point(field_set:client.command_hmget.fields)
   fields_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_hmget::set_fields(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_hmget.fields)
+  // @@protoc_insertion_point(field_set:client.command_hmget.fields)
   fields_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_hmget::set_fields(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmget.fields)
+  // @@protoc_insertion_point(field_set_char:client.command_hmget.fields)
 }
 inline void command_hmget::set_fields(int index, const char* value, size_t size) {
   fields_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmget.fields)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmget.fields)
 }
 inline ::std::string* command_hmget::add_fields() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_hmget.fields)
+  // @@protoc_insertion_point(field_add_mutable:client.command_hmget.fields)
   return fields_.Add();
 }
 inline void command_hmget::add_fields(const ::std::string& value) {
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_hmget.fields)
+  // @@protoc_insertion_point(field_add:client.command_hmget.fields)
 }
 #if LANG_CXX11
 inline void command_hmget::add_fields(::std::string&& value) {
   fields_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_hmget.fields)
+  // @@protoc_insertion_point(field_add:client.command_hmget.fields)
 }
 #endif
 inline void command_hmget::add_fields(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_hmget.fields)
+  // @@protoc_insertion_point(field_add_char:client.command_hmget.fields)
 }
 inline void command_hmget::add_fields(const char* value, size_t size) {
   fields_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_hmget.fields)
+  // @@protoc_insertion_point(field_add_pointer:client.command_hmget.fields)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_hmget::fields() const {
-  // @@protoc_insertion_point(field_list:protocol.command_hmget.fields)
+  // @@protoc_insertion_point(field_list:client.command_hmget.fields)
   return fields_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_hmget::mutable_fields() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_hmget.fields)
+  // @@protoc_insertion_point(field_mutable_list:client.command_hmget.fields)
   return &fields_;
 }
 
@@ -13464,7 +13133,7 @@ command_hmget::mutable_fields() {
 
 // command_hmget_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_hmget_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -13474,28 +13143,28 @@ inline void command_hmget_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_hmget_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_hmget_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_hmget_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_hmget_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_hmget_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmget_reply.state)
+inline ::client::command_reply* command_hmget_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_hmget_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_hmget_reply::mutable_state() {
+inline ::client::command_reply* command_hmget_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmget_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_hmget_reply.state)
   return state_;
 }
-inline void command_hmget_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_hmget_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -13511,37 +13180,34 @@ inline void command_hmget_reply::set_allocated_state(::protocol::command_reply* 
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmget_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmget_reply.state)
 }
 
-// repeated .protocol.VALUE reply = 2;
-inline int command_hmget_reply::reply_size() const {
-  return reply_.size();
+// repeated .data.VALUE data = 2;
+inline int command_hmget_reply::data_size() const {
+  return data_.size();
 }
-inline void command_hmget_reply::clear_reply() {
-  reply_.Clear();
+inline const ::data::VALUE& command_hmget_reply::data(int index) const {
+  // @@protoc_insertion_point(field_get:client.command_hmget_reply.data)
+  return data_.Get(index);
 }
-inline const ::protocol::VALUE& command_hmget_reply::reply(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmget_reply.reply)
-  return reply_.Get(index);
+inline ::data::VALUE* command_hmget_reply::mutable_data(int index) {
+  // @@protoc_insertion_point(field_mutable:client.command_hmget_reply.data)
+  return data_.Mutable(index);
 }
-inline ::protocol::VALUE* command_hmget_reply::mutable_reply(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmget_reply.reply)
-  return reply_.Mutable(index);
+inline ::data::VALUE* command_hmget_reply::add_data() {
+  // @@protoc_insertion_point(field_add:client.command_hmget_reply.data)
+  return data_.Add();
 }
-inline ::protocol::VALUE* command_hmget_reply::add_reply() {
-  // @@protoc_insertion_point(field_add:protocol.command_hmget_reply.reply)
-  return reply_.Add();
+inline ::google::protobuf::RepeatedPtrField< ::data::VALUE >*
+command_hmget_reply::mutable_data() {
+  // @@protoc_insertion_point(field_mutable_list:client.command_hmget_reply.data)
+  return &data_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >*
-command_hmget_reply::mutable_reply() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_hmget_reply.reply)
-  return &reply_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >&
-command_hmget_reply::reply() const {
-  // @@protoc_insertion_point(field_list:protocol.command_hmget_reply.reply)
-  return reply_;
+inline const ::google::protobuf::RepeatedPtrField< ::data::VALUE >&
+command_hmget_reply::data() const {
+  // @@protoc_insertion_point(field_list:client.command_hmget_reply.data)
+  return data_;
 }
 
 // -------------------------------------------------------------------
@@ -13556,64 +13222,64 @@ inline void command_mhmget::clear_keys() {
   keys_.Clear();
 }
 inline const ::std::string& command_mhmget::keys(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmget.keys)
+  // @@protoc_insertion_point(field_get:client.command_mhmget.keys)
   return keys_.Get(index);
 }
 inline ::std::string* command_mhmget::mutable_keys(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmget.keys)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmget.keys)
   return keys_.Mutable(index);
 }
 inline void command_mhmget::set_keys(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmget.keys)
+  // @@protoc_insertion_point(field_set:client.command_mhmget.keys)
   keys_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mhmget::set_keys(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmget.keys)
+  // @@protoc_insertion_point(field_set:client.command_mhmget.keys)
   keys_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mhmget::set_keys(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mhmget.keys)
+  // @@protoc_insertion_point(field_set_char:client.command_mhmget.keys)
 }
 inline void command_mhmget::set_keys(int index, const char* value, size_t size) {
   keys_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mhmget.keys)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mhmget.keys)
 }
 inline ::std::string* command_mhmget::add_keys() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mhmget.keys)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mhmget.keys)
   return keys_.Add();
 }
 inline void command_mhmget::add_keys(const ::std::string& value) {
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mhmget.keys)
+  // @@protoc_insertion_point(field_add:client.command_mhmget.keys)
 }
 #if LANG_CXX11
 inline void command_mhmget::add_keys(::std::string&& value) {
   keys_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mhmget.keys)
+  // @@protoc_insertion_point(field_add:client.command_mhmget.keys)
 }
 #endif
 inline void command_mhmget::add_keys(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mhmget.keys)
+  // @@protoc_insertion_point(field_add_char:client.command_mhmget.keys)
 }
 inline void command_mhmget::add_keys(const char* value, size_t size) {
   keys_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mhmget.keys)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mhmget.keys)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mhmget::keys() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mhmget.keys)
+  // @@protoc_insertion_point(field_list:client.command_mhmget.keys)
   return keys_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mhmget::mutable_keys() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mhmget.keys)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mhmget.keys)
   return &keys_;
 }
 
@@ -13625,64 +13291,64 @@ inline void command_mhmget::clear_fields() {
   fields_.Clear();
 }
 inline const ::std::string& command_mhmget::fields(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmget.fields)
+  // @@protoc_insertion_point(field_get:client.command_mhmget.fields)
   return fields_.Get(index);
 }
 inline ::std::string* command_mhmget::mutable_fields(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmget.fields)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmget.fields)
   return fields_.Mutable(index);
 }
 inline void command_mhmget::set_fields(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmget.fields)
+  // @@protoc_insertion_point(field_set:client.command_mhmget.fields)
   fields_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mhmget::set_fields(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmget.fields)
+  // @@protoc_insertion_point(field_set:client.command_mhmget.fields)
   fields_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mhmget::set_fields(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mhmget.fields)
+  // @@protoc_insertion_point(field_set_char:client.command_mhmget.fields)
 }
 inline void command_mhmget::set_fields(int index, const char* value, size_t size) {
   fields_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mhmget.fields)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mhmget.fields)
 }
 inline ::std::string* command_mhmget::add_fields() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mhmget.fields)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mhmget.fields)
   return fields_.Add();
 }
 inline void command_mhmget::add_fields(const ::std::string& value) {
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mhmget.fields)
+  // @@protoc_insertion_point(field_add:client.command_mhmget.fields)
 }
 #if LANG_CXX11
 inline void command_mhmget::add_fields(::std::string&& value) {
   fields_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mhmget.fields)
+  // @@protoc_insertion_point(field_add:client.command_mhmget.fields)
 }
 #endif
 inline void command_mhmget::add_fields(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mhmget.fields)
+  // @@protoc_insertion_point(field_add_char:client.command_mhmget.fields)
 }
 inline void command_mhmget::add_fields(const char* value, size_t size) {
   fields_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mhmget.fields)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mhmget.fields)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mhmget::fields() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mhmget.fields)
+  // @@protoc_insertion_point(field_list:client.command_mhmget.fields)
   return fields_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mhmget::mutable_fields() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mhmget.fields)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mhmget.fields)
   return &fields_;
 }
 
@@ -13692,7 +13358,7 @@ command_mhmget::mutable_fields() {
 
 // command_mhmget_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_mhmget_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -13702,28 +13368,28 @@ inline void command_mhmget_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_mhmget_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_mhmget_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_mhmget_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_mhmget_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_mhmget_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_mhmget_reply.state)
+inline ::client::command_reply* command_mhmget_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_mhmget_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_mhmget_reply::mutable_state() {
+inline ::client::command_reply* command_mhmget_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmget_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmget_reply.state)
   return state_;
 }
-inline void command_mhmget_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_mhmget_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -13739,25 +13405,25 @@ inline void command_mhmget_reply::set_allocated_state(::protocol::command_reply*
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_mhmget_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_mhmget_reply.state)
 }
 
-// map<string, .protocol.values_type> reply = 2;
-inline int command_mhmget_reply::reply_size() const {
-  return reply_.size();
+// map<string, .client.values_type> data = 2;
+inline int command_mhmget_reply::data_size() const {
+  return data_.size();
 }
-inline void command_mhmget_reply::clear_reply() {
-  reply_.Clear();
+inline void command_mhmget_reply::clear_data() {
+  data_.Clear();
 }
-inline const ::google::protobuf::Map< ::std::string, ::protocol::values_type >&
-command_mhmget_reply::reply() const {
-  // @@protoc_insertion_point(field_map:protocol.command_mhmget_reply.reply)
-  return reply_.GetMap();
+inline const ::google::protobuf::Map< ::std::string, ::client::values_type >&
+command_mhmget_reply::data() const {
+  // @@protoc_insertion_point(field_map:client.command_mhmget_reply.data)
+  return data_.GetMap();
 }
-inline ::google::protobuf::Map< ::std::string, ::protocol::values_type >*
-command_mhmget_reply::mutable_reply() {
-  // @@protoc_insertion_point(field_mutable_map:protocol.command_mhmget_reply.reply)
-  return reply_.MutableMap();
+inline ::google::protobuf::Map< ::std::string, ::client::values_type >*
+command_mhmget_reply::mutable_data() {
+  // @@protoc_insertion_point(field_mutable_map:client.command_mhmget_reply.data)
+  return data_.MutableMap();
 }
 
 // -------------------------------------------------------------------
@@ -13769,41 +13435,41 @@ inline void command_del::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_del::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_del.key)
+  // @@protoc_insertion_point(field_get:client.command_del.key)
   return key_.GetNoArena();
 }
 inline void command_del::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_del.key)
+  // @@protoc_insertion_point(field_set:client.command_del.key)
 }
 #if LANG_CXX11
 inline void command_del::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_del.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_del.key)
 }
 #endif
 inline void command_del::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_del.key)
+  // @@protoc_insertion_point(field_set_char:client.command_del.key)
 }
 inline void command_del::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_del.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_del.key)
 }
 inline ::std::string* command_del::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_del.key)
+  // @@protoc_insertion_point(field_mutable:client.command_del.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_del::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_del.key)
+  // @@protoc_insertion_point(field_release:client.command_del.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -13814,7 +13480,7 @@ inline void command_del::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_del.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_del.key)
 }
 
 // -------------------------------------------------------------------
@@ -13829,64 +13495,64 @@ inline void command_mdel::clear_keys() {
   keys_.Clear();
 }
 inline const ::std::string& command_mdel::keys(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mdel.keys)
+  // @@protoc_insertion_point(field_get:client.command_mdel.keys)
   return keys_.Get(index);
 }
 inline ::std::string* command_mdel::mutable_keys(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mdel.keys)
+  // @@protoc_insertion_point(field_mutable:client.command_mdel.keys)
   return keys_.Mutable(index);
 }
 inline void command_mdel::set_keys(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mdel.keys)
+  // @@protoc_insertion_point(field_set:client.command_mdel.keys)
   keys_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mdel::set_keys(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mdel.keys)
+  // @@protoc_insertion_point(field_set:client.command_mdel.keys)
   keys_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mdel::set_keys(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mdel.keys)
+  // @@protoc_insertion_point(field_set_char:client.command_mdel.keys)
 }
 inline void command_mdel::set_keys(int index, const char* value, size_t size) {
   keys_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mdel.keys)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mdel.keys)
 }
 inline ::std::string* command_mdel::add_keys() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mdel.keys)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mdel.keys)
   return keys_.Add();
 }
 inline void command_mdel::add_keys(const ::std::string& value) {
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mdel.keys)
+  // @@protoc_insertion_point(field_add:client.command_mdel.keys)
 }
 #if LANG_CXX11
 inline void command_mdel::add_keys(::std::string&& value) {
   keys_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mdel.keys)
+  // @@protoc_insertion_point(field_add:client.command_mdel.keys)
 }
 #endif
 inline void command_mdel::add_keys(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mdel.keys)
+  // @@protoc_insertion_point(field_add_char:client.command_mdel.keys)
 }
 inline void command_mdel::add_keys(const char* value, size_t size) {
   keys_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mdel.keys)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mdel.keys)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mdel::keys() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mdel.keys)
+  // @@protoc_insertion_point(field_list:client.command_mdel.keys)
   return keys_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mdel::mutable_keys() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mdel.keys)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mdel.keys)
   return &keys_;
 }
 
@@ -13899,41 +13565,41 @@ inline void command_hdel::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hdel::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hdel.key)
+  // @@protoc_insertion_point(field_get:client.command_hdel.key)
   return key_.GetNoArena();
 }
 inline void command_hdel::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hdel.key)
+  // @@protoc_insertion_point(field_set:client.command_hdel.key)
 }
 #if LANG_CXX11
 inline void command_hdel::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hdel.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hdel.key)
 }
 #endif
 inline void command_hdel::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hdel.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hdel.key)
 }
 inline void command_hdel::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hdel.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hdel.key)
 }
 inline ::std::string* command_hdel::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hdel.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hdel.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hdel::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hdel.key)
+  // @@protoc_insertion_point(field_release:client.command_hdel.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -13944,7 +13610,7 @@ inline void command_hdel::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hdel.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hdel.key)
 }
 
 // string field = 2;
@@ -13952,41 +13618,41 @@ inline void command_hdel::clear_field() {
   field_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hdel::field() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hdel.field)
+  // @@protoc_insertion_point(field_get:client.command_hdel.field)
   return field_.GetNoArena();
 }
 inline void command_hdel::set_field(const ::std::string& value) {
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hdel.field)
+  // @@protoc_insertion_point(field_set:client.command_hdel.field)
 }
 #if LANG_CXX11
 inline void command_hdel::set_field(::std::string&& value) {
   
   field_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hdel.field)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hdel.field)
 }
 #endif
 inline void command_hdel::set_field(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hdel.field)
+  // @@protoc_insertion_point(field_set_char:client.command_hdel.field)
 }
 inline void command_hdel::set_field(const char* value, size_t size) {
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hdel.field)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hdel.field)
 }
 inline ::std::string* command_hdel::mutable_field() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hdel.field)
+  // @@protoc_insertion_point(field_mutable:client.command_hdel.field)
   return field_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hdel::release_field() {
-  // @@protoc_insertion_point(field_release:protocol.command_hdel.field)
+  // @@protoc_insertion_point(field_release:client.command_hdel.field)
   
   return field_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -13997,7 +13663,7 @@ inline void command_hdel::set_allocated_field(::std::string* field) {
     
   }
   field_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), field);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hdel.field)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hdel.field)
 }
 
 // -------------------------------------------------------------------
@@ -14009,41 +13675,41 @@ inline void command_hmdel::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hmdel::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmdel.key)
+  // @@protoc_insertion_point(field_get:client.command_hmdel.key)
   return key_.GetNoArena();
 }
 inline void command_hmdel::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hmdel.key)
+  // @@protoc_insertion_point(field_set:client.command_hmdel.key)
 }
 #if LANG_CXX11
 inline void command_hmdel::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hmdel.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hmdel.key)
 }
 #endif
 inline void command_hmdel::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmdel.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hmdel.key)
 }
 inline void command_hmdel::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmdel.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmdel.key)
 }
 inline ::std::string* command_hmdel::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmdel.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hmdel.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hmdel::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmdel.key)
+  // @@protoc_insertion_point(field_release:client.command_hmdel.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -14054,7 +13720,7 @@ inline void command_hmdel::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmdel.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmdel.key)
 }
 
 // repeated string fields = 2;
@@ -14065,64 +13731,64 @@ inline void command_hmdel::clear_fields() {
   fields_.Clear();
 }
 inline const ::std::string& command_hmdel::fields(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmdel.fields)
+  // @@protoc_insertion_point(field_get:client.command_hmdel.fields)
   return fields_.Get(index);
 }
 inline ::std::string* command_hmdel::mutable_fields(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmdel.fields)
+  // @@protoc_insertion_point(field_mutable:client.command_hmdel.fields)
   return fields_.Mutable(index);
 }
 inline void command_hmdel::set_fields(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_hmdel.fields)
+  // @@protoc_insertion_point(field_set:client.command_hmdel.fields)
   fields_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_hmdel::set_fields(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_hmdel.fields)
+  // @@protoc_insertion_point(field_set:client.command_hmdel.fields)
   fields_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_hmdel::set_fields(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmdel.fields)
+  // @@protoc_insertion_point(field_set_char:client.command_hmdel.fields)
 }
 inline void command_hmdel::set_fields(int index, const char* value, size_t size) {
   fields_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmdel.fields)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmdel.fields)
 }
 inline ::std::string* command_hmdel::add_fields() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_hmdel.fields)
+  // @@protoc_insertion_point(field_add_mutable:client.command_hmdel.fields)
   return fields_.Add();
 }
 inline void command_hmdel::add_fields(const ::std::string& value) {
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_hmdel.fields)
+  // @@protoc_insertion_point(field_add:client.command_hmdel.fields)
 }
 #if LANG_CXX11
 inline void command_hmdel::add_fields(::std::string&& value) {
   fields_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_hmdel.fields)
+  // @@protoc_insertion_point(field_add:client.command_hmdel.fields)
 }
 #endif
 inline void command_hmdel::add_fields(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_hmdel.fields)
+  // @@protoc_insertion_point(field_add_char:client.command_hmdel.fields)
 }
 inline void command_hmdel::add_fields(const char* value, size_t size) {
   fields_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_hmdel.fields)
+  // @@protoc_insertion_point(field_add_pointer:client.command_hmdel.fields)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_hmdel::fields() const {
-  // @@protoc_insertion_point(field_list:protocol.command_hmdel.fields)
+  // @@protoc_insertion_point(field_list:client.command_hmdel.fields)
   return fields_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_hmdel::mutable_fields() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_hmdel.fields)
+  // @@protoc_insertion_point(field_mutable_list:client.command_hmdel.fields)
   return &fields_;
 }
 
@@ -14138,64 +13804,64 @@ inline void command_mhmdel::clear_keys() {
   keys_.Clear();
 }
 inline const ::std::string& command_mhmdel::keys(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmdel.keys)
+  // @@protoc_insertion_point(field_get:client.command_mhmdel.keys)
   return keys_.Get(index);
 }
 inline ::std::string* command_mhmdel::mutable_keys(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmdel.keys)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmdel.keys)
   return keys_.Mutable(index);
 }
 inline void command_mhmdel::set_keys(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmdel.keys)
+  // @@protoc_insertion_point(field_set:client.command_mhmdel.keys)
   keys_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mhmdel::set_keys(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmdel.keys)
+  // @@protoc_insertion_point(field_set:client.command_mhmdel.keys)
   keys_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mhmdel::set_keys(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mhmdel.keys)
+  // @@protoc_insertion_point(field_set_char:client.command_mhmdel.keys)
 }
 inline void command_mhmdel::set_keys(int index, const char* value, size_t size) {
   keys_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mhmdel.keys)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mhmdel.keys)
 }
 inline ::std::string* command_mhmdel::add_keys() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mhmdel.keys)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mhmdel.keys)
   return keys_.Add();
 }
 inline void command_mhmdel::add_keys(const ::std::string& value) {
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mhmdel.keys)
+  // @@protoc_insertion_point(field_add:client.command_mhmdel.keys)
 }
 #if LANG_CXX11
 inline void command_mhmdel::add_keys(::std::string&& value) {
   keys_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mhmdel.keys)
+  // @@protoc_insertion_point(field_add:client.command_mhmdel.keys)
 }
 #endif
 inline void command_mhmdel::add_keys(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mhmdel.keys)
+  // @@protoc_insertion_point(field_add_char:client.command_mhmdel.keys)
 }
 inline void command_mhmdel::add_keys(const char* value, size_t size) {
   keys_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mhmdel.keys)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mhmdel.keys)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mhmdel::keys() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mhmdel.keys)
+  // @@protoc_insertion_point(field_list:client.command_mhmdel.keys)
   return keys_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mhmdel::mutable_keys() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mhmdel.keys)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mhmdel.keys)
   return &keys_;
 }
 
@@ -14207,64 +13873,64 @@ inline void command_mhmdel::clear_fields() {
   fields_.Clear();
 }
 inline const ::std::string& command_mhmdel::fields(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmdel.fields)
+  // @@protoc_insertion_point(field_get:client.command_mhmdel.fields)
   return fields_.Get(index);
 }
 inline ::std::string* command_mhmdel::mutable_fields(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmdel.fields)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmdel.fields)
   return fields_.Mutable(index);
 }
 inline void command_mhmdel::set_fields(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmdel.fields)
+  // @@protoc_insertion_point(field_set:client.command_mhmdel.fields)
   fields_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mhmdel::set_fields(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmdel.fields)
+  // @@protoc_insertion_point(field_set:client.command_mhmdel.fields)
   fields_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mhmdel::set_fields(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mhmdel.fields)
+  // @@protoc_insertion_point(field_set_char:client.command_mhmdel.fields)
 }
 inline void command_mhmdel::set_fields(int index, const char* value, size_t size) {
   fields_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mhmdel.fields)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mhmdel.fields)
 }
 inline ::std::string* command_mhmdel::add_fields() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mhmdel.fields)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mhmdel.fields)
   return fields_.Add();
 }
 inline void command_mhmdel::add_fields(const ::std::string& value) {
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mhmdel.fields)
+  // @@protoc_insertion_point(field_add:client.command_mhmdel.fields)
 }
 #if LANG_CXX11
 inline void command_mhmdel::add_fields(::std::string&& value) {
   fields_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mhmdel.fields)
+  // @@protoc_insertion_point(field_add:client.command_mhmdel.fields)
 }
 #endif
 inline void command_mhmdel::add_fields(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mhmdel.fields)
+  // @@protoc_insertion_point(field_add_char:client.command_mhmdel.fields)
 }
 inline void command_mhmdel::add_fields(const char* value, size_t size) {
   fields_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mhmdel.fields)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mhmdel.fields)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mhmdel::fields() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mhmdel.fields)
+  // @@protoc_insertion_point(field_list:client.command_mhmdel.fields)
   return fields_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mhmdel::mutable_fields() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mhmdel.fields)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mhmdel.fields)
   return &fields_;
 }
 
@@ -14277,41 +13943,41 @@ inline void command_incr::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_incr::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_incr.key)
+  // @@protoc_insertion_point(field_get:client.command_incr.key)
   return key_.GetNoArena();
 }
 inline void command_incr::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_incr.key)
+  // @@protoc_insertion_point(field_set:client.command_incr.key)
 }
 #if LANG_CXX11
 inline void command_incr::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_incr.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_incr.key)
 }
 #endif
 inline void command_incr::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_incr.key)
+  // @@protoc_insertion_point(field_set_char:client.command_incr.key)
 }
 inline void command_incr::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_incr.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_incr.key)
 }
 inline ::std::string* command_incr::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_incr.key)
+  // @@protoc_insertion_point(field_mutable:client.command_incr.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_incr::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_incr.key)
+  // @@protoc_insertion_point(field_release:client.command_incr.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -14322,44 +13988,38 @@ inline void command_incr::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_incr.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_incr.key)
 }
 
-// .protocol.VALUE value = 2;
+// .data.VALUE value = 2;
 inline bool command_incr::has_value() const {
   return this != internal_default_instance() && value_ != NULL;
 }
-inline void command_incr::clear_value() {
-  if (GetArenaNoVirtual() == NULL && value_ != NULL) {
-    delete value_;
-  }
-  value_ = NULL;
+inline const ::data::VALUE& command_incr::value() const {
+  const ::data::VALUE* p = value_;
+  // @@protoc_insertion_point(field_get:client.command_incr.value)
+  return p != NULL ? *p : *reinterpret_cast<const ::data::VALUE*>(
+      &::data::_VALUE_default_instance_);
 }
-inline const ::protocol::VALUE& command_incr::value() const {
-  const ::protocol::VALUE* p = value_;
-  // @@protoc_insertion_point(field_get:protocol.command_incr.value)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::VALUE*>(
-      &::protocol::_VALUE_default_instance_);
-}
-inline ::protocol::VALUE* command_incr::release_value() {
-  // @@protoc_insertion_point(field_release:protocol.command_incr.value)
+inline ::data::VALUE* command_incr::release_value() {
+  // @@protoc_insertion_point(field_release:client.command_incr.value)
   
-  ::protocol::VALUE* temp = value_;
+  ::data::VALUE* temp = value_;
   value_ = NULL;
   return temp;
 }
-inline ::protocol::VALUE* command_incr::mutable_value() {
+inline ::data::VALUE* command_incr::mutable_value() {
   
   if (value_ == NULL) {
-    value_ = new ::protocol::VALUE;
+    value_ = new ::data::VALUE;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_incr.value)
+  // @@protoc_insertion_point(field_mutable:client.command_incr.value)
   return value_;
 }
-inline void command_incr::set_allocated_value(::protocol::VALUE* value) {
+inline void command_incr::set_allocated_value(::data::VALUE* value) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
-    delete value_;
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(value_);
   }
   if (value) {
     ::google::protobuf::Arena* submessage_arena = NULL;
@@ -14372,7 +14032,7 @@ inline void command_incr::set_allocated_value(::protocol::VALUE* value) {
     
   }
   value_ = value;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_incr.value)
+  // @@protoc_insertion_point(field_set_allocated:client.command_incr.value)
 }
 
 // -------------------------------------------------------------------
@@ -14381,21 +14041,18 @@ inline void command_incr::set_allocated_value(::protocol::VALUE* value) {
 
 // command_mincr
 
-// map<string, .protocol.VALUE> kvs = 1;
+// map<string, .data.VALUE> kvs = 1;
 inline int command_mincr::kvs_size() const {
   return kvs_.size();
 }
-inline void command_mincr::clear_kvs() {
-  kvs_.Clear();
-}
-inline const ::google::protobuf::Map< ::std::string, ::protocol::VALUE >&
+inline const ::google::protobuf::Map< ::std::string, ::data::VALUE >&
 command_mincr::kvs() const {
-  // @@protoc_insertion_point(field_map:protocol.command_mincr.kvs)
+  // @@protoc_insertion_point(field_map:client.command_mincr.kvs)
   return kvs_.GetMap();
 }
-inline ::google::protobuf::Map< ::std::string, ::protocol::VALUE >*
+inline ::google::protobuf::Map< ::std::string, ::data::VALUE >*
 command_mincr::mutable_kvs() {
-  // @@protoc_insertion_point(field_mutable_map:protocol.command_mincr.kvs)
+  // @@protoc_insertion_point(field_mutable_map:client.command_mincr.kvs)
   return kvs_.MutableMap();
 }
 
@@ -14408,41 +14065,41 @@ inline void command_hincr::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hincr::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hincr.key)
+  // @@protoc_insertion_point(field_get:client.command_hincr.key)
   return key_.GetNoArena();
 }
 inline void command_hincr::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hincr.key)
+  // @@protoc_insertion_point(field_set:client.command_hincr.key)
 }
 #if LANG_CXX11
 inline void command_hincr::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hincr.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hincr.key)
 }
 #endif
 inline void command_hincr::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hincr.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hincr.key)
 }
 inline void command_hincr::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hincr.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hincr.key)
 }
 inline ::std::string* command_hincr::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hincr.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hincr.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hincr::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hincr.key)
+  // @@protoc_insertion_point(field_release:client.command_hincr.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -14453,7 +14110,7 @@ inline void command_hincr::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hincr.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hincr.key)
 }
 
 // string field = 2;
@@ -14461,41 +14118,41 @@ inline void command_hincr::clear_field() {
   field_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hincr::field() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hincr.field)
+  // @@protoc_insertion_point(field_get:client.command_hincr.field)
   return field_.GetNoArena();
 }
 inline void command_hincr::set_field(const ::std::string& value) {
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hincr.field)
+  // @@protoc_insertion_point(field_set:client.command_hincr.field)
 }
 #if LANG_CXX11
 inline void command_hincr::set_field(::std::string&& value) {
   
   field_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hincr.field)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hincr.field)
 }
 #endif
 inline void command_hincr::set_field(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hincr.field)
+  // @@protoc_insertion_point(field_set_char:client.command_hincr.field)
 }
 inline void command_hincr::set_field(const char* value, size_t size) {
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hincr.field)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hincr.field)
 }
 inline ::std::string* command_hincr::mutable_field() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hincr.field)
+  // @@protoc_insertion_point(field_mutable:client.command_hincr.field)
   return field_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hincr::release_field() {
-  // @@protoc_insertion_point(field_release:protocol.command_hincr.field)
+  // @@protoc_insertion_point(field_release:client.command_hincr.field)
   
   return field_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -14506,44 +14163,38 @@ inline void command_hincr::set_allocated_field(::std::string* field) {
     
   }
   field_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), field);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hincr.field)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hincr.field)
 }
 
-// .protocol.VALUE value = 3;
+// .data.VALUE value = 3;
 inline bool command_hincr::has_value() const {
   return this != internal_default_instance() && value_ != NULL;
 }
-inline void command_hincr::clear_value() {
-  if (GetArenaNoVirtual() == NULL && value_ != NULL) {
-    delete value_;
-  }
-  value_ = NULL;
+inline const ::data::VALUE& command_hincr::value() const {
+  const ::data::VALUE* p = value_;
+  // @@protoc_insertion_point(field_get:client.command_hincr.value)
+  return p != NULL ? *p : *reinterpret_cast<const ::data::VALUE*>(
+      &::data::_VALUE_default_instance_);
 }
-inline const ::protocol::VALUE& command_hincr::value() const {
-  const ::protocol::VALUE* p = value_;
-  // @@protoc_insertion_point(field_get:protocol.command_hincr.value)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::VALUE*>(
-      &::protocol::_VALUE_default_instance_);
-}
-inline ::protocol::VALUE* command_hincr::release_value() {
-  // @@protoc_insertion_point(field_release:protocol.command_hincr.value)
+inline ::data::VALUE* command_hincr::release_value() {
+  // @@protoc_insertion_point(field_release:client.command_hincr.value)
   
-  ::protocol::VALUE* temp = value_;
+  ::data::VALUE* temp = value_;
   value_ = NULL;
   return temp;
 }
-inline ::protocol::VALUE* command_hincr::mutable_value() {
+inline ::data::VALUE* command_hincr::mutable_value() {
   
   if (value_ == NULL) {
-    value_ = new ::protocol::VALUE;
+    value_ = new ::data::VALUE;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_hincr.value)
+  // @@protoc_insertion_point(field_mutable:client.command_hincr.value)
   return value_;
 }
-inline void command_hincr::set_allocated_value(::protocol::VALUE* value) {
+inline void command_hincr::set_allocated_value(::data::VALUE* value) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
-    delete value_;
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(value_);
   }
   if (value) {
     ::google::protobuf::Arena* submessage_arena = NULL;
@@ -14556,7 +14207,7 @@ inline void command_hincr::set_allocated_value(::protocol::VALUE* value) {
     
   }
   value_ = value;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hincr.value)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hincr.value)
 }
 
 // -------------------------------------------------------------------
@@ -14570,41 +14221,41 @@ inline void command_hmincr::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hmincr::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmincr.key)
+  // @@protoc_insertion_point(field_get:client.command_hmincr.key)
   return key_.GetNoArena();
 }
 inline void command_hmincr::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hmincr.key)
+  // @@protoc_insertion_point(field_set:client.command_hmincr.key)
 }
 #if LANG_CXX11
 inline void command_hmincr::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hmincr.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hmincr.key)
 }
 #endif
 inline void command_hmincr::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmincr.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hmincr.key)
 }
 inline void command_hmincr::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmincr.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmincr.key)
 }
 inline ::std::string* command_hmincr::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmincr.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hmincr.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hmincr::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmincr.key)
+  // @@protoc_insertion_point(field_release:client.command_hmincr.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -14615,24 +14266,21 @@ inline void command_hmincr::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmincr.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmincr.key)
 }
 
-// map<string, .protocol.VALUE> kvs = 2;
+// map<string, .data.VALUE> kvs = 2;
 inline int command_hmincr::kvs_size() const {
   return kvs_.size();
 }
-inline void command_hmincr::clear_kvs() {
-  kvs_.Clear();
-}
-inline const ::google::protobuf::Map< ::std::string, ::protocol::VALUE >&
+inline const ::google::protobuf::Map< ::std::string, ::data::VALUE >&
 command_hmincr::kvs() const {
-  // @@protoc_insertion_point(field_map:protocol.command_hmincr.kvs)
+  // @@protoc_insertion_point(field_map:client.command_hmincr.kvs)
   return kvs_.GetMap();
 }
-inline ::google::protobuf::Map< ::std::string, ::protocol::VALUE >*
+inline ::google::protobuf::Map< ::std::string, ::data::VALUE >*
 command_hmincr::mutable_kvs() {
-  // @@protoc_insertion_point(field_mutable_map:protocol.command_hmincr.kvs)
+  // @@protoc_insertion_point(field_mutable_map:client.command_hmincr.kvs)
   return kvs_.MutableMap();
 }
 
@@ -14650,82 +14298,82 @@ inline void command_mhmincr::clear_fields() {
   fields_.Clear();
 }
 inline const ::std::string& command_mhmincr::fields(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmincr.fields)
+  // @@protoc_insertion_point(field_get:client.command_mhmincr.fields)
   return fields_.Get(index);
 }
 inline ::std::string* command_mhmincr::mutable_fields(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmincr.fields)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmincr.fields)
   return fields_.Mutable(index);
 }
 inline void command_mhmincr::set_fields(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmincr.fields)
+  // @@protoc_insertion_point(field_set:client.command_mhmincr.fields)
   fields_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mhmincr::set_fields(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmincr.fields)
+  // @@protoc_insertion_point(field_set:client.command_mhmincr.fields)
   fields_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mhmincr::set_fields(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mhmincr.fields)
+  // @@protoc_insertion_point(field_set_char:client.command_mhmincr.fields)
 }
 inline void command_mhmincr::set_fields(int index, const char* value, size_t size) {
   fields_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mhmincr.fields)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mhmincr.fields)
 }
 inline ::std::string* command_mhmincr::add_fields() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mhmincr.fields)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mhmincr.fields)
   return fields_.Add();
 }
 inline void command_mhmincr::add_fields(const ::std::string& value) {
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mhmincr.fields)
+  // @@protoc_insertion_point(field_add:client.command_mhmincr.fields)
 }
 #if LANG_CXX11
 inline void command_mhmincr::add_fields(::std::string&& value) {
   fields_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mhmincr.fields)
+  // @@protoc_insertion_point(field_add:client.command_mhmincr.fields)
 }
 #endif
 inline void command_mhmincr::add_fields(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mhmincr.fields)
+  // @@protoc_insertion_point(field_add_char:client.command_mhmincr.fields)
 }
 inline void command_mhmincr::add_fields(const char* value, size_t size) {
   fields_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mhmincr.fields)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mhmincr.fields)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mhmincr::fields() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mhmincr.fields)
+  // @@protoc_insertion_point(field_list:client.command_mhmincr.fields)
   return fields_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mhmincr::mutable_fields() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mhmincr.fields)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mhmincr.fields)
   return &fields_;
 }
 
-// map<string, .protocol.values_type> kvs = 2;
+// map<string, .client.values_type> kvs = 2;
 inline int command_mhmincr::kvs_size() const {
   return kvs_.size();
 }
 inline void command_mhmincr::clear_kvs() {
   kvs_.Clear();
 }
-inline const ::google::protobuf::Map< ::std::string, ::protocol::values_type >&
+inline const ::google::protobuf::Map< ::std::string, ::client::values_type >&
 command_mhmincr::kvs() const {
-  // @@protoc_insertion_point(field_map:protocol.command_mhmincr.kvs)
+  // @@protoc_insertion_point(field_map:client.command_mhmincr.kvs)
   return kvs_.GetMap();
 }
-inline ::google::protobuf::Map< ::std::string, ::protocol::values_type >*
+inline ::google::protobuf::Map< ::std::string, ::client::values_type >*
 command_mhmincr::mutable_kvs() {
-  // @@protoc_insertion_point(field_mutable_map:protocol.command_mhmincr.kvs)
+  // @@protoc_insertion_point(field_mutable_map:client.command_mhmincr.kvs)
   return kvs_.MutableMap();
 }
 
@@ -14738,41 +14386,41 @@ inline void command_lpush::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_lpush::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_lpush.key)
+  // @@protoc_insertion_point(field_get:client.command_lpush.key)
   return key_.GetNoArena();
 }
 inline void command_lpush::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_lpush.key)
+  // @@protoc_insertion_point(field_set:client.command_lpush.key)
 }
 #if LANG_CXX11
 inline void command_lpush::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_lpush.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_lpush.key)
 }
 #endif
 inline void command_lpush::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_lpush.key)
+  // @@protoc_insertion_point(field_set_char:client.command_lpush.key)
 }
 inline void command_lpush::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_lpush.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_lpush.key)
 }
 inline ::std::string* command_lpush::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_lpush.key)
+  // @@protoc_insertion_point(field_mutable:client.command_lpush.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_lpush::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_lpush.key)
+  // @@protoc_insertion_point(field_release:client.command_lpush.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -14783,44 +14431,38 @@ inline void command_lpush::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_lpush.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_lpush.key)
 }
 
-// .protocol.VALUE value = 2;
+// .data.VALUE value = 2;
 inline bool command_lpush::has_value() const {
   return this != internal_default_instance() && value_ != NULL;
 }
-inline void command_lpush::clear_value() {
-  if (GetArenaNoVirtual() == NULL && value_ != NULL) {
-    delete value_;
-  }
-  value_ = NULL;
+inline const ::data::VALUE& command_lpush::value() const {
+  const ::data::VALUE* p = value_;
+  // @@protoc_insertion_point(field_get:client.command_lpush.value)
+  return p != NULL ? *p : *reinterpret_cast<const ::data::VALUE*>(
+      &::data::_VALUE_default_instance_);
 }
-inline const ::protocol::VALUE& command_lpush::value() const {
-  const ::protocol::VALUE* p = value_;
-  // @@protoc_insertion_point(field_get:protocol.command_lpush.value)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::VALUE*>(
-      &::protocol::_VALUE_default_instance_);
-}
-inline ::protocol::VALUE* command_lpush::release_value() {
-  // @@protoc_insertion_point(field_release:protocol.command_lpush.value)
+inline ::data::VALUE* command_lpush::release_value() {
+  // @@protoc_insertion_point(field_release:client.command_lpush.value)
   
-  ::protocol::VALUE* temp = value_;
+  ::data::VALUE* temp = value_;
   value_ = NULL;
   return temp;
 }
-inline ::protocol::VALUE* command_lpush::mutable_value() {
+inline ::data::VALUE* command_lpush::mutable_value() {
   
   if (value_ == NULL) {
-    value_ = new ::protocol::VALUE;
+    value_ = new ::data::VALUE;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_lpush.value)
+  // @@protoc_insertion_point(field_mutable:client.command_lpush.value)
   return value_;
 }
-inline void command_lpush::set_allocated_value(::protocol::VALUE* value) {
+inline void command_lpush::set_allocated_value(::data::VALUE* value) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
-    delete value_;
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(value_);
   }
   if (value) {
     ::google::protobuf::Arena* submessage_arena = NULL;
@@ -14833,7 +14475,7 @@ inline void command_lpush::set_allocated_value(::protocol::VALUE* value) {
     
   }
   value_ = value;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_lpush.value)
+  // @@protoc_insertion_point(field_set_allocated:client.command_lpush.value)
 }
 
 // bool head = 3;
@@ -14841,13 +14483,13 @@ inline void command_lpush::clear_head() {
   head_ = false;
 }
 inline bool command_lpush::head() const {
-  // @@protoc_insertion_point(field_get:protocol.command_lpush.head)
+  // @@protoc_insertion_point(field_get:client.command_lpush.head)
   return head_;
 }
 inline void command_lpush::set_head(bool value) {
   
   head_ = value;
-  // @@protoc_insertion_point(field_set:protocol.command_lpush.head)
+  // @@protoc_insertion_point(field_set:client.command_lpush.head)
 }
 
 // -------------------------------------------------------------------
@@ -14856,21 +14498,18 @@ inline void command_lpush::set_head(bool value) {
 
 // command_mlpush
 
-// map<string, .protocol.VALUE> kvs = 1;
+// map<string, .data.VALUE> kvs = 1;
 inline int command_mlpush::kvs_size() const {
   return kvs_.size();
 }
-inline void command_mlpush::clear_kvs() {
-  kvs_.Clear();
-}
-inline const ::google::protobuf::Map< ::std::string, ::protocol::VALUE >&
+inline const ::google::protobuf::Map< ::std::string, ::data::VALUE >&
 command_mlpush::kvs() const {
-  // @@protoc_insertion_point(field_map:protocol.command_mlpush.kvs)
+  // @@protoc_insertion_point(field_map:client.command_mlpush.kvs)
   return kvs_.GetMap();
 }
-inline ::google::protobuf::Map< ::std::string, ::protocol::VALUE >*
+inline ::google::protobuf::Map< ::std::string, ::data::VALUE >*
 command_mlpush::mutable_kvs() {
-  // @@protoc_insertion_point(field_mutable_map:protocol.command_mlpush.kvs)
+  // @@protoc_insertion_point(field_mutable_map:client.command_mlpush.kvs)
   return kvs_.MutableMap();
 }
 
@@ -14879,13 +14518,13 @@ inline void command_mlpush::clear_head() {
   head_ = false;
 }
 inline bool command_mlpush::head() const {
-  // @@protoc_insertion_point(field_get:protocol.command_mlpush.head)
+  // @@protoc_insertion_point(field_get:client.command_mlpush.head)
   return head_;
 }
 inline void command_mlpush::set_head(bool value) {
   
   head_ = value;
-  // @@protoc_insertion_point(field_set:protocol.command_mlpush.head)
+  // @@protoc_insertion_point(field_set:client.command_mlpush.head)
 }
 
 // -------------------------------------------------------------------
@@ -14897,41 +14536,41 @@ inline void command_hlpush::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hlpush::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hlpush.key)
+  // @@protoc_insertion_point(field_get:client.command_hlpush.key)
   return key_.GetNoArena();
 }
 inline void command_hlpush::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hlpush.key)
+  // @@protoc_insertion_point(field_set:client.command_hlpush.key)
 }
 #if LANG_CXX11
 inline void command_hlpush::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hlpush.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hlpush.key)
 }
 #endif
 inline void command_hlpush::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hlpush.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hlpush.key)
 }
 inline void command_hlpush::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hlpush.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hlpush.key)
 }
 inline ::std::string* command_hlpush::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hlpush.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hlpush.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hlpush::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hlpush.key)
+  // @@protoc_insertion_point(field_release:client.command_hlpush.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -14942,7 +14581,7 @@ inline void command_hlpush::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hlpush.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hlpush.key)
 }
 
 // string field = 2;
@@ -14950,41 +14589,41 @@ inline void command_hlpush::clear_field() {
   field_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hlpush::field() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hlpush.field)
+  // @@protoc_insertion_point(field_get:client.command_hlpush.field)
   return field_.GetNoArena();
 }
 inline void command_hlpush::set_field(const ::std::string& value) {
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hlpush.field)
+  // @@protoc_insertion_point(field_set:client.command_hlpush.field)
 }
 #if LANG_CXX11
 inline void command_hlpush::set_field(::std::string&& value) {
   
   field_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hlpush.field)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hlpush.field)
 }
 #endif
 inline void command_hlpush::set_field(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hlpush.field)
+  // @@protoc_insertion_point(field_set_char:client.command_hlpush.field)
 }
 inline void command_hlpush::set_field(const char* value, size_t size) {
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hlpush.field)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hlpush.field)
 }
 inline ::std::string* command_hlpush::mutable_field() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hlpush.field)
+  // @@protoc_insertion_point(field_mutable:client.command_hlpush.field)
   return field_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hlpush::release_field() {
-  // @@protoc_insertion_point(field_release:protocol.command_hlpush.field)
+  // @@protoc_insertion_point(field_release:client.command_hlpush.field)
   
   return field_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -14995,44 +14634,38 @@ inline void command_hlpush::set_allocated_field(::std::string* field) {
     
   }
   field_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), field);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hlpush.field)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hlpush.field)
 }
 
-// .protocol.VALUE value = 3;
+// .data.VALUE value = 3;
 inline bool command_hlpush::has_value() const {
   return this != internal_default_instance() && value_ != NULL;
 }
-inline void command_hlpush::clear_value() {
-  if (GetArenaNoVirtual() == NULL && value_ != NULL) {
-    delete value_;
-  }
-  value_ = NULL;
+inline const ::data::VALUE& command_hlpush::value() const {
+  const ::data::VALUE* p = value_;
+  // @@protoc_insertion_point(field_get:client.command_hlpush.value)
+  return p != NULL ? *p : *reinterpret_cast<const ::data::VALUE*>(
+      &::data::_VALUE_default_instance_);
 }
-inline const ::protocol::VALUE& command_hlpush::value() const {
-  const ::protocol::VALUE* p = value_;
-  // @@protoc_insertion_point(field_get:protocol.command_hlpush.value)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::VALUE*>(
-      &::protocol::_VALUE_default_instance_);
-}
-inline ::protocol::VALUE* command_hlpush::release_value() {
-  // @@protoc_insertion_point(field_release:protocol.command_hlpush.value)
+inline ::data::VALUE* command_hlpush::release_value() {
+  // @@protoc_insertion_point(field_release:client.command_hlpush.value)
   
-  ::protocol::VALUE* temp = value_;
+  ::data::VALUE* temp = value_;
   value_ = NULL;
   return temp;
 }
-inline ::protocol::VALUE* command_hlpush::mutable_value() {
+inline ::data::VALUE* command_hlpush::mutable_value() {
   
   if (value_ == NULL) {
-    value_ = new ::protocol::VALUE;
+    value_ = new ::data::VALUE;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_hlpush.value)
+  // @@protoc_insertion_point(field_mutable:client.command_hlpush.value)
   return value_;
 }
-inline void command_hlpush::set_allocated_value(::protocol::VALUE* value) {
+inline void command_hlpush::set_allocated_value(::data::VALUE* value) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
-    delete value_;
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(value_);
   }
   if (value) {
     ::google::protobuf::Arena* submessage_arena = NULL;
@@ -15045,7 +14678,7 @@ inline void command_hlpush::set_allocated_value(::protocol::VALUE* value) {
     
   }
   value_ = value;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hlpush.value)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hlpush.value)
 }
 
 // -------------------------------------------------------------------
@@ -15059,41 +14692,41 @@ inline void command_hmlpush::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hmlpush::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmlpush.key)
+  // @@protoc_insertion_point(field_get:client.command_hmlpush.key)
   return key_.GetNoArena();
 }
 inline void command_hmlpush::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hmlpush.key)
+  // @@protoc_insertion_point(field_set:client.command_hmlpush.key)
 }
 #if LANG_CXX11
 inline void command_hmlpush::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hmlpush.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hmlpush.key)
 }
 #endif
 inline void command_hmlpush::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmlpush.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hmlpush.key)
 }
 inline void command_hmlpush::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmlpush.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmlpush.key)
 }
 inline ::std::string* command_hmlpush::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmlpush.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hmlpush.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hmlpush::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmlpush.key)
+  // @@protoc_insertion_point(field_release:client.command_hmlpush.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -15104,24 +14737,21 @@ inline void command_hmlpush::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmlpush.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmlpush.key)
 }
 
-// map<string, .protocol.VALUE> kvs = 2;
+// map<string, .data.VALUE> kvs = 2;
 inline int command_hmlpush::kvs_size() const {
   return kvs_.size();
 }
-inline void command_hmlpush::clear_kvs() {
-  kvs_.Clear();
-}
-inline const ::google::protobuf::Map< ::std::string, ::protocol::VALUE >&
+inline const ::google::protobuf::Map< ::std::string, ::data::VALUE >&
 command_hmlpush::kvs() const {
-  // @@protoc_insertion_point(field_map:protocol.command_hmlpush.kvs)
+  // @@protoc_insertion_point(field_map:client.command_hmlpush.kvs)
   return kvs_.GetMap();
 }
-inline ::google::protobuf::Map< ::std::string, ::protocol::VALUE >*
+inline ::google::protobuf::Map< ::std::string, ::data::VALUE >*
 command_hmlpush::mutable_kvs() {
-  // @@protoc_insertion_point(field_mutable_map:protocol.command_hmlpush.kvs)
+  // @@protoc_insertion_point(field_mutable_map:client.command_hmlpush.kvs)
   return kvs_.MutableMap();
 }
 
@@ -15139,82 +14769,82 @@ inline void command_mhmlpush::clear_fields() {
   fields_.Clear();
 }
 inline const ::std::string& command_mhmlpush::fields(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmlpush.fields)
+  // @@protoc_insertion_point(field_get:client.command_mhmlpush.fields)
   return fields_.Get(index);
 }
 inline ::std::string* command_mhmlpush::mutable_fields(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmlpush.fields)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmlpush.fields)
   return fields_.Mutable(index);
 }
 inline void command_mhmlpush::set_fields(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmlpush.fields)
+  // @@protoc_insertion_point(field_set:client.command_mhmlpush.fields)
   fields_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mhmlpush::set_fields(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmlpush.fields)
+  // @@protoc_insertion_point(field_set:client.command_mhmlpush.fields)
   fields_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mhmlpush::set_fields(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mhmlpush.fields)
+  // @@protoc_insertion_point(field_set_char:client.command_mhmlpush.fields)
 }
 inline void command_mhmlpush::set_fields(int index, const char* value, size_t size) {
   fields_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mhmlpush.fields)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mhmlpush.fields)
 }
 inline ::std::string* command_mhmlpush::add_fields() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mhmlpush.fields)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mhmlpush.fields)
   return fields_.Add();
 }
 inline void command_mhmlpush::add_fields(const ::std::string& value) {
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mhmlpush.fields)
+  // @@protoc_insertion_point(field_add:client.command_mhmlpush.fields)
 }
 #if LANG_CXX11
 inline void command_mhmlpush::add_fields(::std::string&& value) {
   fields_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mhmlpush.fields)
+  // @@protoc_insertion_point(field_add:client.command_mhmlpush.fields)
 }
 #endif
 inline void command_mhmlpush::add_fields(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mhmlpush.fields)
+  // @@protoc_insertion_point(field_add_char:client.command_mhmlpush.fields)
 }
 inline void command_mhmlpush::add_fields(const char* value, size_t size) {
   fields_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mhmlpush.fields)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mhmlpush.fields)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mhmlpush::fields() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mhmlpush.fields)
+  // @@protoc_insertion_point(field_list:client.command_mhmlpush.fields)
   return fields_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mhmlpush::mutable_fields() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mhmlpush.fields)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mhmlpush.fields)
   return &fields_;
 }
 
-// map<string, .protocol.values_type> kvs = 2;
+// map<string, .client.values_type> kvs = 2;
 inline int command_mhmlpush::kvs_size() const {
   return kvs_.size();
 }
 inline void command_mhmlpush::clear_kvs() {
   kvs_.Clear();
 }
-inline const ::google::protobuf::Map< ::std::string, ::protocol::values_type >&
+inline const ::google::protobuf::Map< ::std::string, ::client::values_type >&
 command_mhmlpush::kvs() const {
-  // @@protoc_insertion_point(field_map:protocol.command_mhmlpush.kvs)
+  // @@protoc_insertion_point(field_map:client.command_mhmlpush.kvs)
   return kvs_.GetMap();
 }
-inline ::google::protobuf::Map< ::std::string, ::protocol::values_type >*
+inline ::google::protobuf::Map< ::std::string, ::client::values_type >*
 command_mhmlpush::mutable_kvs() {
-  // @@protoc_insertion_point(field_mutable_map:protocol.command_mhmlpush.kvs)
+  // @@protoc_insertion_point(field_mutable_map:client.command_mhmlpush.kvs)
   return kvs_.MutableMap();
 }
 
@@ -15227,41 +14857,41 @@ inline void command_lrange::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_lrange::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_lrange.key)
+  // @@protoc_insertion_point(field_get:client.command_lrange.key)
   return key_.GetNoArena();
 }
 inline void command_lrange::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_lrange.key)
+  // @@protoc_insertion_point(field_set:client.command_lrange.key)
 }
 #if LANG_CXX11
 inline void command_lrange::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_lrange.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_lrange.key)
 }
 #endif
 inline void command_lrange::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_lrange.key)
+  // @@protoc_insertion_point(field_set_char:client.command_lrange.key)
 }
 inline void command_lrange::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_lrange.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_lrange.key)
 }
 inline ::std::string* command_lrange::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_lrange.key)
+  // @@protoc_insertion_point(field_mutable:client.command_lrange.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_lrange::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_lrange.key)
+  // @@protoc_insertion_point(field_release:client.command_lrange.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -15272,7 +14902,7 @@ inline void command_lrange::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_lrange.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_lrange.key)
 }
 
 // int32 start = 2;
@@ -15280,13 +14910,13 @@ inline void command_lrange::clear_start() {
   start_ = 0;
 }
 inline ::google::protobuf::int32 command_lrange::start() const {
-  // @@protoc_insertion_point(field_get:protocol.command_lrange.start)
+  // @@protoc_insertion_point(field_get:client.command_lrange.start)
   return start_;
 }
 inline void command_lrange::set_start(::google::protobuf::int32 value) {
   
   start_ = value;
-  // @@protoc_insertion_point(field_set:protocol.command_lrange.start)
+  // @@protoc_insertion_point(field_set:client.command_lrange.start)
 }
 
 // int32 stop = 3;
@@ -15294,20 +14924,20 @@ inline void command_lrange::clear_stop() {
   stop_ = 0;
 }
 inline ::google::protobuf::int32 command_lrange::stop() const {
-  // @@protoc_insertion_point(field_get:protocol.command_lrange.stop)
+  // @@protoc_insertion_point(field_get:client.command_lrange.stop)
   return stop_;
 }
 inline void command_lrange::set_stop(::google::protobuf::int32 value) {
   
   stop_ = value;
-  // @@protoc_insertion_point(field_set:protocol.command_lrange.stop)
+  // @@protoc_insertion_point(field_set:client.command_lrange.stop)
 }
 
 // -------------------------------------------------------------------
 
 // command_lrange_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_lrange_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -15317,28 +14947,28 @@ inline void command_lrange_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_lrange_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_lrange_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_lrange_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_lrange_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_lrange_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_lrange_reply.state)
+inline ::client::command_reply* command_lrange_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_lrange_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_lrange_reply::mutable_state() {
+inline ::client::command_reply* command_lrange_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_lrange_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_lrange_reply.state)
   return state_;
 }
-inline void command_lrange_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_lrange_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -15354,57 +14984,51 @@ inline void command_lrange_reply::set_allocated_state(::protocol::command_reply*
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_lrange_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_lrange_reply.state)
 }
 
-// .protocol.VALUE reply = 2;
-inline bool command_lrange_reply::has_reply() const {
-  return this != internal_default_instance() && reply_ != NULL;
+// .data.VALUE data = 2;
+inline bool command_lrange_reply::has_data() const {
+  return this != internal_default_instance() && data_ != NULL;
 }
-inline void command_lrange_reply::clear_reply() {
-  if (GetArenaNoVirtual() == NULL && reply_ != NULL) {
-    delete reply_;
-  }
-  reply_ = NULL;
+inline const ::data::VALUE& command_lrange_reply::data() const {
+  const ::data::VALUE* p = data_;
+  // @@protoc_insertion_point(field_get:client.command_lrange_reply.data)
+  return p != NULL ? *p : *reinterpret_cast<const ::data::VALUE*>(
+      &::data::_VALUE_default_instance_);
 }
-inline const ::protocol::VALUE& command_lrange_reply::reply() const {
-  const ::protocol::VALUE* p = reply_;
-  // @@protoc_insertion_point(field_get:protocol.command_lrange_reply.reply)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::VALUE*>(
-      &::protocol::_VALUE_default_instance_);
-}
-inline ::protocol::VALUE* command_lrange_reply::release_reply() {
-  // @@protoc_insertion_point(field_release:protocol.command_lrange_reply.reply)
+inline ::data::VALUE* command_lrange_reply::release_data() {
+  // @@protoc_insertion_point(field_release:client.command_lrange_reply.data)
   
-  ::protocol::VALUE* temp = reply_;
-  reply_ = NULL;
+  ::data::VALUE* temp = data_;
+  data_ = NULL;
   return temp;
 }
-inline ::protocol::VALUE* command_lrange_reply::mutable_reply() {
+inline ::data::VALUE* command_lrange_reply::mutable_data() {
   
-  if (reply_ == NULL) {
-    reply_ = new ::protocol::VALUE;
+  if (data_ == NULL) {
+    data_ = new ::data::VALUE;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_lrange_reply.reply)
-  return reply_;
+  // @@protoc_insertion_point(field_mutable:client.command_lrange_reply.data)
+  return data_;
 }
-inline void command_lrange_reply::set_allocated_reply(::protocol::VALUE* reply) {
+inline void command_lrange_reply::set_allocated_data(::data::VALUE* data) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
-    delete reply_;
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(data_);
   }
-  if (reply) {
+  if (data) {
     ::google::protobuf::Arena* submessage_arena = NULL;
     if (message_arena != submessage_arena) {
-      reply = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, reply, submessage_arena);
+      data = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, data, submessage_arena);
     }
     
   } else {
     
   }
-  reply_ = reply;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_lrange_reply.reply)
+  data_ = data;
+  // @@protoc_insertion_point(field_set_allocated:client.command_lrange_reply.data)
 }
 
 // -------------------------------------------------------------------
@@ -15419,64 +15043,64 @@ inline void command_mlrange::clear_keys() {
   keys_.Clear();
 }
 inline const ::std::string& command_mlrange::keys(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mlrange.keys)
+  // @@protoc_insertion_point(field_get:client.command_mlrange.keys)
   return keys_.Get(index);
 }
 inline ::std::string* command_mlrange::mutable_keys(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mlrange.keys)
+  // @@protoc_insertion_point(field_mutable:client.command_mlrange.keys)
   return keys_.Mutable(index);
 }
 inline void command_mlrange::set_keys(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mlrange.keys)
+  // @@protoc_insertion_point(field_set:client.command_mlrange.keys)
   keys_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mlrange::set_keys(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mlrange.keys)
+  // @@protoc_insertion_point(field_set:client.command_mlrange.keys)
   keys_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mlrange::set_keys(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mlrange.keys)
+  // @@protoc_insertion_point(field_set_char:client.command_mlrange.keys)
 }
 inline void command_mlrange::set_keys(int index, const char* value, size_t size) {
   keys_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mlrange.keys)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mlrange.keys)
 }
 inline ::std::string* command_mlrange::add_keys() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mlrange.keys)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mlrange.keys)
   return keys_.Add();
 }
 inline void command_mlrange::add_keys(const ::std::string& value) {
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mlrange.keys)
+  // @@protoc_insertion_point(field_add:client.command_mlrange.keys)
 }
 #if LANG_CXX11
 inline void command_mlrange::add_keys(::std::string&& value) {
   keys_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mlrange.keys)
+  // @@protoc_insertion_point(field_add:client.command_mlrange.keys)
 }
 #endif
 inline void command_mlrange::add_keys(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mlrange.keys)
+  // @@protoc_insertion_point(field_add_char:client.command_mlrange.keys)
 }
 inline void command_mlrange::add_keys(const char* value, size_t size) {
   keys_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mlrange.keys)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mlrange.keys)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mlrange::keys() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mlrange.keys)
+  // @@protoc_insertion_point(field_list:client.command_mlrange.keys)
   return keys_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mlrange::mutable_keys() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mlrange.keys)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mlrange.keys)
   return &keys_;
 }
 
@@ -15485,13 +15109,13 @@ inline void command_mlrange::clear_start() {
   start_ = 0;
 }
 inline ::google::protobuf::int32 command_mlrange::start() const {
-  // @@protoc_insertion_point(field_get:protocol.command_mlrange.start)
+  // @@protoc_insertion_point(field_get:client.command_mlrange.start)
   return start_;
 }
 inline void command_mlrange::set_start(::google::protobuf::int32 value) {
   
   start_ = value;
-  // @@protoc_insertion_point(field_set:protocol.command_mlrange.start)
+  // @@protoc_insertion_point(field_set:client.command_mlrange.start)
 }
 
 // int32 stop = 3;
@@ -15499,20 +15123,20 @@ inline void command_mlrange::clear_stop() {
   stop_ = 0;
 }
 inline ::google::protobuf::int32 command_mlrange::stop() const {
-  // @@protoc_insertion_point(field_get:protocol.command_mlrange.stop)
+  // @@protoc_insertion_point(field_get:client.command_mlrange.stop)
   return stop_;
 }
 inline void command_mlrange::set_stop(::google::protobuf::int32 value) {
   
   stop_ = value;
-  // @@protoc_insertion_point(field_set:protocol.command_mlrange.stop)
+  // @@protoc_insertion_point(field_set:client.command_mlrange.stop)
 }
 
 // -------------------------------------------------------------------
 
 // command_mlrange_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_mlrange_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -15522,28 +15146,28 @@ inline void command_mlrange_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_mlrange_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_mlrange_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_mlrange_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_mlrange_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_mlrange_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_mlrange_reply.state)
+inline ::client::command_reply* command_mlrange_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_mlrange_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_mlrange_reply::mutable_state() {
+inline ::client::command_reply* command_mlrange_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_mlrange_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_mlrange_reply.state)
   return state_;
 }
-inline void command_mlrange_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_mlrange_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -15559,37 +15183,34 @@ inline void command_mlrange_reply::set_allocated_state(::protocol::command_reply
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_mlrange_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_mlrange_reply.state)
 }
 
-// repeated .protocol.VALUE reply = 2;
-inline int command_mlrange_reply::reply_size() const {
-  return reply_.size();
+// repeated .data.VALUE data = 2;
+inline int command_mlrange_reply::data_size() const {
+  return data_.size();
 }
-inline void command_mlrange_reply::clear_reply() {
-  reply_.Clear();
+inline const ::data::VALUE& command_mlrange_reply::data(int index) const {
+  // @@protoc_insertion_point(field_get:client.command_mlrange_reply.data)
+  return data_.Get(index);
 }
-inline const ::protocol::VALUE& command_mlrange_reply::reply(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mlrange_reply.reply)
-  return reply_.Get(index);
+inline ::data::VALUE* command_mlrange_reply::mutable_data(int index) {
+  // @@protoc_insertion_point(field_mutable:client.command_mlrange_reply.data)
+  return data_.Mutable(index);
 }
-inline ::protocol::VALUE* command_mlrange_reply::mutable_reply(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mlrange_reply.reply)
-  return reply_.Mutable(index);
+inline ::data::VALUE* command_mlrange_reply::add_data() {
+  // @@protoc_insertion_point(field_add:client.command_mlrange_reply.data)
+  return data_.Add();
 }
-inline ::protocol::VALUE* command_mlrange_reply::add_reply() {
-  // @@protoc_insertion_point(field_add:protocol.command_mlrange_reply.reply)
-  return reply_.Add();
+inline ::google::protobuf::RepeatedPtrField< ::data::VALUE >*
+command_mlrange_reply::mutable_data() {
+  // @@protoc_insertion_point(field_mutable_list:client.command_mlrange_reply.data)
+  return &data_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >*
-command_mlrange_reply::mutable_reply() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mlrange_reply.reply)
-  return &reply_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >&
-command_mlrange_reply::reply() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mlrange_reply.reply)
-  return reply_;
+inline const ::google::protobuf::RepeatedPtrField< ::data::VALUE >&
+command_mlrange_reply::data() const {
+  // @@protoc_insertion_point(field_list:client.command_mlrange_reply.data)
+  return data_;
 }
 
 // -------------------------------------------------------------------
@@ -15601,41 +15222,41 @@ inline void command_hlrange::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hlrange::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hlrange.key)
+  // @@protoc_insertion_point(field_get:client.command_hlrange.key)
   return key_.GetNoArena();
 }
 inline void command_hlrange::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hlrange.key)
+  // @@protoc_insertion_point(field_set:client.command_hlrange.key)
 }
 #if LANG_CXX11
 inline void command_hlrange::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hlrange.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hlrange.key)
 }
 #endif
 inline void command_hlrange::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hlrange.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hlrange.key)
 }
 inline void command_hlrange::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hlrange.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hlrange.key)
 }
 inline ::std::string* command_hlrange::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hlrange.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hlrange.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hlrange::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hlrange.key)
+  // @@protoc_insertion_point(field_release:client.command_hlrange.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -15646,7 +15267,7 @@ inline void command_hlrange::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hlrange.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hlrange.key)
 }
 
 // string field = 2;
@@ -15654,41 +15275,41 @@ inline void command_hlrange::clear_field() {
   field_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hlrange::field() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hlrange.field)
+  // @@protoc_insertion_point(field_get:client.command_hlrange.field)
   return field_.GetNoArena();
 }
 inline void command_hlrange::set_field(const ::std::string& value) {
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hlrange.field)
+  // @@protoc_insertion_point(field_set:client.command_hlrange.field)
 }
 #if LANG_CXX11
 inline void command_hlrange::set_field(::std::string&& value) {
   
   field_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hlrange.field)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hlrange.field)
 }
 #endif
 inline void command_hlrange::set_field(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hlrange.field)
+  // @@protoc_insertion_point(field_set_char:client.command_hlrange.field)
 }
 inline void command_hlrange::set_field(const char* value, size_t size) {
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hlrange.field)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hlrange.field)
 }
 inline ::std::string* command_hlrange::mutable_field() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hlrange.field)
+  // @@protoc_insertion_point(field_mutable:client.command_hlrange.field)
   return field_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hlrange::release_field() {
-  // @@protoc_insertion_point(field_release:protocol.command_hlrange.field)
+  // @@protoc_insertion_point(field_release:client.command_hlrange.field)
   
   return field_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -15699,7 +15320,7 @@ inline void command_hlrange::set_allocated_field(::std::string* field) {
     
   }
   field_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), field);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hlrange.field)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hlrange.field)
 }
 
 // int32 start = 3;
@@ -15707,13 +15328,13 @@ inline void command_hlrange::clear_start() {
   start_ = 0;
 }
 inline ::google::protobuf::int32 command_hlrange::start() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hlrange.start)
+  // @@protoc_insertion_point(field_get:client.command_hlrange.start)
   return start_;
 }
 inline void command_hlrange::set_start(::google::protobuf::int32 value) {
   
   start_ = value;
-  // @@protoc_insertion_point(field_set:protocol.command_hlrange.start)
+  // @@protoc_insertion_point(field_set:client.command_hlrange.start)
 }
 
 // int32 stop = 4;
@@ -15721,20 +15342,20 @@ inline void command_hlrange::clear_stop() {
   stop_ = 0;
 }
 inline ::google::protobuf::int32 command_hlrange::stop() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hlrange.stop)
+  // @@protoc_insertion_point(field_get:client.command_hlrange.stop)
   return stop_;
 }
 inline void command_hlrange::set_stop(::google::protobuf::int32 value) {
   
   stop_ = value;
-  // @@protoc_insertion_point(field_set:protocol.command_hlrange.stop)
+  // @@protoc_insertion_point(field_set:client.command_hlrange.stop)
 }
 
 // -------------------------------------------------------------------
 
 // command_hlrange_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_hlrange_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -15744,28 +15365,28 @@ inline void command_hlrange_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_hlrange_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_hlrange_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_hlrange_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_hlrange_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_hlrange_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_hlrange_reply.state)
+inline ::client::command_reply* command_hlrange_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_hlrange_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_hlrange_reply::mutable_state() {
+inline ::client::command_reply* command_hlrange_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_hlrange_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_hlrange_reply.state)
   return state_;
 }
-inline void command_hlrange_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_hlrange_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -15781,44 +15402,38 @@ inline void command_hlrange_reply::set_allocated_state(::protocol::command_reply
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hlrange_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hlrange_reply.state)
 }
 
-// .protocol.VALUE value = 2;
+// .data.VALUE value = 2;
 inline bool command_hlrange_reply::has_value() const {
   return this != internal_default_instance() && value_ != NULL;
 }
-inline void command_hlrange_reply::clear_value() {
-  if (GetArenaNoVirtual() == NULL && value_ != NULL) {
-    delete value_;
-  }
-  value_ = NULL;
+inline const ::data::VALUE& command_hlrange_reply::value() const {
+  const ::data::VALUE* p = value_;
+  // @@protoc_insertion_point(field_get:client.command_hlrange_reply.value)
+  return p != NULL ? *p : *reinterpret_cast<const ::data::VALUE*>(
+      &::data::_VALUE_default_instance_);
 }
-inline const ::protocol::VALUE& command_hlrange_reply::value() const {
-  const ::protocol::VALUE* p = value_;
-  // @@protoc_insertion_point(field_get:protocol.command_hlrange_reply.value)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::VALUE*>(
-      &::protocol::_VALUE_default_instance_);
-}
-inline ::protocol::VALUE* command_hlrange_reply::release_value() {
-  // @@protoc_insertion_point(field_release:protocol.command_hlrange_reply.value)
+inline ::data::VALUE* command_hlrange_reply::release_value() {
+  // @@protoc_insertion_point(field_release:client.command_hlrange_reply.value)
   
-  ::protocol::VALUE* temp = value_;
+  ::data::VALUE* temp = value_;
   value_ = NULL;
   return temp;
 }
-inline ::protocol::VALUE* command_hlrange_reply::mutable_value() {
+inline ::data::VALUE* command_hlrange_reply::mutable_value() {
   
   if (value_ == NULL) {
-    value_ = new ::protocol::VALUE;
+    value_ = new ::data::VALUE;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_hlrange_reply.value)
+  // @@protoc_insertion_point(field_mutable:client.command_hlrange_reply.value)
   return value_;
 }
-inline void command_hlrange_reply::set_allocated_value(::protocol::VALUE* value) {
+inline void command_hlrange_reply::set_allocated_value(::data::VALUE* value) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
-    delete value_;
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(value_);
   }
   if (value) {
     ::google::protobuf::Arena* submessage_arena = NULL;
@@ -15831,7 +15446,7 @@ inline void command_hlrange_reply::set_allocated_value(::protocol::VALUE* value)
     
   }
   value_ = value;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hlrange_reply.value)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hlrange_reply.value)
 }
 
 // -------------------------------------------------------------------
@@ -15843,41 +15458,41 @@ inline void command_hmlrange::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hmlrange::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmlrange.key)
+  // @@protoc_insertion_point(field_get:client.command_hmlrange.key)
   return key_.GetNoArena();
 }
 inline void command_hmlrange::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hmlrange.key)
+  // @@protoc_insertion_point(field_set:client.command_hmlrange.key)
 }
 #if LANG_CXX11
 inline void command_hmlrange::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hmlrange.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hmlrange.key)
 }
 #endif
 inline void command_hmlrange::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmlrange.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hmlrange.key)
 }
 inline void command_hmlrange::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmlrange.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmlrange.key)
 }
 inline ::std::string* command_hmlrange::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmlrange.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hmlrange.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hmlrange::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmlrange.key)
+  // @@protoc_insertion_point(field_release:client.command_hmlrange.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -15888,7 +15503,7 @@ inline void command_hmlrange::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmlrange.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmlrange.key)
 }
 
 // repeated string fields = 2;
@@ -15899,64 +15514,64 @@ inline void command_hmlrange::clear_fields() {
   fields_.Clear();
 }
 inline const ::std::string& command_hmlrange::fields(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmlrange.fields)
+  // @@protoc_insertion_point(field_get:client.command_hmlrange.fields)
   return fields_.Get(index);
 }
 inline ::std::string* command_hmlrange::mutable_fields(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmlrange.fields)
+  // @@protoc_insertion_point(field_mutable:client.command_hmlrange.fields)
   return fields_.Mutable(index);
 }
 inline void command_hmlrange::set_fields(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_hmlrange.fields)
+  // @@protoc_insertion_point(field_set:client.command_hmlrange.fields)
   fields_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_hmlrange::set_fields(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_hmlrange.fields)
+  // @@protoc_insertion_point(field_set:client.command_hmlrange.fields)
   fields_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_hmlrange::set_fields(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmlrange.fields)
+  // @@protoc_insertion_point(field_set_char:client.command_hmlrange.fields)
 }
 inline void command_hmlrange::set_fields(int index, const char* value, size_t size) {
   fields_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmlrange.fields)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmlrange.fields)
 }
 inline ::std::string* command_hmlrange::add_fields() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_hmlrange.fields)
+  // @@protoc_insertion_point(field_add_mutable:client.command_hmlrange.fields)
   return fields_.Add();
 }
 inline void command_hmlrange::add_fields(const ::std::string& value) {
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_hmlrange.fields)
+  // @@protoc_insertion_point(field_add:client.command_hmlrange.fields)
 }
 #if LANG_CXX11
 inline void command_hmlrange::add_fields(::std::string&& value) {
   fields_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_hmlrange.fields)
+  // @@protoc_insertion_point(field_add:client.command_hmlrange.fields)
 }
 #endif
 inline void command_hmlrange::add_fields(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_hmlrange.fields)
+  // @@protoc_insertion_point(field_add_char:client.command_hmlrange.fields)
 }
 inline void command_hmlrange::add_fields(const char* value, size_t size) {
   fields_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_hmlrange.fields)
+  // @@protoc_insertion_point(field_add_pointer:client.command_hmlrange.fields)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_hmlrange::fields() const {
-  // @@protoc_insertion_point(field_list:protocol.command_hmlrange.fields)
+  // @@protoc_insertion_point(field_list:client.command_hmlrange.fields)
   return fields_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_hmlrange::mutable_fields() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_hmlrange.fields)
+  // @@protoc_insertion_point(field_mutable_list:client.command_hmlrange.fields)
   return &fields_;
 }
 
@@ -15965,13 +15580,13 @@ inline void command_hmlrange::clear_start() {
   start_ = 0;
 }
 inline ::google::protobuf::int32 command_hmlrange::start() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmlrange.start)
+  // @@protoc_insertion_point(field_get:client.command_hmlrange.start)
   return start_;
 }
 inline void command_hmlrange::set_start(::google::protobuf::int32 value) {
   
   start_ = value;
-  // @@protoc_insertion_point(field_set:protocol.command_hmlrange.start)
+  // @@protoc_insertion_point(field_set:client.command_hmlrange.start)
 }
 
 // int32 stop = 4;
@@ -15979,20 +15594,20 @@ inline void command_hmlrange::clear_stop() {
   stop_ = 0;
 }
 inline ::google::protobuf::int32 command_hmlrange::stop() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmlrange.stop)
+  // @@protoc_insertion_point(field_get:client.command_hmlrange.stop)
   return stop_;
 }
 inline void command_hmlrange::set_stop(::google::protobuf::int32 value) {
   
   stop_ = value;
-  // @@protoc_insertion_point(field_set:protocol.command_hmlrange.stop)
+  // @@protoc_insertion_point(field_set:client.command_hmlrange.stop)
 }
 
 // -------------------------------------------------------------------
 
 // command_hmlrange_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_hmlrange_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -16002,28 +15617,28 @@ inline void command_hmlrange_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_hmlrange_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_hmlrange_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_hmlrange_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_hmlrange_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_hmlrange_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmlrange_reply.state)
+inline ::client::command_reply* command_hmlrange_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_hmlrange_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_hmlrange_reply::mutable_state() {
+inline ::client::command_reply* command_hmlrange_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmlrange_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_hmlrange_reply.state)
   return state_;
 }
-inline void command_hmlrange_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_hmlrange_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -16039,37 +15654,34 @@ inline void command_hmlrange_reply::set_allocated_state(::protocol::command_repl
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmlrange_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmlrange_reply.state)
 }
 
-// repeated .protocol.VALUE reply = 2;
-inline int command_hmlrange_reply::reply_size() const {
-  return reply_.size();
+// repeated .data.VALUE data = 2;
+inline int command_hmlrange_reply::data_size() const {
+  return data_.size();
 }
-inline void command_hmlrange_reply::clear_reply() {
-  reply_.Clear();
+inline const ::data::VALUE& command_hmlrange_reply::data(int index) const {
+  // @@protoc_insertion_point(field_get:client.command_hmlrange_reply.data)
+  return data_.Get(index);
 }
-inline const ::protocol::VALUE& command_hmlrange_reply::reply(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmlrange_reply.reply)
-  return reply_.Get(index);
+inline ::data::VALUE* command_hmlrange_reply::mutable_data(int index) {
+  // @@protoc_insertion_point(field_mutable:client.command_hmlrange_reply.data)
+  return data_.Mutable(index);
 }
-inline ::protocol::VALUE* command_hmlrange_reply::mutable_reply(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmlrange_reply.reply)
-  return reply_.Mutable(index);
+inline ::data::VALUE* command_hmlrange_reply::add_data() {
+  // @@protoc_insertion_point(field_add:client.command_hmlrange_reply.data)
+  return data_.Add();
 }
-inline ::protocol::VALUE* command_hmlrange_reply::add_reply() {
-  // @@protoc_insertion_point(field_add:protocol.command_hmlrange_reply.reply)
-  return reply_.Add();
+inline ::google::protobuf::RepeatedPtrField< ::data::VALUE >*
+command_hmlrange_reply::mutable_data() {
+  // @@protoc_insertion_point(field_mutable_list:client.command_hmlrange_reply.data)
+  return &data_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >*
-command_hmlrange_reply::mutable_reply() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_hmlrange_reply.reply)
-  return &reply_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >&
-command_hmlrange_reply::reply() const {
-  // @@protoc_insertion_point(field_list:protocol.command_hmlrange_reply.reply)
-  return reply_;
+inline const ::google::protobuf::RepeatedPtrField< ::data::VALUE >&
+command_hmlrange_reply::data() const {
+  // @@protoc_insertion_point(field_list:client.command_hmlrange_reply.data)
+  return data_;
 }
 
 // -------------------------------------------------------------------
@@ -16084,64 +15696,64 @@ inline void command_mhmlrange::clear_keys() {
   keys_.Clear();
 }
 inline const ::std::string& command_mhmlrange::keys(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmlrange.keys)
+  // @@protoc_insertion_point(field_get:client.command_mhmlrange.keys)
   return keys_.Get(index);
 }
 inline ::std::string* command_mhmlrange::mutable_keys(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmlrange.keys)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmlrange.keys)
   return keys_.Mutable(index);
 }
 inline void command_mhmlrange::set_keys(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmlrange.keys)
+  // @@protoc_insertion_point(field_set:client.command_mhmlrange.keys)
   keys_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mhmlrange::set_keys(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmlrange.keys)
+  // @@protoc_insertion_point(field_set:client.command_mhmlrange.keys)
   keys_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mhmlrange::set_keys(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mhmlrange.keys)
+  // @@protoc_insertion_point(field_set_char:client.command_mhmlrange.keys)
 }
 inline void command_mhmlrange::set_keys(int index, const char* value, size_t size) {
   keys_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mhmlrange.keys)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mhmlrange.keys)
 }
 inline ::std::string* command_mhmlrange::add_keys() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mhmlrange.keys)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mhmlrange.keys)
   return keys_.Add();
 }
 inline void command_mhmlrange::add_keys(const ::std::string& value) {
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mhmlrange.keys)
+  // @@protoc_insertion_point(field_add:client.command_mhmlrange.keys)
 }
 #if LANG_CXX11
 inline void command_mhmlrange::add_keys(::std::string&& value) {
   keys_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mhmlrange.keys)
+  // @@protoc_insertion_point(field_add:client.command_mhmlrange.keys)
 }
 #endif
 inline void command_mhmlrange::add_keys(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mhmlrange.keys)
+  // @@protoc_insertion_point(field_add_char:client.command_mhmlrange.keys)
 }
 inline void command_mhmlrange::add_keys(const char* value, size_t size) {
   keys_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mhmlrange.keys)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mhmlrange.keys)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mhmlrange::keys() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mhmlrange.keys)
+  // @@protoc_insertion_point(field_list:client.command_mhmlrange.keys)
   return keys_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mhmlrange::mutable_keys() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mhmlrange.keys)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mhmlrange.keys)
   return &keys_;
 }
 
@@ -16153,64 +15765,64 @@ inline void command_mhmlrange::clear_fields() {
   fields_.Clear();
 }
 inline const ::std::string& command_mhmlrange::fields(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmlrange.fields)
+  // @@protoc_insertion_point(field_get:client.command_mhmlrange.fields)
   return fields_.Get(index);
 }
 inline ::std::string* command_mhmlrange::mutable_fields(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmlrange.fields)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmlrange.fields)
   return fields_.Mutable(index);
 }
 inline void command_mhmlrange::set_fields(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmlrange.fields)
+  // @@protoc_insertion_point(field_set:client.command_mhmlrange.fields)
   fields_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mhmlrange::set_fields(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmlrange.fields)
+  // @@protoc_insertion_point(field_set:client.command_mhmlrange.fields)
   fields_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mhmlrange::set_fields(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mhmlrange.fields)
+  // @@protoc_insertion_point(field_set_char:client.command_mhmlrange.fields)
 }
 inline void command_mhmlrange::set_fields(int index, const char* value, size_t size) {
   fields_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mhmlrange.fields)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mhmlrange.fields)
 }
 inline ::std::string* command_mhmlrange::add_fields() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mhmlrange.fields)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mhmlrange.fields)
   return fields_.Add();
 }
 inline void command_mhmlrange::add_fields(const ::std::string& value) {
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mhmlrange.fields)
+  // @@protoc_insertion_point(field_add:client.command_mhmlrange.fields)
 }
 #if LANG_CXX11
 inline void command_mhmlrange::add_fields(::std::string&& value) {
   fields_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mhmlrange.fields)
+  // @@protoc_insertion_point(field_add:client.command_mhmlrange.fields)
 }
 #endif
 inline void command_mhmlrange::add_fields(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mhmlrange.fields)
+  // @@protoc_insertion_point(field_add_char:client.command_mhmlrange.fields)
 }
 inline void command_mhmlrange::add_fields(const char* value, size_t size) {
   fields_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mhmlrange.fields)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mhmlrange.fields)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mhmlrange::fields() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mhmlrange.fields)
+  // @@protoc_insertion_point(field_list:client.command_mhmlrange.fields)
   return fields_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mhmlrange::mutable_fields() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mhmlrange.fields)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mhmlrange.fields)
   return &fields_;
 }
 
@@ -16218,7 +15830,7 @@ command_mhmlrange::mutable_fields() {
 
 // command_mhmlrange_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_mhmlrange_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -16228,28 +15840,28 @@ inline void command_mhmlrange_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_mhmlrange_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_mhmlrange_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_mhmlrange_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_mhmlrange_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_mhmlrange_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_mhmlrange_reply.state)
+inline ::client::command_reply* command_mhmlrange_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_mhmlrange_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_mhmlrange_reply::mutable_state() {
+inline ::client::command_reply* command_mhmlrange_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmlrange_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmlrange_reply.state)
   return state_;
 }
-inline void command_mhmlrange_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_mhmlrange_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -16265,37 +15877,37 @@ inline void command_mhmlrange_reply::set_allocated_state(::protocol::command_rep
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_mhmlrange_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_mhmlrange_reply.state)
 }
 
-// repeated .protocol.values_type values = 2;
-inline int command_mhmlrange_reply::values_size() const {
-  return values_.size();
+// repeated .client.values_type data = 2;
+inline int command_mhmlrange_reply::data_size() const {
+  return data_.size();
 }
-inline void command_mhmlrange_reply::clear_values() {
-  values_.Clear();
+inline void command_mhmlrange_reply::clear_data() {
+  data_.Clear();
 }
-inline const ::protocol::values_type& command_mhmlrange_reply::values(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmlrange_reply.values)
-  return values_.Get(index);
+inline const ::client::values_type& command_mhmlrange_reply::data(int index) const {
+  // @@protoc_insertion_point(field_get:client.command_mhmlrange_reply.data)
+  return data_.Get(index);
 }
-inline ::protocol::values_type* command_mhmlrange_reply::mutable_values(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmlrange_reply.values)
-  return values_.Mutable(index);
+inline ::client::values_type* command_mhmlrange_reply::mutable_data(int index) {
+  // @@protoc_insertion_point(field_mutable:client.command_mhmlrange_reply.data)
+  return data_.Mutable(index);
 }
-inline ::protocol::values_type* command_mhmlrange_reply::add_values() {
-  // @@protoc_insertion_point(field_add:protocol.command_mhmlrange_reply.values)
-  return values_.Add();
+inline ::client::values_type* command_mhmlrange_reply::add_data() {
+  // @@protoc_insertion_point(field_add:client.command_mhmlrange_reply.data)
+  return data_.Add();
 }
-inline ::google::protobuf::RepeatedPtrField< ::protocol::values_type >*
-command_mhmlrange_reply::mutable_values() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mhmlrange_reply.values)
-  return &values_;
+inline ::google::protobuf::RepeatedPtrField< ::client::values_type >*
+command_mhmlrange_reply::mutable_data() {
+  // @@protoc_insertion_point(field_mutable_list:client.command_mhmlrange_reply.data)
+  return &data_;
 }
-inline const ::google::protobuf::RepeatedPtrField< ::protocol::values_type >&
-command_mhmlrange_reply::values() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mhmlrange_reply.values)
-  return values_;
+inline const ::google::protobuf::RepeatedPtrField< ::client::values_type >&
+command_mhmlrange_reply::data() const {
+  // @@protoc_insertion_point(field_list:client.command_mhmlrange_reply.data)
+  return data_;
 }
 
 // -------------------------------------------------------------------
@@ -16307,41 +15919,41 @@ inline void command_lpop::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_lpop::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_lpop.key)
+  // @@protoc_insertion_point(field_get:client.command_lpop.key)
   return key_.GetNoArena();
 }
 inline void command_lpop::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_lpop.key)
+  // @@protoc_insertion_point(field_set:client.command_lpop.key)
 }
 #if LANG_CXX11
 inline void command_lpop::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_lpop.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_lpop.key)
 }
 #endif
 inline void command_lpop::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_lpop.key)
+  // @@protoc_insertion_point(field_set_char:client.command_lpop.key)
 }
 inline void command_lpop::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_lpop.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_lpop.key)
 }
 inline ::std::string* command_lpop::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_lpop.key)
+  // @@protoc_insertion_point(field_mutable:client.command_lpop.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_lpop::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_lpop.key)
+  // @@protoc_insertion_point(field_release:client.command_lpop.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -16352,7 +15964,7 @@ inline void command_lpop::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_lpop.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_lpop.key)
 }
 
 // bool head = 2;
@@ -16360,20 +15972,20 @@ inline void command_lpop::clear_head() {
   head_ = false;
 }
 inline bool command_lpop::head() const {
-  // @@protoc_insertion_point(field_get:protocol.command_lpop.head)
+  // @@protoc_insertion_point(field_get:client.command_lpop.head)
   return head_;
 }
 inline void command_lpop::set_head(bool value) {
   
   head_ = value;
-  // @@protoc_insertion_point(field_set:protocol.command_lpop.head)
+  // @@protoc_insertion_point(field_set:client.command_lpop.head)
 }
 
 // -------------------------------------------------------------------
 
 // command_lpop_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_lpop_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -16383,28 +15995,28 @@ inline void command_lpop_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_lpop_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_lpop_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_lpop_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_lpop_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_lpop_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_lpop_reply.state)
+inline ::client::command_reply* command_lpop_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_lpop_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_lpop_reply::mutable_state() {
+inline ::client::command_reply* command_lpop_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_lpop_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_lpop_reply.state)
   return state_;
 }
-inline void command_lpop_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_lpop_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -16420,57 +16032,51 @@ inline void command_lpop_reply::set_allocated_state(::protocol::command_reply* s
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_lpop_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_lpop_reply.state)
 }
 
-// .protocol.VALUE reply = 2;
-inline bool command_lpop_reply::has_reply() const {
-  return this != internal_default_instance() && reply_ != NULL;
+// .data.VALUE data = 2;
+inline bool command_lpop_reply::has_data() const {
+  return this != internal_default_instance() && data_ != NULL;
 }
-inline void command_lpop_reply::clear_reply() {
-  if (GetArenaNoVirtual() == NULL && reply_ != NULL) {
-    delete reply_;
-  }
-  reply_ = NULL;
+inline const ::data::VALUE& command_lpop_reply::data() const {
+  const ::data::VALUE* p = data_;
+  // @@protoc_insertion_point(field_get:client.command_lpop_reply.data)
+  return p != NULL ? *p : *reinterpret_cast<const ::data::VALUE*>(
+      &::data::_VALUE_default_instance_);
 }
-inline const ::protocol::VALUE& command_lpop_reply::reply() const {
-  const ::protocol::VALUE* p = reply_;
-  // @@protoc_insertion_point(field_get:protocol.command_lpop_reply.reply)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::VALUE*>(
-      &::protocol::_VALUE_default_instance_);
-}
-inline ::protocol::VALUE* command_lpop_reply::release_reply() {
-  // @@protoc_insertion_point(field_release:protocol.command_lpop_reply.reply)
+inline ::data::VALUE* command_lpop_reply::release_data() {
+  // @@protoc_insertion_point(field_release:client.command_lpop_reply.data)
   
-  ::protocol::VALUE* temp = reply_;
-  reply_ = NULL;
+  ::data::VALUE* temp = data_;
+  data_ = NULL;
   return temp;
 }
-inline ::protocol::VALUE* command_lpop_reply::mutable_reply() {
+inline ::data::VALUE* command_lpop_reply::mutable_data() {
   
-  if (reply_ == NULL) {
-    reply_ = new ::protocol::VALUE;
+  if (data_ == NULL) {
+    data_ = new ::data::VALUE;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_lpop_reply.reply)
-  return reply_;
+  // @@protoc_insertion_point(field_mutable:client.command_lpop_reply.data)
+  return data_;
 }
-inline void command_lpop_reply::set_allocated_reply(::protocol::VALUE* reply) {
+inline void command_lpop_reply::set_allocated_data(::data::VALUE* data) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
-    delete reply_;
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(data_);
   }
-  if (reply) {
+  if (data) {
     ::google::protobuf::Arena* submessage_arena = NULL;
     if (message_arena != submessage_arena) {
-      reply = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, reply, submessage_arena);
+      data = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, data, submessage_arena);
     }
     
   } else {
     
   }
-  reply_ = reply;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_lpop_reply.reply)
+  data_ = data;
+  // @@protoc_insertion_point(field_set_allocated:client.command_lpop_reply.data)
 }
 
 // -------------------------------------------------------------------
@@ -16485,64 +16091,64 @@ inline void command_mlpop::clear_keys() {
   keys_.Clear();
 }
 inline const ::std::string& command_mlpop::keys(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mlpop.keys)
+  // @@protoc_insertion_point(field_get:client.command_mlpop.keys)
   return keys_.Get(index);
 }
 inline ::std::string* command_mlpop::mutable_keys(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mlpop.keys)
+  // @@protoc_insertion_point(field_mutable:client.command_mlpop.keys)
   return keys_.Mutable(index);
 }
 inline void command_mlpop::set_keys(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mlpop.keys)
+  // @@protoc_insertion_point(field_set:client.command_mlpop.keys)
   keys_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mlpop::set_keys(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mlpop.keys)
+  // @@protoc_insertion_point(field_set:client.command_mlpop.keys)
   keys_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mlpop::set_keys(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mlpop.keys)
+  // @@protoc_insertion_point(field_set_char:client.command_mlpop.keys)
 }
 inline void command_mlpop::set_keys(int index, const char* value, size_t size) {
   keys_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mlpop.keys)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mlpop.keys)
 }
 inline ::std::string* command_mlpop::add_keys() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mlpop.keys)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mlpop.keys)
   return keys_.Add();
 }
 inline void command_mlpop::add_keys(const ::std::string& value) {
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mlpop.keys)
+  // @@protoc_insertion_point(field_add:client.command_mlpop.keys)
 }
 #if LANG_CXX11
 inline void command_mlpop::add_keys(::std::string&& value) {
   keys_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mlpop.keys)
+  // @@protoc_insertion_point(field_add:client.command_mlpop.keys)
 }
 #endif
 inline void command_mlpop::add_keys(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mlpop.keys)
+  // @@protoc_insertion_point(field_add_char:client.command_mlpop.keys)
 }
 inline void command_mlpop::add_keys(const char* value, size_t size) {
   keys_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mlpop.keys)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mlpop.keys)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mlpop::keys() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mlpop.keys)
+  // @@protoc_insertion_point(field_list:client.command_mlpop.keys)
   return keys_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mlpop::mutable_keys() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mlpop.keys)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mlpop.keys)
   return &keys_;
 }
 
@@ -16551,20 +16157,20 @@ inline void command_mlpop::clear_head() {
   head_ = false;
 }
 inline bool command_mlpop::head() const {
-  // @@protoc_insertion_point(field_get:protocol.command_mlpop.head)
+  // @@protoc_insertion_point(field_get:client.command_mlpop.head)
   return head_;
 }
 inline void command_mlpop::set_head(bool value) {
   
   head_ = value;
-  // @@protoc_insertion_point(field_set:protocol.command_mlpop.head)
+  // @@protoc_insertion_point(field_set:client.command_mlpop.head)
 }
 
 // -------------------------------------------------------------------
 
 // command_mlpop_repy
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_mlpop_repy::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -16574,28 +16180,28 @@ inline void command_mlpop_repy::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_mlpop_repy::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_mlpop_repy.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_mlpop_repy::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_mlpop_repy.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_mlpop_repy::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_mlpop_repy.state)
+inline ::client::command_reply* command_mlpop_repy::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_mlpop_repy.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_mlpop_repy::mutable_state() {
+inline ::client::command_reply* command_mlpop_repy::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_mlpop_repy.state)
+  // @@protoc_insertion_point(field_mutable:client.command_mlpop_repy.state)
   return state_;
 }
-inline void command_mlpop_repy::set_allocated_state(::protocol::command_reply* state) {
+inline void command_mlpop_repy::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -16611,37 +16217,34 @@ inline void command_mlpop_repy::set_allocated_state(::protocol::command_reply* s
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_mlpop_repy.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_mlpop_repy.state)
 }
 
-// repeated .protocol.VALUE reply = 2;
-inline int command_mlpop_repy::reply_size() const {
-  return reply_.size();
+// repeated .data.VALUE data = 2;
+inline int command_mlpop_repy::data_size() const {
+  return data_.size();
 }
-inline void command_mlpop_repy::clear_reply() {
-  reply_.Clear();
+inline const ::data::VALUE& command_mlpop_repy::data(int index) const {
+  // @@protoc_insertion_point(field_get:client.command_mlpop_repy.data)
+  return data_.Get(index);
 }
-inline const ::protocol::VALUE& command_mlpop_repy::reply(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mlpop_repy.reply)
-  return reply_.Get(index);
+inline ::data::VALUE* command_mlpop_repy::mutable_data(int index) {
+  // @@protoc_insertion_point(field_mutable:client.command_mlpop_repy.data)
+  return data_.Mutable(index);
 }
-inline ::protocol::VALUE* command_mlpop_repy::mutable_reply(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mlpop_repy.reply)
-  return reply_.Mutable(index);
+inline ::data::VALUE* command_mlpop_repy::add_data() {
+  // @@protoc_insertion_point(field_add:client.command_mlpop_repy.data)
+  return data_.Add();
 }
-inline ::protocol::VALUE* command_mlpop_repy::add_reply() {
-  // @@protoc_insertion_point(field_add:protocol.command_mlpop_repy.reply)
-  return reply_.Add();
+inline ::google::protobuf::RepeatedPtrField< ::data::VALUE >*
+command_mlpop_repy::mutable_data() {
+  // @@protoc_insertion_point(field_mutable_list:client.command_mlpop_repy.data)
+  return &data_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >*
-command_mlpop_repy::mutable_reply() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mlpop_repy.reply)
-  return &reply_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >&
-command_mlpop_repy::reply() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mlpop_repy.reply)
-  return reply_;
+inline const ::google::protobuf::RepeatedPtrField< ::data::VALUE >&
+command_mlpop_repy::data() const {
+  // @@protoc_insertion_point(field_list:client.command_mlpop_repy.data)
+  return data_;
 }
 
 // -------------------------------------------------------------------
@@ -16653,41 +16256,41 @@ inline void command_hlpop::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hlpop::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hlpop.key)
+  // @@protoc_insertion_point(field_get:client.command_hlpop.key)
   return key_.GetNoArena();
 }
 inline void command_hlpop::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hlpop.key)
+  // @@protoc_insertion_point(field_set:client.command_hlpop.key)
 }
 #if LANG_CXX11
 inline void command_hlpop::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hlpop.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hlpop.key)
 }
 #endif
 inline void command_hlpop::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hlpop.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hlpop.key)
 }
 inline void command_hlpop::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hlpop.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hlpop.key)
 }
 inline ::std::string* command_hlpop::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hlpop.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hlpop.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hlpop::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hlpop.key)
+  // @@protoc_insertion_point(field_release:client.command_hlpop.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -16698,7 +16301,7 @@ inline void command_hlpop::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hlpop.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hlpop.key)
 }
 
 // string field = 2;
@@ -16706,41 +16309,41 @@ inline void command_hlpop::clear_field() {
   field_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hlpop::field() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hlpop.field)
+  // @@protoc_insertion_point(field_get:client.command_hlpop.field)
   return field_.GetNoArena();
 }
 inline void command_hlpop::set_field(const ::std::string& value) {
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hlpop.field)
+  // @@protoc_insertion_point(field_set:client.command_hlpop.field)
 }
 #if LANG_CXX11
 inline void command_hlpop::set_field(::std::string&& value) {
   
   field_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hlpop.field)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hlpop.field)
 }
 #endif
 inline void command_hlpop::set_field(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hlpop.field)
+  // @@protoc_insertion_point(field_set_char:client.command_hlpop.field)
 }
 inline void command_hlpop::set_field(const char* value, size_t size) {
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hlpop.field)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hlpop.field)
 }
 inline ::std::string* command_hlpop::mutable_field() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hlpop.field)
+  // @@protoc_insertion_point(field_mutable:client.command_hlpop.field)
   return field_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hlpop::release_field() {
-  // @@protoc_insertion_point(field_release:protocol.command_hlpop.field)
+  // @@protoc_insertion_point(field_release:client.command_hlpop.field)
   
   return field_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -16751,14 +16354,14 @@ inline void command_hlpop::set_allocated_field(::std::string* field) {
     
   }
   field_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), field);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hlpop.field)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hlpop.field)
 }
 
 // -------------------------------------------------------------------
 
 // command_hlpop_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_hlpop_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -16768,28 +16371,28 @@ inline void command_hlpop_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_hlpop_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_hlpop_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_hlpop_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_hlpop_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_hlpop_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_hlpop_reply.state)
+inline ::client::command_reply* command_hlpop_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_hlpop_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_hlpop_reply::mutable_state() {
+inline ::client::command_reply* command_hlpop_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_hlpop_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_hlpop_reply.state)
   return state_;
 }
-inline void command_hlpop_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_hlpop_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -16805,57 +16408,51 @@ inline void command_hlpop_reply::set_allocated_state(::protocol::command_reply* 
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hlpop_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hlpop_reply.state)
 }
 
-// .protocol.VALUE reply = 2;
-inline bool command_hlpop_reply::has_reply() const {
-  return this != internal_default_instance() && reply_ != NULL;
+// .data.VALUE data = 2;
+inline bool command_hlpop_reply::has_data() const {
+  return this != internal_default_instance() && data_ != NULL;
 }
-inline void command_hlpop_reply::clear_reply() {
-  if (GetArenaNoVirtual() == NULL && reply_ != NULL) {
-    delete reply_;
-  }
-  reply_ = NULL;
+inline const ::data::VALUE& command_hlpop_reply::data() const {
+  const ::data::VALUE* p = data_;
+  // @@protoc_insertion_point(field_get:client.command_hlpop_reply.data)
+  return p != NULL ? *p : *reinterpret_cast<const ::data::VALUE*>(
+      &::data::_VALUE_default_instance_);
 }
-inline const ::protocol::VALUE& command_hlpop_reply::reply() const {
-  const ::protocol::VALUE* p = reply_;
-  // @@protoc_insertion_point(field_get:protocol.command_hlpop_reply.reply)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::VALUE*>(
-      &::protocol::_VALUE_default_instance_);
-}
-inline ::protocol::VALUE* command_hlpop_reply::release_reply() {
-  // @@protoc_insertion_point(field_release:protocol.command_hlpop_reply.reply)
+inline ::data::VALUE* command_hlpop_reply::release_data() {
+  // @@protoc_insertion_point(field_release:client.command_hlpop_reply.data)
   
-  ::protocol::VALUE* temp = reply_;
-  reply_ = NULL;
+  ::data::VALUE* temp = data_;
+  data_ = NULL;
   return temp;
 }
-inline ::protocol::VALUE* command_hlpop_reply::mutable_reply() {
+inline ::data::VALUE* command_hlpop_reply::mutable_data() {
   
-  if (reply_ == NULL) {
-    reply_ = new ::protocol::VALUE;
+  if (data_ == NULL) {
+    data_ = new ::data::VALUE;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_hlpop_reply.reply)
-  return reply_;
+  // @@protoc_insertion_point(field_mutable:client.command_hlpop_reply.data)
+  return data_;
 }
-inline void command_hlpop_reply::set_allocated_reply(::protocol::VALUE* reply) {
+inline void command_hlpop_reply::set_allocated_data(::data::VALUE* data) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
-    delete reply_;
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(data_);
   }
-  if (reply) {
+  if (data) {
     ::google::protobuf::Arena* submessage_arena = NULL;
     if (message_arena != submessage_arena) {
-      reply = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, reply, submessage_arena);
+      data = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, data, submessage_arena);
     }
     
   } else {
     
   }
-  reply_ = reply;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hlpop_reply.reply)
+  data_ = data;
+  // @@protoc_insertion_point(field_set_allocated:client.command_hlpop_reply.data)
 }
 
 // -------------------------------------------------------------------
@@ -16867,41 +16464,41 @@ inline void command_hmlpop::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hmlpop::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmlpop.key)
+  // @@protoc_insertion_point(field_get:client.command_hmlpop.key)
   return key_.GetNoArena();
 }
 inline void command_hmlpop::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hmlpop.key)
+  // @@protoc_insertion_point(field_set:client.command_hmlpop.key)
 }
 #if LANG_CXX11
 inline void command_hmlpop::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hmlpop.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hmlpop.key)
 }
 #endif
 inline void command_hmlpop::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmlpop.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hmlpop.key)
 }
 inline void command_hmlpop::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmlpop.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmlpop.key)
 }
 inline ::std::string* command_hmlpop::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmlpop.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hmlpop.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hmlpop::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmlpop.key)
+  // @@protoc_insertion_point(field_release:client.command_hmlpop.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -16912,7 +16509,7 @@ inline void command_hmlpop::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmlpop.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmlpop.key)
 }
 
 // repeated string fields = 2;
@@ -16923,64 +16520,64 @@ inline void command_hmlpop::clear_fields() {
   fields_.Clear();
 }
 inline const ::std::string& command_hmlpop::fields(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmlpop.fields)
+  // @@protoc_insertion_point(field_get:client.command_hmlpop.fields)
   return fields_.Get(index);
 }
 inline ::std::string* command_hmlpop::mutable_fields(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmlpop.fields)
+  // @@protoc_insertion_point(field_mutable:client.command_hmlpop.fields)
   return fields_.Mutable(index);
 }
 inline void command_hmlpop::set_fields(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_hmlpop.fields)
+  // @@protoc_insertion_point(field_set:client.command_hmlpop.fields)
   fields_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_hmlpop::set_fields(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_hmlpop.fields)
+  // @@protoc_insertion_point(field_set:client.command_hmlpop.fields)
   fields_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_hmlpop::set_fields(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmlpop.fields)
+  // @@protoc_insertion_point(field_set_char:client.command_hmlpop.fields)
 }
 inline void command_hmlpop::set_fields(int index, const char* value, size_t size) {
   fields_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmlpop.fields)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmlpop.fields)
 }
 inline ::std::string* command_hmlpop::add_fields() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_hmlpop.fields)
+  // @@protoc_insertion_point(field_add_mutable:client.command_hmlpop.fields)
   return fields_.Add();
 }
 inline void command_hmlpop::add_fields(const ::std::string& value) {
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_hmlpop.fields)
+  // @@protoc_insertion_point(field_add:client.command_hmlpop.fields)
 }
 #if LANG_CXX11
 inline void command_hmlpop::add_fields(::std::string&& value) {
   fields_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_hmlpop.fields)
+  // @@protoc_insertion_point(field_add:client.command_hmlpop.fields)
 }
 #endif
 inline void command_hmlpop::add_fields(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_hmlpop.fields)
+  // @@protoc_insertion_point(field_add_char:client.command_hmlpop.fields)
 }
 inline void command_hmlpop::add_fields(const char* value, size_t size) {
   fields_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_hmlpop.fields)
+  // @@protoc_insertion_point(field_add_pointer:client.command_hmlpop.fields)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_hmlpop::fields() const {
-  // @@protoc_insertion_point(field_list:protocol.command_hmlpop.fields)
+  // @@protoc_insertion_point(field_list:client.command_hmlpop.fields)
   return fields_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_hmlpop::mutable_fields() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_hmlpop.fields)
+  // @@protoc_insertion_point(field_mutable_list:client.command_hmlpop.fields)
   return &fields_;
 }
 
@@ -16988,7 +16585,7 @@ command_hmlpop::mutable_fields() {
 
 // command_hmlpop_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_hmlpop_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -16998,28 +16595,28 @@ inline void command_hmlpop_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_hmlpop_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_hmlpop_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_hmlpop_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_hmlpop_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_hmlpop_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmlpop_reply.state)
+inline ::client::command_reply* command_hmlpop_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_hmlpop_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_hmlpop_reply::mutable_state() {
+inline ::client::command_reply* command_hmlpop_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmlpop_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_hmlpop_reply.state)
   return state_;
 }
-inline void command_hmlpop_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_hmlpop_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -17035,37 +16632,34 @@ inline void command_hmlpop_reply::set_allocated_state(::protocol::command_reply*
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmlpop_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmlpop_reply.state)
 }
 
-// repeated .protocol.VALUE reply = 2;
-inline int command_hmlpop_reply::reply_size() const {
-  return reply_.size();
+// repeated .data.VALUE data = 2;
+inline int command_hmlpop_reply::data_size() const {
+  return data_.size();
 }
-inline void command_hmlpop_reply::clear_reply() {
-  reply_.Clear();
+inline const ::data::VALUE& command_hmlpop_reply::data(int index) const {
+  // @@protoc_insertion_point(field_get:client.command_hmlpop_reply.data)
+  return data_.Get(index);
 }
-inline const ::protocol::VALUE& command_hmlpop_reply::reply(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmlpop_reply.reply)
-  return reply_.Get(index);
+inline ::data::VALUE* command_hmlpop_reply::mutable_data(int index) {
+  // @@protoc_insertion_point(field_mutable:client.command_hmlpop_reply.data)
+  return data_.Mutable(index);
 }
-inline ::protocol::VALUE* command_hmlpop_reply::mutable_reply(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmlpop_reply.reply)
-  return reply_.Mutable(index);
+inline ::data::VALUE* command_hmlpop_reply::add_data() {
+  // @@protoc_insertion_point(field_add:client.command_hmlpop_reply.data)
+  return data_.Add();
 }
-inline ::protocol::VALUE* command_hmlpop_reply::add_reply() {
-  // @@protoc_insertion_point(field_add:protocol.command_hmlpop_reply.reply)
-  return reply_.Add();
+inline ::google::protobuf::RepeatedPtrField< ::data::VALUE >*
+command_hmlpop_reply::mutable_data() {
+  // @@protoc_insertion_point(field_mutable_list:client.command_hmlpop_reply.data)
+  return &data_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >*
-command_hmlpop_reply::mutable_reply() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_hmlpop_reply.reply)
-  return &reply_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >&
-command_hmlpop_reply::reply() const {
-  // @@protoc_insertion_point(field_list:protocol.command_hmlpop_reply.reply)
-  return reply_;
+inline const ::google::protobuf::RepeatedPtrField< ::data::VALUE >&
+command_hmlpop_reply::data() const {
+  // @@protoc_insertion_point(field_list:client.command_hmlpop_reply.data)
+  return data_;
 }
 
 // -------------------------------------------------------------------
@@ -17080,64 +16674,64 @@ inline void command_mhmlpop::clear_keys() {
   keys_.Clear();
 }
 inline const ::std::string& command_mhmlpop::keys(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmlpop.keys)
+  // @@protoc_insertion_point(field_get:client.command_mhmlpop.keys)
   return keys_.Get(index);
 }
 inline ::std::string* command_mhmlpop::mutable_keys(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmlpop.keys)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmlpop.keys)
   return keys_.Mutable(index);
 }
 inline void command_mhmlpop::set_keys(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmlpop.keys)
+  // @@protoc_insertion_point(field_set:client.command_mhmlpop.keys)
   keys_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mhmlpop::set_keys(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmlpop.keys)
+  // @@protoc_insertion_point(field_set:client.command_mhmlpop.keys)
   keys_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mhmlpop::set_keys(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mhmlpop.keys)
+  // @@protoc_insertion_point(field_set_char:client.command_mhmlpop.keys)
 }
 inline void command_mhmlpop::set_keys(int index, const char* value, size_t size) {
   keys_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mhmlpop.keys)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mhmlpop.keys)
 }
 inline ::std::string* command_mhmlpop::add_keys() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mhmlpop.keys)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mhmlpop.keys)
   return keys_.Add();
 }
 inline void command_mhmlpop::add_keys(const ::std::string& value) {
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mhmlpop.keys)
+  // @@protoc_insertion_point(field_add:client.command_mhmlpop.keys)
 }
 #if LANG_CXX11
 inline void command_mhmlpop::add_keys(::std::string&& value) {
   keys_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mhmlpop.keys)
+  // @@protoc_insertion_point(field_add:client.command_mhmlpop.keys)
 }
 #endif
 inline void command_mhmlpop::add_keys(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mhmlpop.keys)
+  // @@protoc_insertion_point(field_add_char:client.command_mhmlpop.keys)
 }
 inline void command_mhmlpop::add_keys(const char* value, size_t size) {
   keys_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mhmlpop.keys)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mhmlpop.keys)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mhmlpop::keys() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mhmlpop.keys)
+  // @@protoc_insertion_point(field_list:client.command_mhmlpop.keys)
   return keys_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mhmlpop::mutable_keys() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mhmlpop.keys)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mhmlpop.keys)
   return &keys_;
 }
 
@@ -17149,64 +16743,64 @@ inline void command_mhmlpop::clear_fields() {
   fields_.Clear();
 }
 inline const ::std::string& command_mhmlpop::fields(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmlpop.fields)
+  // @@protoc_insertion_point(field_get:client.command_mhmlpop.fields)
   return fields_.Get(index);
 }
 inline ::std::string* command_mhmlpop::mutable_fields(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmlpop.fields)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmlpop.fields)
   return fields_.Mutable(index);
 }
 inline void command_mhmlpop::set_fields(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmlpop.fields)
+  // @@protoc_insertion_point(field_set:client.command_mhmlpop.fields)
   fields_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mhmlpop::set_fields(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmlpop.fields)
+  // @@protoc_insertion_point(field_set:client.command_mhmlpop.fields)
   fields_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mhmlpop::set_fields(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mhmlpop.fields)
+  // @@protoc_insertion_point(field_set_char:client.command_mhmlpop.fields)
 }
 inline void command_mhmlpop::set_fields(int index, const char* value, size_t size) {
   fields_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mhmlpop.fields)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mhmlpop.fields)
 }
 inline ::std::string* command_mhmlpop::add_fields() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mhmlpop.fields)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mhmlpop.fields)
   return fields_.Add();
 }
 inline void command_mhmlpop::add_fields(const ::std::string& value) {
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mhmlpop.fields)
+  // @@protoc_insertion_point(field_add:client.command_mhmlpop.fields)
 }
 #if LANG_CXX11
 inline void command_mhmlpop::add_fields(::std::string&& value) {
   fields_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mhmlpop.fields)
+  // @@protoc_insertion_point(field_add:client.command_mhmlpop.fields)
 }
 #endif
 inline void command_mhmlpop::add_fields(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mhmlpop.fields)
+  // @@protoc_insertion_point(field_add_char:client.command_mhmlpop.fields)
 }
 inline void command_mhmlpop::add_fields(const char* value, size_t size) {
   fields_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mhmlpop.fields)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mhmlpop.fields)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mhmlpop::fields() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mhmlpop.fields)
+  // @@protoc_insertion_point(field_list:client.command_mhmlpop.fields)
   return fields_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mhmlpop::mutable_fields() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mhmlpop.fields)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mhmlpop.fields)
   return &fields_;
 }
 
@@ -17214,7 +16808,7 @@ command_mhmlpop::mutable_fields() {
 
 // command_mhmlpop_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_mhmlpop_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -17224,28 +16818,28 @@ inline void command_mhmlpop_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_mhmlpop_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_mhmlpop_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_mhmlpop_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_mhmlpop_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_mhmlpop_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_mhmlpop_reply.state)
+inline ::client::command_reply* command_mhmlpop_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_mhmlpop_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_mhmlpop_reply::mutable_state() {
+inline ::client::command_reply* command_mhmlpop_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmlpop_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmlpop_reply.state)
   return state_;
 }
-inline void command_mhmlpop_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_mhmlpop_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -17261,37 +16855,37 @@ inline void command_mhmlpop_reply::set_allocated_state(::protocol::command_reply
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_mhmlpop_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_mhmlpop_reply.state)
 }
 
-// repeated .protocol.values_type values = 2;
-inline int command_mhmlpop_reply::values_size() const {
-  return values_.size();
+// repeated .client.values_type data = 2;
+inline int command_mhmlpop_reply::data_size() const {
+  return data_.size();
 }
-inline void command_mhmlpop_reply::clear_values() {
-  values_.Clear();
+inline void command_mhmlpop_reply::clear_data() {
+  data_.Clear();
 }
-inline const ::protocol::values_type& command_mhmlpop_reply::values(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmlpop_reply.values)
-  return values_.Get(index);
+inline const ::client::values_type& command_mhmlpop_reply::data(int index) const {
+  // @@protoc_insertion_point(field_get:client.command_mhmlpop_reply.data)
+  return data_.Get(index);
 }
-inline ::protocol::values_type* command_mhmlpop_reply::mutable_values(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmlpop_reply.values)
-  return values_.Mutable(index);
+inline ::client::values_type* command_mhmlpop_reply::mutable_data(int index) {
+  // @@protoc_insertion_point(field_mutable:client.command_mhmlpop_reply.data)
+  return data_.Mutable(index);
 }
-inline ::protocol::values_type* command_mhmlpop_reply::add_values() {
-  // @@protoc_insertion_point(field_add:protocol.command_mhmlpop_reply.values)
-  return values_.Add();
+inline ::client::values_type* command_mhmlpop_reply::add_data() {
+  // @@protoc_insertion_point(field_add:client.command_mhmlpop_reply.data)
+  return data_.Add();
 }
-inline ::google::protobuf::RepeatedPtrField< ::protocol::values_type >*
-command_mhmlpop_reply::mutable_values() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mhmlpop_reply.values)
-  return &values_;
+inline ::google::protobuf::RepeatedPtrField< ::client::values_type >*
+command_mhmlpop_reply::mutable_data() {
+  // @@protoc_insertion_point(field_mutable_list:client.command_mhmlpop_reply.data)
+  return &data_;
 }
-inline const ::google::protobuf::RepeatedPtrField< ::protocol::values_type >&
-command_mhmlpop_reply::values() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mhmlpop_reply.values)
-  return values_;
+inline const ::google::protobuf::RepeatedPtrField< ::client::values_type >&
+command_mhmlpop_reply::data() const {
+  // @@protoc_insertion_point(field_list:client.command_mhmlpop_reply.data)
+  return data_;
 }
 
 // -------------------------------------------------------------------
@@ -17303,41 +16897,41 @@ inline void command_ltrim::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_ltrim::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_ltrim.key)
+  // @@protoc_insertion_point(field_get:client.command_ltrim.key)
   return key_.GetNoArena();
 }
 inline void command_ltrim::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_ltrim.key)
+  // @@protoc_insertion_point(field_set:client.command_ltrim.key)
 }
 #if LANG_CXX11
 inline void command_ltrim::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_ltrim.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_ltrim.key)
 }
 #endif
 inline void command_ltrim::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_ltrim.key)
+  // @@protoc_insertion_point(field_set_char:client.command_ltrim.key)
 }
 inline void command_ltrim::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_ltrim.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_ltrim.key)
 }
 inline ::std::string* command_ltrim::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_ltrim.key)
+  // @@protoc_insertion_point(field_mutable:client.command_ltrim.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_ltrim::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_ltrim.key)
+  // @@protoc_insertion_point(field_release:client.command_ltrim.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -17348,7 +16942,7 @@ inline void command_ltrim::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_ltrim.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_ltrim.key)
 }
 
 // int32 start = 2;
@@ -17356,13 +16950,13 @@ inline void command_ltrim::clear_start() {
   start_ = 0;
 }
 inline ::google::protobuf::int32 command_ltrim::start() const {
-  // @@protoc_insertion_point(field_get:protocol.command_ltrim.start)
+  // @@protoc_insertion_point(field_get:client.command_ltrim.start)
   return start_;
 }
 inline void command_ltrim::set_start(::google::protobuf::int32 value) {
   
   start_ = value;
-  // @@protoc_insertion_point(field_set:protocol.command_ltrim.start)
+  // @@protoc_insertion_point(field_set:client.command_ltrim.start)
 }
 
 // int32 stop = 3;
@@ -17370,13 +16964,13 @@ inline void command_ltrim::clear_stop() {
   stop_ = 0;
 }
 inline ::google::protobuf::int32 command_ltrim::stop() const {
-  // @@protoc_insertion_point(field_get:protocol.command_ltrim.stop)
+  // @@protoc_insertion_point(field_get:client.command_ltrim.stop)
   return stop_;
 }
 inline void command_ltrim::set_stop(::google::protobuf::int32 value) {
   
   stop_ = value;
-  // @@protoc_insertion_point(field_set:protocol.command_ltrim.stop)
+  // @@protoc_insertion_point(field_set:client.command_ltrim.stop)
 }
 
 // -------------------------------------------------------------------
@@ -17391,64 +16985,64 @@ inline void command_mltrim::clear_keys() {
   keys_.Clear();
 }
 inline const ::std::string& command_mltrim::keys(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mltrim.keys)
+  // @@protoc_insertion_point(field_get:client.command_mltrim.keys)
   return keys_.Get(index);
 }
 inline ::std::string* command_mltrim::mutable_keys(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mltrim.keys)
+  // @@protoc_insertion_point(field_mutable:client.command_mltrim.keys)
   return keys_.Mutable(index);
 }
 inline void command_mltrim::set_keys(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mltrim.keys)
+  // @@protoc_insertion_point(field_set:client.command_mltrim.keys)
   keys_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mltrim::set_keys(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mltrim.keys)
+  // @@protoc_insertion_point(field_set:client.command_mltrim.keys)
   keys_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mltrim::set_keys(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mltrim.keys)
+  // @@protoc_insertion_point(field_set_char:client.command_mltrim.keys)
 }
 inline void command_mltrim::set_keys(int index, const char* value, size_t size) {
   keys_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mltrim.keys)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mltrim.keys)
 }
 inline ::std::string* command_mltrim::add_keys() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mltrim.keys)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mltrim.keys)
   return keys_.Add();
 }
 inline void command_mltrim::add_keys(const ::std::string& value) {
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mltrim.keys)
+  // @@protoc_insertion_point(field_add:client.command_mltrim.keys)
 }
 #if LANG_CXX11
 inline void command_mltrim::add_keys(::std::string&& value) {
   keys_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mltrim.keys)
+  // @@protoc_insertion_point(field_add:client.command_mltrim.keys)
 }
 #endif
 inline void command_mltrim::add_keys(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mltrim.keys)
+  // @@protoc_insertion_point(field_add_char:client.command_mltrim.keys)
 }
 inline void command_mltrim::add_keys(const char* value, size_t size) {
   keys_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mltrim.keys)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mltrim.keys)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mltrim::keys() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mltrim.keys)
+  // @@protoc_insertion_point(field_list:client.command_mltrim.keys)
   return keys_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mltrim::mutable_keys() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mltrim.keys)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mltrim.keys)
   return &keys_;
 }
 
@@ -17457,13 +17051,13 @@ inline void command_mltrim::clear_start() {
   start_ = 0;
 }
 inline ::google::protobuf::int32 command_mltrim::start() const {
-  // @@protoc_insertion_point(field_get:protocol.command_mltrim.start)
+  // @@protoc_insertion_point(field_get:client.command_mltrim.start)
   return start_;
 }
 inline void command_mltrim::set_start(::google::protobuf::int32 value) {
   
   start_ = value;
-  // @@protoc_insertion_point(field_set:protocol.command_mltrim.start)
+  // @@protoc_insertion_point(field_set:client.command_mltrim.start)
 }
 
 // int32 stop = 3;
@@ -17471,13 +17065,13 @@ inline void command_mltrim::clear_stop() {
   stop_ = 0;
 }
 inline ::google::protobuf::int32 command_mltrim::stop() const {
-  // @@protoc_insertion_point(field_get:protocol.command_mltrim.stop)
+  // @@protoc_insertion_point(field_get:client.command_mltrim.stop)
   return stop_;
 }
 inline void command_mltrim::set_stop(::google::protobuf::int32 value) {
   
   stop_ = value;
-  // @@protoc_insertion_point(field_set:protocol.command_mltrim.stop)
+  // @@protoc_insertion_point(field_set:client.command_mltrim.stop)
 }
 
 // -------------------------------------------------------------------
@@ -17489,41 +17083,41 @@ inline void command_hltrim::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hltrim::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hltrim.key)
+  // @@protoc_insertion_point(field_get:client.command_hltrim.key)
   return key_.GetNoArena();
 }
 inline void command_hltrim::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hltrim.key)
+  // @@protoc_insertion_point(field_set:client.command_hltrim.key)
 }
 #if LANG_CXX11
 inline void command_hltrim::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hltrim.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hltrim.key)
 }
 #endif
 inline void command_hltrim::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hltrim.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hltrim.key)
 }
 inline void command_hltrim::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hltrim.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hltrim.key)
 }
 inline ::std::string* command_hltrim::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hltrim.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hltrim.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hltrim::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hltrim.key)
+  // @@protoc_insertion_point(field_release:client.command_hltrim.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -17534,7 +17128,7 @@ inline void command_hltrim::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hltrim.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hltrim.key)
 }
 
 // string filed = 2;
@@ -17542,41 +17136,41 @@ inline void command_hltrim::clear_filed() {
   filed_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hltrim::filed() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hltrim.filed)
+  // @@protoc_insertion_point(field_get:client.command_hltrim.filed)
   return filed_.GetNoArena();
 }
 inline void command_hltrim::set_filed(const ::std::string& value) {
   
   filed_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hltrim.filed)
+  // @@protoc_insertion_point(field_set:client.command_hltrim.filed)
 }
 #if LANG_CXX11
 inline void command_hltrim::set_filed(::std::string&& value) {
   
   filed_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hltrim.filed)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hltrim.filed)
 }
 #endif
 inline void command_hltrim::set_filed(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   filed_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hltrim.filed)
+  // @@protoc_insertion_point(field_set_char:client.command_hltrim.filed)
 }
 inline void command_hltrim::set_filed(const char* value, size_t size) {
   
   filed_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hltrim.filed)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hltrim.filed)
 }
 inline ::std::string* command_hltrim::mutable_filed() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hltrim.filed)
+  // @@protoc_insertion_point(field_mutable:client.command_hltrim.filed)
   return filed_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hltrim::release_filed() {
-  // @@protoc_insertion_point(field_release:protocol.command_hltrim.filed)
+  // @@protoc_insertion_point(field_release:client.command_hltrim.filed)
   
   return filed_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -17587,7 +17181,7 @@ inline void command_hltrim::set_allocated_filed(::std::string* filed) {
     
   }
   filed_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), filed);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hltrim.filed)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hltrim.filed)
 }
 
 // int32 start = 3;
@@ -17595,13 +17189,13 @@ inline void command_hltrim::clear_start() {
   start_ = 0;
 }
 inline ::google::protobuf::int32 command_hltrim::start() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hltrim.start)
+  // @@protoc_insertion_point(field_get:client.command_hltrim.start)
   return start_;
 }
 inline void command_hltrim::set_start(::google::protobuf::int32 value) {
   
   start_ = value;
-  // @@protoc_insertion_point(field_set:protocol.command_hltrim.start)
+  // @@protoc_insertion_point(field_set:client.command_hltrim.start)
 }
 
 // int32 stop = 4;
@@ -17609,13 +17203,13 @@ inline void command_hltrim::clear_stop() {
   stop_ = 0;
 }
 inline ::google::protobuf::int32 command_hltrim::stop() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hltrim.stop)
+  // @@protoc_insertion_point(field_get:client.command_hltrim.stop)
   return stop_;
 }
 inline void command_hltrim::set_stop(::google::protobuf::int32 value) {
   
   stop_ = value;
-  // @@protoc_insertion_point(field_set:protocol.command_hltrim.stop)
+  // @@protoc_insertion_point(field_set:client.command_hltrim.stop)
 }
 
 // -------------------------------------------------------------------
@@ -17627,41 +17221,41 @@ inline void command_hmltrim::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hmltrim::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmltrim.key)
+  // @@protoc_insertion_point(field_get:client.command_hmltrim.key)
   return key_.GetNoArena();
 }
 inline void command_hmltrim::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hmltrim.key)
+  // @@protoc_insertion_point(field_set:client.command_hmltrim.key)
 }
 #if LANG_CXX11
 inline void command_hmltrim::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hmltrim.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hmltrim.key)
 }
 #endif
 inline void command_hmltrim::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmltrim.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hmltrim.key)
 }
 inline void command_hmltrim::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmltrim.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmltrim.key)
 }
 inline ::std::string* command_hmltrim::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmltrim.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hmltrim.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hmltrim::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmltrim.key)
+  // @@protoc_insertion_point(field_release:client.command_hmltrim.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -17672,7 +17266,7 @@ inline void command_hmltrim::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmltrim.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmltrim.key)
 }
 
 // repeated string fileds = 2;
@@ -17683,64 +17277,64 @@ inline void command_hmltrim::clear_fileds() {
   fileds_.Clear();
 }
 inline const ::std::string& command_hmltrim::fileds(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmltrim.fileds)
+  // @@protoc_insertion_point(field_get:client.command_hmltrim.fileds)
   return fileds_.Get(index);
 }
 inline ::std::string* command_hmltrim::mutable_fileds(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmltrim.fileds)
+  // @@protoc_insertion_point(field_mutable:client.command_hmltrim.fileds)
   return fileds_.Mutable(index);
 }
 inline void command_hmltrim::set_fileds(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_hmltrim.fileds)
+  // @@protoc_insertion_point(field_set:client.command_hmltrim.fileds)
   fileds_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_hmltrim::set_fileds(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_hmltrim.fileds)
+  // @@protoc_insertion_point(field_set:client.command_hmltrim.fileds)
   fileds_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_hmltrim::set_fileds(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fileds_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmltrim.fileds)
+  // @@protoc_insertion_point(field_set_char:client.command_hmltrim.fileds)
 }
 inline void command_hmltrim::set_fileds(int index, const char* value, size_t size) {
   fileds_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmltrim.fileds)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmltrim.fileds)
 }
 inline ::std::string* command_hmltrim::add_fileds() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_hmltrim.fileds)
+  // @@protoc_insertion_point(field_add_mutable:client.command_hmltrim.fileds)
   return fileds_.Add();
 }
 inline void command_hmltrim::add_fileds(const ::std::string& value) {
   fileds_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_hmltrim.fileds)
+  // @@protoc_insertion_point(field_add:client.command_hmltrim.fileds)
 }
 #if LANG_CXX11
 inline void command_hmltrim::add_fileds(::std::string&& value) {
   fileds_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_hmltrim.fileds)
+  // @@protoc_insertion_point(field_add:client.command_hmltrim.fileds)
 }
 #endif
 inline void command_hmltrim::add_fileds(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fileds_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_hmltrim.fileds)
+  // @@protoc_insertion_point(field_add_char:client.command_hmltrim.fileds)
 }
 inline void command_hmltrim::add_fileds(const char* value, size_t size) {
   fileds_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_hmltrim.fileds)
+  // @@protoc_insertion_point(field_add_pointer:client.command_hmltrim.fileds)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_hmltrim::fileds() const {
-  // @@protoc_insertion_point(field_list:protocol.command_hmltrim.fileds)
+  // @@protoc_insertion_point(field_list:client.command_hmltrim.fileds)
   return fileds_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_hmltrim::mutable_fileds() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_hmltrim.fileds)
+  // @@protoc_insertion_point(field_mutable_list:client.command_hmltrim.fileds)
   return &fileds_;
 }
 
@@ -17749,13 +17343,13 @@ inline void command_hmltrim::clear_start() {
   start_ = 0;
 }
 inline ::google::protobuf::int32 command_hmltrim::start() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmltrim.start)
+  // @@protoc_insertion_point(field_get:client.command_hmltrim.start)
   return start_;
 }
 inline void command_hmltrim::set_start(::google::protobuf::int32 value) {
   
   start_ = value;
-  // @@protoc_insertion_point(field_set:protocol.command_hmltrim.start)
+  // @@protoc_insertion_point(field_set:client.command_hmltrim.start)
 }
 
 // int32 stop = 4;
@@ -17763,13 +17357,13 @@ inline void command_hmltrim::clear_stop() {
   stop_ = 0;
 }
 inline ::google::protobuf::int32 command_hmltrim::stop() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmltrim.stop)
+  // @@protoc_insertion_point(field_get:client.command_hmltrim.stop)
   return stop_;
 }
 inline void command_hmltrim::set_stop(::google::protobuf::int32 value) {
   
   stop_ = value;
-  // @@protoc_insertion_point(field_set:protocol.command_hmltrim.stop)
+  // @@protoc_insertion_point(field_set:client.command_hmltrim.stop)
 }
 
 // -------------------------------------------------------------------
@@ -17784,64 +17378,64 @@ inline void command_mhmltrim::clear_keys() {
   keys_.Clear();
 }
 inline const ::std::string& command_mhmltrim::keys(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmltrim.keys)
+  // @@protoc_insertion_point(field_get:client.command_mhmltrim.keys)
   return keys_.Get(index);
 }
 inline ::std::string* command_mhmltrim::mutable_keys(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmltrim.keys)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmltrim.keys)
   return keys_.Mutable(index);
 }
 inline void command_mhmltrim::set_keys(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmltrim.keys)
+  // @@protoc_insertion_point(field_set:client.command_mhmltrim.keys)
   keys_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mhmltrim::set_keys(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmltrim.keys)
+  // @@protoc_insertion_point(field_set:client.command_mhmltrim.keys)
   keys_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mhmltrim::set_keys(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mhmltrim.keys)
+  // @@protoc_insertion_point(field_set_char:client.command_mhmltrim.keys)
 }
 inline void command_mhmltrim::set_keys(int index, const char* value, size_t size) {
   keys_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mhmltrim.keys)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mhmltrim.keys)
 }
 inline ::std::string* command_mhmltrim::add_keys() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mhmltrim.keys)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mhmltrim.keys)
   return keys_.Add();
 }
 inline void command_mhmltrim::add_keys(const ::std::string& value) {
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mhmltrim.keys)
+  // @@protoc_insertion_point(field_add:client.command_mhmltrim.keys)
 }
 #if LANG_CXX11
 inline void command_mhmltrim::add_keys(::std::string&& value) {
   keys_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mhmltrim.keys)
+  // @@protoc_insertion_point(field_add:client.command_mhmltrim.keys)
 }
 #endif
 inline void command_mhmltrim::add_keys(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mhmltrim.keys)
+  // @@protoc_insertion_point(field_add_char:client.command_mhmltrim.keys)
 }
 inline void command_mhmltrim::add_keys(const char* value, size_t size) {
   keys_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mhmltrim.keys)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mhmltrim.keys)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mhmltrim::keys() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mhmltrim.keys)
+  // @@protoc_insertion_point(field_list:client.command_mhmltrim.keys)
   return keys_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mhmltrim::mutable_keys() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mhmltrim.keys)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mhmltrim.keys)
   return &keys_;
 }
 
@@ -17853,64 +17447,64 @@ inline void command_mhmltrim::clear_fileds() {
   fileds_.Clear();
 }
 inline const ::std::string& command_mhmltrim::fileds(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmltrim.fileds)
+  // @@protoc_insertion_point(field_get:client.command_mhmltrim.fileds)
   return fileds_.Get(index);
 }
 inline ::std::string* command_mhmltrim::mutable_fileds(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmltrim.fileds)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmltrim.fileds)
   return fileds_.Mutable(index);
 }
 inline void command_mhmltrim::set_fileds(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmltrim.fileds)
+  // @@protoc_insertion_point(field_set:client.command_mhmltrim.fileds)
   fileds_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mhmltrim::set_fileds(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmltrim.fileds)
+  // @@protoc_insertion_point(field_set:client.command_mhmltrim.fileds)
   fileds_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mhmltrim::set_fileds(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fileds_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mhmltrim.fileds)
+  // @@protoc_insertion_point(field_set_char:client.command_mhmltrim.fileds)
 }
 inline void command_mhmltrim::set_fileds(int index, const char* value, size_t size) {
   fileds_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mhmltrim.fileds)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mhmltrim.fileds)
 }
 inline ::std::string* command_mhmltrim::add_fileds() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mhmltrim.fileds)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mhmltrim.fileds)
   return fileds_.Add();
 }
 inline void command_mhmltrim::add_fileds(const ::std::string& value) {
   fileds_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mhmltrim.fileds)
+  // @@protoc_insertion_point(field_add:client.command_mhmltrim.fileds)
 }
 #if LANG_CXX11
 inline void command_mhmltrim::add_fileds(::std::string&& value) {
   fileds_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mhmltrim.fileds)
+  // @@protoc_insertion_point(field_add:client.command_mhmltrim.fileds)
 }
 #endif
 inline void command_mhmltrim::add_fileds(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fileds_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mhmltrim.fileds)
+  // @@protoc_insertion_point(field_add_char:client.command_mhmltrim.fileds)
 }
 inline void command_mhmltrim::add_fileds(const char* value, size_t size) {
   fileds_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mhmltrim.fileds)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mhmltrim.fileds)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mhmltrim::fileds() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mhmltrim.fileds)
+  // @@protoc_insertion_point(field_list:client.command_mhmltrim.fileds)
   return fileds_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mhmltrim::mutable_fileds() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mhmltrim.fileds)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mhmltrim.fileds)
   return &fileds_;
 }
 
@@ -17919,13 +17513,13 @@ inline void command_mhmltrim::clear_start() {
   start_ = 0;
 }
 inline ::google::protobuf::int32 command_mhmltrim::start() const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmltrim.start)
+  // @@protoc_insertion_point(field_get:client.command_mhmltrim.start)
   return start_;
 }
 inline void command_mhmltrim::set_start(::google::protobuf::int32 value) {
   
   start_ = value;
-  // @@protoc_insertion_point(field_set:protocol.command_mhmltrim.start)
+  // @@protoc_insertion_point(field_set:client.command_mhmltrim.start)
 }
 
 // int32 stop = 4;
@@ -17933,13 +17527,13 @@ inline void command_mhmltrim::clear_stop() {
   stop_ = 0;
 }
 inline ::google::protobuf::int32 command_mhmltrim::stop() const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmltrim.stop)
+  // @@protoc_insertion_point(field_get:client.command_mhmltrim.stop)
   return stop_;
 }
 inline void command_mhmltrim::set_stop(::google::protobuf::int32 value) {
   
   stop_ = value;
-  // @@protoc_insertion_point(field_set:protocol.command_mhmltrim.stop)
+  // @@protoc_insertion_point(field_set:client.command_mhmltrim.stop)
 }
 
 // -------------------------------------------------------------------
@@ -17951,41 +17545,41 @@ inline void command_llen::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_llen::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_llen.key)
+  // @@protoc_insertion_point(field_get:client.command_llen.key)
   return key_.GetNoArena();
 }
 inline void command_llen::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_llen.key)
+  // @@protoc_insertion_point(field_set:client.command_llen.key)
 }
 #if LANG_CXX11
 inline void command_llen::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_llen.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_llen.key)
 }
 #endif
 inline void command_llen::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_llen.key)
+  // @@protoc_insertion_point(field_set_char:client.command_llen.key)
 }
 inline void command_llen::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_llen.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_llen.key)
 }
 inline ::std::string* command_llen::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_llen.key)
+  // @@protoc_insertion_point(field_mutable:client.command_llen.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_llen::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_llen.key)
+  // @@protoc_insertion_point(field_release:client.command_llen.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -17996,14 +17590,14 @@ inline void command_llen::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_llen.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_llen.key)
 }
 
 // -------------------------------------------------------------------
 
 // command_llen_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_llen_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -18013,28 +17607,28 @@ inline void command_llen_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_llen_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_llen_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_llen_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_llen_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_llen_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_llen_reply.state)
+inline ::client::command_reply* command_llen_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_llen_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_llen_reply::mutable_state() {
+inline ::client::command_reply* command_llen_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_llen_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_llen_reply.state)
   return state_;
 }
-inline void command_llen_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_llen_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -18050,57 +17644,51 @@ inline void command_llen_reply::set_allocated_state(::protocol::command_reply* s
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_llen_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_llen_reply.state)
 }
 
-// .protocol.VALUE reply = 2;
-inline bool command_llen_reply::has_reply() const {
-  return this != internal_default_instance() && reply_ != NULL;
+// .data.VALUE data = 2;
+inline bool command_llen_reply::has_data() const {
+  return this != internal_default_instance() && data_ != NULL;
 }
-inline void command_llen_reply::clear_reply() {
-  if (GetArenaNoVirtual() == NULL && reply_ != NULL) {
-    delete reply_;
-  }
-  reply_ = NULL;
+inline const ::data::VALUE& command_llen_reply::data() const {
+  const ::data::VALUE* p = data_;
+  // @@protoc_insertion_point(field_get:client.command_llen_reply.data)
+  return p != NULL ? *p : *reinterpret_cast<const ::data::VALUE*>(
+      &::data::_VALUE_default_instance_);
 }
-inline const ::protocol::VALUE& command_llen_reply::reply() const {
-  const ::protocol::VALUE* p = reply_;
-  // @@protoc_insertion_point(field_get:protocol.command_llen_reply.reply)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::VALUE*>(
-      &::protocol::_VALUE_default_instance_);
-}
-inline ::protocol::VALUE* command_llen_reply::release_reply() {
-  // @@protoc_insertion_point(field_release:protocol.command_llen_reply.reply)
+inline ::data::VALUE* command_llen_reply::release_data() {
+  // @@protoc_insertion_point(field_release:client.command_llen_reply.data)
   
-  ::protocol::VALUE* temp = reply_;
-  reply_ = NULL;
+  ::data::VALUE* temp = data_;
+  data_ = NULL;
   return temp;
 }
-inline ::protocol::VALUE* command_llen_reply::mutable_reply() {
+inline ::data::VALUE* command_llen_reply::mutable_data() {
   
-  if (reply_ == NULL) {
-    reply_ = new ::protocol::VALUE;
+  if (data_ == NULL) {
+    data_ = new ::data::VALUE;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_llen_reply.reply)
-  return reply_;
+  // @@protoc_insertion_point(field_mutable:client.command_llen_reply.data)
+  return data_;
 }
-inline void command_llen_reply::set_allocated_reply(::protocol::VALUE* reply) {
+inline void command_llen_reply::set_allocated_data(::data::VALUE* data) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
-    delete reply_;
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(data_);
   }
-  if (reply) {
+  if (data) {
     ::google::protobuf::Arena* submessage_arena = NULL;
     if (message_arena != submessage_arena) {
-      reply = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, reply, submessage_arena);
+      data = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, data, submessage_arena);
     }
     
   } else {
     
   }
-  reply_ = reply;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_llen_reply.reply)
+  data_ = data;
+  // @@protoc_insertion_point(field_set_allocated:client.command_llen_reply.data)
 }
 
 // -------------------------------------------------------------------
@@ -18115,64 +17703,64 @@ inline void command_mllen::clear_keys() {
   keys_.Clear();
 }
 inline const ::std::string& command_mllen::keys(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mllen.keys)
+  // @@protoc_insertion_point(field_get:client.command_mllen.keys)
   return keys_.Get(index);
 }
 inline ::std::string* command_mllen::mutable_keys(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mllen.keys)
+  // @@protoc_insertion_point(field_mutable:client.command_mllen.keys)
   return keys_.Mutable(index);
 }
 inline void command_mllen::set_keys(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mllen.keys)
+  // @@protoc_insertion_point(field_set:client.command_mllen.keys)
   keys_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mllen::set_keys(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mllen.keys)
+  // @@protoc_insertion_point(field_set:client.command_mllen.keys)
   keys_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mllen::set_keys(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mllen.keys)
+  // @@protoc_insertion_point(field_set_char:client.command_mllen.keys)
 }
 inline void command_mllen::set_keys(int index, const char* value, size_t size) {
   keys_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mllen.keys)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mllen.keys)
 }
 inline ::std::string* command_mllen::add_keys() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mllen.keys)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mllen.keys)
   return keys_.Add();
 }
 inline void command_mllen::add_keys(const ::std::string& value) {
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mllen.keys)
+  // @@protoc_insertion_point(field_add:client.command_mllen.keys)
 }
 #if LANG_CXX11
 inline void command_mllen::add_keys(::std::string&& value) {
   keys_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mllen.keys)
+  // @@protoc_insertion_point(field_add:client.command_mllen.keys)
 }
 #endif
 inline void command_mllen::add_keys(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mllen.keys)
+  // @@protoc_insertion_point(field_add_char:client.command_mllen.keys)
 }
 inline void command_mllen::add_keys(const char* value, size_t size) {
   keys_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mllen.keys)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mllen.keys)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mllen::keys() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mllen.keys)
+  // @@protoc_insertion_point(field_list:client.command_mllen.keys)
   return keys_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mllen::mutable_keys() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mllen.keys)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mllen.keys)
   return &keys_;
 }
 
@@ -18180,7 +17768,7 @@ command_mllen::mutable_keys() {
 
 // command_mllen_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_mllen_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -18190,28 +17778,28 @@ inline void command_mllen_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_mllen_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_mllen_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_mllen_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_mllen_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_mllen_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_mllen_reply.state)
+inline ::client::command_reply* command_mllen_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_mllen_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_mllen_reply::mutable_state() {
+inline ::client::command_reply* command_mllen_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_mllen_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_mllen_reply.state)
   return state_;
 }
-inline void command_mllen_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_mllen_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -18227,37 +17815,34 @@ inline void command_mllen_reply::set_allocated_state(::protocol::command_reply* 
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_mllen_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_mllen_reply.state)
 }
 
-// repeated .protocol.VALUE reply = 2;
-inline int command_mllen_reply::reply_size() const {
-  return reply_.size();
+// repeated .data.VALUE data = 2;
+inline int command_mllen_reply::data_size() const {
+  return data_.size();
 }
-inline void command_mllen_reply::clear_reply() {
-  reply_.Clear();
+inline const ::data::VALUE& command_mllen_reply::data(int index) const {
+  // @@protoc_insertion_point(field_get:client.command_mllen_reply.data)
+  return data_.Get(index);
 }
-inline const ::protocol::VALUE& command_mllen_reply::reply(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mllen_reply.reply)
-  return reply_.Get(index);
+inline ::data::VALUE* command_mllen_reply::mutable_data(int index) {
+  // @@protoc_insertion_point(field_mutable:client.command_mllen_reply.data)
+  return data_.Mutable(index);
 }
-inline ::protocol::VALUE* command_mllen_reply::mutable_reply(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mllen_reply.reply)
-  return reply_.Mutable(index);
+inline ::data::VALUE* command_mllen_reply::add_data() {
+  // @@protoc_insertion_point(field_add:client.command_mllen_reply.data)
+  return data_.Add();
 }
-inline ::protocol::VALUE* command_mllen_reply::add_reply() {
-  // @@protoc_insertion_point(field_add:protocol.command_mllen_reply.reply)
-  return reply_.Add();
+inline ::google::protobuf::RepeatedPtrField< ::data::VALUE >*
+command_mllen_reply::mutable_data() {
+  // @@protoc_insertion_point(field_mutable_list:client.command_mllen_reply.data)
+  return &data_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >*
-command_mllen_reply::mutable_reply() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mllen_reply.reply)
-  return &reply_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >&
-command_mllen_reply::reply() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mllen_reply.reply)
-  return reply_;
+inline const ::google::protobuf::RepeatedPtrField< ::data::VALUE >&
+command_mllen_reply::data() const {
+  // @@protoc_insertion_point(field_list:client.command_mllen_reply.data)
+  return data_;
 }
 
 // -------------------------------------------------------------------
@@ -18269,41 +17854,41 @@ inline void command_hllen::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hllen::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hllen.key)
+  // @@protoc_insertion_point(field_get:client.command_hllen.key)
   return key_.GetNoArena();
 }
 inline void command_hllen::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hllen.key)
+  // @@protoc_insertion_point(field_set:client.command_hllen.key)
 }
 #if LANG_CXX11
 inline void command_hllen::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hllen.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hllen.key)
 }
 #endif
 inline void command_hllen::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hllen.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hllen.key)
 }
 inline void command_hllen::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hllen.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hllen.key)
 }
 inline ::std::string* command_hllen::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hllen.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hllen.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hllen::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hllen.key)
+  // @@protoc_insertion_point(field_release:client.command_hllen.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -18314,7 +17899,7 @@ inline void command_hllen::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hllen.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hllen.key)
 }
 
 // string field = 2;
@@ -18322,41 +17907,41 @@ inline void command_hllen::clear_field() {
   field_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hllen::field() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hllen.field)
+  // @@protoc_insertion_point(field_get:client.command_hllen.field)
   return field_.GetNoArena();
 }
 inline void command_hllen::set_field(const ::std::string& value) {
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hllen.field)
+  // @@protoc_insertion_point(field_set:client.command_hllen.field)
 }
 #if LANG_CXX11
 inline void command_hllen::set_field(::std::string&& value) {
   
   field_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hllen.field)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hllen.field)
 }
 #endif
 inline void command_hllen::set_field(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hllen.field)
+  // @@protoc_insertion_point(field_set_char:client.command_hllen.field)
 }
 inline void command_hllen::set_field(const char* value, size_t size) {
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hllen.field)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hllen.field)
 }
 inline ::std::string* command_hllen::mutable_field() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hllen.field)
+  // @@protoc_insertion_point(field_mutable:client.command_hllen.field)
   return field_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hllen::release_field() {
-  // @@protoc_insertion_point(field_release:protocol.command_hllen.field)
+  // @@protoc_insertion_point(field_release:client.command_hllen.field)
   
   return field_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -18367,14 +17952,14 @@ inline void command_hllen::set_allocated_field(::std::string* field) {
     
   }
   field_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), field);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hllen.field)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hllen.field)
 }
 
 // -------------------------------------------------------------------
 
 // command_hllen_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_hllen_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -18384,28 +17969,28 @@ inline void command_hllen_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_hllen_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_hllen_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_hllen_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_hllen_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_hllen_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_hllen_reply.state)
+inline ::client::command_reply* command_hllen_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_hllen_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_hllen_reply::mutable_state() {
+inline ::client::command_reply* command_hllen_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_hllen_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_hllen_reply.state)
   return state_;
 }
-inline void command_hllen_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_hllen_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -18421,57 +18006,51 @@ inline void command_hllen_reply::set_allocated_state(::protocol::command_reply* 
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hllen_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hllen_reply.state)
 }
 
-// .protocol.VALUE reply = 2;
-inline bool command_hllen_reply::has_reply() const {
-  return this != internal_default_instance() && reply_ != NULL;
+// .data.VALUE data = 2;
+inline bool command_hllen_reply::has_data() const {
+  return this != internal_default_instance() && data_ != NULL;
 }
-inline void command_hllen_reply::clear_reply() {
-  if (GetArenaNoVirtual() == NULL && reply_ != NULL) {
-    delete reply_;
-  }
-  reply_ = NULL;
+inline const ::data::VALUE& command_hllen_reply::data() const {
+  const ::data::VALUE* p = data_;
+  // @@protoc_insertion_point(field_get:client.command_hllen_reply.data)
+  return p != NULL ? *p : *reinterpret_cast<const ::data::VALUE*>(
+      &::data::_VALUE_default_instance_);
 }
-inline const ::protocol::VALUE& command_hllen_reply::reply() const {
-  const ::protocol::VALUE* p = reply_;
-  // @@protoc_insertion_point(field_get:protocol.command_hllen_reply.reply)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::VALUE*>(
-      &::protocol::_VALUE_default_instance_);
-}
-inline ::protocol::VALUE* command_hllen_reply::release_reply() {
-  // @@protoc_insertion_point(field_release:protocol.command_hllen_reply.reply)
+inline ::data::VALUE* command_hllen_reply::release_data() {
+  // @@protoc_insertion_point(field_release:client.command_hllen_reply.data)
   
-  ::protocol::VALUE* temp = reply_;
-  reply_ = NULL;
+  ::data::VALUE* temp = data_;
+  data_ = NULL;
   return temp;
 }
-inline ::protocol::VALUE* command_hllen_reply::mutable_reply() {
+inline ::data::VALUE* command_hllen_reply::mutable_data() {
   
-  if (reply_ == NULL) {
-    reply_ = new ::protocol::VALUE;
+  if (data_ == NULL) {
+    data_ = new ::data::VALUE;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_hllen_reply.reply)
-  return reply_;
+  // @@protoc_insertion_point(field_mutable:client.command_hllen_reply.data)
+  return data_;
 }
-inline void command_hllen_reply::set_allocated_reply(::protocol::VALUE* reply) {
+inline void command_hllen_reply::set_allocated_data(::data::VALUE* data) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
-    delete reply_;
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(data_);
   }
-  if (reply) {
+  if (data) {
     ::google::protobuf::Arena* submessage_arena = NULL;
     if (message_arena != submessage_arena) {
-      reply = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, reply, submessage_arena);
+      data = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, data, submessage_arena);
     }
     
   } else {
     
   }
-  reply_ = reply;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hllen_reply.reply)
+  data_ = data;
+  // @@protoc_insertion_point(field_set_allocated:client.command_hllen_reply.data)
 }
 
 // -------------------------------------------------------------------
@@ -18483,41 +18062,41 @@ inline void command_hmllen::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hmllen::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmllen.key)
+  // @@protoc_insertion_point(field_get:client.command_hmllen.key)
   return key_.GetNoArena();
 }
 inline void command_hmllen::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hmllen.key)
+  // @@protoc_insertion_point(field_set:client.command_hmllen.key)
 }
 #if LANG_CXX11
 inline void command_hmllen::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hmllen.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hmllen.key)
 }
 #endif
 inline void command_hmllen::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmllen.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hmllen.key)
 }
 inline void command_hmllen::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmllen.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmllen.key)
 }
 inline ::std::string* command_hmllen::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmllen.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hmllen.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hmllen::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmllen.key)
+  // @@protoc_insertion_point(field_release:client.command_hmllen.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -18528,7 +18107,7 @@ inline void command_hmllen::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmllen.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmllen.key)
 }
 
 // repeated string fields = 2;
@@ -18539,64 +18118,64 @@ inline void command_hmllen::clear_fields() {
   fields_.Clear();
 }
 inline const ::std::string& command_hmllen::fields(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmllen.fields)
+  // @@protoc_insertion_point(field_get:client.command_hmllen.fields)
   return fields_.Get(index);
 }
 inline ::std::string* command_hmllen::mutable_fields(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmllen.fields)
+  // @@protoc_insertion_point(field_mutable:client.command_hmllen.fields)
   return fields_.Mutable(index);
 }
 inline void command_hmllen::set_fields(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_hmllen.fields)
+  // @@protoc_insertion_point(field_set:client.command_hmllen.fields)
   fields_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_hmllen::set_fields(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_hmllen.fields)
+  // @@protoc_insertion_point(field_set:client.command_hmllen.fields)
   fields_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_hmllen::set_fields(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmllen.fields)
+  // @@protoc_insertion_point(field_set_char:client.command_hmllen.fields)
 }
 inline void command_hmllen::set_fields(int index, const char* value, size_t size) {
   fields_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmllen.fields)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmllen.fields)
 }
 inline ::std::string* command_hmllen::add_fields() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_hmllen.fields)
+  // @@protoc_insertion_point(field_add_mutable:client.command_hmllen.fields)
   return fields_.Add();
 }
 inline void command_hmllen::add_fields(const ::std::string& value) {
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_hmllen.fields)
+  // @@protoc_insertion_point(field_add:client.command_hmllen.fields)
 }
 #if LANG_CXX11
 inline void command_hmllen::add_fields(::std::string&& value) {
   fields_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_hmllen.fields)
+  // @@protoc_insertion_point(field_add:client.command_hmllen.fields)
 }
 #endif
 inline void command_hmllen::add_fields(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_hmllen.fields)
+  // @@protoc_insertion_point(field_add_char:client.command_hmllen.fields)
 }
 inline void command_hmllen::add_fields(const char* value, size_t size) {
   fields_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_hmllen.fields)
+  // @@protoc_insertion_point(field_add_pointer:client.command_hmllen.fields)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_hmllen::fields() const {
-  // @@protoc_insertion_point(field_list:protocol.command_hmllen.fields)
+  // @@protoc_insertion_point(field_list:client.command_hmllen.fields)
   return fields_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_hmllen::mutable_fields() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_hmllen.fields)
+  // @@protoc_insertion_point(field_mutable_list:client.command_hmllen.fields)
   return &fields_;
 }
 
@@ -18604,7 +18183,7 @@ command_hmllen::mutable_fields() {
 
 // command_hmllen_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_hmllen_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -18614,28 +18193,28 @@ inline void command_hmllen_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_hmllen_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_hmllen_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_hmllen_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_hmllen_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_hmllen_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmllen_reply.state)
+inline ::client::command_reply* command_hmllen_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_hmllen_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_hmllen_reply::mutable_state() {
+inline ::client::command_reply* command_hmllen_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmllen_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_hmllen_reply.state)
   return state_;
 }
-inline void command_hmllen_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_hmllen_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -18651,37 +18230,34 @@ inline void command_hmllen_reply::set_allocated_state(::protocol::command_reply*
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmllen_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmllen_reply.state)
 }
 
-// repeated .protocol.VALUE reply = 2;
-inline int command_hmllen_reply::reply_size() const {
-  return reply_.size();
+// repeated .data.VALUE data = 2;
+inline int command_hmllen_reply::data_size() const {
+  return data_.size();
 }
-inline void command_hmllen_reply::clear_reply() {
-  reply_.Clear();
+inline const ::data::VALUE& command_hmllen_reply::data(int index) const {
+  // @@protoc_insertion_point(field_get:client.command_hmllen_reply.data)
+  return data_.Get(index);
 }
-inline const ::protocol::VALUE& command_hmllen_reply::reply(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmllen_reply.reply)
-  return reply_.Get(index);
+inline ::data::VALUE* command_hmllen_reply::mutable_data(int index) {
+  // @@protoc_insertion_point(field_mutable:client.command_hmllen_reply.data)
+  return data_.Mutable(index);
 }
-inline ::protocol::VALUE* command_hmllen_reply::mutable_reply(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmllen_reply.reply)
-  return reply_.Mutable(index);
+inline ::data::VALUE* command_hmllen_reply::add_data() {
+  // @@protoc_insertion_point(field_add:client.command_hmllen_reply.data)
+  return data_.Add();
 }
-inline ::protocol::VALUE* command_hmllen_reply::add_reply() {
-  // @@protoc_insertion_point(field_add:protocol.command_hmllen_reply.reply)
-  return reply_.Add();
+inline ::google::protobuf::RepeatedPtrField< ::data::VALUE >*
+command_hmllen_reply::mutable_data() {
+  // @@protoc_insertion_point(field_mutable_list:client.command_hmllen_reply.data)
+  return &data_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >*
-command_hmllen_reply::mutable_reply() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_hmllen_reply.reply)
-  return &reply_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >&
-command_hmllen_reply::reply() const {
-  // @@protoc_insertion_point(field_list:protocol.command_hmllen_reply.reply)
-  return reply_;
+inline const ::google::protobuf::RepeatedPtrField< ::data::VALUE >&
+command_hmllen_reply::data() const {
+  // @@protoc_insertion_point(field_list:client.command_hmllen_reply.data)
+  return data_;
 }
 
 // -------------------------------------------------------------------
@@ -18696,64 +18272,64 @@ inline void command_mhmllen::clear_keys() {
   keys_.Clear();
 }
 inline const ::std::string& command_mhmllen::keys(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmllen.keys)
+  // @@protoc_insertion_point(field_get:client.command_mhmllen.keys)
   return keys_.Get(index);
 }
 inline ::std::string* command_mhmllen::mutable_keys(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmllen.keys)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmllen.keys)
   return keys_.Mutable(index);
 }
 inline void command_mhmllen::set_keys(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmllen.keys)
+  // @@protoc_insertion_point(field_set:client.command_mhmllen.keys)
   keys_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mhmllen::set_keys(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmllen.keys)
+  // @@protoc_insertion_point(field_set:client.command_mhmllen.keys)
   keys_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mhmllen::set_keys(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mhmllen.keys)
+  // @@protoc_insertion_point(field_set_char:client.command_mhmllen.keys)
 }
 inline void command_mhmllen::set_keys(int index, const char* value, size_t size) {
   keys_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mhmllen.keys)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mhmllen.keys)
 }
 inline ::std::string* command_mhmllen::add_keys() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mhmllen.keys)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mhmllen.keys)
   return keys_.Add();
 }
 inline void command_mhmllen::add_keys(const ::std::string& value) {
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mhmllen.keys)
+  // @@protoc_insertion_point(field_add:client.command_mhmllen.keys)
 }
 #if LANG_CXX11
 inline void command_mhmllen::add_keys(::std::string&& value) {
   keys_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mhmllen.keys)
+  // @@protoc_insertion_point(field_add:client.command_mhmllen.keys)
 }
 #endif
 inline void command_mhmllen::add_keys(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mhmllen.keys)
+  // @@protoc_insertion_point(field_add_char:client.command_mhmllen.keys)
 }
 inline void command_mhmllen::add_keys(const char* value, size_t size) {
   keys_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mhmllen.keys)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mhmllen.keys)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mhmllen::keys() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mhmllen.keys)
+  // @@protoc_insertion_point(field_list:client.command_mhmllen.keys)
   return keys_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mhmllen::mutable_keys() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mhmllen.keys)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mhmllen.keys)
   return &keys_;
 }
 
@@ -18765,64 +18341,64 @@ inline void command_mhmllen::clear_fields() {
   fields_.Clear();
 }
 inline const ::std::string& command_mhmllen::fields(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmllen.fields)
+  // @@protoc_insertion_point(field_get:client.command_mhmllen.fields)
   return fields_.Get(index);
 }
 inline ::std::string* command_mhmllen::mutable_fields(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmllen.fields)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmllen.fields)
   return fields_.Mutable(index);
 }
 inline void command_mhmllen::set_fields(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmllen.fields)
+  // @@protoc_insertion_point(field_set:client.command_mhmllen.fields)
   fields_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mhmllen::set_fields(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmllen.fields)
+  // @@protoc_insertion_point(field_set:client.command_mhmllen.fields)
   fields_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mhmllen::set_fields(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mhmllen.fields)
+  // @@protoc_insertion_point(field_set_char:client.command_mhmllen.fields)
 }
 inline void command_mhmllen::set_fields(int index, const char* value, size_t size) {
   fields_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mhmllen.fields)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mhmllen.fields)
 }
 inline ::std::string* command_mhmllen::add_fields() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mhmllen.fields)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mhmllen.fields)
   return fields_.Add();
 }
 inline void command_mhmllen::add_fields(const ::std::string& value) {
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mhmllen.fields)
+  // @@protoc_insertion_point(field_add:client.command_mhmllen.fields)
 }
 #if LANG_CXX11
 inline void command_mhmllen::add_fields(::std::string&& value) {
   fields_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mhmllen.fields)
+  // @@protoc_insertion_point(field_add:client.command_mhmllen.fields)
 }
 #endif
 inline void command_mhmllen::add_fields(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mhmllen.fields)
+  // @@protoc_insertion_point(field_add_char:client.command_mhmllen.fields)
 }
 inline void command_mhmllen::add_fields(const char* value, size_t size) {
   fields_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mhmllen.fields)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mhmllen.fields)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mhmllen::fields() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mhmllen.fields)
+  // @@protoc_insertion_point(field_list:client.command_mhmllen.fields)
   return fields_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mhmllen::mutable_fields() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mhmllen.fields)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mhmllen.fields)
   return &fields_;
 }
 
@@ -18830,7 +18406,7 @@ command_mhmllen::mutable_fields() {
 
 // command_mhmllen_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_mhmllen_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -18840,28 +18416,28 @@ inline void command_mhmllen_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_mhmllen_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_mhmllen_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_mhmllen_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_mhmllen_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_mhmllen_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_mhmllen_reply.state)
+inline ::client::command_reply* command_mhmllen_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_mhmllen_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_mhmllen_reply::mutable_state() {
+inline ::client::command_reply* command_mhmllen_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmllen_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmllen_reply.state)
   return state_;
 }
-inline void command_mhmllen_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_mhmllen_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -18877,37 +18453,37 @@ inline void command_mhmllen_reply::set_allocated_state(::protocol::command_reply
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_mhmllen_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_mhmllen_reply.state)
 }
 
-// repeated .protocol.values_type reply = 2;
-inline int command_mhmllen_reply::reply_size() const {
-  return reply_.size();
+// repeated .client.values_type data = 2;
+inline int command_mhmllen_reply::data_size() const {
+  return data_.size();
 }
-inline void command_mhmllen_reply::clear_reply() {
-  reply_.Clear();
+inline void command_mhmllen_reply::clear_data() {
+  data_.Clear();
 }
-inline const ::protocol::values_type& command_mhmllen_reply::reply(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmllen_reply.reply)
-  return reply_.Get(index);
+inline const ::client::values_type& command_mhmllen_reply::data(int index) const {
+  // @@protoc_insertion_point(field_get:client.command_mhmllen_reply.data)
+  return data_.Get(index);
 }
-inline ::protocol::values_type* command_mhmllen_reply::mutable_reply(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmllen_reply.reply)
-  return reply_.Mutable(index);
+inline ::client::values_type* command_mhmllen_reply::mutable_data(int index) {
+  // @@protoc_insertion_point(field_mutable:client.command_mhmllen_reply.data)
+  return data_.Mutable(index);
 }
-inline ::protocol::values_type* command_mhmllen_reply::add_reply() {
-  // @@protoc_insertion_point(field_add:protocol.command_mhmllen_reply.reply)
-  return reply_.Add();
+inline ::client::values_type* command_mhmllen_reply::add_data() {
+  // @@protoc_insertion_point(field_add:client.command_mhmllen_reply.data)
+  return data_.Add();
 }
-inline ::google::protobuf::RepeatedPtrField< ::protocol::values_type >*
-command_mhmllen_reply::mutable_reply() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mhmllen_reply.reply)
-  return &reply_;
+inline ::google::protobuf::RepeatedPtrField< ::client::values_type >*
+command_mhmllen_reply::mutable_data() {
+  // @@protoc_insertion_point(field_mutable_list:client.command_mhmllen_reply.data)
+  return &data_;
 }
-inline const ::google::protobuf::RepeatedPtrField< ::protocol::values_type >&
-command_mhmllen_reply::reply() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mhmllen_reply.reply)
-  return reply_;
+inline const ::google::protobuf::RepeatedPtrField< ::client::values_type >&
+command_mhmllen_reply::data() const {
+  // @@protoc_insertion_point(field_list:client.command_mhmllen_reply.data)
+  return data_;
 }
 
 // -------------------------------------------------------------------
@@ -18919,41 +18495,41 @@ inline void command_mapget::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_mapget::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_mapget.key)
+  // @@protoc_insertion_point(field_get:client.command_mapget.key)
   return key_.GetNoArena();
 }
 inline void command_mapget::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_mapget.key)
+  // @@protoc_insertion_point(field_set:client.command_mapget.key)
 }
 #if LANG_CXX11
 inline void command_mapget::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_mapget.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_mapget.key)
 }
 #endif
 inline void command_mapget::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_mapget.key)
+  // @@protoc_insertion_point(field_set_char:client.command_mapget.key)
 }
 inline void command_mapget::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mapget.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mapget.key)
 }
 inline ::std::string* command_mapget::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_mapget.key)
+  // @@protoc_insertion_point(field_mutable:client.command_mapget.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_mapget::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_mapget.key)
+  // @@protoc_insertion_point(field_release:client.command_mapget.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -18964,14 +18540,14 @@ inline void command_mapget::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_mapget.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_mapget.key)
 }
 
 // -------------------------------------------------------------------
 
 // command_mapget_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_mapget_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -18981,28 +18557,28 @@ inline void command_mapget_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_mapget_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_mapget_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_mapget_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_mapget_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_mapget_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_mapget_reply.state)
+inline ::client::command_reply* command_mapget_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_mapget_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_mapget_reply::mutable_state() {
+inline ::client::command_reply* command_mapget_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_mapget_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_mapget_reply.state)
   return state_;
 }
-inline void command_mapget_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_mapget_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -19018,57 +18594,51 @@ inline void command_mapget_reply::set_allocated_state(::protocol::command_reply*
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_mapget_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_mapget_reply.state)
 }
 
-// .protocol.VALUE value = 2;
-inline bool command_mapget_reply::has_value() const {
-  return this != internal_default_instance() && value_ != NULL;
+// .data.VALUE data = 2;
+inline bool command_mapget_reply::has_data() const {
+  return this != internal_default_instance() && data_ != NULL;
 }
-inline void command_mapget_reply::clear_value() {
-  if (GetArenaNoVirtual() == NULL && value_ != NULL) {
-    delete value_;
-  }
-  value_ = NULL;
+inline const ::data::VALUE& command_mapget_reply::data() const {
+  const ::data::VALUE* p = data_;
+  // @@protoc_insertion_point(field_get:client.command_mapget_reply.data)
+  return p != NULL ? *p : *reinterpret_cast<const ::data::VALUE*>(
+      &::data::_VALUE_default_instance_);
 }
-inline const ::protocol::VALUE& command_mapget_reply::value() const {
-  const ::protocol::VALUE* p = value_;
-  // @@protoc_insertion_point(field_get:protocol.command_mapget_reply.value)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::VALUE*>(
-      &::protocol::_VALUE_default_instance_);
-}
-inline ::protocol::VALUE* command_mapget_reply::release_value() {
-  // @@protoc_insertion_point(field_release:protocol.command_mapget_reply.value)
+inline ::data::VALUE* command_mapget_reply::release_data() {
+  // @@protoc_insertion_point(field_release:client.command_mapget_reply.data)
   
-  ::protocol::VALUE* temp = value_;
-  value_ = NULL;
+  ::data::VALUE* temp = data_;
+  data_ = NULL;
   return temp;
 }
-inline ::protocol::VALUE* command_mapget_reply::mutable_value() {
+inline ::data::VALUE* command_mapget_reply::mutable_data() {
   
-  if (value_ == NULL) {
-    value_ = new ::protocol::VALUE;
+  if (data_ == NULL) {
+    data_ = new ::data::VALUE;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_mapget_reply.value)
-  return value_;
+  // @@protoc_insertion_point(field_mutable:client.command_mapget_reply.data)
+  return data_;
 }
-inline void command_mapget_reply::set_allocated_value(::protocol::VALUE* value) {
+inline void command_mapget_reply::set_allocated_data(::data::VALUE* data) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
-    delete value_;
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(data_);
   }
-  if (value) {
+  if (data) {
     ::google::protobuf::Arena* submessage_arena = NULL;
     if (message_arena != submessage_arena) {
-      value = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, value, submessage_arena);
+      data = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, data, submessage_arena);
     }
     
   } else {
     
   }
-  value_ = value;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_mapget_reply.value)
+  data_ = data;
+  // @@protoc_insertion_point(field_set_allocated:client.command_mapget_reply.data)
 }
 
 // -------------------------------------------------------------------
@@ -19083,64 +18653,64 @@ inline void command_mmapget::clear_keys() {
   keys_.Clear();
 }
 inline const ::std::string& command_mmapget::keys(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mmapget.keys)
+  // @@protoc_insertion_point(field_get:client.command_mmapget.keys)
   return keys_.Get(index);
 }
 inline ::std::string* command_mmapget::mutable_keys(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mmapget.keys)
+  // @@protoc_insertion_point(field_mutable:client.command_mmapget.keys)
   return keys_.Mutable(index);
 }
 inline void command_mmapget::set_keys(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mmapget.keys)
+  // @@protoc_insertion_point(field_set:client.command_mmapget.keys)
   keys_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mmapget::set_keys(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mmapget.keys)
+  // @@protoc_insertion_point(field_set:client.command_mmapget.keys)
   keys_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mmapget::set_keys(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mmapget.keys)
+  // @@protoc_insertion_point(field_set_char:client.command_mmapget.keys)
 }
 inline void command_mmapget::set_keys(int index, const char* value, size_t size) {
   keys_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mmapget.keys)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mmapget.keys)
 }
 inline ::std::string* command_mmapget::add_keys() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mmapget.keys)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mmapget.keys)
   return keys_.Add();
 }
 inline void command_mmapget::add_keys(const ::std::string& value) {
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mmapget.keys)
+  // @@protoc_insertion_point(field_add:client.command_mmapget.keys)
 }
 #if LANG_CXX11
 inline void command_mmapget::add_keys(::std::string&& value) {
   keys_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mmapget.keys)
+  // @@protoc_insertion_point(field_add:client.command_mmapget.keys)
 }
 #endif
 inline void command_mmapget::add_keys(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mmapget.keys)
+  // @@protoc_insertion_point(field_add_char:client.command_mmapget.keys)
 }
 inline void command_mmapget::add_keys(const char* value, size_t size) {
   keys_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mmapget.keys)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mmapget.keys)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mmapget::keys() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mmapget.keys)
+  // @@protoc_insertion_point(field_list:client.command_mmapget.keys)
   return keys_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mmapget::mutable_keys() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mmapget.keys)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mmapget.keys)
   return &keys_;
 }
 
@@ -19148,7 +18718,7 @@ command_mmapget::mutable_keys() {
 
 // command_mmapget_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_mmapget_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -19158,28 +18728,28 @@ inline void command_mmapget_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_mmapget_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_mmapget_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_mmapget_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_mmapget_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_mmapget_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_mmapget_reply.state)
+inline ::client::command_reply* command_mmapget_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_mmapget_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_mmapget_reply::mutable_state() {
+inline ::client::command_reply* command_mmapget_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_mmapget_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_mmapget_reply.state)
   return state_;
 }
-inline void command_mmapget_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_mmapget_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -19195,37 +18765,34 @@ inline void command_mmapget_reply::set_allocated_state(::protocol::command_reply
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_mmapget_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_mmapget_reply.state)
 }
 
-// repeated .protocol.VALUE values = 2;
-inline int command_mmapget_reply::values_size() const {
-  return values_.size();
+// repeated .data.VALUE data = 2;
+inline int command_mmapget_reply::data_size() const {
+  return data_.size();
 }
-inline void command_mmapget_reply::clear_values() {
-  values_.Clear();
+inline const ::data::VALUE& command_mmapget_reply::data(int index) const {
+  // @@protoc_insertion_point(field_get:client.command_mmapget_reply.data)
+  return data_.Get(index);
 }
-inline const ::protocol::VALUE& command_mmapget_reply::values(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mmapget_reply.values)
-  return values_.Get(index);
+inline ::data::VALUE* command_mmapget_reply::mutable_data(int index) {
+  // @@protoc_insertion_point(field_mutable:client.command_mmapget_reply.data)
+  return data_.Mutable(index);
 }
-inline ::protocol::VALUE* command_mmapget_reply::mutable_values(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mmapget_reply.values)
-  return values_.Mutable(index);
+inline ::data::VALUE* command_mmapget_reply::add_data() {
+  // @@protoc_insertion_point(field_add:client.command_mmapget_reply.data)
+  return data_.Add();
 }
-inline ::protocol::VALUE* command_mmapget_reply::add_values() {
-  // @@protoc_insertion_point(field_add:protocol.command_mmapget_reply.values)
-  return values_.Add();
+inline ::google::protobuf::RepeatedPtrField< ::data::VALUE >*
+command_mmapget_reply::mutable_data() {
+  // @@protoc_insertion_point(field_mutable_list:client.command_mmapget_reply.data)
+  return &data_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >*
-command_mmapget_reply::mutable_values() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mmapget_reply.values)
-  return &values_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >&
-command_mmapget_reply::values() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mmapget_reply.values)
-  return values_;
+inline const ::google::protobuf::RepeatedPtrField< ::data::VALUE >&
+command_mmapget_reply::data() const {
+  // @@protoc_insertion_point(field_list:client.command_mmapget_reply.data)
+  return data_;
 }
 
 // -------------------------------------------------------------------
@@ -19237,41 +18804,41 @@ inline void command_hmapget::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hmapget::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmapget.key)
+  // @@protoc_insertion_point(field_get:client.command_hmapget.key)
   return key_.GetNoArena();
 }
 inline void command_hmapget::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hmapget.key)
+  // @@protoc_insertion_point(field_set:client.command_hmapget.key)
 }
 #if LANG_CXX11
 inline void command_hmapget::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hmapget.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hmapget.key)
 }
 #endif
 inline void command_hmapget::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmapget.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hmapget.key)
 }
 inline void command_hmapget::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmapget.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmapget.key)
 }
 inline ::std::string* command_hmapget::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmapget.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hmapget.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hmapget::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmapget.key)
+  // @@protoc_insertion_point(field_release:client.command_hmapget.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -19282,7 +18849,7 @@ inline void command_hmapget::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmapget.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmapget.key)
 }
 
 // string field = 2;
@@ -19290,41 +18857,41 @@ inline void command_hmapget::clear_field() {
   field_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hmapget::field() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmapget.field)
+  // @@protoc_insertion_point(field_get:client.command_hmapget.field)
   return field_.GetNoArena();
 }
 inline void command_hmapget::set_field(const ::std::string& value) {
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hmapget.field)
+  // @@protoc_insertion_point(field_set:client.command_hmapget.field)
 }
 #if LANG_CXX11
 inline void command_hmapget::set_field(::std::string&& value) {
   
   field_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hmapget.field)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hmapget.field)
 }
 #endif
 inline void command_hmapget::set_field(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmapget.field)
+  // @@protoc_insertion_point(field_set_char:client.command_hmapget.field)
 }
 inline void command_hmapget::set_field(const char* value, size_t size) {
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmapget.field)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmapget.field)
 }
 inline ::std::string* command_hmapget::mutable_field() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmapget.field)
+  // @@protoc_insertion_point(field_mutable:client.command_hmapget.field)
   return field_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hmapget::release_field() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmapget.field)
+  // @@protoc_insertion_point(field_release:client.command_hmapget.field)
   
   return field_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -19335,14 +18902,14 @@ inline void command_hmapget::set_allocated_field(::std::string* field) {
     
   }
   field_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), field);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmapget.field)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmapget.field)
 }
 
 // -------------------------------------------------------------------
 
 // command_hmapget_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_hmapget_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -19352,28 +18919,28 @@ inline void command_hmapget_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_hmapget_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_hmapget_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_hmapget_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_hmapget_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_hmapget_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmapget_reply.state)
+inline ::client::command_reply* command_hmapget_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_hmapget_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_hmapget_reply::mutable_state() {
+inline ::client::command_reply* command_hmapget_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmapget_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_hmapget_reply.state)
   return state_;
 }
-inline void command_hmapget_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_hmapget_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -19389,57 +18956,51 @@ inline void command_hmapget_reply::set_allocated_state(::protocol::command_reply
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmapget_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmapget_reply.state)
 }
 
-// .protocol.VALUE values = 2;
-inline bool command_hmapget_reply::has_values() const {
-  return this != internal_default_instance() && values_ != NULL;
+// .data.VALUE data = 2;
+inline bool command_hmapget_reply::has_data() const {
+  return this != internal_default_instance() && data_ != NULL;
 }
-inline void command_hmapget_reply::clear_values() {
-  if (GetArenaNoVirtual() == NULL && values_ != NULL) {
-    delete values_;
-  }
-  values_ = NULL;
+inline const ::data::VALUE& command_hmapget_reply::data() const {
+  const ::data::VALUE* p = data_;
+  // @@protoc_insertion_point(field_get:client.command_hmapget_reply.data)
+  return p != NULL ? *p : *reinterpret_cast<const ::data::VALUE*>(
+      &::data::_VALUE_default_instance_);
 }
-inline const ::protocol::VALUE& command_hmapget_reply::values() const {
-  const ::protocol::VALUE* p = values_;
-  // @@protoc_insertion_point(field_get:protocol.command_hmapget_reply.values)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::VALUE*>(
-      &::protocol::_VALUE_default_instance_);
-}
-inline ::protocol::VALUE* command_hmapget_reply::release_values() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmapget_reply.values)
+inline ::data::VALUE* command_hmapget_reply::release_data() {
+  // @@protoc_insertion_point(field_release:client.command_hmapget_reply.data)
   
-  ::protocol::VALUE* temp = values_;
-  values_ = NULL;
+  ::data::VALUE* temp = data_;
+  data_ = NULL;
   return temp;
 }
-inline ::protocol::VALUE* command_hmapget_reply::mutable_values() {
+inline ::data::VALUE* command_hmapget_reply::mutable_data() {
   
-  if (values_ == NULL) {
-    values_ = new ::protocol::VALUE;
+  if (data_ == NULL) {
+    data_ = new ::data::VALUE;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmapget_reply.values)
-  return values_;
+  // @@protoc_insertion_point(field_mutable:client.command_hmapget_reply.data)
+  return data_;
 }
-inline void command_hmapget_reply::set_allocated_values(::protocol::VALUE* values) {
+inline void command_hmapget_reply::set_allocated_data(::data::VALUE* data) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
-    delete values_;
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(data_);
   }
-  if (values) {
+  if (data) {
     ::google::protobuf::Arena* submessage_arena = NULL;
     if (message_arena != submessage_arena) {
-      values = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, values, submessage_arena);
+      data = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, data, submessage_arena);
     }
     
   } else {
     
   }
-  values_ = values;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmapget_reply.values)
+  data_ = data;
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmapget_reply.data)
 }
 
 // -------------------------------------------------------------------
@@ -19451,41 +19012,41 @@ inline void command_hmmapget::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hmmapget::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmmapget.key)
+  // @@protoc_insertion_point(field_get:client.command_hmmapget.key)
   return key_.GetNoArena();
 }
 inline void command_hmmapget::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hmmapget.key)
+  // @@protoc_insertion_point(field_set:client.command_hmmapget.key)
 }
 #if LANG_CXX11
 inline void command_hmmapget::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hmmapget.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hmmapget.key)
 }
 #endif
 inline void command_hmmapget::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmmapget.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hmmapget.key)
 }
 inline void command_hmmapget::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmmapget.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmmapget.key)
 }
 inline ::std::string* command_hmmapget::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmmapget.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hmmapget.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hmmapget::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmmapget.key)
+  // @@protoc_insertion_point(field_release:client.command_hmmapget.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -19496,7 +19057,7 @@ inline void command_hmmapget::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmmapget.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmmapget.key)
 }
 
 // repeated string fields = 2;
@@ -19507,64 +19068,64 @@ inline void command_hmmapget::clear_fields() {
   fields_.Clear();
 }
 inline const ::std::string& command_hmmapget::fields(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmmapget.fields)
+  // @@protoc_insertion_point(field_get:client.command_hmmapget.fields)
   return fields_.Get(index);
 }
 inline ::std::string* command_hmmapget::mutable_fields(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmmapget.fields)
+  // @@protoc_insertion_point(field_mutable:client.command_hmmapget.fields)
   return fields_.Mutable(index);
 }
 inline void command_hmmapget::set_fields(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_hmmapget.fields)
+  // @@protoc_insertion_point(field_set:client.command_hmmapget.fields)
   fields_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_hmmapget::set_fields(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_hmmapget.fields)
+  // @@protoc_insertion_point(field_set:client.command_hmmapget.fields)
   fields_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_hmmapget::set_fields(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmmapget.fields)
+  // @@protoc_insertion_point(field_set_char:client.command_hmmapget.fields)
 }
 inline void command_hmmapget::set_fields(int index, const char* value, size_t size) {
   fields_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmmapget.fields)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmmapget.fields)
 }
 inline ::std::string* command_hmmapget::add_fields() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_hmmapget.fields)
+  // @@protoc_insertion_point(field_add_mutable:client.command_hmmapget.fields)
   return fields_.Add();
 }
 inline void command_hmmapget::add_fields(const ::std::string& value) {
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_hmmapget.fields)
+  // @@protoc_insertion_point(field_add:client.command_hmmapget.fields)
 }
 #if LANG_CXX11
 inline void command_hmmapget::add_fields(::std::string&& value) {
   fields_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_hmmapget.fields)
+  // @@protoc_insertion_point(field_add:client.command_hmmapget.fields)
 }
 #endif
 inline void command_hmmapget::add_fields(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_hmmapget.fields)
+  // @@protoc_insertion_point(field_add_char:client.command_hmmapget.fields)
 }
 inline void command_hmmapget::add_fields(const char* value, size_t size) {
   fields_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_hmmapget.fields)
+  // @@protoc_insertion_point(field_add_pointer:client.command_hmmapget.fields)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_hmmapget::fields() const {
-  // @@protoc_insertion_point(field_list:protocol.command_hmmapget.fields)
+  // @@protoc_insertion_point(field_list:client.command_hmmapget.fields)
   return fields_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_hmmapget::mutable_fields() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_hmmapget.fields)
+  // @@protoc_insertion_point(field_mutable_list:client.command_hmmapget.fields)
   return &fields_;
 }
 
@@ -19572,7 +19133,7 @@ command_hmmapget::mutable_fields() {
 
 // command_hmmapget_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_hmmapget_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -19582,28 +19143,28 @@ inline void command_hmmapget_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_hmmapget_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_hmmapget_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_hmmapget_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_hmmapget_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_hmmapget_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmmapget_reply.state)
+inline ::client::command_reply* command_hmmapget_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_hmmapget_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_hmmapget_reply::mutable_state() {
+inline ::client::command_reply* command_hmmapget_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmmapget_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_hmmapget_reply.state)
   return state_;
 }
-inline void command_hmmapget_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_hmmapget_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -19619,37 +19180,34 @@ inline void command_hmmapget_reply::set_allocated_state(::protocol::command_repl
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmmapget_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmmapget_reply.state)
 }
 
-// repeated .protocol.VALUE values = 2;
-inline int command_hmmapget_reply::values_size() const {
-  return values_.size();
+// repeated .data.VALUE data = 2;
+inline int command_hmmapget_reply::data_size() const {
+  return data_.size();
 }
-inline void command_hmmapget_reply::clear_values() {
-  values_.Clear();
+inline const ::data::VALUE& command_hmmapget_reply::data(int index) const {
+  // @@protoc_insertion_point(field_get:client.command_hmmapget_reply.data)
+  return data_.Get(index);
 }
-inline const ::protocol::VALUE& command_hmmapget_reply::values(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmmapget_reply.values)
-  return values_.Get(index);
+inline ::data::VALUE* command_hmmapget_reply::mutable_data(int index) {
+  // @@protoc_insertion_point(field_mutable:client.command_hmmapget_reply.data)
+  return data_.Mutable(index);
 }
-inline ::protocol::VALUE* command_hmmapget_reply::mutable_values(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmmapget_reply.values)
-  return values_.Mutable(index);
+inline ::data::VALUE* command_hmmapget_reply::add_data() {
+  // @@protoc_insertion_point(field_add:client.command_hmmapget_reply.data)
+  return data_.Add();
 }
-inline ::protocol::VALUE* command_hmmapget_reply::add_values() {
-  // @@protoc_insertion_point(field_add:protocol.command_hmmapget_reply.values)
-  return values_.Add();
+inline ::google::protobuf::RepeatedPtrField< ::data::VALUE >*
+command_hmmapget_reply::mutable_data() {
+  // @@protoc_insertion_point(field_mutable_list:client.command_hmmapget_reply.data)
+  return &data_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >*
-command_hmmapget_reply::mutable_values() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_hmmapget_reply.values)
-  return &values_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::protocol::VALUE >&
-command_hmmapget_reply::values() const {
-  // @@protoc_insertion_point(field_list:protocol.command_hmmapget_reply.values)
-  return values_;
+inline const ::google::protobuf::RepeatedPtrField< ::data::VALUE >&
+command_hmmapget_reply::data() const {
+  // @@protoc_insertion_point(field_list:client.command_hmmapget_reply.data)
+  return data_;
 }
 
 // -------------------------------------------------------------------
@@ -19664,64 +19222,64 @@ inline void command_mhmmapget::clear_keys() {
   keys_.Clear();
 }
 inline const ::std::string& command_mhmmapget::keys(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmmapget.keys)
+  // @@protoc_insertion_point(field_get:client.command_mhmmapget.keys)
   return keys_.Get(index);
 }
 inline ::std::string* command_mhmmapget::mutable_keys(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmmapget.keys)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmmapget.keys)
   return keys_.Mutable(index);
 }
 inline void command_mhmmapget::set_keys(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmmapget.keys)
+  // @@protoc_insertion_point(field_set:client.command_mhmmapget.keys)
   keys_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mhmmapget::set_keys(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmmapget.keys)
+  // @@protoc_insertion_point(field_set:client.command_mhmmapget.keys)
   keys_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mhmmapget::set_keys(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mhmmapget.keys)
+  // @@protoc_insertion_point(field_set_char:client.command_mhmmapget.keys)
 }
 inline void command_mhmmapget::set_keys(int index, const char* value, size_t size) {
   keys_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mhmmapget.keys)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mhmmapget.keys)
 }
 inline ::std::string* command_mhmmapget::add_keys() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mhmmapget.keys)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mhmmapget.keys)
   return keys_.Add();
 }
 inline void command_mhmmapget::add_keys(const ::std::string& value) {
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mhmmapget.keys)
+  // @@protoc_insertion_point(field_add:client.command_mhmmapget.keys)
 }
 #if LANG_CXX11
 inline void command_mhmmapget::add_keys(::std::string&& value) {
   keys_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mhmmapget.keys)
+  // @@protoc_insertion_point(field_add:client.command_mhmmapget.keys)
 }
 #endif
 inline void command_mhmmapget::add_keys(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mhmmapget.keys)
+  // @@protoc_insertion_point(field_add_char:client.command_mhmmapget.keys)
 }
 inline void command_mhmmapget::add_keys(const char* value, size_t size) {
   keys_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mhmmapget.keys)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mhmmapget.keys)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mhmmapget::keys() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mhmmapget.keys)
+  // @@protoc_insertion_point(field_list:client.command_mhmmapget.keys)
   return keys_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mhmmapget::mutable_keys() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mhmmapget.keys)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mhmmapget.keys)
   return &keys_;
 }
 
@@ -19733,64 +19291,64 @@ inline void command_mhmmapget::clear_fields() {
   fields_.Clear();
 }
 inline const ::std::string& command_mhmmapget::fields(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmmapget.fields)
+  // @@protoc_insertion_point(field_get:client.command_mhmmapget.fields)
   return fields_.Get(index);
 }
 inline ::std::string* command_mhmmapget::mutable_fields(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmmapget.fields)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmmapget.fields)
   return fields_.Mutable(index);
 }
 inline void command_mhmmapget::set_fields(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmmapget.fields)
+  // @@protoc_insertion_point(field_set:client.command_mhmmapget.fields)
   fields_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mhmmapget::set_fields(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmmapget.fields)
+  // @@protoc_insertion_point(field_set:client.command_mhmmapget.fields)
   fields_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mhmmapget::set_fields(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mhmmapget.fields)
+  // @@protoc_insertion_point(field_set_char:client.command_mhmmapget.fields)
 }
 inline void command_mhmmapget::set_fields(int index, const char* value, size_t size) {
   fields_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mhmmapget.fields)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mhmmapget.fields)
 }
 inline ::std::string* command_mhmmapget::add_fields() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mhmmapget.fields)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mhmmapget.fields)
   return fields_.Add();
 }
 inline void command_mhmmapget::add_fields(const ::std::string& value) {
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mhmmapget.fields)
+  // @@protoc_insertion_point(field_add:client.command_mhmmapget.fields)
 }
 #if LANG_CXX11
 inline void command_mhmmapget::add_fields(::std::string&& value) {
   fields_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mhmmapget.fields)
+  // @@protoc_insertion_point(field_add:client.command_mhmmapget.fields)
 }
 #endif
 inline void command_mhmmapget::add_fields(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mhmmapget.fields)
+  // @@protoc_insertion_point(field_add_char:client.command_mhmmapget.fields)
 }
 inline void command_mhmmapget::add_fields(const char* value, size_t size) {
   fields_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mhmmapget.fields)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mhmmapget.fields)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mhmmapget::fields() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mhmmapget.fields)
+  // @@protoc_insertion_point(field_list:client.command_mhmmapget.fields)
   return fields_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mhmmapget::mutable_fields() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mhmmapget.fields)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mhmmapget.fields)
   return &fields_;
 }
 
@@ -19798,7 +19356,7 @@ command_mhmmapget::mutable_fields() {
 
 // command_mhmmapget_reply
 
-// .protocol.command_reply state = 1;
+// .client.command_reply state = 1;
 inline bool command_mhmmapget_reply::has_state() const {
   return this != internal_default_instance() && state_ != NULL;
 }
@@ -19808,28 +19366,28 @@ inline void command_mhmmapget_reply::clear_state() {
   }
   state_ = NULL;
 }
-inline const ::protocol::command_reply& command_mhmmapget_reply::state() const {
-  const ::protocol::command_reply* p = state_;
-  // @@protoc_insertion_point(field_get:protocol.command_mhmmapget_reply.state)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::command_reply*>(
-      &::protocol::_command_reply_default_instance_);
+inline const ::client::command_reply& command_mhmmapget_reply::state() const {
+  const ::client::command_reply* p = state_;
+  // @@protoc_insertion_point(field_get:client.command_mhmmapget_reply.state)
+  return p != NULL ? *p : *reinterpret_cast<const ::client::command_reply*>(
+      &::client::_command_reply_default_instance_);
 }
-inline ::protocol::command_reply* command_mhmmapget_reply::release_state() {
-  // @@protoc_insertion_point(field_release:protocol.command_mhmmapget_reply.state)
+inline ::client::command_reply* command_mhmmapget_reply::release_state() {
+  // @@protoc_insertion_point(field_release:client.command_mhmmapget_reply.state)
   
-  ::protocol::command_reply* temp = state_;
+  ::client::command_reply* temp = state_;
   state_ = NULL;
   return temp;
 }
-inline ::protocol::command_reply* command_mhmmapget_reply::mutable_state() {
+inline ::client::command_reply* command_mhmmapget_reply::mutable_state() {
   
   if (state_ == NULL) {
-    state_ = new ::protocol::command_reply;
+    state_ = new ::client::command_reply;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmmapget_reply.state)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmmapget_reply.state)
   return state_;
 }
-inline void command_mhmmapget_reply::set_allocated_state(::protocol::command_reply* state) {
+inline void command_mhmmapget_reply::set_allocated_state(::client::command_reply* state) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete state_;
@@ -19845,37 +19403,37 @@ inline void command_mhmmapget_reply::set_allocated_state(::protocol::command_rep
     
   }
   state_ = state;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_mhmmapget_reply.state)
+  // @@protoc_insertion_point(field_set_allocated:client.command_mhmmapget_reply.state)
 }
 
-// repeated .protocol.values_type values = 2;
-inline int command_mhmmapget_reply::values_size() const {
-  return values_.size();
+// repeated .client.values_type data = 2;
+inline int command_mhmmapget_reply::data_size() const {
+  return data_.size();
 }
-inline void command_mhmmapget_reply::clear_values() {
-  values_.Clear();
+inline void command_mhmmapget_reply::clear_data() {
+  data_.Clear();
 }
-inline const ::protocol::values_type& command_mhmmapget_reply::values(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmmapget_reply.values)
-  return values_.Get(index);
+inline const ::client::values_type& command_mhmmapget_reply::data(int index) const {
+  // @@protoc_insertion_point(field_get:client.command_mhmmapget_reply.data)
+  return data_.Get(index);
 }
-inline ::protocol::values_type* command_mhmmapget_reply::mutable_values(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmmapget_reply.values)
-  return values_.Mutable(index);
+inline ::client::values_type* command_mhmmapget_reply::mutable_data(int index) {
+  // @@protoc_insertion_point(field_mutable:client.command_mhmmapget_reply.data)
+  return data_.Mutable(index);
 }
-inline ::protocol::values_type* command_mhmmapget_reply::add_values() {
-  // @@protoc_insertion_point(field_add:protocol.command_mhmmapget_reply.values)
-  return values_.Add();
+inline ::client::values_type* command_mhmmapget_reply::add_data() {
+  // @@protoc_insertion_point(field_add:client.command_mhmmapget_reply.data)
+  return data_.Add();
 }
-inline ::google::protobuf::RepeatedPtrField< ::protocol::values_type >*
-command_mhmmapget_reply::mutable_values() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mhmmapget_reply.values)
-  return &values_;
+inline ::google::protobuf::RepeatedPtrField< ::client::values_type >*
+command_mhmmapget_reply::mutable_data() {
+  // @@protoc_insertion_point(field_mutable_list:client.command_mhmmapget_reply.data)
+  return &data_;
 }
-inline const ::google::protobuf::RepeatedPtrField< ::protocol::values_type >&
-command_mhmmapget_reply::values() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mhmmapget_reply.values)
-  return values_;
+inline const ::google::protobuf::RepeatedPtrField< ::client::values_type >&
+command_mhmmapget_reply::data() const {
+  // @@protoc_insertion_point(field_list:client.command_mhmmapget_reply.data)
+  return data_;
 }
 
 // -------------------------------------------------------------------
@@ -19887,41 +19445,41 @@ inline void command_mapset::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_mapset::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_mapset.key)
+  // @@protoc_insertion_point(field_get:client.command_mapset.key)
   return key_.GetNoArena();
 }
 inline void command_mapset::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_mapset.key)
+  // @@protoc_insertion_point(field_set:client.command_mapset.key)
 }
 #if LANG_CXX11
 inline void command_mapset::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_mapset.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_mapset.key)
 }
 #endif
 inline void command_mapset::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_mapset.key)
+  // @@protoc_insertion_point(field_set_char:client.command_mapset.key)
 }
 inline void command_mapset::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mapset.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mapset.key)
 }
 inline ::std::string* command_mapset::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_mapset.key)
+  // @@protoc_insertion_point(field_mutable:client.command_mapset.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_mapset::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_mapset.key)
+  // @@protoc_insertion_point(field_release:client.command_mapset.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -19932,44 +19490,38 @@ inline void command_mapset::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_mapset.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_mapset.key)
 }
 
-// .protocol.VALUE value = 2;
+// .data.VALUE value = 2;
 inline bool command_mapset::has_value() const {
   return this != internal_default_instance() && value_ != NULL;
 }
-inline void command_mapset::clear_value() {
-  if (GetArenaNoVirtual() == NULL && value_ != NULL) {
-    delete value_;
-  }
-  value_ = NULL;
+inline const ::data::VALUE& command_mapset::value() const {
+  const ::data::VALUE* p = value_;
+  // @@protoc_insertion_point(field_get:client.command_mapset.value)
+  return p != NULL ? *p : *reinterpret_cast<const ::data::VALUE*>(
+      &::data::_VALUE_default_instance_);
 }
-inline const ::protocol::VALUE& command_mapset::value() const {
-  const ::protocol::VALUE* p = value_;
-  // @@protoc_insertion_point(field_get:protocol.command_mapset.value)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::VALUE*>(
-      &::protocol::_VALUE_default_instance_);
-}
-inline ::protocol::VALUE* command_mapset::release_value() {
-  // @@protoc_insertion_point(field_release:protocol.command_mapset.value)
+inline ::data::VALUE* command_mapset::release_value() {
+  // @@protoc_insertion_point(field_release:client.command_mapset.value)
   
-  ::protocol::VALUE* temp = value_;
+  ::data::VALUE* temp = value_;
   value_ = NULL;
   return temp;
 }
-inline ::protocol::VALUE* command_mapset::mutable_value() {
+inline ::data::VALUE* command_mapset::mutable_value() {
   
   if (value_ == NULL) {
-    value_ = new ::protocol::VALUE;
+    value_ = new ::data::VALUE;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_mapset.value)
+  // @@protoc_insertion_point(field_mutable:client.command_mapset.value)
   return value_;
 }
-inline void command_mapset::set_allocated_value(::protocol::VALUE* value) {
+inline void command_mapset::set_allocated_value(::data::VALUE* value) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
-    delete value_;
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(value_);
   }
   if (value) {
     ::google::protobuf::Arena* submessage_arena = NULL;
@@ -19982,7 +19534,7 @@ inline void command_mapset::set_allocated_value(::protocol::VALUE* value) {
     
   }
   value_ = value;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_mapset.value)
+  // @@protoc_insertion_point(field_set_allocated:client.command_mapset.value)
 }
 
 // -------------------------------------------------------------------
@@ -19991,21 +19543,18 @@ inline void command_mapset::set_allocated_value(::protocol::VALUE* value) {
 
 // command_mmapset
 
-// map<string, .protocol.VALUE> kvs = 1;
+// map<string, .data.VALUE> kvs = 1;
 inline int command_mmapset::kvs_size() const {
   return kvs_.size();
 }
-inline void command_mmapset::clear_kvs() {
-  kvs_.Clear();
-}
-inline const ::google::protobuf::Map< ::std::string, ::protocol::VALUE >&
+inline const ::google::protobuf::Map< ::std::string, ::data::VALUE >&
 command_mmapset::kvs() const {
-  // @@protoc_insertion_point(field_map:protocol.command_mmapset.kvs)
+  // @@protoc_insertion_point(field_map:client.command_mmapset.kvs)
   return kvs_.GetMap();
 }
-inline ::google::protobuf::Map< ::std::string, ::protocol::VALUE >*
+inline ::google::protobuf::Map< ::std::string, ::data::VALUE >*
 command_mmapset::mutable_kvs() {
-  // @@protoc_insertion_point(field_mutable_map:protocol.command_mmapset.kvs)
+  // @@protoc_insertion_point(field_mutable_map:client.command_mmapset.kvs)
   return kvs_.MutableMap();
 }
 
@@ -20018,41 +19567,41 @@ inline void command_hmapset::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hmapset::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmapset.key)
+  // @@protoc_insertion_point(field_get:client.command_hmapset.key)
   return key_.GetNoArena();
 }
 inline void command_hmapset::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hmapset.key)
+  // @@protoc_insertion_point(field_set:client.command_hmapset.key)
 }
 #if LANG_CXX11
 inline void command_hmapset::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hmapset.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hmapset.key)
 }
 #endif
 inline void command_hmapset::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmapset.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hmapset.key)
 }
 inline void command_hmapset::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmapset.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmapset.key)
 }
 inline ::std::string* command_hmapset::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmapset.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hmapset.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hmapset::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmapset.key)
+  // @@protoc_insertion_point(field_release:client.command_hmapset.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -20063,7 +19612,7 @@ inline void command_hmapset::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmapset.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmapset.key)
 }
 
 // string field = 2;
@@ -20071,41 +19620,41 @@ inline void command_hmapset::clear_field() {
   field_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hmapset::field() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmapset.field)
+  // @@protoc_insertion_point(field_get:client.command_hmapset.field)
   return field_.GetNoArena();
 }
 inline void command_hmapset::set_field(const ::std::string& value) {
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hmapset.field)
+  // @@protoc_insertion_point(field_set:client.command_hmapset.field)
 }
 #if LANG_CXX11
 inline void command_hmapset::set_field(::std::string&& value) {
   
   field_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hmapset.field)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hmapset.field)
 }
 #endif
 inline void command_hmapset::set_field(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmapset.field)
+  // @@protoc_insertion_point(field_set_char:client.command_hmapset.field)
 }
 inline void command_hmapset::set_field(const char* value, size_t size) {
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmapset.field)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmapset.field)
 }
 inline ::std::string* command_hmapset::mutable_field() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmapset.field)
+  // @@protoc_insertion_point(field_mutable:client.command_hmapset.field)
   return field_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hmapset::release_field() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmapset.field)
+  // @@protoc_insertion_point(field_release:client.command_hmapset.field)
   
   return field_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -20116,44 +19665,38 @@ inline void command_hmapset::set_allocated_field(::std::string* field) {
     
   }
   field_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), field);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmapset.field)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmapset.field)
 }
 
-// .protocol.VALUE value = 3;
+// .data.VALUE value = 3;
 inline bool command_hmapset::has_value() const {
   return this != internal_default_instance() && value_ != NULL;
 }
-inline void command_hmapset::clear_value() {
-  if (GetArenaNoVirtual() == NULL && value_ != NULL) {
-    delete value_;
-  }
-  value_ = NULL;
+inline const ::data::VALUE& command_hmapset::value() const {
+  const ::data::VALUE* p = value_;
+  // @@protoc_insertion_point(field_get:client.command_hmapset.value)
+  return p != NULL ? *p : *reinterpret_cast<const ::data::VALUE*>(
+      &::data::_VALUE_default_instance_);
 }
-inline const ::protocol::VALUE& command_hmapset::value() const {
-  const ::protocol::VALUE* p = value_;
-  // @@protoc_insertion_point(field_get:protocol.command_hmapset.value)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::VALUE*>(
-      &::protocol::_VALUE_default_instance_);
-}
-inline ::protocol::VALUE* command_hmapset::release_value() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmapset.value)
+inline ::data::VALUE* command_hmapset::release_value() {
+  // @@protoc_insertion_point(field_release:client.command_hmapset.value)
   
-  ::protocol::VALUE* temp = value_;
+  ::data::VALUE* temp = value_;
   value_ = NULL;
   return temp;
 }
-inline ::protocol::VALUE* command_hmapset::mutable_value() {
+inline ::data::VALUE* command_hmapset::mutable_value() {
   
   if (value_ == NULL) {
-    value_ = new ::protocol::VALUE;
+    value_ = new ::data::VALUE;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmapset.value)
+  // @@protoc_insertion_point(field_mutable:client.command_hmapset.value)
   return value_;
 }
-inline void command_hmapset::set_allocated_value(::protocol::VALUE* value) {
+inline void command_hmapset::set_allocated_value(::data::VALUE* value) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
-    delete value_;
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(value_);
   }
   if (value) {
     ::google::protobuf::Arena* submessage_arena = NULL;
@@ -20166,7 +19709,7 @@ inline void command_hmapset::set_allocated_value(::protocol::VALUE* value) {
     
   }
   value_ = value;
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmapset.value)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmapset.value)
 }
 
 // -------------------------------------------------------------------
@@ -20180,41 +19723,41 @@ inline void command_hmmapset::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hmmapset::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmmapset.key)
+  // @@protoc_insertion_point(field_get:client.command_hmmapset.key)
   return key_.GetNoArena();
 }
 inline void command_hmmapset::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hmmapset.key)
+  // @@protoc_insertion_point(field_set:client.command_hmmapset.key)
 }
 #if LANG_CXX11
 inline void command_hmmapset::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hmmapset.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hmmapset.key)
 }
 #endif
 inline void command_hmmapset::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmmapset.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hmmapset.key)
 }
 inline void command_hmmapset::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmmapset.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmmapset.key)
 }
 inline ::std::string* command_hmmapset::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmmapset.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hmmapset.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hmmapset::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmmapset.key)
+  // @@protoc_insertion_point(field_release:client.command_hmmapset.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -20225,24 +19768,21 @@ inline void command_hmmapset::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmmapset.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmmapset.key)
 }
 
-// map<string, .protocol.VALUE> values = 2;
+// map<string, .data.VALUE> values = 2;
 inline int command_hmmapset::values_size() const {
   return values_.size();
 }
-inline void command_hmmapset::clear_values() {
-  values_.Clear();
-}
-inline const ::google::protobuf::Map< ::std::string, ::protocol::VALUE >&
+inline const ::google::protobuf::Map< ::std::string, ::data::VALUE >&
 command_hmmapset::values() const {
-  // @@protoc_insertion_point(field_map:protocol.command_hmmapset.values)
+  // @@protoc_insertion_point(field_map:client.command_hmmapset.values)
   return values_.GetMap();
 }
-inline ::google::protobuf::Map< ::std::string, ::protocol::VALUE >*
+inline ::google::protobuf::Map< ::std::string, ::data::VALUE >*
 command_hmmapset::mutable_values() {
-  // @@protoc_insertion_point(field_mutable_map:protocol.command_hmmapset.values)
+  // @@protoc_insertion_point(field_mutable_map:client.command_hmmapset.values)
   return values_.MutableMap();
 }
 
@@ -20260,82 +19800,79 @@ inline void command_mhmmapset::clear_fields() {
   fields_.Clear();
 }
 inline const ::std::string& command_mhmmapset::fields(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmmapset.fields)
+  // @@protoc_insertion_point(field_get:client.command_mhmmapset.fields)
   return fields_.Get(index);
 }
 inline ::std::string* command_mhmmapset::mutable_fields(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmmapset.fields)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmmapset.fields)
   return fields_.Mutable(index);
 }
 inline void command_mhmmapset::set_fields(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmmapset.fields)
+  // @@protoc_insertion_point(field_set:client.command_mhmmapset.fields)
   fields_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mhmmapset::set_fields(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmmapset.fields)
+  // @@protoc_insertion_point(field_set:client.command_mhmmapset.fields)
   fields_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mhmmapset::set_fields(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mhmmapset.fields)
+  // @@protoc_insertion_point(field_set_char:client.command_mhmmapset.fields)
 }
 inline void command_mhmmapset::set_fields(int index, const char* value, size_t size) {
   fields_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mhmmapset.fields)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mhmmapset.fields)
 }
 inline ::std::string* command_mhmmapset::add_fields() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mhmmapset.fields)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mhmmapset.fields)
   return fields_.Add();
 }
 inline void command_mhmmapset::add_fields(const ::std::string& value) {
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mhmmapset.fields)
+  // @@protoc_insertion_point(field_add:client.command_mhmmapset.fields)
 }
 #if LANG_CXX11
 inline void command_mhmmapset::add_fields(::std::string&& value) {
   fields_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mhmmapset.fields)
+  // @@protoc_insertion_point(field_add:client.command_mhmmapset.fields)
 }
 #endif
 inline void command_mhmmapset::add_fields(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   fields_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mhmmapset.fields)
+  // @@protoc_insertion_point(field_add_char:client.command_mhmmapset.fields)
 }
 inline void command_mhmmapset::add_fields(const char* value, size_t size) {
   fields_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mhmmapset.fields)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mhmmapset.fields)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mhmmapset::fields() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mhmmapset.fields)
+  // @@protoc_insertion_point(field_list:client.command_mhmmapset.fields)
   return fields_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mhmmapset::mutable_fields() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mhmmapset.fields)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mhmmapset.fields)
   return &fields_;
 }
 
-// map<string, .protocol.VALUE> values = 2;
+// map<string, .data.VALUE> values = 2;
 inline int command_mhmmapset::values_size() const {
   return values_.size();
 }
-inline void command_mhmmapset::clear_values() {
-  values_.Clear();
-}
-inline const ::google::protobuf::Map< ::std::string, ::protocol::VALUE >&
+inline const ::google::protobuf::Map< ::std::string, ::data::VALUE >&
 command_mhmmapset::values() const {
-  // @@protoc_insertion_point(field_map:protocol.command_mhmmapset.values)
+  // @@protoc_insertion_point(field_map:client.command_mhmmapset.values)
   return values_.GetMap();
 }
-inline ::google::protobuf::Map< ::std::string, ::protocol::VALUE >*
+inline ::google::protobuf::Map< ::std::string, ::data::VALUE >*
 command_mhmmapset::mutable_values() {
-  // @@protoc_insertion_point(field_mutable_map:protocol.command_mhmmapset.values)
+  // @@protoc_insertion_point(field_mutable_map:client.command_mhmmapset.values)
   return values_.MutableMap();
 }
 
@@ -20348,41 +19885,41 @@ inline void command_mapdel::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_mapdel::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_mapdel.key)
+  // @@protoc_insertion_point(field_get:client.command_mapdel.key)
   return key_.GetNoArena();
 }
 inline void command_mapdel::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_mapdel.key)
+  // @@protoc_insertion_point(field_set:client.command_mapdel.key)
 }
 #if LANG_CXX11
 inline void command_mapdel::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_mapdel.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_mapdel.key)
 }
 #endif
 inline void command_mapdel::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_mapdel.key)
+  // @@protoc_insertion_point(field_set_char:client.command_mapdel.key)
 }
 inline void command_mapdel::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mapdel.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mapdel.key)
 }
 inline ::std::string* command_mapdel::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_mapdel.key)
+  // @@protoc_insertion_point(field_mutable:client.command_mapdel.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_mapdel::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_mapdel.key)
+  // @@protoc_insertion_point(field_release:client.command_mapdel.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -20393,7 +19930,7 @@ inline void command_mapdel::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_mapdel.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_mapdel.key)
 }
 
 // repeated string mapkeys = 2;
@@ -20404,64 +19941,64 @@ inline void command_mapdel::clear_mapkeys() {
   mapkeys_.Clear();
 }
 inline const ::std::string& command_mapdel::mapkeys(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mapdel.mapkeys)
+  // @@protoc_insertion_point(field_get:client.command_mapdel.mapkeys)
   return mapkeys_.Get(index);
 }
 inline ::std::string* command_mapdel::mutable_mapkeys(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mapdel.mapkeys)
+  // @@protoc_insertion_point(field_mutable:client.command_mapdel.mapkeys)
   return mapkeys_.Mutable(index);
 }
 inline void command_mapdel::set_mapkeys(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mapdel.mapkeys)
+  // @@protoc_insertion_point(field_set:client.command_mapdel.mapkeys)
   mapkeys_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mapdel::set_mapkeys(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mapdel.mapkeys)
+  // @@protoc_insertion_point(field_set:client.command_mapdel.mapkeys)
   mapkeys_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mapdel::set_mapkeys(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   mapkeys_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mapdel.mapkeys)
+  // @@protoc_insertion_point(field_set_char:client.command_mapdel.mapkeys)
 }
 inline void command_mapdel::set_mapkeys(int index, const char* value, size_t size) {
   mapkeys_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mapdel.mapkeys)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mapdel.mapkeys)
 }
 inline ::std::string* command_mapdel::add_mapkeys() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mapdel.mapkeys)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mapdel.mapkeys)
   return mapkeys_.Add();
 }
 inline void command_mapdel::add_mapkeys(const ::std::string& value) {
   mapkeys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mapdel.mapkeys)
+  // @@protoc_insertion_point(field_add:client.command_mapdel.mapkeys)
 }
 #if LANG_CXX11
 inline void command_mapdel::add_mapkeys(::std::string&& value) {
   mapkeys_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mapdel.mapkeys)
+  // @@protoc_insertion_point(field_add:client.command_mapdel.mapkeys)
 }
 #endif
 inline void command_mapdel::add_mapkeys(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   mapkeys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mapdel.mapkeys)
+  // @@protoc_insertion_point(field_add_char:client.command_mapdel.mapkeys)
 }
 inline void command_mapdel::add_mapkeys(const char* value, size_t size) {
   mapkeys_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mapdel.mapkeys)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mapdel.mapkeys)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mapdel::mapkeys() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mapdel.mapkeys)
+  // @@protoc_insertion_point(field_list:client.command_mapdel.mapkeys)
   return mapkeys_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mapdel::mutable_mapkeys() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mapdel.mapkeys)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mapdel.mapkeys)
   return &mapkeys_;
 }
 
@@ -20477,64 +20014,64 @@ inline void command_mmapdel::clear_keys() {
   keys_.Clear();
 }
 inline const ::std::string& command_mmapdel::keys(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mmapdel.keys)
+  // @@protoc_insertion_point(field_get:client.command_mmapdel.keys)
   return keys_.Get(index);
 }
 inline ::std::string* command_mmapdel::mutable_keys(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mmapdel.keys)
+  // @@protoc_insertion_point(field_mutable:client.command_mmapdel.keys)
   return keys_.Mutable(index);
 }
 inline void command_mmapdel::set_keys(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mmapdel.keys)
+  // @@protoc_insertion_point(field_set:client.command_mmapdel.keys)
   keys_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mmapdel::set_keys(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mmapdel.keys)
+  // @@protoc_insertion_point(field_set:client.command_mmapdel.keys)
   keys_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mmapdel::set_keys(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mmapdel.keys)
+  // @@protoc_insertion_point(field_set_char:client.command_mmapdel.keys)
 }
 inline void command_mmapdel::set_keys(int index, const char* value, size_t size) {
   keys_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mmapdel.keys)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mmapdel.keys)
 }
 inline ::std::string* command_mmapdel::add_keys() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mmapdel.keys)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mmapdel.keys)
   return keys_.Add();
 }
 inline void command_mmapdel::add_keys(const ::std::string& value) {
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mmapdel.keys)
+  // @@protoc_insertion_point(field_add:client.command_mmapdel.keys)
 }
 #if LANG_CXX11
 inline void command_mmapdel::add_keys(::std::string&& value) {
   keys_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mmapdel.keys)
+  // @@protoc_insertion_point(field_add:client.command_mmapdel.keys)
 }
 #endif
 inline void command_mmapdel::add_keys(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   keys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mmapdel.keys)
+  // @@protoc_insertion_point(field_add_char:client.command_mmapdel.keys)
 }
 inline void command_mmapdel::add_keys(const char* value, size_t size) {
   keys_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mmapdel.keys)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mmapdel.keys)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mmapdel::keys() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mmapdel.keys)
+  // @@protoc_insertion_point(field_list:client.command_mmapdel.keys)
   return keys_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mmapdel::mutable_keys() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mmapdel.keys)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mmapdel.keys)
   return &keys_;
 }
 
@@ -20546,64 +20083,64 @@ inline void command_mmapdel::clear_mapkeys() {
   mapkeys_.Clear();
 }
 inline const ::std::string& command_mmapdel::mapkeys(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mmapdel.mapkeys)
+  // @@protoc_insertion_point(field_get:client.command_mmapdel.mapkeys)
   return mapkeys_.Get(index);
 }
 inline ::std::string* command_mmapdel::mutable_mapkeys(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mmapdel.mapkeys)
+  // @@protoc_insertion_point(field_mutable:client.command_mmapdel.mapkeys)
   return mapkeys_.Mutable(index);
 }
 inline void command_mmapdel::set_mapkeys(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mmapdel.mapkeys)
+  // @@protoc_insertion_point(field_set:client.command_mmapdel.mapkeys)
   mapkeys_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mmapdel::set_mapkeys(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mmapdel.mapkeys)
+  // @@protoc_insertion_point(field_set:client.command_mmapdel.mapkeys)
   mapkeys_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mmapdel::set_mapkeys(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   mapkeys_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mmapdel.mapkeys)
+  // @@protoc_insertion_point(field_set_char:client.command_mmapdel.mapkeys)
 }
 inline void command_mmapdel::set_mapkeys(int index, const char* value, size_t size) {
   mapkeys_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mmapdel.mapkeys)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mmapdel.mapkeys)
 }
 inline ::std::string* command_mmapdel::add_mapkeys() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mmapdel.mapkeys)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mmapdel.mapkeys)
   return mapkeys_.Add();
 }
 inline void command_mmapdel::add_mapkeys(const ::std::string& value) {
   mapkeys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mmapdel.mapkeys)
+  // @@protoc_insertion_point(field_add:client.command_mmapdel.mapkeys)
 }
 #if LANG_CXX11
 inline void command_mmapdel::add_mapkeys(::std::string&& value) {
   mapkeys_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mmapdel.mapkeys)
+  // @@protoc_insertion_point(field_add:client.command_mmapdel.mapkeys)
 }
 #endif
 inline void command_mmapdel::add_mapkeys(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   mapkeys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mmapdel.mapkeys)
+  // @@protoc_insertion_point(field_add_char:client.command_mmapdel.mapkeys)
 }
 inline void command_mmapdel::add_mapkeys(const char* value, size_t size) {
   mapkeys_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mmapdel.mapkeys)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mmapdel.mapkeys)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mmapdel::mapkeys() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mmapdel.mapkeys)
+  // @@protoc_insertion_point(field_list:client.command_mmapdel.mapkeys)
   return mapkeys_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mmapdel::mutable_mapkeys() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mmapdel.mapkeys)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mmapdel.mapkeys)
   return &mapkeys_;
 }
 
@@ -20616,41 +20153,41 @@ inline void command_hmapdel::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hmapdel::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmapdel.key)
+  // @@protoc_insertion_point(field_get:client.command_hmapdel.key)
   return key_.GetNoArena();
 }
 inline void command_hmapdel::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hmapdel.key)
+  // @@protoc_insertion_point(field_set:client.command_hmapdel.key)
 }
 #if LANG_CXX11
 inline void command_hmapdel::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hmapdel.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hmapdel.key)
 }
 #endif
 inline void command_hmapdel::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmapdel.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hmapdel.key)
 }
 inline void command_hmapdel::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmapdel.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmapdel.key)
 }
 inline ::std::string* command_hmapdel::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmapdel.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hmapdel.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hmapdel::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmapdel.key)
+  // @@protoc_insertion_point(field_release:client.command_hmapdel.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -20661,7 +20198,7 @@ inline void command_hmapdel::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmapdel.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmapdel.key)
 }
 
 // string field = 2;
@@ -20669,41 +20206,41 @@ inline void command_hmapdel::clear_field() {
   field_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hmapdel::field() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmapdel.field)
+  // @@protoc_insertion_point(field_get:client.command_hmapdel.field)
   return field_.GetNoArena();
 }
 inline void command_hmapdel::set_field(const ::std::string& value) {
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hmapdel.field)
+  // @@protoc_insertion_point(field_set:client.command_hmapdel.field)
 }
 #if LANG_CXX11
 inline void command_hmapdel::set_field(::std::string&& value) {
   
   field_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hmapdel.field)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hmapdel.field)
 }
 #endif
 inline void command_hmapdel::set_field(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmapdel.field)
+  // @@protoc_insertion_point(field_set_char:client.command_hmapdel.field)
 }
 inline void command_hmapdel::set_field(const char* value, size_t size) {
   
   field_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmapdel.field)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmapdel.field)
 }
 inline ::std::string* command_hmapdel::mutable_field() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmapdel.field)
+  // @@protoc_insertion_point(field_mutable:client.command_hmapdel.field)
   return field_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hmapdel::release_field() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmapdel.field)
+  // @@protoc_insertion_point(field_release:client.command_hmapdel.field)
   
   return field_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -20714,7 +20251,7 @@ inline void command_hmapdel::set_allocated_field(::std::string* field) {
     
   }
   field_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), field);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmapdel.field)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmapdel.field)
 }
 
 // repeated string mapkeys = 3;
@@ -20725,64 +20262,64 @@ inline void command_hmapdel::clear_mapkeys() {
   mapkeys_.Clear();
 }
 inline const ::std::string& command_hmapdel::mapkeys(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmapdel.mapkeys)
+  // @@protoc_insertion_point(field_get:client.command_hmapdel.mapkeys)
   return mapkeys_.Get(index);
 }
 inline ::std::string* command_hmapdel::mutable_mapkeys(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmapdel.mapkeys)
+  // @@protoc_insertion_point(field_mutable:client.command_hmapdel.mapkeys)
   return mapkeys_.Mutable(index);
 }
 inline void command_hmapdel::set_mapkeys(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_hmapdel.mapkeys)
+  // @@protoc_insertion_point(field_set:client.command_hmapdel.mapkeys)
   mapkeys_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_hmapdel::set_mapkeys(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_hmapdel.mapkeys)
+  // @@protoc_insertion_point(field_set:client.command_hmapdel.mapkeys)
   mapkeys_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_hmapdel::set_mapkeys(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   mapkeys_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmapdel.mapkeys)
+  // @@protoc_insertion_point(field_set_char:client.command_hmapdel.mapkeys)
 }
 inline void command_hmapdel::set_mapkeys(int index, const char* value, size_t size) {
   mapkeys_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmapdel.mapkeys)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmapdel.mapkeys)
 }
 inline ::std::string* command_hmapdel::add_mapkeys() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_hmapdel.mapkeys)
+  // @@protoc_insertion_point(field_add_mutable:client.command_hmapdel.mapkeys)
   return mapkeys_.Add();
 }
 inline void command_hmapdel::add_mapkeys(const ::std::string& value) {
   mapkeys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_hmapdel.mapkeys)
+  // @@protoc_insertion_point(field_add:client.command_hmapdel.mapkeys)
 }
 #if LANG_CXX11
 inline void command_hmapdel::add_mapkeys(::std::string&& value) {
   mapkeys_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_hmapdel.mapkeys)
+  // @@protoc_insertion_point(field_add:client.command_hmapdel.mapkeys)
 }
 #endif
 inline void command_hmapdel::add_mapkeys(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   mapkeys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_hmapdel.mapkeys)
+  // @@protoc_insertion_point(field_add_char:client.command_hmapdel.mapkeys)
 }
 inline void command_hmapdel::add_mapkeys(const char* value, size_t size) {
   mapkeys_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_hmapdel.mapkeys)
+  // @@protoc_insertion_point(field_add_pointer:client.command_hmapdel.mapkeys)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_hmapdel::mapkeys() const {
-  // @@protoc_insertion_point(field_list:protocol.command_hmapdel.mapkeys)
+  // @@protoc_insertion_point(field_list:client.command_hmapdel.mapkeys)
   return mapkeys_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_hmapdel::mutable_mapkeys() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_hmapdel.mapkeys)
+  // @@protoc_insertion_point(field_mutable_list:client.command_hmapdel.mapkeys)
   return &mapkeys_;
 }
 
@@ -20795,41 +20332,41 @@ inline void command_hmmapdel::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& command_hmmapdel::key() const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmmapdel.key)
+  // @@protoc_insertion_point(field_get:client.command_hmmapdel.key)
   return key_.GetNoArena();
 }
 inline void command_hmmapdel::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.command_hmmapdel.key)
+  // @@protoc_insertion_point(field_set:client.command_hmmapdel.key)
 }
 #if LANG_CXX11
 inline void command_hmmapdel::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.command_hmmapdel.key)
+  // @@protoc_insertion_point(field_set_rvalue:client.command_hmmapdel.key)
 }
 #endif
 inline void command_hmmapdel::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmmapdel.key)
+  // @@protoc_insertion_point(field_set_char:client.command_hmmapdel.key)
 }
 inline void command_hmmapdel::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmmapdel.key)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmmapdel.key)
 }
 inline ::std::string* command_hmmapdel::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmmapdel.key)
+  // @@protoc_insertion_point(field_mutable:client.command_hmmapdel.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* command_hmmapdel::release_key() {
-  // @@protoc_insertion_point(field_release:protocol.command_hmmapdel.key)
+  // @@protoc_insertion_point(field_release:client.command_hmmapdel.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -20840,7 +20377,7 @@ inline void command_hmmapdel::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:protocol.command_hmmapdel.key)
+  // @@protoc_insertion_point(field_set_allocated:client.command_hmmapdel.key)
 }
 
 // repeated string field = 2;
@@ -20851,64 +20388,64 @@ inline void command_hmmapdel::clear_field() {
   field_.Clear();
 }
 inline const ::std::string& command_hmmapdel::field(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmmapdel.field)
+  // @@protoc_insertion_point(field_get:client.command_hmmapdel.field)
   return field_.Get(index);
 }
 inline ::std::string* command_hmmapdel::mutable_field(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmmapdel.field)
+  // @@protoc_insertion_point(field_mutable:client.command_hmmapdel.field)
   return field_.Mutable(index);
 }
 inline void command_hmmapdel::set_field(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_hmmapdel.field)
+  // @@protoc_insertion_point(field_set:client.command_hmmapdel.field)
   field_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_hmmapdel::set_field(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_hmmapdel.field)
+  // @@protoc_insertion_point(field_set:client.command_hmmapdel.field)
   field_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_hmmapdel::set_field(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   field_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmmapdel.field)
+  // @@protoc_insertion_point(field_set_char:client.command_hmmapdel.field)
 }
 inline void command_hmmapdel::set_field(int index, const char* value, size_t size) {
   field_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmmapdel.field)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmmapdel.field)
 }
 inline ::std::string* command_hmmapdel::add_field() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_hmmapdel.field)
+  // @@protoc_insertion_point(field_add_mutable:client.command_hmmapdel.field)
   return field_.Add();
 }
 inline void command_hmmapdel::add_field(const ::std::string& value) {
   field_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_hmmapdel.field)
+  // @@protoc_insertion_point(field_add:client.command_hmmapdel.field)
 }
 #if LANG_CXX11
 inline void command_hmmapdel::add_field(::std::string&& value) {
   field_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_hmmapdel.field)
+  // @@protoc_insertion_point(field_add:client.command_hmmapdel.field)
 }
 #endif
 inline void command_hmmapdel::add_field(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   field_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_hmmapdel.field)
+  // @@protoc_insertion_point(field_add_char:client.command_hmmapdel.field)
 }
 inline void command_hmmapdel::add_field(const char* value, size_t size) {
   field_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_hmmapdel.field)
+  // @@protoc_insertion_point(field_add_pointer:client.command_hmmapdel.field)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_hmmapdel::field() const {
-  // @@protoc_insertion_point(field_list:protocol.command_hmmapdel.field)
+  // @@protoc_insertion_point(field_list:client.command_hmmapdel.field)
   return field_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_hmmapdel::mutable_field() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_hmmapdel.field)
+  // @@protoc_insertion_point(field_mutable_list:client.command_hmmapdel.field)
   return &field_;
 }
 
@@ -20920,64 +20457,64 @@ inline void command_hmmapdel::clear_mapkeys() {
   mapkeys_.Clear();
 }
 inline const ::std::string& command_hmmapdel::mapkeys(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_hmmapdel.mapkeys)
+  // @@protoc_insertion_point(field_get:client.command_hmmapdel.mapkeys)
   return mapkeys_.Get(index);
 }
 inline ::std::string* command_hmmapdel::mutable_mapkeys(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_hmmapdel.mapkeys)
+  // @@protoc_insertion_point(field_mutable:client.command_hmmapdel.mapkeys)
   return mapkeys_.Mutable(index);
 }
 inline void command_hmmapdel::set_mapkeys(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_hmmapdel.mapkeys)
+  // @@protoc_insertion_point(field_set:client.command_hmmapdel.mapkeys)
   mapkeys_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_hmmapdel::set_mapkeys(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_hmmapdel.mapkeys)
+  // @@protoc_insertion_point(field_set:client.command_hmmapdel.mapkeys)
   mapkeys_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_hmmapdel::set_mapkeys(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   mapkeys_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_hmmapdel.mapkeys)
+  // @@protoc_insertion_point(field_set_char:client.command_hmmapdel.mapkeys)
 }
 inline void command_hmmapdel::set_mapkeys(int index, const char* value, size_t size) {
   mapkeys_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_hmmapdel.mapkeys)
+  // @@protoc_insertion_point(field_set_pointer:client.command_hmmapdel.mapkeys)
 }
 inline ::std::string* command_hmmapdel::add_mapkeys() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_hmmapdel.mapkeys)
+  // @@protoc_insertion_point(field_add_mutable:client.command_hmmapdel.mapkeys)
   return mapkeys_.Add();
 }
 inline void command_hmmapdel::add_mapkeys(const ::std::string& value) {
   mapkeys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_hmmapdel.mapkeys)
+  // @@protoc_insertion_point(field_add:client.command_hmmapdel.mapkeys)
 }
 #if LANG_CXX11
 inline void command_hmmapdel::add_mapkeys(::std::string&& value) {
   mapkeys_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_hmmapdel.mapkeys)
+  // @@protoc_insertion_point(field_add:client.command_hmmapdel.mapkeys)
 }
 #endif
 inline void command_hmmapdel::add_mapkeys(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   mapkeys_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_hmmapdel.mapkeys)
+  // @@protoc_insertion_point(field_add_char:client.command_hmmapdel.mapkeys)
 }
 inline void command_hmmapdel::add_mapkeys(const char* value, size_t size) {
   mapkeys_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_hmmapdel.mapkeys)
+  // @@protoc_insertion_point(field_add_pointer:client.command_hmmapdel.mapkeys)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_hmmapdel::mapkeys() const {
-  // @@protoc_insertion_point(field_list:protocol.command_hmmapdel.mapkeys)
+  // @@protoc_insertion_point(field_list:client.command_hmmapdel.mapkeys)
   return mapkeys_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_hmmapdel::mutable_mapkeys() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_hmmapdel.mapkeys)
+  // @@protoc_insertion_point(field_mutable_list:client.command_hmmapdel.mapkeys)
   return &mapkeys_;
 }
 
@@ -20995,83 +20532,154 @@ inline void command_mhmmapdel::clear_field() {
   field_.Clear();
 }
 inline const ::std::string& command_mhmmapdel::field(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.command_mhmmapdel.field)
+  // @@protoc_insertion_point(field_get:client.command_mhmmapdel.field)
   return field_.Get(index);
 }
 inline ::std::string* command_mhmmapdel::mutable_field(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.command_mhmmapdel.field)
+  // @@protoc_insertion_point(field_mutable:client.command_mhmmapdel.field)
   return field_.Mutable(index);
 }
 inline void command_mhmmapdel::set_field(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmmapdel.field)
+  // @@protoc_insertion_point(field_set:client.command_mhmmapdel.field)
   field_.Mutable(index)->assign(value);
 }
 #if LANG_CXX11
 inline void command_mhmmapdel::set_field(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:protocol.command_mhmmapdel.field)
+  // @@protoc_insertion_point(field_set:client.command_mhmmapdel.field)
   field_.Mutable(index)->assign(std::move(value));
 }
 #endif
 inline void command_mhmmapdel::set_field(int index, const char* value) {
   GOOGLE_DCHECK(value != NULL);
   field_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:protocol.command_mhmmapdel.field)
+  // @@protoc_insertion_point(field_set_char:client.command_mhmmapdel.field)
 }
 inline void command_mhmmapdel::set_field(int index, const char* value, size_t size) {
   field_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:protocol.command_mhmmapdel.field)
+  // @@protoc_insertion_point(field_set_pointer:client.command_mhmmapdel.field)
 }
 inline ::std::string* command_mhmmapdel::add_field() {
-  // @@protoc_insertion_point(field_add_mutable:protocol.command_mhmmapdel.field)
+  // @@protoc_insertion_point(field_add_mutable:client.command_mhmmapdel.field)
   return field_.Add();
 }
 inline void command_mhmmapdel::add_field(const ::std::string& value) {
   field_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:protocol.command_mhmmapdel.field)
+  // @@protoc_insertion_point(field_add:client.command_mhmmapdel.field)
 }
 #if LANG_CXX11
 inline void command_mhmmapdel::add_field(::std::string&& value) {
   field_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:protocol.command_mhmmapdel.field)
+  // @@protoc_insertion_point(field_add:client.command_mhmmapdel.field)
 }
 #endif
 inline void command_mhmmapdel::add_field(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   field_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:protocol.command_mhmmapdel.field)
+  // @@protoc_insertion_point(field_add_char:client.command_mhmmapdel.field)
 }
 inline void command_mhmmapdel::add_field(const char* value, size_t size) {
   field_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:protocol.command_mhmmapdel.field)
+  // @@protoc_insertion_point(field_add_pointer:client.command_mhmmapdel.field)
 }
 inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 command_mhmmapdel::field() const {
-  // @@protoc_insertion_point(field_list:protocol.command_mhmmapdel.field)
+  // @@protoc_insertion_point(field_list:client.command_mhmmapdel.field)
   return field_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 command_mhmmapdel::mutable_field() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.command_mhmmapdel.field)
+  // @@protoc_insertion_point(field_mutable_list:client.command_mhmmapdel.field)
   return &field_;
 }
 
-// map<string, .protocol.keys_type> values = 2;
+// map<string, .client.keys_type> values = 2;
 inline int command_mhmmapdel::values_size() const {
   return values_.size();
 }
 inline void command_mhmmapdel::clear_values() {
   values_.Clear();
 }
-inline const ::google::protobuf::Map< ::std::string, ::protocol::keys_type >&
+inline const ::google::protobuf::Map< ::std::string, ::client::keys_type >&
 command_mhmmapdel::values() const {
-  // @@protoc_insertion_point(field_map:protocol.command_mhmmapdel.values)
+  // @@protoc_insertion_point(field_map:client.command_mhmmapdel.values)
   return values_.GetMap();
 }
-inline ::google::protobuf::Map< ::std::string, ::protocol::keys_type >*
+inline ::google::protobuf::Map< ::std::string, ::client::keys_type >*
 command_mhmmapdel::mutable_values() {
-  // @@protoc_insertion_point(field_mutable_map:protocol.command_mhmmapdel.values)
+  // @@protoc_insertion_point(field_mutable_map:client.command_mhmmapdel.values)
   return values_.MutableMap();
+}
+
+// -------------------------------------------------------------------
+
+// command_meet
+
+// string ip = 1;
+inline void command_meet::clear_ip() {
+  ip_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& command_meet::ip() const {
+  // @@protoc_insertion_point(field_get:client.command_meet.ip)
+  return ip_.GetNoArena();
+}
+inline void command_meet::set_ip(const ::std::string& value) {
+  
+  ip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:client.command_meet.ip)
+}
+#if LANG_CXX11
+inline void command_meet::set_ip(::std::string&& value) {
+  
+  ip_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:client.command_meet.ip)
+}
+#endif
+inline void command_meet::set_ip(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  ip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:client.command_meet.ip)
+}
+inline void command_meet::set_ip(const char* value, size_t size) {
+  
+  ip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:client.command_meet.ip)
+}
+inline ::std::string* command_meet::mutable_ip() {
+  
+  // @@protoc_insertion_point(field_mutable:client.command_meet.ip)
+  return ip_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* command_meet::release_ip() {
+  // @@protoc_insertion_point(field_release:client.command_meet.ip)
+  
+  return ip_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void command_meet::set_allocated_ip(::std::string* ip) {
+  if (ip != NULL) {
+    
+  } else {
+    
+  }
+  ip_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ip);
+  // @@protoc_insertion_point(field_set_allocated:client.command_meet.ip)
+}
+
+// int64 port = 2;
+inline void command_meet::clear_port() {
+  port_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 command_meet::port() const {
+  // @@protoc_insertion_point(field_get:client.command_meet.port)
+  return port_;
+}
+inline void command_meet::set_port(::google::protobuf::int64 value) {
+  
+  port_ = value;
+  // @@protoc_insertion_point(field_set:client.command_meet.port)
 }
 
 #ifdef __GNUC__
@@ -21281,24 +20889,10 @@ command_mhmmapdel::mutable_values() {
 
 // -------------------------------------------------------------------
 
-// -------------------------------------------------------------------
-
 
 // @@protoc_insertion_point(namespace_scope)
 
-}  // namespace protocol
-
-namespace google {
-namespace protobuf {
-
-template <> struct is_proto_enum< ::protocol::TYPE> : ::google::protobuf::internal::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::protocol::TYPE>() {
-  return ::protocol::TYPE_descriptor();
-}
-
-}  // namespace protobuf
-}  // namespace google
+}  // namespace client
 
 // @@protoc_insertion_point(global_scope)
 

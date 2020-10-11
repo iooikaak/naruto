@@ -1,20 +1,16 @@
 //
 // Created by 王振奎 on 2020/8/14.
 //
-#include <deque>
-#include <glog/logging.h>
-#include <cstring>
-#include <arpa/inet.h>
-#include <fcntl.h>
 
 #include "naruto.h"
-#include "s_connect.h"
-#include "utils/net.h"
+
 
 namespace naruto{
 
-Naruto::Naruto(int port, int tcp_backlog) : _port(port), _tcp_backlog(tcp_backlog),
-                                            _loop(), _cluster(port, tcp_backlog){
+Naruto::Naruto(int port, int tcp_backlog, int bucket_num) :
+            _port(port), _tcp_backlog(tcp_backlog),
+            _loop(), _cluster(port, tcp_backlog){
+
     // 统计信息初始化
     _stat_start_time = 0;
     _stat_num_commands = 0;
@@ -40,9 +36,10 @@ Naruto::Naruto(int port, int tcp_backlog) : _port(port), _tcp_backlog(tcp_backlo
 
     _hz = 0;
     _cron_loops = 0;
+    _bucket_num = bucket_num;
 }
 
-Naruto::~Naruto() { delete [] _workers; }
+Naruto::~Naruto() { delete [] workers; }
 
 // onAccept 客户端连接
 void Naruto::onAccept(ev::io& watcher, int events) {
@@ -57,20 +54,29 @@ void Naruto::onAccept(ev::io& watcher, int events) {
         return;
     }
 
-    // 创建新的连接
-    naruto::net::ConnectOptions options;
-    auto* c = new Connect(options, watcher.fd);
-    c->_fd = (client_sd);
-    c->_addr = (struct sockaddr*)malloc(sizeof(struct sockaddr));
-    auto* addr = (struct sockaddr*)(&client_addr);
-    memcpy(c->_addr, addr, sizeof(struct sockaddr));
+    // 创建新的client连接
+    auto client = new narutoClient();
+    client->connect = std::make_shared<connection::Connect>(client_sd);
+    char str[INET_ADDRSTRLEN];
+    inet_ntop(AF_INET, &client_addr.sin_addr, str, sizeof(str));
+    client->ip = str;
+    client->port = std::to_string(client_addr.sin_port);
 
     // 唤醒worker
-    LOG(INFO) << "onAccept OK! dispatch connect, client_sd=" << client_sd << " watcher.fd=" << watcher.fd << " addr:" << c->_remote_addr();
-    int robin = _connect_nums % _worker_num;
-    _workers[robin].conns.push_back(c);
-    _workers[robin].async_watcher.send();
+    LOG(INFO) << "onAccept OK! dispatch connect, client_sd=" << client->connect->fd() << " watcher.fd=" << watcher.fd
+        << " addr:" << client->ip << ":" << client->port;
+
+    int index = _connect_nums % workder_num;
+    client->worker_id = index;
+    workers[index].conns.push_back(client);
+//    workers[index].async_watcher.data = (void*)&workers[index];
+    workers[index].async_watcher.send();
+
     _connect_nums++;
+}
+
+void Naruto::onCron(ev::timer & watcher, int event) {
+
 }
 
 void Naruto::onSignal(ev::sig& signal, int) {
@@ -78,24 +84,27 @@ void Naruto::onSignal(ev::sig& signal, int) {
     // 关闭socket
     close(s->_fd);
     signal.stop();
+    LOG(INFO) << "onSignal start...1";
     // 关闭工作线程
-    for (int i = 0; i < s->_worker_num; ++i)  s->_workers[i].stop();
+    exit_success_workers = 0;
+    for (int i = 0; i < workder_num; ++i)  workers[i].stop();
+    LOG(INFO) << "onSignal start...2";
     // 关闭cluster工作线程
     s->_cluster.stop();
 
-    LOG(INFO) << "onSignal...";
     std::unique_lock<std::mutex> lck(mux);
-    while (exit_success_workers < s->_worker_num){
+    while (exit_success_workers < workder_num){
         LOG(INFO) << "onSignal..." << exit_success_workers;
         cond.wait(lck);
     }
     // 停止主线程 ev loop
     s->_accept_watcher.stop();
     s->_loop.break_loop(ev::ALL);
-    LOG(INFO) << "onSignal...2";
+    LOG(INFO) << "onSignal end...";
 }
 
 void Naruto::run() {
+    std::cout << "run" << std::endl;
     LOG(INFO) << "naruto run:" << _port;
     _init_workers();
     _init_signal();
@@ -103,40 +112,39 @@ void Naruto::run() {
 }
 
 void Naruto::_init_workers() {
-    LOG(INFO) << "_init_workers...";
-    _worker_num = (int)(sysconf(_SC_NPROCESSORS_CONF) *2);
-    int client_worker_num;
-    if (_cluster_enable){
-        client_worker_num = _worker_num-1;
-    }else{
-        client_worker_num = _worker_num;
+    LOG(INFO) << "_init_workers,workder_num=" << workder_num;
+    auto cmds = std::make_shared<command::Commands>();
+    auto bts = std::make_shared<database::Buckets>();
+    for (int i = 0; i < workder_num; ++i) {
+        workers[i].commands = cmds;
+        workers[i].buckets = bts;
+        workers[i].async_watcher.set<&ConnectWorker::onAsync>(&workers[i]);
+        workers[i].async_watcher.set(workers[i].loop);
+        workers[i].async_watcher.start();
+
+        workers[i].stop_async_watcher.set<&ConnectWorker::onStopAsync>(&workers[i]);
+        workers[i].stop_async_watcher.set(workers[i].loop);
+        workers[i].stop_async_watcher.start();
     }
 
-    _workers = new ConnectWorker[client_worker_num];
-
-    for (int i = 0; i < client_worker_num; ++i) {
-        _workers[i].async_watcher.set<&ConnectWorker::onAsync>(&_workers[i]);
-        _workers[i].async_watcher.set(_workers[i].loop);
-        _workers[i].async_watcher.start();
-
-        _workers[i].stop_async_watcher.set<&ConnectWorker::onStopAsync>(&_workers[i]);
-        _workers[i].stop_async_watcher.set(_workers[i].loop);
-        _workers[i].stop_async_watcher.start();
-    }
+    LOG(INFO) << "_init_workers...2";
 
     // run workers in thread
-    for (int j = 0; j < client_worker_num; ++j) {
-        auto worker = &_workers[j];
+    for (int j = 0; j < workder_num; ++j) {
+        auto worker = &workers[j];
         std::thread([worker,j](){
             worker->run(j);
         }).detach();
     }
 
+    LOG(INFO) << "_init_workers...3";
+//    std::this_thread::sleep_for(std::chrono::seconds(5));
+    LOG(INFO) << "_init_workers...4, init_success_workers:" << init_success_workers;
     if (_cluster_enable) _init_cluster();
-
+    LOG(INFO) << "_init_workers...5";
     // 等待 worker 线程初始化完毕
     std::unique_lock<std::mutex> lck(mux);
-    while (init_success_workers < _worker_num){
+    while (init_success_workers < workder_num){
         cond.wait(lck);
     }
     LOG(INFO) << "_init_workers end..." << init_success_workers;
@@ -167,11 +175,11 @@ void Naruto::_init_signal() {
 }
 
 void Naruto::_init_cluster() {
-    LOG(INFO) << "cluster run...";
+    LOG(INFO) << "init cluster run...";
     std::unique_lock<std::mutex> lck(mux);
     init_success_workers++;
     cond.notify_one();
-    std::thread([this]{ _cluster.run(); });
+    _cluster.run();
     lck.unlock();
 }
 

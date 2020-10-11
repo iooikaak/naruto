@@ -39,3 +39,4 @@ naruto.cbp
 *.exe
 *.out
 *.app
+*.pb.*

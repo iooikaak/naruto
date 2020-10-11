@@ -11,12 +11,20 @@
 #include <gflags/gflags.h>
 #include <unistd.h>
 #include <netinet/in.h>
+#include <deque>
+#include <glog/logging.h>
+#include <cstring>
+#include <arpa/inet.h>
 
-#include "global.h"
 #include "types.h"
-#include "s_connect.h"
 #include "connect_worker.h"
 #include "cluster.h"
+#include "database/buckets.h"
+#include "command/command.h"
+#include "command/commands.h"
+#include "command/command_nf.h"
+#include "command/command_hget.h"
+#include "utils/net.h"
 
 //DEFINE_string(host,"","host");
 
@@ -24,7 +32,8 @@ namespace naruto{
 
 class Naruto{
 public:
-    explicit Naruto(int port = 7290, int tcp_backlog = 521);
+    explicit Naruto(int port, int tcp_backlog, int bucket_num);
+
     ~Naruto();
 
     void onAccept(ev::io&, int);
@@ -32,7 +41,7 @@ public:
 
     // 向集群中的所有断线或者未连接节点发送消息
     // 遍历所有节点，检查是否需要将某个节点标记为下线
-    static void onClusterTimer(ev::timer&, int);
+    void onCron(ev::timer&, int);
     void run();
 
 private:
@@ -42,13 +51,16 @@ private:
     void _init_signal();
     void _listen();
 
+    // database
+    int _bucket_num;
+
     // 处理信号，任务线程执行频率
     int _hz;
     int _cron_loops;
 
-    // 实际工作线程，数量为 _worker_num
-    ConnectWorker* _workers;
-    int _worker_num;
+//    std::shared_ptr<command::Commands> _commands;
+//    std::shared_ptr<database::Buckets> _buckets;
+
     bool _cluster_enable;
     ev::io _accept_watcher;
     ev::sig _sigint;
@@ -71,10 +83,10 @@ private:
 
     // Client
     // 一个链表，保存了所有客户端状态结构
-    std::list<std::shared_ptr<naruto::Connect>> _clents;
+    std::list<std::shared_ptr<narutoClient>> _clents;
 
     // 链表，保存了所有待关闭的客户端
-    std::list<std::shared_ptr<naruto::Connect>> _slaves;
+    std::list<std::shared_ptr<narutoClient>> _slaves;
 
     bool _clients_paused; // 暂停客户端
     mstime_t _clients_pause_end_time;

@@ -2,17 +2,17 @@
 // Created by 王振奎 on 2020/8/11.
 //
 #include <glog/logging.h>
-#include <unistd.h>
 #include <netinet/in.h>
 #include <ev++.h>
 
 #include "cluster.h"
-#include "s_connect.h"
 #include "utils/net.h"
 #include "global.h"
 
-naruto::Cluster::Cluster(int port, int tcp_backlop):_connect_nums(0), _loop(),_tcp_backlog(tcp_backlop){
-
+naruto::Cluster::Cluster(int port, int tcp_backlop){
+    _port = port;
+    _tcp_backlog = tcp_backlop;
+    _connect_nums = 0;
 }
 
 naruto::Cluster::~Cluster(){
@@ -20,23 +20,23 @@ naruto::Cluster::~Cluster(){
 }
 
 void naruto::Cluster::run(){
+    LOG(INFO) << "cluster run..." << _port + CLUSTER_BASE_PORT;
     if ((_fd = naruto::utils::Net::listen(_port + CLUSTER_BASE_PORT,
             _tcp_backlog)) == -1){
         return;
     }
-    auto* w = new ev::io;
-    w->set<Cluster, &Cluster::onAccept>(this);
-    w->set(this->_loop);
-    w->start(_fd, ev::READ);
-    LOG(INFO) << "cluster run...";
-    _loop.run(0);
-
-    std::unique_lock<std::mutex> lck(mux);
-    exit_success_workers++;
-    LOG(INFO) << "cluster stop...";
+    LOG(INFO) << "cluster run..2";
+    _cluster_ev_io_r = std::make_shared<ev::io>();
+    _cluster_ev_io_r->set<Cluster, &Cluster::onAccept>(this);
+    _cluster_ev_io_r->set(ev::get_default_loop());
+    _cluster_ev_io_r->start(_fd, ev::READ);
+    LOG(INFO) << "cluster run...3";
 }
 
-void naruto::Cluster::stop() { _loop.break_loop(ev::ALL); }
+void naruto::Cluster::stop() {
+    if (_cluster_ev_io_r) _cluster_ev_io_r->stop();
+    if (_cluster_ev_io_w) _cluster_ev_io_w->stop();
+}
 
 void naruto::Cluster::onAccept(ev::io& watcher, int events){
     LOG(INFO) << "cluster onAccept...";
@@ -51,21 +51,17 @@ void naruto::Cluster::onAccept(ev::io& watcher, int events){
     }
 
     // 创建新的连接
-    naruto::net::ConnectOptions options;
-    auto* c = new Connect(options, watcher.fd);
-    c->_fd = (client_sd);
-    c->_addr = (struct sockaddr*)malloc(sizeof(struct sockaddr));
-    auto* addr = (struct sockaddr*)(&client_addr);
-    memcpy(c->_addr, addr, sizeof(struct sockaddr));
+    naruto::connection::ConnectOptions options;
+    auto* c = new connection::Connect(client_sd);
 
     // 唤醒 worker
-    LOG(INFO) << "cluster onAccept OK! dispatch connect, client_sd=" << client_sd << " watcher.fd=" << watcher.fd << " addr:" << c->_remote_addr();
+    LOG(INFO) << "cluster onAccept OK! dispatch connect, client_sd=" << client_sd << " watcher.fd=" << watcher.fd;
 
     auto* w = new ev::io;
-    w->set<Cluster, &Cluster::onEvents>(this);
-    w->data = (void*)c;
-    w->set(this->_loop);
-    w->start(c->_fd, ev::READ);
+    _cluster_ev_io_r->set<Cluster, &Cluster::onEvents>(this);
+    _cluster_ev_io_r->data = (void*)c;
+    _cluster_ev_io_r->set(ev::get_default_loop());
+    _cluster_ev_io_r->start(c->fd(), ev::READ);
 
     _connect_nums++;
 }
@@ -92,7 +88,7 @@ void naruto::Cluster::onPing(ev::timer &watcher, int events) {
         // 发送 Ping 消息
         if (node.second->link == nullptr){
             // 为未创建连接的节点创建连接
-            naruto::net::ConnectOptions options;
+            naruto::connection::ConnectOptions options;
             options.host = node.second->ip;
             options.port = this->_port + CLUSTER_BASE_PORT;
             node.second->link = new naruto::connection::Connect(options);
@@ -100,16 +96,16 @@ void naruto::Cluster::onPing(ev::timer &watcher, int events) {
             if (node.second->link->connect() == CONNECT_RT_ERR){
                 LOG(ERROR) << "unable to connect to cluster node ["<< node.second->ip << "]:"
                             << options.port
-                            << " -> " << node.second->link->connector->errmsg();
+                            << " -> " << node.second->link->errmsg();
                 continue;
             }
 
             // 加入 epoll 事件中
             auto* w = new ev::io;
             w->set<Cluster, &Cluster::onEvents>(this);
-            w->set((void*)node.second->link);
-            w->set(this->_loop);
-            w->start(node.second->link->connector->fd(), ev::READ);
+            w->data = (void*)node.second->link;
+            w->set(ev::get_default_loop());
+            w->start(node.second->link->fd(), ev::READ);
 
             // 发送 Ping 消息
 
@@ -146,7 +142,7 @@ void naruto::Cluster::_send_ping(std::shared_ptr<clusterNode> node, int type) {
     master = (node->isSlave() && node->slaveof != nullptr) ? node->slaveof : _myself;
 
     // build message
-    protocol::cluster_command_gossip ping;
+    cluster::command_gossip ping;
     auto header = ping.mutable_header();
     header->set_current_epoch(_currentEpoch);
     header->set_config_epoch(master->config_epoch);

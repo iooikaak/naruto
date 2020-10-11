@@ -9,7 +9,7 @@ namespace naruto{
 namespace connection{
 
 ConnectionPool::ConnectionPool(const ConnectionPoolOptions &pool_opts,
-                               const naruto::net::ConnectOptions &opts) : _pool_opts(pool_opts), _opts(opts) {
+                               const ConnectOptions &opts) : _pool_opts(pool_opts), _opts(opts) {
     if (_pool_opts.max_conns == 0){
         naruto::utils::throw_err(CONNECT_ERROR_OTHER, "can not create an empty pool");
     }
@@ -58,7 +58,7 @@ void ConnectionPool::release(Connect connection) {
 }
 
 bool ConnectionPool::_need_reconnect(const Connect &conn, const std::chrono::milliseconds &lifetime) const {
-    if (conn.connector->broken()){ return true ;}
+    if (conn.broken()){ return true ;}
 
     if (lifetime > std::chrono::milliseconds(0)){
         auto now = std::chrono::steady_clock::now();
@@ -77,9 +77,11 @@ Connect ConnectionPool::_fetch() {
 }
 
 Connect ConnectionPool::_create() {
+    LOG(INFO) << "_create----1";
     auto conn =  Connect(_opts);
+    LOG(INFO) << "_create----2";
     if (conn.connect() != CONNECT_RT_OK)
-        naruto::utils::throw_err(conn.connector->_err, conn.connector->_errmsg);
+        naruto::utils::throw_err(conn.errcode(), conn.errmsg());
     return conn;
 }
 

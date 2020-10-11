@@ -20,8 +20,7 @@
 #include "protocol/message_type.h"
 #include "protocol/message.pb.h"
 
-namespace naruto {
-namespace utils{
+namespace naruto::utils{
 
 class Bytes{
 
@@ -81,7 +80,7 @@ public:
     // Replacement
     void replace(uint8_t key, uint8_t rep, uint32_t start = 0, bool firstOccuranceOnly = false);
 
-    unsigned char* data();
+    const unsigned char * data() const;
 
     // Read
     uint8_t peek() const; // just peek one uint8_t ，不会增加 pos
@@ -214,7 +213,6 @@ private:
         wpos = index + sizeof(data);
     }
 };
-}
 }
 
 #endif

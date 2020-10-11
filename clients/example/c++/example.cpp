@@ -9,11 +9,11 @@
 #include "connection/connection_pool.h"
 #include "connection/connection.h"
 #include "protocol/message.pb.h"
-#include "protocol/message_type.h"
+#include "command/command.h"
+#include "utils/pack.h"
 
-
-int main(int argc, char* argv[]){
-    naruto::net::ConnectOptions options;
+void test_thread_request(){
+    naruto::connection::ConnectOptions options;
     options.host = "127.0.0.1";
     naruto::connection::ConnectionPoolOptions pool_opts;
 
@@ -24,16 +24,9 @@ int main(int argc, char* argv[]){
     for (int i = 0; i < 5; ++i) {
         ts[i] = std::thread([&pool]{
             while (true){
-//        line.clear();
-//        LOG(INFO) << "Enter string to send:";
-//        getline(std::cin, line);
-//
-//        LOG(INFO) << "Enter:" << line;
-//        if (line == "quit") break;
-
                 naruto::utils::Bytes pack;
 
-                protocol::command_hmget message;
+                client::command_hmget message;
                 message.set_key("10000");
                 message.add_fields("test");
                 message.add_fields("test1");
@@ -41,7 +34,7 @@ int main(int argc, char* argv[]){
                 LOG(INFO) << "message:" << message.DebugString();
                 pack.putMessage(message, COMMAND_HMGET);
                 auto conn =  pool.fetch();
-                conn.connector->send(pack);
+                conn.send(pack);
                 pool.release(std::move(conn));
 
                 LOG(INFO) << "Send  success, len:" << pack.size();
@@ -53,4 +46,45 @@ int main(int argc, char* argv[]){
     for (int j = 0; j < 5; ++j) {
         ts[j].join();
     }
+}
+int main(int argc, char* argv[]){
+    naruto::connection::ConnectOptions options;
+    options.host = "127.0.0.1";
+    naruto::connection::ConnectionPoolOptions pool_opts;
+
+    naruto::connection::ConnectionPool pool(pool_opts, options);
+    auto conn = pool.fetch();
+
+    LOG(INFO) << "............client set .........";
+    client::command_hset request;
+    request.set_key("test");
+    request.set_field("field1");
+    auto value =  request.mutable_value();
+    value->set_type(data::STRING);
+    value->set_str("test-value");
+
+    naruto::utils::Bytes pack;
+    pack.putMessage(request, COMMAND_CLIENT_HSET);
+    conn.send(pack);
+
+    conn.recv(pack);
+    client::command_reply reply;
+    auto type = naruto::utils::Pack::deSerialize(pack, reply);
+    LOG(INFO) << "type:" << type << " msg:" << reply.DebugString();
+
+    // ============ get ============
+    LOG(INFO) << "............client get.........";
+    client::command_hget request1;
+    request1.set_key("test");
+    request1.set_field("field1");
+
+    naruto::utils::Bytes pack1;
+    pack1.putMessage(request1, COMMAND_CLIENT_HGET);
+    conn.send(pack1);
+
+    conn.recv(pack1);
+    client::command_hget_reply reply1;
+    auto type1 = naruto::utils::Pack::deSerialize(pack1, reply1);
+    LOG(INFO) << "type1:" << type1 << " msg:" << reply1.DebugString();
+
 }

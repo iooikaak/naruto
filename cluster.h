@@ -15,7 +15,6 @@
 #include <list>
 #include <chrono>
 
-#include "net/connector.h"
 #include "types.h"
 #include "global.h"
 #include "connection/connection.h"
@@ -84,7 +83,7 @@ struct clusterNode{
 
     ~clusterNode(){
         if (link != nullptr) {
-            link->connector->closeConnect();
+            link->close();
             delete link;
         }
     }
@@ -201,7 +200,9 @@ private:
     int _port;
     int _tcp_backlog;
     int _connect_nums;
-    ev::dynamic_loop _loop;
+    std::shared_ptr<ev::io> _cluster_ev_io_w;
+    std::shared_ptr<ev::io> _cluster_ev_io_r;
+
     std::chrono::milliseconds _cluster_node_timeout;
 
     // 指向当前节点的指针

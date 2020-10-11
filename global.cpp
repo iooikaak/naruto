@@ -12,5 +12,4 @@ std::mutex mux = {};
 std::condition_variable cond = {};
 
 std::string charset = "0123456789abcdef";
-
 }

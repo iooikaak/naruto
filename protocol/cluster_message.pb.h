@@ -42,63 +42,63 @@ struct TableStruct {
   static const ::google::protobuf::uint32 offsets[];
 };
 void AddDescriptors();
-void InitDefaultscluster_headerImpl();
-void InitDefaultscluster_header();
-void InitDefaultscluster_gossipImpl();
-void InitDefaultscluster_gossip();
-void InitDefaultscluster_command_gossipImpl();
-void InitDefaultscluster_command_gossip();
-void InitDefaultscluster_command_failImpl();
-void InitDefaultscluster_command_fail();
-void InitDefaultscluster_command_updateImpl();
-void InitDefaultscluster_command_update();
+void InitDefaultscommand_headerImpl();
+void InitDefaultscommand_header();
+void InitDefaultsgossipImpl();
+void InitDefaultsgossip();
+void InitDefaultscommand_gossipImpl();
+void InitDefaultscommand_gossip();
+void InitDefaultscommand_failImpl();
+void InitDefaultscommand_fail();
+void InitDefaultscommand_updateImpl();
+void InitDefaultscommand_update();
 inline void InitDefaults() {
-  InitDefaultscluster_header();
-  InitDefaultscluster_gossip();
-  InitDefaultscluster_command_gossip();
-  InitDefaultscluster_command_fail();
-  InitDefaultscluster_command_update();
+  InitDefaultscommand_header();
+  InitDefaultsgossip();
+  InitDefaultscommand_gossip();
+  InitDefaultscommand_fail();
+  InitDefaultscommand_update();
 }
 }  // namespace protobuf_cluster_5fmessage_2eproto
-namespace protocol {
-class cluster_command_fail;
-class cluster_command_failDefaultTypeInternal;
-extern cluster_command_failDefaultTypeInternal _cluster_command_fail_default_instance_;
-class cluster_command_gossip;
-class cluster_command_gossipDefaultTypeInternal;
-extern cluster_command_gossipDefaultTypeInternal _cluster_command_gossip_default_instance_;
-class cluster_command_update;
-class cluster_command_updateDefaultTypeInternal;
-extern cluster_command_updateDefaultTypeInternal _cluster_command_update_default_instance_;
-class cluster_gossip;
-class cluster_gossipDefaultTypeInternal;
-extern cluster_gossipDefaultTypeInternal _cluster_gossip_default_instance_;
-class cluster_header;
-class cluster_headerDefaultTypeInternal;
-extern cluster_headerDefaultTypeInternal _cluster_header_default_instance_;
-}  // namespace protocol
-namespace protocol {
+namespace cluster {
+class command_fail;
+class command_failDefaultTypeInternal;
+extern command_failDefaultTypeInternal _command_fail_default_instance_;
+class command_gossip;
+class command_gossipDefaultTypeInternal;
+extern command_gossipDefaultTypeInternal _command_gossip_default_instance_;
+class command_header;
+class command_headerDefaultTypeInternal;
+extern command_headerDefaultTypeInternal _command_header_default_instance_;
+class command_update;
+class command_updateDefaultTypeInternal;
+extern command_updateDefaultTypeInternal _command_update_default_instance_;
+class gossip;
+class gossipDefaultTypeInternal;
+extern gossipDefaultTypeInternal _gossip_default_instance_;
+}  // namespace cluster
+namespace cluster {
 
 // ===================================================================
 
-class cluster_header : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.cluster_header) */ {
+class command_header : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:cluster.command_header) */ {
  public:
-  cluster_header();
-  virtual ~cluster_header();
+  command_header();
+  virtual ~command_header();
 
-  cluster_header(const cluster_header& from);
+  command_header(const command_header& from);
 
-  inline cluster_header& operator=(const cluster_header& from) {
+  inline command_header& operator=(const command_header& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  cluster_header(cluster_header&& from) noexcept
-    : cluster_header() {
+  command_header(command_header&& from) noexcept
+    : command_header() {
     *this = ::std::move(from);
   }
 
-  inline cluster_header& operator=(cluster_header&& from) noexcept {
+  inline command_header& operator=(command_header&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -108,30 +108,30 @@ class cluster_header : public ::google::protobuf::Message /* @@protoc_insertion_
   }
   #endif
   static const ::google::protobuf::Descriptor* descriptor();
-  static const cluster_header& default_instance();
+  static const command_header& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const cluster_header* internal_default_instance() {
-    return reinterpret_cast<const cluster_header*>(
-               &_cluster_header_default_instance_);
+  static inline const command_header* internal_default_instance() {
+    return reinterpret_cast<const command_header*>(
+               &_command_header_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     0;
 
-  void Swap(cluster_header* other);
-  friend void swap(cluster_header& a, cluster_header& b) {
+  void Swap(command_header* other);
+  friend void swap(command_header& a, command_header& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline cluster_header* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline command_header* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  cluster_header* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  command_header* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
   void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
-  void CopyFrom(const cluster_header& from);
-  void MergeFrom(const cluster_header& from);
+  void CopyFrom(const command_header& from);
+  void MergeFrom(const command_header& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -147,7 +147,7 @@ class cluster_header : public ::google::protobuf::Message /* @@protoc_insertion_
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const PROTOBUF_FINAL;
-  void InternalSwap(cluster_header* other);
+  void InternalSwap(command_header* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -239,7 +239,7 @@ class cluster_header : public ::google::protobuf::Message /* @@protoc_insertion_
   ::google::protobuf::int32 state() const;
   void set_state(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:protocol.cluster_header)
+  // @@protoc_insertion_point(class_scope:cluster.command_header)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -255,28 +255,28 @@ class cluster_header : public ::google::protobuf::Message /* @@protoc_insertion_
   ::google::protobuf::int32 state_;
   mutable int _cached_size_;
   friend struct ::protobuf_cluster_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_cluster_5fmessage_2eproto::InitDefaultscluster_headerImpl();
+  friend void ::protobuf_cluster_5fmessage_2eproto::InitDefaultscommand_headerImpl();
 };
 // -------------------------------------------------------------------
 
-class cluster_gossip : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.cluster_gossip) */ {
+class gossip : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:cluster.gossip) */ {
  public:
-  cluster_gossip();
-  virtual ~cluster_gossip();
+  gossip();
+  virtual ~gossip();
 
-  cluster_gossip(const cluster_gossip& from);
+  gossip(const gossip& from);
 
-  inline cluster_gossip& operator=(const cluster_gossip& from) {
+  inline gossip& operator=(const gossip& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  cluster_gossip(cluster_gossip&& from) noexcept
-    : cluster_gossip() {
+  gossip(gossip&& from) noexcept
+    : gossip() {
     *this = ::std::move(from);
   }
 
-  inline cluster_gossip& operator=(cluster_gossip&& from) noexcept {
+  inline gossip& operator=(gossip&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -286,30 +286,30 @@ class cluster_gossip : public ::google::protobuf::Message /* @@protoc_insertion_
   }
   #endif
   static const ::google::protobuf::Descriptor* descriptor();
-  static const cluster_gossip& default_instance();
+  static const gossip& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const cluster_gossip* internal_default_instance() {
-    return reinterpret_cast<const cluster_gossip*>(
-               &_cluster_gossip_default_instance_);
+  static inline const gossip* internal_default_instance() {
+    return reinterpret_cast<const gossip*>(
+               &_gossip_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     1;
 
-  void Swap(cluster_gossip* other);
-  friend void swap(cluster_gossip& a, cluster_gossip& b) {
+  void Swap(gossip* other);
+  friend void swap(gossip& a, gossip& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline cluster_gossip* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline gossip* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  cluster_gossip* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  gossip* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
   void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
-  void CopyFrom(const cluster_gossip& from);
-  void MergeFrom(const cluster_gossip& from);
+  void CopyFrom(const gossip& from);
+  void MergeFrom(const gossip& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -325,7 +325,7 @@ class cluster_gossip : public ::google::protobuf::Message /* @@protoc_insertion_
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const PROTOBUF_FINAL;
-  void InternalSwap(cluster_gossip* other);
+  void InternalSwap(gossip* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -393,7 +393,7 @@ class cluster_gossip : public ::google::protobuf::Message /* @@protoc_insertion_
   ::google::protobuf::int32 flags() const;
   void set_flags(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:protocol.cluster_gossip)
+  // @@protoc_insertion_point(class_scope:cluster.gossip)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -405,28 +405,28 @@ class cluster_gossip : public ::google::protobuf::Message /* @@protoc_insertion_
   ::google::protobuf::int32 flags_;
   mutable int _cached_size_;
   friend struct ::protobuf_cluster_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_cluster_5fmessage_2eproto::InitDefaultscluster_gossipImpl();
+  friend void ::protobuf_cluster_5fmessage_2eproto::InitDefaultsgossipImpl();
 };
 // -------------------------------------------------------------------
 
-class cluster_command_gossip : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.cluster_command_gossip) */ {
+class command_gossip : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:cluster.command_gossip) */ {
  public:
-  cluster_command_gossip();
-  virtual ~cluster_command_gossip();
+  command_gossip();
+  virtual ~command_gossip();
 
-  cluster_command_gossip(const cluster_command_gossip& from);
+  command_gossip(const command_gossip& from);
 
-  inline cluster_command_gossip& operator=(const cluster_command_gossip& from) {
+  inline command_gossip& operator=(const command_gossip& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  cluster_command_gossip(cluster_command_gossip&& from) noexcept
-    : cluster_command_gossip() {
+  command_gossip(command_gossip&& from) noexcept
+    : command_gossip() {
     *this = ::std::move(from);
   }
 
-  inline cluster_command_gossip& operator=(cluster_command_gossip&& from) noexcept {
+  inline command_gossip& operator=(command_gossip&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -436,30 +436,30 @@ class cluster_command_gossip : public ::google::protobuf::Message /* @@protoc_in
   }
   #endif
   static const ::google::protobuf::Descriptor* descriptor();
-  static const cluster_command_gossip& default_instance();
+  static const command_gossip& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const cluster_command_gossip* internal_default_instance() {
-    return reinterpret_cast<const cluster_command_gossip*>(
-               &_cluster_command_gossip_default_instance_);
+  static inline const command_gossip* internal_default_instance() {
+    return reinterpret_cast<const command_gossip*>(
+               &_command_gossip_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     2;
 
-  void Swap(cluster_command_gossip* other);
-  friend void swap(cluster_command_gossip& a, cluster_command_gossip& b) {
+  void Swap(command_gossip* other);
+  friend void swap(command_gossip& a, command_gossip& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline cluster_command_gossip* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline command_gossip* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  cluster_command_gossip* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  command_gossip* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
   void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
-  void CopyFrom(const cluster_command_gossip& from);
-  void MergeFrom(const cluster_command_gossip& from);
+  void CopyFrom(const command_gossip& from);
+  void MergeFrom(const command_gossip& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -475,7 +475,7 @@ class cluster_command_gossip : public ::google::protobuf::Message /* @@protoc_in
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const PROTOBUF_FINAL;
-  void InternalSwap(cluster_command_gossip* other);
+  void InternalSwap(command_gossip* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -491,57 +491,57 @@ class cluster_command_gossip : public ::google::protobuf::Message /* @@protoc_in
 
   // accessors -------------------------------------------------------
 
-  // repeated .protocol.cluster_gossip gossips = 2;
+  // repeated .cluster.gossip gossips = 2;
   int gossips_size() const;
   void clear_gossips();
   static const int kGossipsFieldNumber = 2;
-  const ::protocol::cluster_gossip& gossips(int index) const;
-  ::protocol::cluster_gossip* mutable_gossips(int index);
-  ::protocol::cluster_gossip* add_gossips();
-  ::google::protobuf::RepeatedPtrField< ::protocol::cluster_gossip >*
+  const ::cluster::gossip& gossips(int index) const;
+  ::cluster::gossip* mutable_gossips(int index);
+  ::cluster::gossip* add_gossips();
+  ::google::protobuf::RepeatedPtrField< ::cluster::gossip >*
       mutable_gossips();
-  const ::google::protobuf::RepeatedPtrField< ::protocol::cluster_gossip >&
+  const ::google::protobuf::RepeatedPtrField< ::cluster::gossip >&
       gossips() const;
 
-  // .protocol.cluster_header header = 1;
+  // .cluster.command_header header = 1;
   bool has_header() const;
   void clear_header();
   static const int kHeaderFieldNumber = 1;
-  const ::protocol::cluster_header& header() const;
-  ::protocol::cluster_header* release_header();
-  ::protocol::cluster_header* mutable_header();
-  void set_allocated_header(::protocol::cluster_header* header);
+  const ::cluster::command_header& header() const;
+  ::cluster::command_header* release_header();
+  ::cluster::command_header* mutable_header();
+  void set_allocated_header(::cluster::command_header* header);
 
-  // @@protoc_insertion_point(class_scope:protocol.cluster_command_gossip)
+  // @@protoc_insertion_point(class_scope:cluster.command_gossip)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::protocol::cluster_gossip > gossips_;
-  ::protocol::cluster_header* header_;
+  ::google::protobuf::RepeatedPtrField< ::cluster::gossip > gossips_;
+  ::cluster::command_header* header_;
   mutable int _cached_size_;
   friend struct ::protobuf_cluster_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_cluster_5fmessage_2eproto::InitDefaultscluster_command_gossipImpl();
+  friend void ::protobuf_cluster_5fmessage_2eproto::InitDefaultscommand_gossipImpl();
 };
 // -------------------------------------------------------------------
 
-class cluster_command_fail : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.cluster_command_fail) */ {
+class command_fail : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:cluster.command_fail) */ {
  public:
-  cluster_command_fail();
-  virtual ~cluster_command_fail();
+  command_fail();
+  virtual ~command_fail();
 
-  cluster_command_fail(const cluster_command_fail& from);
+  command_fail(const command_fail& from);
 
-  inline cluster_command_fail& operator=(const cluster_command_fail& from) {
+  inline command_fail& operator=(const command_fail& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  cluster_command_fail(cluster_command_fail&& from) noexcept
-    : cluster_command_fail() {
+  command_fail(command_fail&& from) noexcept
+    : command_fail() {
     *this = ::std::move(from);
   }
 
-  inline cluster_command_fail& operator=(cluster_command_fail&& from) noexcept {
+  inline command_fail& operator=(command_fail&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -551,30 +551,30 @@ class cluster_command_fail : public ::google::protobuf::Message /* @@protoc_inse
   }
   #endif
   static const ::google::protobuf::Descriptor* descriptor();
-  static const cluster_command_fail& default_instance();
+  static const command_fail& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const cluster_command_fail* internal_default_instance() {
-    return reinterpret_cast<const cluster_command_fail*>(
-               &_cluster_command_fail_default_instance_);
+  static inline const command_fail* internal_default_instance() {
+    return reinterpret_cast<const command_fail*>(
+               &_command_fail_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     3;
 
-  void Swap(cluster_command_fail* other);
-  friend void swap(cluster_command_fail& a, cluster_command_fail& b) {
+  void Swap(command_fail* other);
+  friend void swap(command_fail& a, command_fail& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline cluster_command_fail* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline command_fail* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  cluster_command_fail* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  command_fail* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
   void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
-  void CopyFrom(const cluster_command_fail& from);
-  void MergeFrom(const cluster_command_fail& from);
+  void CopyFrom(const command_fail& from);
+  void MergeFrom(const command_fail& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -590,7 +590,7 @@ class cluster_command_fail : public ::google::protobuf::Message /* @@protoc_inse
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const PROTOBUF_FINAL;
-  void InternalSwap(cluster_command_fail* other);
+  void InternalSwap(command_fail* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -620,45 +620,45 @@ class cluster_command_fail : public ::google::protobuf::Message /* @@protoc_inse
   ::std::string* release_node_name();
   void set_allocated_node_name(::std::string* node_name);
 
-  // .protocol.cluster_header header = 1;
+  // .cluster.command_header header = 1;
   bool has_header() const;
   void clear_header();
   static const int kHeaderFieldNumber = 1;
-  const ::protocol::cluster_header& header() const;
-  ::protocol::cluster_header* release_header();
-  ::protocol::cluster_header* mutable_header();
-  void set_allocated_header(::protocol::cluster_header* header);
+  const ::cluster::command_header& header() const;
+  ::cluster::command_header* release_header();
+  ::cluster::command_header* mutable_header();
+  void set_allocated_header(::cluster::command_header* header);
 
-  // @@protoc_insertion_point(class_scope:protocol.cluster_command_fail)
+  // @@protoc_insertion_point(class_scope:cluster.command_fail)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr node_name_;
-  ::protocol::cluster_header* header_;
+  ::cluster::command_header* header_;
   mutable int _cached_size_;
   friend struct ::protobuf_cluster_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_cluster_5fmessage_2eproto::InitDefaultscluster_command_failImpl();
+  friend void ::protobuf_cluster_5fmessage_2eproto::InitDefaultscommand_failImpl();
 };
 // -------------------------------------------------------------------
 
-class cluster_command_update : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:protocol.cluster_command_update) */ {
+class command_update : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:cluster.command_update) */ {
  public:
-  cluster_command_update();
-  virtual ~cluster_command_update();
+  command_update();
+  virtual ~command_update();
 
-  cluster_command_update(const cluster_command_update& from);
+  command_update(const command_update& from);
 
-  inline cluster_command_update& operator=(const cluster_command_update& from) {
+  inline command_update& operator=(const command_update& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  cluster_command_update(cluster_command_update&& from) noexcept
-    : cluster_command_update() {
+  command_update(command_update&& from) noexcept
+    : command_update() {
     *this = ::std::move(from);
   }
 
-  inline cluster_command_update& operator=(cluster_command_update&& from) noexcept {
+  inline command_update& operator=(command_update&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -668,30 +668,30 @@ class cluster_command_update : public ::google::protobuf::Message /* @@protoc_in
   }
   #endif
   static const ::google::protobuf::Descriptor* descriptor();
-  static const cluster_command_update& default_instance();
+  static const command_update& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const cluster_command_update* internal_default_instance() {
-    return reinterpret_cast<const cluster_command_update*>(
-               &_cluster_command_update_default_instance_);
+  static inline const command_update* internal_default_instance() {
+    return reinterpret_cast<const command_update*>(
+               &_command_update_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     4;
 
-  void Swap(cluster_command_update* other);
-  friend void swap(cluster_command_update& a, cluster_command_update& b) {
+  void Swap(command_update* other);
+  friend void swap(command_update& a, command_update& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline cluster_command_update* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline command_update* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  cluster_command_update* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  command_update* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
   void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
-  void CopyFrom(const cluster_command_update& from);
-  void MergeFrom(const cluster_command_update& from);
+  void CopyFrom(const command_update& from);
+  void MergeFrom(const command_update& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -707,7 +707,7 @@ class cluster_command_update : public ::google::protobuf::Message /* @@protoc_in
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const PROTOBUF_FINAL;
-  void InternalSwap(cluster_command_update* other);
+  void InternalSwap(command_update* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -749,14 +749,14 @@ class cluster_command_update : public ::google::protobuf::Message /* @@protoc_in
   ::std::string* release_node_name();
   void set_allocated_node_name(::std::string* node_name);
 
-  // .protocol.cluster_header header = 1;
+  // .cluster.command_header header = 1;
   bool has_header() const;
   void clear_header();
   static const int kHeaderFieldNumber = 1;
-  const ::protocol::cluster_header& header() const;
-  ::protocol::cluster_header* release_header();
-  ::protocol::cluster_header* mutable_header();
-  void set_allocated_header(::protocol::cluster_header* header);
+  const ::cluster::command_header& header() const;
+  ::cluster::command_header* release_header();
+  ::cluster::command_header* mutable_header();
+  void set_allocated_header(::cluster::command_header* header);
 
   // int64 config_epoch = 2;
   void clear_config_epoch();
@@ -764,18 +764,18 @@ class cluster_command_update : public ::google::protobuf::Message /* @@protoc_in
   ::google::protobuf::int64 config_epoch() const;
   void set_config_epoch(::google::protobuf::int64 value);
 
-  // @@protoc_insertion_point(class_scope:protocol.cluster_command_update)
+  // @@protoc_insertion_point(class_scope:cluster.command_update)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::RepeatedField< bool > slots_;
   mutable int _slots_cached_byte_size_;
   ::google::protobuf::internal::ArenaStringPtr node_name_;
-  ::protocol::cluster_header* header_;
+  ::cluster::command_header* header_;
   ::google::protobuf::int64 config_epoch_;
   mutable int _cached_size_;
   friend struct ::protobuf_cluster_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_cluster_5fmessage_2eproto::InitDefaultscluster_command_updateImpl();
+  friend void ::protobuf_cluster_5fmessage_2eproto::InitDefaultscommand_updateImpl();
 };
 // ===================================================================
 
@@ -786,430 +786,430 @@ class cluster_command_update : public ::google::protobuf::Message /* @@protoc_in
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// cluster_header
+// command_header
 
 // int64 current_epoch = 1;
-inline void cluster_header::clear_current_epoch() {
+inline void command_header::clear_current_epoch() {
   current_epoch_ = GOOGLE_LONGLONG(0);
 }
-inline ::google::protobuf::int64 cluster_header::current_epoch() const {
-  // @@protoc_insertion_point(field_get:protocol.cluster_header.current_epoch)
+inline ::google::protobuf::int64 command_header::current_epoch() const {
+  // @@protoc_insertion_point(field_get:cluster.command_header.current_epoch)
   return current_epoch_;
 }
-inline void cluster_header::set_current_epoch(::google::protobuf::int64 value) {
+inline void command_header::set_current_epoch(::google::protobuf::int64 value) {
   
   current_epoch_ = value;
-  // @@protoc_insertion_point(field_set:protocol.cluster_header.current_epoch)
+  // @@protoc_insertion_point(field_set:cluster.command_header.current_epoch)
 }
 
 // int64 config_epoch = 2;
-inline void cluster_header::clear_config_epoch() {
+inline void command_header::clear_config_epoch() {
   config_epoch_ = GOOGLE_LONGLONG(0);
 }
-inline ::google::protobuf::int64 cluster_header::config_epoch() const {
-  // @@protoc_insertion_point(field_get:protocol.cluster_header.config_epoch)
+inline ::google::protobuf::int64 command_header::config_epoch() const {
+  // @@protoc_insertion_point(field_get:cluster.command_header.config_epoch)
   return config_epoch_;
 }
-inline void cluster_header::set_config_epoch(::google::protobuf::int64 value) {
+inline void command_header::set_config_epoch(::google::protobuf::int64 value) {
   
   config_epoch_ = value;
-  // @@protoc_insertion_point(field_set:protocol.cluster_header.config_epoch)
+  // @@protoc_insertion_point(field_set:cluster.command_header.config_epoch)
 }
 
 // int64 offset = 3;
-inline void cluster_header::clear_offset() {
+inline void command_header::clear_offset() {
   offset_ = GOOGLE_LONGLONG(0);
 }
-inline ::google::protobuf::int64 cluster_header::offset() const {
-  // @@protoc_insertion_point(field_get:protocol.cluster_header.offset)
+inline ::google::protobuf::int64 command_header::offset() const {
+  // @@protoc_insertion_point(field_get:cluster.command_header.offset)
   return offset_;
 }
-inline void cluster_header::set_offset(::google::protobuf::int64 value) {
+inline void command_header::set_offset(::google::protobuf::int64 value) {
   
   offset_ = value;
-  // @@protoc_insertion_point(field_set:protocol.cluster_header.offset)
+  // @@protoc_insertion_point(field_set:cluster.command_header.offset)
 }
 
 // string sender_name = 4;
-inline void cluster_header::clear_sender_name() {
+inline void command_header::clear_sender_name() {
   sender_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& cluster_header::sender_name() const {
-  // @@protoc_insertion_point(field_get:protocol.cluster_header.sender_name)
+inline const ::std::string& command_header::sender_name() const {
+  // @@protoc_insertion_point(field_get:cluster.command_header.sender_name)
   return sender_name_.GetNoArena();
 }
-inline void cluster_header::set_sender_name(const ::std::string& value) {
+inline void command_header::set_sender_name(const ::std::string& value) {
   
   sender_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.cluster_header.sender_name)
+  // @@protoc_insertion_point(field_set:cluster.command_header.sender_name)
 }
 #if LANG_CXX11
-inline void cluster_header::set_sender_name(::std::string&& value) {
+inline void command_header::set_sender_name(::std::string&& value) {
   
   sender_name_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.cluster_header.sender_name)
+  // @@protoc_insertion_point(field_set_rvalue:cluster.command_header.sender_name)
 }
 #endif
-inline void cluster_header::set_sender_name(const char* value) {
+inline void command_header::set_sender_name(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   sender_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.cluster_header.sender_name)
+  // @@protoc_insertion_point(field_set_char:cluster.command_header.sender_name)
 }
-inline void cluster_header::set_sender_name(const char* value, size_t size) {
+inline void command_header::set_sender_name(const char* value, size_t size) {
   
   sender_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.cluster_header.sender_name)
+  // @@protoc_insertion_point(field_set_pointer:cluster.command_header.sender_name)
 }
-inline ::std::string* cluster_header::mutable_sender_name() {
+inline ::std::string* command_header::mutable_sender_name() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.cluster_header.sender_name)
+  // @@protoc_insertion_point(field_mutable:cluster.command_header.sender_name)
   return sender_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* cluster_header::release_sender_name() {
-  // @@protoc_insertion_point(field_release:protocol.cluster_header.sender_name)
+inline ::std::string* command_header::release_sender_name() {
+  // @@protoc_insertion_point(field_release:cluster.command_header.sender_name)
   
   return sender_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void cluster_header::set_allocated_sender_name(::std::string* sender_name) {
+inline void command_header::set_allocated_sender_name(::std::string* sender_name) {
   if (sender_name != NULL) {
     
   } else {
     
   }
   sender_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), sender_name);
-  // @@protoc_insertion_point(field_set_allocated:protocol.cluster_header.sender_name)
+  // @@protoc_insertion_point(field_set_allocated:cluster.command_header.sender_name)
 }
 
 // string slaveof_name = 5;
-inline void cluster_header::clear_slaveof_name() {
+inline void command_header::clear_slaveof_name() {
   slaveof_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& cluster_header::slaveof_name() const {
-  // @@protoc_insertion_point(field_get:protocol.cluster_header.slaveof_name)
+inline const ::std::string& command_header::slaveof_name() const {
+  // @@protoc_insertion_point(field_get:cluster.command_header.slaveof_name)
   return slaveof_name_.GetNoArena();
 }
-inline void cluster_header::set_slaveof_name(const ::std::string& value) {
+inline void command_header::set_slaveof_name(const ::std::string& value) {
   
   slaveof_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.cluster_header.slaveof_name)
+  // @@protoc_insertion_point(field_set:cluster.command_header.slaveof_name)
 }
 #if LANG_CXX11
-inline void cluster_header::set_slaveof_name(::std::string&& value) {
+inline void command_header::set_slaveof_name(::std::string&& value) {
   
   slaveof_name_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.cluster_header.slaveof_name)
+  // @@protoc_insertion_point(field_set_rvalue:cluster.command_header.slaveof_name)
 }
 #endif
-inline void cluster_header::set_slaveof_name(const char* value) {
+inline void command_header::set_slaveof_name(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   slaveof_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.cluster_header.slaveof_name)
+  // @@protoc_insertion_point(field_set_char:cluster.command_header.slaveof_name)
 }
-inline void cluster_header::set_slaveof_name(const char* value, size_t size) {
+inline void command_header::set_slaveof_name(const char* value, size_t size) {
   
   slaveof_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.cluster_header.slaveof_name)
+  // @@protoc_insertion_point(field_set_pointer:cluster.command_header.slaveof_name)
 }
-inline ::std::string* cluster_header::mutable_slaveof_name() {
+inline ::std::string* command_header::mutable_slaveof_name() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.cluster_header.slaveof_name)
+  // @@protoc_insertion_point(field_mutable:cluster.command_header.slaveof_name)
   return slaveof_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* cluster_header::release_slaveof_name() {
-  // @@protoc_insertion_point(field_release:protocol.cluster_header.slaveof_name)
+inline ::std::string* command_header::release_slaveof_name() {
+  // @@protoc_insertion_point(field_release:cluster.command_header.slaveof_name)
   
   return slaveof_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void cluster_header::set_allocated_slaveof_name(::std::string* slaveof_name) {
+inline void command_header::set_allocated_slaveof_name(::std::string* slaveof_name) {
   if (slaveof_name != NULL) {
     
   } else {
     
   }
   slaveof_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), slaveof_name);
-  // @@protoc_insertion_point(field_set_allocated:protocol.cluster_header.slaveof_name)
+  // @@protoc_insertion_point(field_set_allocated:cluster.command_header.slaveof_name)
 }
 
 // repeated bool myslots = 6;
-inline int cluster_header::myslots_size() const {
+inline int command_header::myslots_size() const {
   return myslots_.size();
 }
-inline void cluster_header::clear_myslots() {
+inline void command_header::clear_myslots() {
   myslots_.Clear();
 }
-inline bool cluster_header::myslots(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.cluster_header.myslots)
+inline bool command_header::myslots(int index) const {
+  // @@protoc_insertion_point(field_get:cluster.command_header.myslots)
   return myslots_.Get(index);
 }
-inline void cluster_header::set_myslots(int index, bool value) {
+inline void command_header::set_myslots(int index, bool value) {
   myslots_.Set(index, value);
-  // @@protoc_insertion_point(field_set:protocol.cluster_header.myslots)
+  // @@protoc_insertion_point(field_set:cluster.command_header.myslots)
 }
-inline void cluster_header::add_myslots(bool value) {
+inline void command_header::add_myslots(bool value) {
   myslots_.Add(value);
-  // @@protoc_insertion_point(field_add:protocol.cluster_header.myslots)
+  // @@protoc_insertion_point(field_add:cluster.command_header.myslots)
 }
 inline const ::google::protobuf::RepeatedField< bool >&
-cluster_header::myslots() const {
-  // @@protoc_insertion_point(field_list:protocol.cluster_header.myslots)
+command_header::myslots() const {
+  // @@protoc_insertion_point(field_list:cluster.command_header.myslots)
   return myslots_;
 }
 inline ::google::protobuf::RepeatedField< bool >*
-cluster_header::mutable_myslots() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.cluster_header.myslots)
+command_header::mutable_myslots() {
+  // @@protoc_insertion_point(field_mutable_list:cluster.command_header.myslots)
   return &myslots_;
 }
 
 // int32 port = 7;
-inline void cluster_header::clear_port() {
+inline void command_header::clear_port() {
   port_ = 0;
 }
-inline ::google::protobuf::int32 cluster_header::port() const {
-  // @@protoc_insertion_point(field_get:protocol.cluster_header.port)
+inline ::google::protobuf::int32 command_header::port() const {
+  // @@protoc_insertion_point(field_get:cluster.command_header.port)
   return port_;
 }
-inline void cluster_header::set_port(::google::protobuf::int32 value) {
+inline void command_header::set_port(::google::protobuf::int32 value) {
   
   port_ = value;
-  // @@protoc_insertion_point(field_set:protocol.cluster_header.port)
+  // @@protoc_insertion_point(field_set:cluster.command_header.port)
 }
 
 // int32 flags = 8;
-inline void cluster_header::clear_flags() {
+inline void command_header::clear_flags() {
   flags_ = 0;
 }
-inline ::google::protobuf::int32 cluster_header::flags() const {
-  // @@protoc_insertion_point(field_get:protocol.cluster_header.flags)
+inline ::google::protobuf::int32 command_header::flags() const {
+  // @@protoc_insertion_point(field_get:cluster.command_header.flags)
   return flags_;
 }
-inline void cluster_header::set_flags(::google::protobuf::int32 value) {
+inline void command_header::set_flags(::google::protobuf::int32 value) {
   
   flags_ = value;
-  // @@protoc_insertion_point(field_set:protocol.cluster_header.flags)
+  // @@protoc_insertion_point(field_set:cluster.command_header.flags)
 }
 
 // int32 state = 9;
-inline void cluster_header::clear_state() {
+inline void command_header::clear_state() {
   state_ = 0;
 }
-inline ::google::protobuf::int32 cluster_header::state() const {
-  // @@protoc_insertion_point(field_get:protocol.cluster_header.state)
+inline ::google::protobuf::int32 command_header::state() const {
+  // @@protoc_insertion_point(field_get:cluster.command_header.state)
   return state_;
 }
-inline void cluster_header::set_state(::google::protobuf::int32 value) {
+inline void command_header::set_state(::google::protobuf::int32 value) {
   
   state_ = value;
-  // @@protoc_insertion_point(field_set:protocol.cluster_header.state)
+  // @@protoc_insertion_point(field_set:cluster.command_header.state)
 }
 
 // -------------------------------------------------------------------
 
-// cluster_gossip
+// gossip
 
 // string node_name = 1;
-inline void cluster_gossip::clear_node_name() {
+inline void gossip::clear_node_name() {
   node_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& cluster_gossip::node_name() const {
-  // @@protoc_insertion_point(field_get:protocol.cluster_gossip.node_name)
+inline const ::std::string& gossip::node_name() const {
+  // @@protoc_insertion_point(field_get:cluster.gossip.node_name)
   return node_name_.GetNoArena();
 }
-inline void cluster_gossip::set_node_name(const ::std::string& value) {
+inline void gossip::set_node_name(const ::std::string& value) {
   
   node_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.cluster_gossip.node_name)
+  // @@protoc_insertion_point(field_set:cluster.gossip.node_name)
 }
 #if LANG_CXX11
-inline void cluster_gossip::set_node_name(::std::string&& value) {
+inline void gossip::set_node_name(::std::string&& value) {
   
   node_name_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.cluster_gossip.node_name)
+  // @@protoc_insertion_point(field_set_rvalue:cluster.gossip.node_name)
 }
 #endif
-inline void cluster_gossip::set_node_name(const char* value) {
+inline void gossip::set_node_name(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   node_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.cluster_gossip.node_name)
+  // @@protoc_insertion_point(field_set_char:cluster.gossip.node_name)
 }
-inline void cluster_gossip::set_node_name(const char* value, size_t size) {
+inline void gossip::set_node_name(const char* value, size_t size) {
   
   node_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.cluster_gossip.node_name)
+  // @@protoc_insertion_point(field_set_pointer:cluster.gossip.node_name)
 }
-inline ::std::string* cluster_gossip::mutable_node_name() {
+inline ::std::string* gossip::mutable_node_name() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.cluster_gossip.node_name)
+  // @@protoc_insertion_point(field_mutable:cluster.gossip.node_name)
   return node_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* cluster_gossip::release_node_name() {
-  // @@protoc_insertion_point(field_release:protocol.cluster_gossip.node_name)
+inline ::std::string* gossip::release_node_name() {
+  // @@protoc_insertion_point(field_release:cluster.gossip.node_name)
   
   return node_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void cluster_gossip::set_allocated_node_name(::std::string* node_name) {
+inline void gossip::set_allocated_node_name(::std::string* node_name) {
   if (node_name != NULL) {
     
   } else {
     
   }
   node_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), node_name);
-  // @@protoc_insertion_point(field_set_allocated:protocol.cluster_gossip.node_name)
+  // @@protoc_insertion_point(field_set_allocated:cluster.gossip.node_name)
 }
 
 // int32 ping_sent = 2;
-inline void cluster_gossip::clear_ping_sent() {
+inline void gossip::clear_ping_sent() {
   ping_sent_ = 0;
 }
-inline ::google::protobuf::int32 cluster_gossip::ping_sent() const {
-  // @@protoc_insertion_point(field_get:protocol.cluster_gossip.ping_sent)
+inline ::google::protobuf::int32 gossip::ping_sent() const {
+  // @@protoc_insertion_point(field_get:cluster.gossip.ping_sent)
   return ping_sent_;
 }
-inline void cluster_gossip::set_ping_sent(::google::protobuf::int32 value) {
+inline void gossip::set_ping_sent(::google::protobuf::int32 value) {
   
   ping_sent_ = value;
-  // @@protoc_insertion_point(field_set:protocol.cluster_gossip.ping_sent)
+  // @@protoc_insertion_point(field_set:cluster.gossip.ping_sent)
 }
 
 // int32 pong_received = 3;
-inline void cluster_gossip::clear_pong_received() {
+inline void gossip::clear_pong_received() {
   pong_received_ = 0;
 }
-inline ::google::protobuf::int32 cluster_gossip::pong_received() const {
-  // @@protoc_insertion_point(field_get:protocol.cluster_gossip.pong_received)
+inline ::google::protobuf::int32 gossip::pong_received() const {
+  // @@protoc_insertion_point(field_get:cluster.gossip.pong_received)
   return pong_received_;
 }
-inline void cluster_gossip::set_pong_received(::google::protobuf::int32 value) {
+inline void gossip::set_pong_received(::google::protobuf::int32 value) {
   
   pong_received_ = value;
-  // @@protoc_insertion_point(field_set:protocol.cluster_gossip.pong_received)
+  // @@protoc_insertion_point(field_set:cluster.gossip.pong_received)
 }
 
 // string ip = 4;
-inline void cluster_gossip::clear_ip() {
+inline void gossip::clear_ip() {
   ip_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& cluster_gossip::ip() const {
-  // @@protoc_insertion_point(field_get:protocol.cluster_gossip.ip)
+inline const ::std::string& gossip::ip() const {
+  // @@protoc_insertion_point(field_get:cluster.gossip.ip)
   return ip_.GetNoArena();
 }
-inline void cluster_gossip::set_ip(const ::std::string& value) {
+inline void gossip::set_ip(const ::std::string& value) {
   
   ip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.cluster_gossip.ip)
+  // @@protoc_insertion_point(field_set:cluster.gossip.ip)
 }
 #if LANG_CXX11
-inline void cluster_gossip::set_ip(::std::string&& value) {
+inline void gossip::set_ip(::std::string&& value) {
   
   ip_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.cluster_gossip.ip)
+  // @@protoc_insertion_point(field_set_rvalue:cluster.gossip.ip)
 }
 #endif
-inline void cluster_gossip::set_ip(const char* value) {
+inline void gossip::set_ip(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   ip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.cluster_gossip.ip)
+  // @@protoc_insertion_point(field_set_char:cluster.gossip.ip)
 }
-inline void cluster_gossip::set_ip(const char* value, size_t size) {
+inline void gossip::set_ip(const char* value, size_t size) {
   
   ip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.cluster_gossip.ip)
+  // @@protoc_insertion_point(field_set_pointer:cluster.gossip.ip)
 }
-inline ::std::string* cluster_gossip::mutable_ip() {
+inline ::std::string* gossip::mutable_ip() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.cluster_gossip.ip)
+  // @@protoc_insertion_point(field_mutable:cluster.gossip.ip)
   return ip_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* cluster_gossip::release_ip() {
-  // @@protoc_insertion_point(field_release:protocol.cluster_gossip.ip)
+inline ::std::string* gossip::release_ip() {
+  // @@protoc_insertion_point(field_release:cluster.gossip.ip)
   
   return ip_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void cluster_gossip::set_allocated_ip(::std::string* ip) {
+inline void gossip::set_allocated_ip(::std::string* ip) {
   if (ip != NULL) {
     
   } else {
     
   }
   ip_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ip);
-  // @@protoc_insertion_point(field_set_allocated:protocol.cluster_gossip.ip)
+  // @@protoc_insertion_point(field_set_allocated:cluster.gossip.ip)
 }
 
 // int32 port = 5;
-inline void cluster_gossip::clear_port() {
+inline void gossip::clear_port() {
   port_ = 0;
 }
-inline ::google::protobuf::int32 cluster_gossip::port() const {
-  // @@protoc_insertion_point(field_get:protocol.cluster_gossip.port)
+inline ::google::protobuf::int32 gossip::port() const {
+  // @@protoc_insertion_point(field_get:cluster.gossip.port)
   return port_;
 }
-inline void cluster_gossip::set_port(::google::protobuf::int32 value) {
+inline void gossip::set_port(::google::protobuf::int32 value) {
   
   port_ = value;
-  // @@protoc_insertion_point(field_set:protocol.cluster_gossip.port)
+  // @@protoc_insertion_point(field_set:cluster.gossip.port)
 }
 
 // int32 flags = 6;
-inline void cluster_gossip::clear_flags() {
+inline void gossip::clear_flags() {
   flags_ = 0;
 }
-inline ::google::protobuf::int32 cluster_gossip::flags() const {
-  // @@protoc_insertion_point(field_get:protocol.cluster_gossip.flags)
+inline ::google::protobuf::int32 gossip::flags() const {
+  // @@protoc_insertion_point(field_get:cluster.gossip.flags)
   return flags_;
 }
-inline void cluster_gossip::set_flags(::google::protobuf::int32 value) {
+inline void gossip::set_flags(::google::protobuf::int32 value) {
   
   flags_ = value;
-  // @@protoc_insertion_point(field_set:protocol.cluster_gossip.flags)
+  // @@protoc_insertion_point(field_set:cluster.gossip.flags)
 }
 
 // -------------------------------------------------------------------
 
-// cluster_command_gossip
+// command_gossip
 
-// .protocol.cluster_header header = 1;
-inline bool cluster_command_gossip::has_header() const {
+// .cluster.command_header header = 1;
+inline bool command_gossip::has_header() const {
   return this != internal_default_instance() && header_ != NULL;
 }
-inline void cluster_command_gossip::clear_header() {
+inline void command_gossip::clear_header() {
   if (GetArenaNoVirtual() == NULL && header_ != NULL) {
     delete header_;
   }
   header_ = NULL;
 }
-inline const ::protocol::cluster_header& cluster_command_gossip::header() const {
-  const ::protocol::cluster_header* p = header_;
-  // @@protoc_insertion_point(field_get:protocol.cluster_command_gossip.header)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::cluster_header*>(
-      &::protocol::_cluster_header_default_instance_);
+inline const ::cluster::command_header& command_gossip::header() const {
+  const ::cluster::command_header* p = header_;
+  // @@protoc_insertion_point(field_get:cluster.command_gossip.header)
+  return p != NULL ? *p : *reinterpret_cast<const ::cluster::command_header*>(
+      &::cluster::_command_header_default_instance_);
 }
-inline ::protocol::cluster_header* cluster_command_gossip::release_header() {
-  // @@protoc_insertion_point(field_release:protocol.cluster_command_gossip.header)
+inline ::cluster::command_header* command_gossip::release_header() {
+  // @@protoc_insertion_point(field_release:cluster.command_gossip.header)
   
-  ::protocol::cluster_header* temp = header_;
+  ::cluster::command_header* temp = header_;
   header_ = NULL;
   return temp;
 }
-inline ::protocol::cluster_header* cluster_command_gossip::mutable_header() {
+inline ::cluster::command_header* command_gossip::mutable_header() {
   
   if (header_ == NULL) {
-    header_ = new ::protocol::cluster_header;
+    header_ = new ::cluster::command_header;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.cluster_command_gossip.header)
+  // @@protoc_insertion_point(field_mutable:cluster.command_gossip.header)
   return header_;
 }
-inline void cluster_command_gossip::set_allocated_header(::protocol::cluster_header* header) {
+inline void command_gossip::set_allocated_header(::cluster::command_header* header) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete header_;
@@ -1225,75 +1225,75 @@ inline void cluster_command_gossip::set_allocated_header(::protocol::cluster_hea
     
   }
   header_ = header;
-  // @@protoc_insertion_point(field_set_allocated:protocol.cluster_command_gossip.header)
+  // @@protoc_insertion_point(field_set_allocated:cluster.command_gossip.header)
 }
 
-// repeated .protocol.cluster_gossip gossips = 2;
-inline int cluster_command_gossip::gossips_size() const {
+// repeated .cluster.gossip gossips = 2;
+inline int command_gossip::gossips_size() const {
   return gossips_.size();
 }
-inline void cluster_command_gossip::clear_gossips() {
+inline void command_gossip::clear_gossips() {
   gossips_.Clear();
 }
-inline const ::protocol::cluster_gossip& cluster_command_gossip::gossips(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.cluster_command_gossip.gossips)
+inline const ::cluster::gossip& command_gossip::gossips(int index) const {
+  // @@protoc_insertion_point(field_get:cluster.command_gossip.gossips)
   return gossips_.Get(index);
 }
-inline ::protocol::cluster_gossip* cluster_command_gossip::mutable_gossips(int index) {
-  // @@protoc_insertion_point(field_mutable:protocol.cluster_command_gossip.gossips)
+inline ::cluster::gossip* command_gossip::mutable_gossips(int index) {
+  // @@protoc_insertion_point(field_mutable:cluster.command_gossip.gossips)
   return gossips_.Mutable(index);
 }
-inline ::protocol::cluster_gossip* cluster_command_gossip::add_gossips() {
-  // @@protoc_insertion_point(field_add:protocol.cluster_command_gossip.gossips)
+inline ::cluster::gossip* command_gossip::add_gossips() {
+  // @@protoc_insertion_point(field_add:cluster.command_gossip.gossips)
   return gossips_.Add();
 }
-inline ::google::protobuf::RepeatedPtrField< ::protocol::cluster_gossip >*
-cluster_command_gossip::mutable_gossips() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.cluster_command_gossip.gossips)
+inline ::google::protobuf::RepeatedPtrField< ::cluster::gossip >*
+command_gossip::mutable_gossips() {
+  // @@protoc_insertion_point(field_mutable_list:cluster.command_gossip.gossips)
   return &gossips_;
 }
-inline const ::google::protobuf::RepeatedPtrField< ::protocol::cluster_gossip >&
-cluster_command_gossip::gossips() const {
-  // @@protoc_insertion_point(field_list:protocol.cluster_command_gossip.gossips)
+inline const ::google::protobuf::RepeatedPtrField< ::cluster::gossip >&
+command_gossip::gossips() const {
+  // @@protoc_insertion_point(field_list:cluster.command_gossip.gossips)
   return gossips_;
 }
 
 // -------------------------------------------------------------------
 
-// cluster_command_fail
+// command_fail
 
-// .protocol.cluster_header header = 1;
-inline bool cluster_command_fail::has_header() const {
+// .cluster.command_header header = 1;
+inline bool command_fail::has_header() const {
   return this != internal_default_instance() && header_ != NULL;
 }
-inline void cluster_command_fail::clear_header() {
+inline void command_fail::clear_header() {
   if (GetArenaNoVirtual() == NULL && header_ != NULL) {
     delete header_;
   }
   header_ = NULL;
 }
-inline const ::protocol::cluster_header& cluster_command_fail::header() const {
-  const ::protocol::cluster_header* p = header_;
-  // @@protoc_insertion_point(field_get:protocol.cluster_command_fail.header)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::cluster_header*>(
-      &::protocol::_cluster_header_default_instance_);
+inline const ::cluster::command_header& command_fail::header() const {
+  const ::cluster::command_header* p = header_;
+  // @@protoc_insertion_point(field_get:cluster.command_fail.header)
+  return p != NULL ? *p : *reinterpret_cast<const ::cluster::command_header*>(
+      &::cluster::_command_header_default_instance_);
 }
-inline ::protocol::cluster_header* cluster_command_fail::release_header() {
-  // @@protoc_insertion_point(field_release:protocol.cluster_command_fail.header)
+inline ::cluster::command_header* command_fail::release_header() {
+  // @@protoc_insertion_point(field_release:cluster.command_fail.header)
   
-  ::protocol::cluster_header* temp = header_;
+  ::cluster::command_header* temp = header_;
   header_ = NULL;
   return temp;
 }
-inline ::protocol::cluster_header* cluster_command_fail::mutable_header() {
+inline ::cluster::command_header* command_fail::mutable_header() {
   
   if (header_ == NULL) {
-    header_ = new ::protocol::cluster_header;
+    header_ = new ::cluster::command_header;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.cluster_command_fail.header)
+  // @@protoc_insertion_point(field_mutable:cluster.command_fail.header)
   return header_;
 }
-inline void cluster_command_fail::set_allocated_header(::protocol::cluster_header* header) {
+inline void command_fail::set_allocated_header(::cluster::command_header* header) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete header_;
@@ -1309,98 +1309,98 @@ inline void cluster_command_fail::set_allocated_header(::protocol::cluster_heade
     
   }
   header_ = header;
-  // @@protoc_insertion_point(field_set_allocated:protocol.cluster_command_fail.header)
+  // @@protoc_insertion_point(field_set_allocated:cluster.command_fail.header)
 }
 
 // string node_name = 2;
-inline void cluster_command_fail::clear_node_name() {
+inline void command_fail::clear_node_name() {
   node_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& cluster_command_fail::node_name() const {
-  // @@protoc_insertion_point(field_get:protocol.cluster_command_fail.node_name)
+inline const ::std::string& command_fail::node_name() const {
+  // @@protoc_insertion_point(field_get:cluster.command_fail.node_name)
   return node_name_.GetNoArena();
 }
-inline void cluster_command_fail::set_node_name(const ::std::string& value) {
+inline void command_fail::set_node_name(const ::std::string& value) {
   
   node_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.cluster_command_fail.node_name)
+  // @@protoc_insertion_point(field_set:cluster.command_fail.node_name)
 }
 #if LANG_CXX11
-inline void cluster_command_fail::set_node_name(::std::string&& value) {
+inline void command_fail::set_node_name(::std::string&& value) {
   
   node_name_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.cluster_command_fail.node_name)
+  // @@protoc_insertion_point(field_set_rvalue:cluster.command_fail.node_name)
 }
 #endif
-inline void cluster_command_fail::set_node_name(const char* value) {
+inline void command_fail::set_node_name(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   node_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.cluster_command_fail.node_name)
+  // @@protoc_insertion_point(field_set_char:cluster.command_fail.node_name)
 }
-inline void cluster_command_fail::set_node_name(const char* value, size_t size) {
+inline void command_fail::set_node_name(const char* value, size_t size) {
   
   node_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.cluster_command_fail.node_name)
+  // @@protoc_insertion_point(field_set_pointer:cluster.command_fail.node_name)
 }
-inline ::std::string* cluster_command_fail::mutable_node_name() {
+inline ::std::string* command_fail::mutable_node_name() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.cluster_command_fail.node_name)
+  // @@protoc_insertion_point(field_mutable:cluster.command_fail.node_name)
   return node_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* cluster_command_fail::release_node_name() {
-  // @@protoc_insertion_point(field_release:protocol.cluster_command_fail.node_name)
+inline ::std::string* command_fail::release_node_name() {
+  // @@protoc_insertion_point(field_release:cluster.command_fail.node_name)
   
   return node_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void cluster_command_fail::set_allocated_node_name(::std::string* node_name) {
+inline void command_fail::set_allocated_node_name(::std::string* node_name) {
   if (node_name != NULL) {
     
   } else {
     
   }
   node_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), node_name);
-  // @@protoc_insertion_point(field_set_allocated:protocol.cluster_command_fail.node_name)
+  // @@protoc_insertion_point(field_set_allocated:cluster.command_fail.node_name)
 }
 
 // -------------------------------------------------------------------
 
-// cluster_command_update
+// command_update
 
-// .protocol.cluster_header header = 1;
-inline bool cluster_command_update::has_header() const {
+// .cluster.command_header header = 1;
+inline bool command_update::has_header() const {
   return this != internal_default_instance() && header_ != NULL;
 }
-inline void cluster_command_update::clear_header() {
+inline void command_update::clear_header() {
   if (GetArenaNoVirtual() == NULL && header_ != NULL) {
     delete header_;
   }
   header_ = NULL;
 }
-inline const ::protocol::cluster_header& cluster_command_update::header() const {
-  const ::protocol::cluster_header* p = header_;
-  // @@protoc_insertion_point(field_get:protocol.cluster_command_update.header)
-  return p != NULL ? *p : *reinterpret_cast<const ::protocol::cluster_header*>(
-      &::protocol::_cluster_header_default_instance_);
+inline const ::cluster::command_header& command_update::header() const {
+  const ::cluster::command_header* p = header_;
+  // @@protoc_insertion_point(field_get:cluster.command_update.header)
+  return p != NULL ? *p : *reinterpret_cast<const ::cluster::command_header*>(
+      &::cluster::_command_header_default_instance_);
 }
-inline ::protocol::cluster_header* cluster_command_update::release_header() {
-  // @@protoc_insertion_point(field_release:protocol.cluster_command_update.header)
+inline ::cluster::command_header* command_update::release_header() {
+  // @@protoc_insertion_point(field_release:cluster.command_update.header)
   
-  ::protocol::cluster_header* temp = header_;
+  ::cluster::command_header* temp = header_;
   header_ = NULL;
   return temp;
 }
-inline ::protocol::cluster_header* cluster_command_update::mutable_header() {
+inline ::cluster::command_header* command_update::mutable_header() {
   
   if (header_ == NULL) {
-    header_ = new ::protocol::cluster_header;
+    header_ = new ::cluster::command_header;
   }
-  // @@protoc_insertion_point(field_mutable:protocol.cluster_command_update.header)
+  // @@protoc_insertion_point(field_mutable:cluster.command_update.header)
   return header_;
 }
-inline void cluster_command_update::set_allocated_header(::protocol::cluster_header* header) {
+inline void command_update::set_allocated_header(::cluster::command_header* header) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete header_;
@@ -1416,103 +1416,103 @@ inline void cluster_command_update::set_allocated_header(::protocol::cluster_hea
     
   }
   header_ = header;
-  // @@protoc_insertion_point(field_set_allocated:protocol.cluster_command_update.header)
+  // @@protoc_insertion_point(field_set_allocated:cluster.command_update.header)
 }
 
 // int64 config_epoch = 2;
-inline void cluster_command_update::clear_config_epoch() {
+inline void command_update::clear_config_epoch() {
   config_epoch_ = GOOGLE_LONGLONG(0);
 }
-inline ::google::protobuf::int64 cluster_command_update::config_epoch() const {
-  // @@protoc_insertion_point(field_get:protocol.cluster_command_update.config_epoch)
+inline ::google::protobuf::int64 command_update::config_epoch() const {
+  // @@protoc_insertion_point(field_get:cluster.command_update.config_epoch)
   return config_epoch_;
 }
-inline void cluster_command_update::set_config_epoch(::google::protobuf::int64 value) {
+inline void command_update::set_config_epoch(::google::protobuf::int64 value) {
   
   config_epoch_ = value;
-  // @@protoc_insertion_point(field_set:protocol.cluster_command_update.config_epoch)
+  // @@protoc_insertion_point(field_set:cluster.command_update.config_epoch)
 }
 
 // string node_name = 3;
-inline void cluster_command_update::clear_node_name() {
+inline void command_update::clear_node_name() {
   node_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& cluster_command_update::node_name() const {
-  // @@protoc_insertion_point(field_get:protocol.cluster_command_update.node_name)
+inline const ::std::string& command_update::node_name() const {
+  // @@protoc_insertion_point(field_get:cluster.command_update.node_name)
   return node_name_.GetNoArena();
 }
-inline void cluster_command_update::set_node_name(const ::std::string& value) {
+inline void command_update::set_node_name(const ::std::string& value) {
   
   node_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:protocol.cluster_command_update.node_name)
+  // @@protoc_insertion_point(field_set:cluster.command_update.node_name)
 }
 #if LANG_CXX11
-inline void cluster_command_update::set_node_name(::std::string&& value) {
+inline void command_update::set_node_name(::std::string&& value) {
   
   node_name_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:protocol.cluster_command_update.node_name)
+  // @@protoc_insertion_point(field_set_rvalue:cluster.command_update.node_name)
 }
 #endif
-inline void cluster_command_update::set_node_name(const char* value) {
+inline void command_update::set_node_name(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   node_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:protocol.cluster_command_update.node_name)
+  // @@protoc_insertion_point(field_set_char:cluster.command_update.node_name)
 }
-inline void cluster_command_update::set_node_name(const char* value, size_t size) {
+inline void command_update::set_node_name(const char* value, size_t size) {
   
   node_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:protocol.cluster_command_update.node_name)
+  // @@protoc_insertion_point(field_set_pointer:cluster.command_update.node_name)
 }
-inline ::std::string* cluster_command_update::mutable_node_name() {
+inline ::std::string* command_update::mutable_node_name() {
   
-  // @@protoc_insertion_point(field_mutable:protocol.cluster_command_update.node_name)
+  // @@protoc_insertion_point(field_mutable:cluster.command_update.node_name)
   return node_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* cluster_command_update::release_node_name() {
-  // @@protoc_insertion_point(field_release:protocol.cluster_command_update.node_name)
+inline ::std::string* command_update::release_node_name() {
+  // @@protoc_insertion_point(field_release:cluster.command_update.node_name)
   
   return node_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void cluster_command_update::set_allocated_node_name(::std::string* node_name) {
+inline void command_update::set_allocated_node_name(::std::string* node_name) {
   if (node_name != NULL) {
     
   } else {
     
   }
   node_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), node_name);
-  // @@protoc_insertion_point(field_set_allocated:protocol.cluster_command_update.node_name)
+  // @@protoc_insertion_point(field_set_allocated:cluster.command_update.node_name)
 }
 
 // repeated bool slots = 4;
-inline int cluster_command_update::slots_size() const {
+inline int command_update::slots_size() const {
   return slots_.size();
 }
-inline void cluster_command_update::clear_slots() {
+inline void command_update::clear_slots() {
   slots_.Clear();
 }
-inline bool cluster_command_update::slots(int index) const {
-  // @@protoc_insertion_point(field_get:protocol.cluster_command_update.slots)
+inline bool command_update::slots(int index) const {
+  // @@protoc_insertion_point(field_get:cluster.command_update.slots)
   return slots_.Get(index);
 }
-inline void cluster_command_update::set_slots(int index, bool value) {
+inline void command_update::set_slots(int index, bool value) {
   slots_.Set(index, value);
-  // @@protoc_insertion_point(field_set:protocol.cluster_command_update.slots)
+  // @@protoc_insertion_point(field_set:cluster.command_update.slots)
 }
-inline void cluster_command_update::add_slots(bool value) {
+inline void command_update::add_slots(bool value) {
   slots_.Add(value);
-  // @@protoc_insertion_point(field_add:protocol.cluster_command_update.slots)
+  // @@protoc_insertion_point(field_add:cluster.command_update.slots)
 }
 inline const ::google::protobuf::RepeatedField< bool >&
-cluster_command_update::slots() const {
-  // @@protoc_insertion_point(field_list:protocol.cluster_command_update.slots)
+command_update::slots() const {
+  // @@protoc_insertion_point(field_list:cluster.command_update.slots)
   return slots_;
 }
 inline ::google::protobuf::RepeatedField< bool >*
-cluster_command_update::mutable_slots() {
-  // @@protoc_insertion_point(field_mutable_list:protocol.cluster_command_update.slots)
+command_update::mutable_slots() {
+  // @@protoc_insertion_point(field_mutable_list:cluster.command_update.slots)
   return &slots_;
 }
 
@@ -1530,7 +1530,7 @@ cluster_command_update::mutable_slots() {
 
 // @@protoc_insertion_point(namespace_scope)
 
-}  // namespace protocol
+}  // namespace cluster
 
 // @@protoc_insertion_point(global_scope)
 

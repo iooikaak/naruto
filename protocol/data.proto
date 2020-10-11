@@ -1,0 +1,28 @@
+syntax="proto3";
+package data;
+
+enum TYPE{
+  UNKNOW = 0;
+
+  NUMBER = 1; // 数值
+  NUMBER_LIST = 2; // 数值列表
+
+  FLOAT = 3;
+  FLOAT_LIST = 4;
+
+  STRING = 5; // 字符串
+  STRING_LIST = 6; // 字符串列表
+
+  MAP = 7; // map
+}
+
+message VALUE{
+  TYPE type = 1;
+  int64 number = 2;
+  repeated int64 number_list = 3;
+  float float = 4;
+  repeated float float_list = 5;
+  string str = 6;
+  repeated string str_list = 7;
+  map<string, VALUE> kvs = 8;
+}

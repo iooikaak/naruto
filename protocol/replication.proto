@@ -1,0 +1,31 @@
+syntax="proto3";
+package replication;
+
+// ======================== repl ping pong ==============================
+message command_ping{
+  string ip = 1;
+}
+
+message command_pong{
+  string ip = 1;
+}
+
+// ======================== repl sync ==============================
+message command_ack{
+  uint64 repl_off = 1;
+}
+
+message command_psync{
+  int64 repl_off = 1;
+  string run_id = 2;
+}
+
+message command_fullsync{
+  int64 repl_off = 1;
+  string run_id = 2;
+}
+
+message command_partsync{
+  int64 repl_off = 1;
+  string run_id = 2;
+}

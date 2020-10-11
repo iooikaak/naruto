@@ -7,7 +7,6 @@
 
 #include <exception>
 #include <string>
-#include <utility>
 
 // 定义 CONNECT 错误值
 #define CONNECT_ERROR_IO 1
@@ -18,8 +17,9 @@
 #define CONNECT_ERROR_TIMEOUT 6
 #define CONNECT_ERROR_EAGIN_TIMEOUT 7
 
-namespace naruto{
-namespace utils{
+#define ERROR_NOT_SUPPORT_TYPE 8
+
+namespace naruto::utils{
 
 class Error : public std::exception{
 public:
@@ -120,9 +120,33 @@ public:
     virtual ~ReplyError() = default;
 };
 
+class TypeError : public Error{
+public:
+    explicit TypeError(const std::string& msg) : Error(msg){}
+    TypeError(const TypeError &) = default;
+    TypeError& operator=(const TypeError &) = default;
+
+    TypeError(TypeError &&) = default;
+    TypeError& operator=(TypeError &&) = default;
+
+    virtual ~TypeError() = default;
+};
+
+
+class BadArgError : public Error{
+public:
+    explicit BadArgError(const std::string& msg) : Error(msg){}
+    BadArgError(const BadArgError &) = default;
+    BadArgError& operator=(const BadArgError &) = default;
+
+    BadArgError(BadArgError &&) = default;
+    BadArgError& operator=(BadArgError &&) = default;
+
+    virtual ~BadArgError() = default;
+};
+
 void throw_err(int err_type, const std::string& errmsg);
 
-}
 }
 
 #endif //NARUTO__ERRORS_H

@@ -108,7 +108,7 @@ void Bytes::replace(uint8_t key, uint8_t rep, uint32_t start, bool firstOccuranc
     }
 }
 
-unsigned char *Bytes::data() { return buf.data(); }
+const unsigned char * Bytes::data() const { return buf.data(); }
 
 // Read Functions
 uint8_t Bytes::peek() const {
@@ -270,11 +270,14 @@ void Bytes::putMessage(const google::protobuf::Message &message, uint16_t type) 
     // 包消息类型 2 字节
     putShort(type);
 
-    LOG(INFO) << "putMessage pack_size:" << pack_size << " body size:" << body_size << " version:" << unsigned(version) << " flag:" << unsigned(flag) << std::endl;
-    // body
-    char buf[body_size];
-    message.SerializeToArray(buf, body_size);
-    putBytes((uint8_t*)buf, body_size);
+    if (size() < (wpos + body_size)){
+        LOG(INFO) << "wpos add...";
+        buf.resize(wpos + body_size);
+    }
+
+    message.SerializeToArray((void*)(&buf[wpos]), body_size);
+    wpos += body_size;
+    LOG(INFO) << "putMessage pack_size:" << pack_size << " body size:" << body_size << " version:" << unsigned(version) << " flag:" << unsigned(flag) << " type:" << unsigned(type) << std::endl;
 }
 
 void Bytes::setName(std::string n) {

@@ -5,8 +5,7 @@
 #ifndef NARUTO_NOCOPY_H
 #define NARUTO_NOCOPY_H
 
-namespace naruto {
-namespace utils {
+namespace naruto::utils {
 
 class UnCopyable {
 public:
@@ -16,5 +15,5 @@ public:
 
     UnCopyable &operator=(const UnCopyable &) = delete;
 };
-}}
+}
 #endif //NARUTO_NOCOPY_H

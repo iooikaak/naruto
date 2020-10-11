@@ -9,25 +9,28 @@
 #include <vector>
 #include <iostream>
 
-struct data{
+
+struct data {
     int a;
-    std::string * str;
+    std::string *str;
 };
 
-class A{
+class A {
 public:
-    A() : data_(new data{10, new std::string("1231213")}){
+    A() : data_(new data{10, new std::string("1231213")}) {
         std::cout << "A()" << std::endl;
     }
-    A(const A& a) = delete;
-    A& operator = (const A& a) = delete;
 
-    A(A&& a) noexcept {
-        data_ =std::move(a.data_);
+    A(const A &a) = delete;
+
+    A &operator=(const A &a) = delete;
+
+    A(A &&a) noexcept {
+        data_ = std::move(a.data_);
         std::cout << "A(A&& a)" << std::endl;
     }
 
-    A& operator= (A&& a) noexcept {
+    A &operator=(A &&a) noexcept {
         std::cout << "A& operator= (AA& a)" << std::endl;
         data_ = std::move(a.data_);
         return *this;
@@ -37,26 +40,27 @@ public:
     data_ptr data_;
 };
 
-A getA(){
+A getA() {
     A a;
     return a;
 }
 
-class TestCPP : public ::testing::Test{
+class TestCPP : public ::testing::Test {
 
 };
 
-TEST_F(TestCPP, cpp){
+TEST_F(TestCPP, cpp) {
     A a = getA();
-    std::cout <<"a.a:"<< a.data_->a << std::endl;
+    std::cout << "a.a:" << a.data_->a << std::endl;
     std::cout << "a.str:" << *a.data_->str << std::endl;
 
     A b = std::move(a);
-    std::cout <<"b.a:"<< b.data_->a << std::endl;
+    std::cout << "b.a:" << b.data_->a << std::endl;
     std::cout << "b.str:" << *b.data_->str << std::endl;
 
 //    std::cout <<"a.a:"<< a.data_->a << std::endl;
 //    std::cout << "a.str:" << *a.data_->str << std::endl;
 }
+
 
 #endif //NARUTO_UT_CPP_H

@@ -8,8 +8,13 @@
 #include <vector>
 #include <atomic>
 #include <ev++.h>
+#include <list>
+#include <glog/logging.h>
+#include <sys/socket.h>
 
 #include "utils/bytes.h"
+#include "connection/connection.h"
+#include "client.h"
 
 // 未开始复制
 #define REPL_STATE_NONE 0
@@ -30,21 +35,77 @@
 // 首次全量同步已经完成，和master连接正常连接，增量同步
 #define REPL_STATE_CONNECTED 5
 
+// 主服务器 save db 开始
+#define REPL_STATE_WAIT_BGSAVE_START 6
+
+// 主服务器 save db 完成
+#define REPL_STATE_WAIT_BGSAVE_END 7
+
+// 主服务器 正在 发送 db 到 slave
+#define REPL_STATE_SEND_BULK 8
+
+// 全量db 文件已经发送完成，只需要增量更新即可
+#define REPL_STATE_ONLINE 9
+
 namespace naruto{
+
+struct saveparam{
+    // 多少秒之内
+    std::chrono::seconds seconds;
+
+    // 发生多少次修改
+    int changes;
+};
 
 class Replication {
 public:
     Replication(bool master,int back_log_size, int merge_threads_size, int repl_timeout_sec);
+    void onEvents(ev::io&, int);
+    void onSyncWithMaster(ev::io&, int);
 
+    ~Replication();
     void onReplCron(ev::timer&, int);
 
+    void feedSlaves(const ::google::protobuf::Message&, uint16_t type);
+
+
 private:
+    void _feed_backlog(utils::Bytes&);
+    void _undo_connect_master();
+    void _connect_master();
+    void _repl_cache_master();
+    void _repl_discard_cache_master();
+    void _abort_sync_transfer();
+    void _free_client(std::shared_ptr<narutoClient>&);
+    void _repl_send_ack();
+
+    int _slave_try_partial_resynchronization();
+
+    uint64_t _cronloops;
+
     // 每个线程会持有一个 写命令的 双 buffer
     using repl_bytes = std::vector<std::shared_ptr<naruto::utils::Bytes>>;
-    bool _master;
+    bool _is_master;
 
     // 消息自增id，用于多线程命名重排序
     std::atomic_uint64_t _repl_incr_id;
+    std::chrono::steady_clock::time_point _repl_unixtime;
+    std::chrono::steady_clock::time_point _repl_no_slaves_since;
+    std::chrono::steady_clock::time_point _repl_down_since;
+    // dump db
+    // 负责执行 dump db 的 子进程 id
+    pid_t _dump_db_child_pid;
+    std::list<saveparam> _saveparams;
+
+    // connect to master
+    std::shared_ptr<narutoClient> _master;
+    // 为了实现 当正常同步时，master 连接中断
+    // 当尝试重连时，可以顺利执行 部分重同步
+    std::shared_ptr<narutoClient> _cache_master;
+    std::list<std::shared_ptr<narutoClient>> _slaves;
+
+    std::shared_ptr<ev::io> _repl_ev_io_w;
+    std::shared_ptr<ev::io> _repl_ev_io_r;
 
     // 当前使用的index
     std::atomic_int _pos;
@@ -87,13 +148,14 @@ private:
     std::string _repl_transfer_tmpfile;
     // 最近一次读入 RDB 内容的时间
     std::chrono::steady_clock::time_point _repl_transfer_lastio;
+    std::chrono::steady_clock::time_point _repl_last_interaction;
     // 是否只读从服务器？
     bool _repl_slave_ro;
     // 连接断开的时长
-    time_t _repl_down_since;
     std::string _repl_master_runid;
     // 初始化偏移量
     long long _repl_master_initial_offset;
+
 };
 
 

@@ -8,8 +8,9 @@
 #include <deque>
 #include <condition_variable>
 #include <mutex>
-
+#include "utils/nocopy.h"
 #include "connection.h"
+
 
 namespace naruto{
 namespace connection{
@@ -29,10 +30,9 @@ struct ConnectionPoolOptions {
     std::chrono::milliseconds connection_lifetime{5000};
 };
 
-class ConnectionPool : public naruto::utils::UnCopyable{
+class ConnectionPool : public utils::UnCopyable{
 public:
-    ConnectionPool() = default;
-    ConnectionPool(const ConnectionPoolOptions& pool_opts, const naruto::net::ConnectOptions& opts);
+    ConnectionPool(const ConnectionPoolOptions& pool_opts, const ConnectOptions& opts);
     ~ConnectionPool() = default;
 
     Connect fetch();
@@ -45,7 +45,7 @@ private:
     bool _need_reconnect(const Connect& conn, const std::chrono::milliseconds& lifetime) const;
     void _wait_for_connect(std::unique_lock<std::mutex>& lock);
 
-    naruto::net::ConnectOptions _opts;
+    ConnectOptions _opts;
     ConnectionPoolOptions _pool_opts;
     std::deque<Connect> _pool;
 
