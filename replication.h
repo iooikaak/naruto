@@ -16,37 +16,6 @@
 #include "connection/connection.h"
 #include "client.h"
 
-// 未开始复制
-#define REPL_STATE_NONE 0
-
-// 准备和 master 建立连接
-#define REPL_STATE_CONNECT 1
-
-// 已经和 master 建立连接，未进行通信确认
-#define REPL_STATE_CONNECTING 2
-
-// 发送 Ping 到 master ，准备接受 master Pong 确认
-#define REPL_STATE_RECEIVE_PONG 3
-
-// 已经和master建立连接，并且 PING-PONG 确认连接有效
-// 发送了 sync 或者 psync 请求，开始接受 同步数据
-#define REPL_STATE_TRASFER 4
-
-// 首次全量同步已经完成，和master连接正常连接，增量同步
-#define REPL_STATE_CONNECTED 5
-
-// 主服务器 save db 开始
-#define REPL_STATE_WAIT_BGSAVE_START 6
-
-// 主服务器 save db 完成
-#define REPL_STATE_WAIT_BGSAVE_END 7
-
-// 主服务器 正在 发送 db 到 slave
-#define REPL_STATE_SEND_BULK 8
-
-// 全量db 文件已经发送完成，只需要增量更新即可
-#define REPL_STATE_ONLINE 9
-
 namespace naruto{
 
 struct saveparam{
@@ -57,13 +26,27 @@ struct saveparam{
     int changes;
 };
 
+enum class state{
+    NONE = 0,          // 未开始复制
+    CONNECT,           // 准备和 master 建立连接
+    CONNECTING,        // 已经和 master 建立连接，未进行通信确认
+    RECEIVE_PONG,      // 发送 Ping 到 master ，准备接受 master Pong 确认
+    TRANSFOR,          // 已经和master建立连接，并且 PING-PONG 确认连接有效
+    CONNECTED,         // 首次全量同步已经完成，和master连接正常连接，增量同步
+    WAIT_BGSAVE_START, // 主服务器 save db 开始
+    WAIT_BGSAVE_END,   // 主服务器 save db 完成
+    SEND_BULK,         // 主服务器 正在 发送 db 到 slave
+    ONLINE,            // 全量db 文件已经发送完成，只需要增量更新即可
+};
+
 class Replication {
 public:
-    Replication(bool master,int back_log_size, int merge_threads_size, int repl_timeout_sec);
+    Replication(int back_log_size, int merge_threads_size, int repl_timeout_sec);
     void onEvents(ev::io&, int);
     void onSyncWithMaster(ev::io&, int);
 
     ~Replication();
+
     void onReplCron(ev::timer&, int);
 
     void feedSlaves(const ::google::protobuf::Message&, uint16_t type);
@@ -82,7 +65,8 @@ private:
     int _slave_try_partial_resynchronization();
 
     uint64_t _cronloops;
-
+    double cron_interval_;
+    ev::timer time_watcher_;
     // 每个线程会持有一个 写命令的 双 buffer
     using repl_bytes = std::vector<std::shared_ptr<naruto::utils::Bytes>>;
     bool _is_master;
@@ -132,7 +116,9 @@ private:
 
     // slave
     // 复制状态
-    int _repl_state;
+//    int _repl_state;
+    enum state _repl_state;
+
     int _repl_timeout;
     // RDB 文件的大小
     off_t _repl_transfer_size;

@@ -26,6 +26,8 @@
 // 每个线程会并行处理客户端 io
 namespace naruto{
 
+class Naruto;
+
 class ConnectWorker {
 public:
     ConnectWorker();
@@ -49,6 +51,8 @@ public:
 
     std::shared_ptr<command::Commands> commands;
     std::shared_ptr<database::Buckets> buckets;
+
+    Naruto* server;
 
     // 所有连接的client
     std::list<std::shared_ptr<narutoClient>> clients;

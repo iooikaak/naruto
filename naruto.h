@@ -25,6 +25,7 @@
 #include "command/command_nf.h"
 #include "command/command_hget.h"
 #include "utils/net.h"
+#include "replication.h"
 
 //DEFINE_string(host,"","host");
 
@@ -41,12 +42,13 @@ public:
 
     // 向集群中的所有断线或者未连接节点发送消息
     // 遍历所有节点，检查是否需要将某个节点标记为下线
-    void onCron(ev::timer&, int);
+    static void onCron(ev::timer&, int);
     void run();
 
 private:
 
     void _init_workers();
+    void _init_cron();
     void _init_cluster();
     void _init_signal();
     void _listen();
@@ -57,9 +59,7 @@ private:
     // 处理信号，任务线程执行频率
     int _hz;
     int _cron_loops;
-
-//    std::shared_ptr<command::Commands> _commands;
-//    std::shared_ptr<database::Buckets> _buckets;
+    double _cron_interval;
 
     bool _cluster_enable;
     ev::io _accept_watcher;
@@ -80,6 +80,8 @@ private:
     int _tcp_backlog;
     std::string _bind_addr;
     int _bind_add_count;
+
+    std::shared_ptr<Replication> _repl;
 
     // Client
     // 一个链表，保存了所有客户端状态结构

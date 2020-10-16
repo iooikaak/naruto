@@ -33,10 +33,11 @@ Naruto::Naruto(int port, int tcp_backlog, int bucket_num) :
     _loading_process_events_interval_bytes = 0;
     _clients_paused = false;
     _clients_pause_end_time = 0;
-
+    _cron_interval = 1.0;
     _hz = 0;
     _cron_loops = 0;
     _bucket_num = bucket_num;
+    _repl = std::make_shared<Replication>(512,16,1000);
 }
 
 Naruto::~Naruto() { delete [] workers; }
@@ -67,15 +68,16 @@ void Naruto::onAccept(ev::io& watcher, int events) {
         << " addr:" << client->ip << ":" << client->port;
 
     int index = _connect_nums % workder_num;
-    client->worker_id = index;
+    client->worker_id = index; // record work id
+
     workers[index].conns.push_back(client);
-//    workers[index].async_watcher.data = (void*)&workers[index];
     workers[index].async_watcher.send();
 
     _connect_nums++;
 }
 
-void Naruto::onCron(ev::timer & watcher, int event) {
+void Naruto::onCron(ev::timer& watcher, int event) {
+    LOG(INFO) << "onCron....";
 
 }
 
@@ -97,17 +99,19 @@ void Naruto::onSignal(ev::sig& signal, int) {
         LOG(INFO) << "onSignal..." << exit_success_workers;
         cond.wait(lck);
     }
+
     // 停止主线程 ev loop
     s->_accept_watcher.stop();
+    s->_timer_watcher.stop();
     s->_loop.break_loop(ev::ALL);
     LOG(INFO) << "onSignal end...";
 }
 
 void Naruto::run() {
-    std::cout << "run" << std::endl;
     LOG(INFO) << "naruto run:" << _port;
     _init_workers();
     _init_signal();
+    _init_cron();
     _listen();
 }
 
@@ -118,6 +122,7 @@ void Naruto::_init_workers() {
     for (int i = 0; i < workder_num; ++i) {
         workers[i].commands = cmds;
         workers[i].buckets = bts;
+        workers[i].server = this;
         workers[i].async_watcher.set<&ConnectWorker::onAsync>(&workers[i]);
         workers[i].async_watcher.set(workers[i].loop);
         workers[i].async_watcher.start();
@@ -181,6 +186,12 @@ void Naruto::_init_cluster() {
     cond.notify_one();
     _cluster.run();
     lck.unlock();
+}
+
+void Naruto::_init_cron() {
+    _timer_watcher.set<&Naruto::onCron>(this);
+    _timer_watcher.set(_loop);
+    _timer_watcher.start(_cron_interval, _cron_interval);
 }
 
 }

@@ -2,9 +2,7 @@
 
 #include "naruto.h"
 
-int main()
-{
-
+int main(){
     std::cout << "main" << std::endl;
     naruto::Naruto s(7290,521,32);
     s.run();

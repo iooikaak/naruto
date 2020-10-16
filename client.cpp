@@ -11,7 +11,7 @@ naruto::narutoClient::narutoClient() {
     flags = 0;
     ctime = std::chrono::steady_clock::now();
     repl_run_id = "";
-    repl_state = REPL_STATE_NONE;
+    repl_state = state::NONE;
     repl_ack_time = std::chrono::steady_clock::now();
     repl_fd = -1;
     repl_db_off = 0;
@@ -55,6 +55,7 @@ void naruto::narutoClient::onRead(ev::io &watcher, int events) {
     wbuf.clear();
     rbuf.clear();
     // feed slaves
+
 }
 
 void naruto::narutoClient::onWrite(ev::io &watcher, int events) {

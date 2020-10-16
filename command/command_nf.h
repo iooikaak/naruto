@@ -8,8 +8,7 @@
 #include "command.h"
 #include "protocol/message.pb.h"
 
-namespace naruto{
-namespace command{
+namespace naruto::command{
 
 // 未知命令
 class CommandNF : public Command {
@@ -19,7 +18,6 @@ public:
     ~CommandNF() override = default;
 };
 
-}
 }
 
 

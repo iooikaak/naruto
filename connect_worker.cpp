@@ -5,6 +5,7 @@
 
 
 #include "connect_worker.h"
+#include "naruto.h"
 
 namespace naruto{
 
@@ -39,7 +40,7 @@ void ConnectWorker::run(int id) {
 }
 
 void ConnectWorker::freeClient(ev::io &watcher, narutoClient *client) {
-    LOG(INFO) << "connect worker: peer " << client->remoteAddr()  <<  " might closed";
+    LOG(INFO) << "connect worker: peer " << client->remoteAddr()  <<  " " << client->connect->errmsg();
     // 停止 io 事件
     watcher.stop();
     delete &watcher;
@@ -47,6 +48,7 @@ void ConnectWorker::freeClient(ev::io &watcher, narutoClient *client) {
     if (client->flags & CLIENT_FLAG_MASTER){
 
     }
+
     if (client->flags & CLIENT_FLAG_SLAVE){
 
     }
@@ -86,9 +88,8 @@ void ConnectWorker::onStopAsync(ev::async &watcher, int events) {
     cw->loop.break_loop(ev::ALL);
 }
 
-void ConnectWorker::stop() {
-    stop_async_watcher.send();
-}
+void ConnectWorker::stop() { stop_async_watcher.send(); }
+
 
 int workder_num = (int)(sysconf(_SC_NPROCESSORS_CONF) *2) -1;;
 ConnectWorker* workers = new ConnectWorker[workder_num];

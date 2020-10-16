@@ -13,6 +13,7 @@
 // 定义成员函数返回值
 #define CONNECT_RT_OK 0
 #define CONNECT_RT_ERR -1
+#define CONNECT_RT_CLOSE -2
 
 // 定义连接类型
 #define CONNECT_FLAGS_INIT 0x00 // 初始化

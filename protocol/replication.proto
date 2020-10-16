@@ -1,6 +1,11 @@
 syntax="proto3";
 package replication;
 
+message command_slaveof{
+  string ip = 1;
+  int64 port = 2;
+}
+
 // ======================== repl ping pong ==============================
 message command_ping{
   string ip = 1;

@@ -10,6 +10,7 @@
 #include "connection/connection.h"
 #include "utils/errors.h"
 #include "utils/bytes.h"
+//#include "replication.h"
 
 #define CLIENT_BUF_SIZE (1024*1024)
 
@@ -18,6 +19,8 @@
 
 namespace naruto{
 
+enum class state;
+class Replication;
 class ConnectWorker;
 
 class narutoClient {
@@ -43,7 +46,8 @@ public:
 
     uint32_t flags;
     std::string repl_run_id;
-    int repl_state{};
+    state repl_state;
+
     std::chrono::steady_clock::time_point repl_ack_time;
     int repl_fd{};
 

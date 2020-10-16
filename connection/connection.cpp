@@ -369,6 +369,7 @@ int Connect::_read_pack(naruto::utils::Bytes & pack) {
             }
         }
     }while (!done);
+
     return CONNECT_RT_OK;
 }
 }

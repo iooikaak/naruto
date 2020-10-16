@@ -7,10 +7,9 @@
 #include "replication.h"
 
 
-naruto::Replication::Replication(bool master,
-        int back_log_size, int merge_threads_size, int repl_timeout_sec) {
+naruto::Replication::Replication(int back_log_size,
+        int merge_threads_size, int repl_timeout_sec) {
 
-    _is_master = master;
     _master_host = "";
     _master_port = 0;
     _repl_timeout = repl_timeout_sec;
@@ -24,7 +23,7 @@ naruto::Replication::Replication(bool master,
     _repl_backlog_histlen = 0;
     _repl_backlog_idx = 0;
     _repl_backlog_off = 0;
-    _repl_state = REPL_STATE_NONE;
+    _repl_state = state::NONE;
     _repl_transfer_size = 0;
     _repl_transfer_read = 0;
     _repl_transfer_last_fsync_off = 0;
@@ -36,35 +35,40 @@ naruto::Replication::Replication(bool master,
     _repl_down_since = std::chrono::steady_clock::now();
     _repl_master_runid = "";
     _repl_master_initial_offset = 0;
+
+    cron_interval_ = 1.0;
+    time_watcher_.set<Replication, &Replication::onReplCron>(this);
+    time_watcher_.set(ev::get_default_loop());
+    time_watcher_.start(cron_interval_, cron_interval_);
 }
 
 void naruto::Replication::onReplCron(ev::timer &, int) {
-
+    LOG(INFO) << "onReplCron...";
     // ====================== slave 情况 ===========================
     auto now = std::chrono::steady_clock::now();
     // 连接 master 超时
-    if (!_master_host.empty() && (_repl_state == REPL_STATE_CONNECTING||
-        _repl_state == REPL_STATE_RECEIVE_PONG) && (now - _repl_transfer_lastio).count() > _repl_timeout){
+    if (!_master_host.empty() && (_repl_state == state::CONNECTING||
+        _repl_state == state::RECEIVE_PONG) && (now - _repl_transfer_lastio).count() > _repl_timeout){
         LOG(WARNING) <<  "Timeout connecting to the MASTER...";
         _undo_connect_master();
     }
 
     // dump db 传送超时
-    if (!_master_host.empty() && _repl_state == REPL_STATE_TRASFER
+    if (!_master_host.empty() && _repl_state == state::TRANSFOR
             && (now - _repl_transfer_lastio).count() > _repl_timeout){
         LOG(WARNING) << "Timeout receiving bulk data from MASTER... If the problem persists try to set the 'repl-timeout' parameter in naruto.conf to a larger value.";
         _abort_sync_transfer();
     }
 
     // 从服务器曾经连接上主服务器，但现在超时
-    if (!_master_host.empty() && _repl_state == REPL_STATE_CONNECTED &&
+    if (!_master_host.empty() && _repl_state ==state::CONNECTED &&
         (now - _repl_last_interaction).count() > _repl_timeout){
         LOG(WARNING) <<"MASTER timeout: no data nor PING received...";
         _free_client(_master);
     }
 
     // 尝试连接主服务器
-    if (!_master_host.empty() && _repl_state == REPL_STATE_CONNECT){ _connect_master(); }
+    if (!_master_host.empty() && _repl_state ==state::CONNECT){ _connect_master(); }
 
     // 定期向主服务器发送 ACK 命令
     if (!_master_host.empty() && _master){ _repl_send_ack(); }
@@ -81,7 +85,7 @@ void naruto::Replication::onReplCron(ev::timer &, int) {
 
     // 断开超时从服务器
     for (auto it = _slaves.begin(); it != _slaves.end(); ++it){
-        if ((*it)->repl_state != REPL_STATE_ONLINE) continue;
+        if ((*it)->repl_state != state::ONLINE) continue;
         if ((_repl_unixtime - (*it)->repl_ack_time).count() > _repl_timeout){
             auto slave =  *it;
             _slaves.erase(it);
@@ -95,7 +99,7 @@ void naruto::Replication::onEvents(ev::io &, int) {
 }
 
 void naruto::Replication::onSyncWithMaster(ev::io & watcher, int event) {
-    if (_repl_state == REPL_STATE_NONE) {
+    if (_repl_state ==state::NONE) {
         ::close(watcher.fd);
         return;
     }
@@ -116,9 +120,9 @@ void naruto::Replication::onSyncWithMaster(ev::io & watcher, int event) {
     // 如果状态为 CONNECTING ，那么在进行初次同步之前，
     // 向主服务器发送一个非阻塞的 PING
     // 因为接下来的 RDB 文件发送非常耗时，所以我们想确认主服务器真的能访问
-    if (_repl_state == REPL_STATE_CONNECTING){
+    if (_repl_state == state::CONNECTING){
         LOG(INFO) << "Repl state CONNECTING, send PING to master";
-        _repl_state = REPL_STATE_RECEIVE_PONG;
+        _repl_state = state::RECEIVE_PONG;
         _repl_ev_io_r->stop();
         replication::command_ping ping;
         ping.set_ip("1111");
@@ -127,7 +131,7 @@ void naruto::Replication::onSyncWithMaster(ev::io & watcher, int event) {
         return;
     }
 
-    if (_repl_state == REPL_STATE_RECEIVE_PONG){
+    if (_repl_state == state::RECEIVE_PONG){
         LOG(INFO) << "Repl state RECEIVE_PONG";
         _repl_ev_io_w->stop();
         replication::command_pong pong;
@@ -153,7 +157,7 @@ void naruto::Replication::onSyncWithMaster(ev::io & watcher, int event) {
 error:
     ::close(watcher.fd);
     _repl_transfer_fd = -1;
-    _repl_state = REPL_STATE_CONNECT;
+    _repl_state = state::CONNECT;
     return;
 }
 
@@ -163,9 +167,9 @@ void naruto::Replication::feedSlaves(const ::google::protobuf::Message & msg, ui
     // 写到复制积压缓冲区
     _feed_backlog(pack);
 
-    for (auto slave : _slaves){
+    for (const auto& slave : _slaves){
         // 不要给正在等待 BGSAVE 开始的从服务器发送命令
-        if (slave->repl_state == REPL_STATE_WAIT_BGSAVE_START) continue;
+        if (slave->repl_state == state::WAIT_BGSAVE_START) continue;
         // 向已经接收完 RDB 文件的从服务器发送命令
         try {
             slave->connect->send(pack);
@@ -217,12 +221,12 @@ void naruto::Replication::_feed_backlog(utils::Bytes& bytes) {
 
 void naruto::Replication::_undo_connect_master() {
     int fd = _repl_transfer_s;
-    assert(_repl_state == REPL_STATE_CONNECTING || _repl_state == REPL_STATE_RECEIVE_PONG);
+    assert(_repl_state == state::CONNECTING || _repl_state == state::RECEIVE_PONG);
     _repl_ev_io_r->stop();
     _repl_ev_io_w->stop();
     ::close(fd);
     _repl_transfer_s = -1;
-    _repl_state = REPL_STATE_CONNECT;
+    _repl_state = state::CONNECT;
 }
 
 void naruto::Replication::_connect_master() {
@@ -255,17 +259,17 @@ void naruto::Replication::_connect_master() {
     // 初始化统计变量
     _repl_transfer_lastio = std::chrono::steady_clock::now();
     _repl_transfer_fd = _master->connect->fd();
-    _repl_state = REPL_STATE_CONNECTING;
+    _repl_state = state::CONNECTING;
 }
 
 // 停止下载 RDB 文件
 void naruto::Replication::_abort_sync_transfer() {
-    assert(_repl_state == REPL_STATE_TRASFER);
+    assert(_repl_state == state::TRANSFOR);
     _repl_ev_io_r->stop();
     ::close(_repl_transfer_fd);
     ::unlink(_repl_transfer_tmpfile.c_str());
     _repl_transfer_tmpfile = "";
-    _repl_state = REPL_STATE_CONNECT;
+    _repl_state = state::CONNECT;
 }
 
 void naruto::Replication::_free_client(std::shared_ptr<narutoClient> & client) {
@@ -277,13 +281,13 @@ void naruto::Replication::_free_client(std::shared_ptr<narutoClient> & client) {
         LOG(WARNING) << "Connect with master lost:" << client->remoteAddr();
         _repl_cache_master();
         _master = nullptr;
-        _repl_state = REPL_STATE_CONNECT;
+        _repl_state = state::CONNECT;
         _repl_down_since = std::chrono::steady_clock::now();
     }
 
     if (client->flags & (uint32_t)CLIENT_FLAG_SLAVE){
         LOG(WARNING) << "Connect with slave lost:" << client->remoteAddr();
-        if (client->repl_state == REPL_STATE_SEND_BULK){
+        if (client->repl_state == state::SEND_BULK){
             if (client->repl_fd != -1) ::close(client->repl_fd);
         }
         if (_slaves.empty()){
@@ -353,7 +357,7 @@ int naruto::Replication::_slave_try_partial_resynchronization() {
     }
 
     _master->lastinteraction = std::chrono::steady_clock::now();
-    _master->repl_state = REPL_STATE_CONNECTED;
+    _master->repl_state = state::CONNECTED;
 
     // 安装读事件
     _master->repl_ev_io_r = std::make_shared<ev::io>();

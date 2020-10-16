@@ -21,8 +21,21 @@
 #define COMMAND_CLIENT_HGET 1
 #define COMMAND_CLIENT_HSET 2
 
-namespace naruto{
-namespace command {
+namespace naruto::command {
+
+enum class replication : uint16_t{
+    PING = 1,
+    PONG,
+    ACK,
+    PSYNC,
+    FULLSYNC,
+    PARTSYNC,
+};
+
+enum class client : uint16_t{
+    HGET = 1,
+    HSET,
+};
 
 class Command {
 public:
@@ -32,7 +45,6 @@ public:
     virtual ~Command() = default;
 };
 
-}
 }
 
 
