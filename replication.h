@@ -11,10 +11,14 @@
 #include <list>
 #include <glog/logging.h>
 #include <sys/socket.h>
+#include <array>
+#include <atomic>
+#include <algorithm>
 
 #include "utils/bytes.h"
 #include "connection/connection.h"
 #include "client.h"
+#include "utils/pack.h"
 
 namespace naruto{
 
@@ -62,11 +66,16 @@ public:
 
     void onReplCron(ev::timer&, int);
 
-    void feedSlaves(const ::google::protobuf::Message&, uint16_t type);
+    void slavesFeed(int tid, const ::google::protobuf::Message&, uint16_t type);
 
 
 private:
-    void _feed_backlog(utils::Bytes&);
+    struct indexLog{
+        int tid;
+        uint64_t id;
+    };
+    void _backlog_feed(utils::Bytes&);
+    void _merge_backlog_feed_slaves();
     void _undo_connect_master();
     void _connect_master();
     void _repl_cache_master();
@@ -77,84 +86,86 @@ private:
 
     int _slave_try_partial_resynchronization();
 
-    uint64_t _cronloops;
+    uint64_t cronloops_;
     double cron_interval_;
     ev::timer time_watcher_;
     // 每个线程会持有一个 写命令的 双 buffer
-    using repl_bytes = std::vector<std::shared_ptr<naruto::utils::Bytes>>;
-    bool _is_master;
+
+    bool is_master_;
 
     // 消息自增id，用于多线程命名重排序
-    std::atomic_uint64_t _repl_incr_id;
-    std::chrono::steady_clock::time_point _repl_unixtime;
-    std::chrono::steady_clock::time_point _repl_no_slaves_since;
-    std::chrono::steady_clock::time_point _repl_down_since;
+    std::atomic_uint64_t repl_incr_id_;
+    std::chrono::steady_clock::time_point repl_unixtime_;
+    std::chrono::steady_clock::time_point repl_no_slaves_since_;
+    std::chrono::steady_clock::time_point repl_down_since_;
 
     // dump db
     // 负责执行 dump db 的 子进程 id
-    pid_t _dump_db_child_pid;
-    std::list<saveparam> _saveparams;
+    pid_t dump_db_child_pid_;
+    std::list<saveparam> saveparams_;
 
     // connect to master
-    std::shared_ptr<narutoClient> _master;
+    std::shared_ptr<narutoClient> master_;
     // 为了实现 当正常同步时，master 连接中断
     // 当尝试重连时，可以顺利执行 部分重同步
-    std::shared_ptr<narutoClient> _cache_master;
-    std::list<std::shared_ptr<narutoClient>> _slaves;
+    std::shared_ptr<narutoClient> cache_master_;
+    std::list<std::shared_ptr<narutoClient>> slaves_;
 
-    std::shared_ptr<ev::io> _repl_ev_io_w;
-    std::shared_ptr<ev::io> _repl_ev_io_r;
-
-    // 当前使用的index
-    std::atomic_int _pos;
-    std::vector<repl_bytes> _repl;
+    std::shared_ptr<ev::io> repl_ev_io_w_;
+    std::shared_ptr<ev::io> repl_ev_io_r_;
 
     // replication
-    std::vector<uint8_t> _back_log;
+    std::atomic_int repl_pos_; // 当前使用的index
+    using repl_workers = std::vector<naruto::utils::Bytes>;
+    std::array<std::shared_ptr<repl_workers>,2> repl_;
+    int repl_merge_size_; // 和 worker 数一致
+    std::atomic_uint64_t repl_command_incr_; // 命令自增数
+
+    std::vector<uint8_t> back_log_;
 
     // master
-    std::string _master_host;
-    int _master_port;
+    std::string master_host_;
+    int master_port_;
     // 全局复制偏移量（一个累计值）
-    long long _master_repl_offset;
-    int _repl_ping_slave_period;
+    long long master_repl_offset_;
+    int repl_ping_slave_period_;
     // 环形缓冲长度
-    long long _repl_back_size;
+    long long repl_back_size_;
     // backlog 中数据的长度(实际存储数据)
-    long long _repl_backlog_histlen;
+    long long repl_backlog_histlen_;
     // backlog 的当前索引
-    long long _repl_backlog_idx;
+    long long repl_backlog_idx_;
     // backlog 中可以被还原的第一个字节的偏移量
     // 即可读的第一个位置
-    long long _repl_backlog_off;
+    long long repl_backlog_off_;
 
     // slave
     // 复制状态
 //    int _repl_state;
-    enum state _repl_state;
+    enum state repl_state_;
 
-    int _repl_timeout;
+    int repl_timeout_;
     // RDB 文件的大小
-    off_t _repl_transfer_size;
+    off_t repl_transfer_size_;
     // 已读 RDB 文件内容的字节数
-    off_t _repl_transfer_read;
+    off_t repl_transfer_read_;
     // 最近一次执行 fsync 时的偏移量
-    off_t _repl_transfer_last_fsync_off;
+    off_t repl_transfer_last_fsync_off_;
     // 主服务器的套接字
-    int _repl_transfer_s;
+    int repl_transfer_s_;
     // 保存 RDB 文件的临时文件的描述符
-    int _repl_transfer_fd;
+    int repl_transfer_fd_;
     // 保存 RDB 文件的临时文件名字
-    std::string _repl_transfer_tmpfile;
+    std::string repl_transfer_tmpfile_;
     // 最近一次读入 RDB 内容的时间
-    std::chrono::steady_clock::time_point _repl_transfer_lastio;
-    std::chrono::steady_clock::time_point _repl_last_interaction;
+    std::chrono::steady_clock::time_point repl_transfer_lastio_;
+    std::chrono::steady_clock::time_point repl_last_interaction_;
     // 是否只读从服务器？
-    bool _repl_slave_ro;
+    bool repl_slave_ro_;
     // 连接断开的时长
-    std::string _repl_master_runid;
+    std::string repl_master_runid_;
     // 初始化偏移量
-    long long _repl_master_initial_offset;
+    long long repl_master_initial_offset_;
 
 };
 
