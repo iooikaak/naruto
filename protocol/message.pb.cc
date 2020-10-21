@@ -2773,6 +2773,7 @@ void InitDefaultscommand_meet() {
 }
 
 ::google::protobuf::Metadata file_level_metadata[103];
+const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors[1];
 
 const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   ~0u,  // no _has_bits_
@@ -3751,7 +3752,7 @@ void protobuf_AssignDescriptors() {
   ::google::protobuf::MessageFactory* factory = NULL;
   AssignDescriptors(
       "message.proto", schemas, file_default_instances, TableStruct::offsets, factory,
-      file_level_metadata, NULL, NULL);
+      file_level_metadata, file_level_enum_descriptors, NULL);
 }
 
 void protobuf_AssignDescriptorsOnce() {
@@ -3939,10 +3940,12 @@ void AddDescriptorsImpl() {
       "t.command_mhmmapdel.ValuesEntry\032@\n\013Value"
       "sEntry\022\013\n\003key\030\001 \001(\t\022 \n\005value\030\002 \001(\0132\021.cli"
       "ent.keys_type:\0028\001\"(\n\014command_meet\022\n\n\002ip\030"
-      "\001 \001(\t\022\014\n\004port\030\002 \001(\003b\006proto3"
+      "\001 \001(\t\022\014\n\004port\030\002 \001(\003*5\n\004type\022\n\n\006UNKNOW\020\000\022"
+      "\r\n\tNOT_FOUND\020\001\022\010\n\004HSET\020\002\022\010\n\004HGET\020\003b\006prot"
+      "o3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 6867);
+      descriptor, 6922);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "message.proto", &protobuf_RegisterTypes);
   ::protobuf_data_2eproto::AddDescriptors();
@@ -3960,6 +3963,22 @@ struct StaticDescriptorInitializer {
 } static_descriptor_initializer;
 }  // namespace protobuf_message_2eproto
 namespace client {
+const ::google::protobuf::EnumDescriptor* type_descriptor() {
+  protobuf_message_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_message_2eproto::file_level_enum_descriptors[0];
+}
+bool type_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+      return true;
+    default:
+      return false;
+  }
+}
+
 
 // ===================================================================
 

@@ -1,17 +1,46 @@
 //
 // Created by 王振奎 on 2020/8/14.
 //
+#include <gflags/gflags.h>
 
 #include "naruto.h"
+
+DEFINE_int32(port, 7290, "listen port");
+static bool valid_port(const char* flagname, int value){
+    LOG(INFO) << "argument port:" << value;
+    return true;
+}
+DEFINE_validator(port,&valid_port);
+
+DEFINE_int32(cron_interval,1, "server time cron seconds");
+static bool valid_cron_interval(const char* flagname, int value){
+    LOG(INFO) << "argument cron_interval:" << value;
+    return true;
+}
+DEFINE_validator(cron_interval,&valid_cron_interval);
+
+DEFINE_int32(tcp_backlog, 521, "tcp back log");
+static bool valid_tcp_backlog(const char* flagname, int value){
+    LOG(INFO) << "argument tcp_backlog:" << value;
+    return true;
+}
+DEFINE_validator(tcp_backlog,&valid_tcp_backlog);
+
+DEFINE_int32(bucket_num, 16, "database bucket num");
+static bool valid_bucket_num(const char* flagname, int value){
+    LOG(INFO) << "argument bucket_num:" << value;
+    return true;
+}
+DEFINE_validator(bucket_num,&valid_bucket_num);
 
 
 namespace naruto{
 
-Naruto::Naruto(int port, int tcp_backlog, int bucket_num) :
-            _port(port), _tcp_backlog(tcp_backlog),
-            _loop(), _cluster(port, tcp_backlog){
-
+Naruto::Naruto() : _loop(), _cluster(FLAGS_port, FLAGS_tcp_backlog){
     // 统计信息初始化
+    _tcp_backlog = FLAGS_tcp_backlog;
+    _port = FLAGS_port;
+    _fd = -1;
     _stat_start_time = 0;
     _stat_num_commands = 0;
     _stat_num_connections = 0;
@@ -24,7 +53,7 @@ Naruto::Naruto(int port, int tcp_backlog, int bucket_num) :
     _stat_sync_partial_ok = 0;
     _stat_sync_partial_err = 0;
     _connect_nums = 0;
-    _cluster_enable = true;
+    _cluster_enable = false;
     // RDB / AOF
     _loading = false;
     _loading_total_bytes = 0;
@@ -36,11 +65,18 @@ Naruto::Naruto(int port, int tcp_backlog, int bucket_num) :
     _cron_interval = 1.0;
     _hz = 0;
     _cron_loops = 0;
-    _bucket_num = bucket_num;
-    _repl = std::make_shared<Replication>(512,16,1000);
+    _bucket_num = FLAGS_bucket_num;
+    repl = nullptr;
 }
 
 Naruto::~Naruto() { delete [] workers; }
+
+void Naruto::run() {
+    _init_workers();
+    _init_signal();
+    _init_cron();
+    _listen();
+}
 
 // onAccept 客户端连接
 void Naruto::onAccept(ev::io& watcher, int events) {
@@ -77,8 +113,7 @@ void Naruto::onAccept(ev::io& watcher, int events) {
 }
 
 void Naruto::onCron(ev::timer& watcher, int event) {
-    LOG(INFO) << "onCron....";
-
+//    LOG(INFO) << "onCron....";
 }
 
 void Naruto::onSignal(ev::sig& signal, int) {
@@ -105,14 +140,6 @@ void Naruto::onSignal(ev::sig& signal, int) {
     s->_timer_watcher.stop();
     s->_loop.break_loop(ev::ALL);
     LOG(INFO) << "onSignal end...";
-}
-
-void Naruto::run() {
-    LOG(INFO) << "naruto run:" << _port;
-    _init_workers();
-    _init_signal();
-    _init_cron();
-    _listen();
 }
 
 void Naruto::_init_workers() {
@@ -162,9 +189,9 @@ void Naruto::_listen() {
     _accept_watcher.set(_loop);
     _accept_watcher.set<Naruto, &Naruto::onAccept>(this);
     _accept_watcher.start(_fd, ev::READ);
-    LOG(INFO) << "naruto listen loop start...";
+    LOG(INFO) << "Naruto listen in " << _port;
     _loop.loop(0);
-    LOG(INFO) << "_listen end...1";
+    LOG(INFO) << "Naruto stop listen.";
 }
 
 void Naruto::_init_signal() {

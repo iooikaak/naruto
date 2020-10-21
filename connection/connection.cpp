@@ -44,16 +44,15 @@ Connect::Connect(ConnectOptions opts) : _opts(std::move(opts)) {
 }
 
 int Connect::connect() {
+    LOG(INFO) << "connecting port:" << _opts.port;
     if (_flags & CONNECT_FLAGS_CONNECTED) return CONNECT_RT_OK;
-
-    LOG(INFO) << "Connect::connect---1";
 
     int client_fd;
     struct sockaddr_in addr{};
     memset(&addr, 0, sizeof(addr));
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = inet_addr(_opts.host.c_str());
-    LOG(INFO) << "connect port:" << _opts.port;
+
     addr.sin_port = htons(_opts.port);
 
     int blocking = (_flags & CONNECT_FLAGS_BLOCK);
@@ -64,7 +63,6 @@ int Connect::connect() {
         return CONNECT_RT_ERR;
     }
 
-    LOG(INFO) << "Connect::connect---13";
     retry:
     if (::connect(client_fd, (sockaddr*)&addr, sizeof(addr)) < 0){
         if (errno == EHOSTUNREACH){
@@ -88,7 +86,6 @@ int Connect::connect() {
         return CONNECT_RT_ERR;
     }
 
-    LOG(INFO) << "Connect::connect---14";
     _fd = client_fd;
 
     if (_set_blocking(false) != CONNECT_RT_OK){
@@ -96,10 +93,11 @@ int Connect::connect() {
         return CONNECT_RT_ERR;
     }
 
-    LOG(INFO) << "Connect::connect---15";
     _flags |= CONNECT_FLAGS_CONNECTED;
     _addr = (struct sockaddr*) malloc(sizeof(struct sockaddr));
     memcpy(_addr, (sockaddr*)&addr, sizeof(struct sockaddr));
+
+    LOG(INFO) << "connected port:" << _opts.port;
     return _set_connect_timeout();
 }
 
@@ -302,7 +300,6 @@ void Connect::_set_error(int type, const std::string &prefix) {
 }
 
 int Connect::_write_pack(naruto::utils::Bytes & pack) {
-    LOG(INFO) << "connect write_pack:" << pack.size();
     bool done = false;
     int size = pack.size();
     char* buf = (char*) pack.data();
@@ -328,12 +325,10 @@ int Connect::_write_pack(naruto::utils::Bytes & pack) {
             }
         }
     }while(!done);
-
     return CONNECT_RT_OK;
 }
 
 int Connect::_read_pack(naruto::utils::Bytes & pack) {
-    LOG(INFO) << "connect read_pack:" << pack.size();
     pack.clear();
     bool done = false;
     ssize_t readed_num = 0;
@@ -362,8 +357,7 @@ int Connect::_read_pack(naruto::utils::Bytes & pack) {
                     done = true;
                 }
                 next_len = length - pack.size();
-                if (next_len > CONNECT_READ_BUF_SIZE)
-                    next_len = CONNECT_READ_BUF_SIZE;
+                if (next_len > CONNECT_READ_BUF_SIZE) next_len = CONNECT_READ_BUF_SIZE;
             }else{
                 next_len = PACK_HEAD_LEN - readed_num;
             }
@@ -372,4 +366,5 @@ int Connect::_read_pack(naruto::utils::Bytes & pack) {
 
     return CONNECT_RT_OK;
 }
+
 }

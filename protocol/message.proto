@@ -3,6 +3,13 @@ package client;
 
 import "data.proto";
 
+enum type{
+    UNKNOW = 0;
+    NOT_FOUND = 1;
+    HSET = 2;
+    HGET = 3;
+}
+
 // 通用返回码
 message command_reply{
     int32 errcode = 1;

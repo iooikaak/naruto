@@ -4,8 +4,9 @@
 
 #include "pack.h"
 
-void naruto::utils::Pack::serialize(naruto::utils::Bytes &pack,
-        ::google::protobuf::Message &msg, uint64_t type) {
+void naruto::utils::Pack::serialize(const ::google::protobuf::Message &msg, uint64_t type,
+        naruto::utils::Bytes &pack) {
+    LOG(INFO) << "Pack::serialize--->>" << pack.size();
     pack.putMessage(msg, type);
 }
 

@@ -56,29 +56,18 @@ void ConnectWorker::freeClient(ev::io &watcher, narutoClient *client) {
 }
 
 void ConnectWorker::onAsync(ev::async& watcher, int events) {
-    LOG(INFO) << "onAsync...";
     auto worker = static_cast<ConnectWorker*>(watcher.data);
     while (!worker->conns.empty()){
         // 这里的连接包含了slave的连接
         narutoClient* client = worker->conns.front();
-        if (!client){
-            LOG(INFO) << "onAsync item nullptr...";
-            return;
-        }
+        if (!client) return;
+
         worker->conns.pop_front();
 
-        LOG(INFO)<< "onAsync item..." << client->connect->fd();
-
         auto* r = new ev::io;
-        r->set<naruto::narutoClient, &naruto::narutoClient::onRead>(client);
+        r->set<naruto::narutoClient, &naruto::narutoClient::onReadEvent>(client);
         r->set(worker->loop);
         r->start(client->connect->fd(), ev::READ);
-
-//        auto* w = new ev::io;
-//        w->set<naruto::narutoClient, &naruto::narutoClient::onWrite>(client);
-//        w->data = (void*)worker;
-//        w->set(worker->loop);
-//        w->start(client->connect->fd(), ev::WRITE);
     }
 }
 

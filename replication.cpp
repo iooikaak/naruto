@@ -2,24 +2,43 @@
 // Created by 王振奎 on 2020/9/18.
 //
 #include <chrono>
+#include <gflags/gflags.h>
+
 #include "protocol/message_type.h"
 #include "protocol/replication.pb.h"
 #include "replication.h"
 
+DEFINE_int32(repl_back_log_size, 7290, "listen port");
+static bool valid_repl_back_log_size(const char* flagname, int value){
+    return true;
+}
+DEFINE_validator(repl_back_log_size,&valid_repl_back_log_size);
 
-naruto::Replication::Replication(int back_log_size,
-        int merge_threads_size, int repl_timeout_sec) {
+DEFINE_int32(repl_timeout_sec, 1, "listen port");
+static bool valid_repl_timeout_sec(const char* flagname, int value){
+    return true;
+}
+DEFINE_validator(repl_timeout_sec,&valid_repl_timeout_sec);
 
+DEFINE_double(repl_cron_interval, 1, "listen port");
+static bool valid_repl_cron_interval(const char* flagname, double value){
+    return true;
+}
+DEFINE_validator(repl_cron_interval,&valid_repl_cron_interval);
+
+
+naruto::Replication::Replication(int merge_threads_size) {
     _master_host = "";
     _master_port = 0;
-    _repl_timeout = repl_timeout_sec;
+    _is_master = false;
+    _repl_timeout = FLAGS_repl_timeout_sec;
     _repl_incr_id.store(0);
     _pos.store(0);
     _repl.reserve(merge_threads_size);
     _back_log.reserve(0);
     _master_repl_offset = 0;
     _repl_ping_slave_period = 0;
-    _repl_back_size  = back_log_size;
+    _repl_back_size  = FLAGS_repl_back_log_size;
     _repl_backlog_histlen = 0;
     _repl_backlog_idx = 0;
     _repl_backlog_off = 0;
@@ -36,7 +55,7 @@ naruto::Replication::Replication(int back_log_size,
     _repl_master_runid = "";
     _repl_master_initial_offset = 0;
 
-    cron_interval_ = 1.0;
+    cron_interval_ = FLAGS_repl_cron_interval;
     time_watcher_.set<Replication, &Replication::onReplCron>(this);
     time_watcher_.set(ev::get_default_loop());
     time_watcher_.start(cron_interval_, cron_interval_);
@@ -324,6 +343,7 @@ int naruto::Replication::_slave_try_partial_resynchronization() {
     }
 
     _master->sendMsg(psync, COMMAND_REPL_PSYNC);
+
     utils::Bytes pack;
     _master->connect->recv(pack);
     uint32_t len = pack.getInt();
@@ -384,3 +404,15 @@ void naruto::Replication::_repl_discard_cache_master() {
 }
 
 naruto::Replication::~Replication() { }
+
+const std::string &naruto::Replication::getMasterHost() const { return _master_host; }
+
+void naruto::Replication::setMasterHost(const std::string &masterHost) { _master_host = masterHost; }
+
+int naruto::Replication::getMasterPort() const { return _master_port; }
+
+void naruto::Replication::setMasterPort(int masterPort) { _master_port = masterPort; }
+
+bool naruto::Replication::isIsMaster() const { return _is_master; }
+
+void naruto::Replication::setIsMaster(bool isMaster) { _is_master = isMaster; }

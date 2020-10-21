@@ -1,6 +1,17 @@
 syntax="proto3";
 package replication;
 
+enum type{
+    UNKNOW = 0;
+    PING = 1;
+    PONG = 2;
+    ACK = 3;
+    PSYNC = 4;
+    FULLSYNC = 5;
+    PARTSYNC = 6;
+    SLAVEOF = 7;
+}
+
 message command_slaveof{
   string ip = 1;
   int64 port = 2;

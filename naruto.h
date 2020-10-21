@@ -27,13 +27,11 @@
 #include "utils/net.h"
 #include "replication.h"
 
-//DEFINE_string(host,"","host");
-
 namespace naruto{
 
 class Naruto{
 public:
-    explicit Naruto(int port, int tcp_backlog, int bucket_num);
+    explicit Naruto();
 
     ~Naruto();
 
@@ -44,6 +42,8 @@ public:
     // 遍历所有节点，检查是否需要将某个节点标记为下线
     static void onCron(ev::timer&, int);
     void run();
+
+    std::shared_ptr<Replication> repl;
 
 private:
 
@@ -78,10 +78,6 @@ private:
     int _port;
     int _fd;
     int _tcp_backlog;
-    std::string _bind_addr;
-    int _bind_add_count;
-
-    std::shared_ptr<Replication> _repl;
 
     // Client
     // 一个链表，保存了所有客户端状态结构

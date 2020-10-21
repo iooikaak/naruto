@@ -32,7 +32,7 @@ void test_thread_request(){
                 message.add_fields("test1");
 
                 LOG(INFO) << "message:" << message.DebugString();
-                pack.putMessage(message, COMMAND_HMGET);
+                pack.putMessage(message, client::HGET);
                 auto conn =  pool.fetch();
                 conn.send(pack);
                 pool.release(std::move(conn));
@@ -55,7 +55,7 @@ int main(int argc, char* argv[]){
     naruto::connection::ConnectionPool pool(pool_opts, options);
     auto conn = pool.fetch();
 
-    LOG(INFO) << "............client set .........";
+    LOG(INFO) << "............client set start.........";
     client::command_hset request;
     request.set_key("test");
     request.set_field("field1");
@@ -64,27 +64,30 @@ int main(int argc, char* argv[]){
     value->set_str("test-value");
 
     naruto::utils::Bytes pack;
-    pack.putMessage(request, COMMAND_CLIENT_HSET);
+    pack.putMessage(request, client::HSET);
     conn.send(pack);
 
     conn.recv(pack);
     client::command_reply reply;
     auto type = naruto::utils::Pack::deSerialize(pack, reply);
     LOG(INFO) << "type:" << type << " msg:" << reply.DebugString();
+    LOG(INFO) << "............client set end .........";
+
+    LOG(INFO) << "**********************************************************";
 
     // ============ get ============
-    LOG(INFO) << "............client get.........";
-    client::command_hget request1;
-    request1.set_key("test");
-    request1.set_field("field1");
-
-    naruto::utils::Bytes pack1;
-    pack1.putMessage(request1, COMMAND_CLIENT_HGET);
-    conn.send(pack1);
-
-    conn.recv(pack1);
-    client::command_hget_reply reply1;
-    auto type1 = naruto::utils::Pack::deSerialize(pack1, reply1);
-    LOG(INFO) << "type1:" << type1 << " msg:" << reply1.DebugString();
-
+//    LOG(INFO) << "............client get start .........";
+//    client::command_hget request1;
+//    request1.set_key("test");
+//    request1.set_field("field1");
+//
+//    naruto::utils::Bytes pack1;
+//    pack1.putMessage(request1, client::HGET);
+//    conn.send(pack1);
+//
+//    conn.recv(pack1);
+//    client::command_hget_reply reply1;
+//    auto type1 = naruto::utils::Pack::deSerialize(pack1, reply1);
+//    LOG(INFO) << "type1:" << type1 << " msg:" << reply1.DebugString();
+//    LOG(INFO) << "............client get end.........";
 }

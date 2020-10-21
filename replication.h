@@ -41,9 +41,22 @@ enum class state{
 
 class Replication {
 public:
-    Replication(int back_log_size, int merge_threads_size, int repl_timeout_sec);
+    explicit Replication(int merge_threads_size);
+
     void onEvents(ev::io&, int);
     void onSyncWithMaster(ev::io&, int);
+
+    const std::string &getMasterHost() const;
+
+    void setMasterHost(const std::string &masterHost);
+
+    int getMasterPort() const;
+
+    void setMasterPort(int masterPort);
+
+    bool isIsMaster() const;
+
+    void setIsMaster(bool isMaster);
 
     ~Replication();
 
@@ -76,6 +89,7 @@ private:
     std::chrono::steady_clock::time_point _repl_unixtime;
     std::chrono::steady_clock::time_point _repl_no_slaves_since;
     std::chrono::steady_clock::time_point _repl_down_since;
+
     // dump db
     // 负责执行 dump db 的 子进程 id
     pid_t _dump_db_child_pid;

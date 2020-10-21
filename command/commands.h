@@ -6,6 +6,7 @@
 #define NARUTO_COMMANDS_H
 
 #include "command.h"
+#include "utils/nocopy.h"
 #include "command_nf.h"
 #include "command_hget.h"
 #include "command_hset.h"

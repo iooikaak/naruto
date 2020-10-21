@@ -46,5 +46,5 @@ void naruto::database::String::mapdel(const std::string &string) {
 }
 
 void naruto::database::String::debugString() {
-    LOG(INFO) << "-->>debug string data:" << _data;
+    LOG(INFO) << "database debug string data:" << _data;
 }

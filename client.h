@@ -10,7 +10,7 @@
 #include "connection/connection.h"
 #include "utils/errors.h"
 #include "utils/bytes.h"
-//#include "replication.h"
+#include "utils/pack.h"
 
 #define CLIENT_BUF_SIZE (1024*1024)
 
@@ -27,8 +27,8 @@ class narutoClient {
 public:
     narutoClient();
 
-    void onRead(ev::io& watcher, int events);
-    void onWrite(ev::io& watcher, int events);
+    void onReadEvent(ev::io& watcher, int events);
+    void onWriteEvent(ev::io& watcher, int events);
 
     // 异步
     void sendMsg(const ::google::protobuf::Message& msg, uint16_t type);
@@ -50,6 +50,7 @@ public:
 
     std::chrono::steady_clock::time_point repl_ack_time;
     int repl_fd{};
+    ev::io wio;
 
     std::shared_ptr<ev::io> repl_ev_io_w;
     std::shared_ptr<ev::io> repl_ev_io_r;

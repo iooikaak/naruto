@@ -16,7 +16,7 @@ public:
      * 打包 @msg 到 @pack 中
      * 打包后的 pack 可直接在系统中传输并被其他机器识别
      * */
-    static void serialize(utils::Bytes& pack, ::google::protobuf::Message& msg, uint64_t type);
+    static void serialize( const ::google::protobuf::Message& msg, uint64_t type, utils::Bytes& pack);
 
     /*
      * 从 @pack 解析到 @msg,返回消息的类型，如果解析失败返回 -1

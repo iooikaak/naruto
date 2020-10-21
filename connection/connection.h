@@ -121,7 +121,7 @@ private:
     int _fd;
     int _flags;
 
-    char _ibuf[CONNECT_READ_BUF_SIZE];
+    char _ibuf[CONNECT_READ_BUF_SIZE]{};
 
     ConnectOptions _opts;
     std::chrono::time_point<std::chrono::steady_clock> _last_active{};

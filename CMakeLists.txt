@@ -23,9 +23,11 @@ aux_source_directory(protocol PROTOCOL_SRC)
 aux_source_directory(connection CONNECTION_SRC)
 aux_source_directory(database DATABASE_SRC)
 aux_source_directory(command COMMAND_SRC)
-#add_definitions(-w)
+
+list(REMOVE_ITEM NARUTO_SRC ./main.cpp)
 
 add_executable(client ./clients/example/c++/example.cpp
+        ${NARUTO_SRC}
         ${UTILS_SRC}
         ${PROTOCOL_SRC}
         ${CONNECTION_SRC}

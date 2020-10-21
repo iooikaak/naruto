@@ -1,10 +1,10 @@
-#include <iostream>
+#include <gflags/gflags.h>
 
 #include "naruto.h"
 
-int main(){
-    std::cout << "main" << std::endl;
-    naruto::Naruto s(7290,521,32);
-    s.run();
+int main(int argc, char** argv){
+    gflags::ParseCommandLineFlags(&argc, &argv, true);
+    auto* s =new naruto::Naruto();
+    s->run();
     return 0;
 }

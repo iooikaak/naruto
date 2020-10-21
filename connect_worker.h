@@ -34,6 +34,7 @@ public:
     ~ConnectWorker();
 
     void run(int id);
+
     void freeClient(ev::io &watcher, narutoClient* client);
 
     static void onAsync(ev::async& watcher, int events);

@@ -10,8 +10,7 @@
 #include "utils/errors.h"
 #include "utils/bytes.h"
 
-namespace naruto {
-namespace database {
+namespace naruto::database {
 
 class ListFloat : public ::naruto::database::object{
 public:
@@ -45,7 +44,6 @@ private:
     std::vector<float> _data;
 };
 
-}
 }
 
 

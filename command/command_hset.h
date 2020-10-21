@@ -8,16 +8,14 @@
 #include "command.h"
 #include "protocol/message.pb.h"
 
-namespace naruto{
-namespace command {
+namespace naruto::command {
 
 class CommandHset : public Command {
 public:
-    void call(std::shared_ptr<database::Buckets> data, const utils::Bytes &request, utils::Bytes &response) override;
+    void exec(narutoClient *client) override;
 
     ~CommandHset() override = default;
 };
 
-}
 }
 #endif //NARUTO_COMMAND_HSET_H

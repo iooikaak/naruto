@@ -3,14 +3,17 @@
 //
 
 
+#include <client.h>
 #include "command_hset.h"
 #include "database/factory.h"
+#include "utils/pack.h"
+#include "connect_worker.h"
 
-void naruto::command::CommandHset::call(std::shared_ptr<database::Buckets> data, const naruto::utils::Bytes &request,
-                                        naruto::utils::Bytes &response) {
+void naruto::command::CommandHset::exec(naruto::narutoClient *client) {
     client::command_hset cmd;
-    uint32_t len = request.getInt(0);
-    cmd.ParseFromArray(&request.data()[PACK_HEAD_LEN],len - PACK_HEAD_LEN);
+    utils::Pack::deSerialize(client->rbuf, cmd);
+
+    // 构造元素
     auto element = std::make_shared<database::element>();
     element->create = std::chrono::steady_clock::now();
     element->lru =  element->create;
@@ -24,9 +27,10 @@ void naruto::command::CommandHset::call(std::shared_ptr<database::Buckets> data,
 
     // debug
     element->ptr->debugString();
+    // set data
+    workers[client->worker_id].buckets->put(cmd.key(), cmd.field(), element);
 
-    data->put(cmd.key(), cmd.field(), element);
     client::command_reply reply;
     reply.set_errcode(1);
-    response.putMessage(reply, COMMAND_CLIENT_HSET);
+    client->sendMsg(reply,client::HSET);
 }

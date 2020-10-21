@@ -31,6 +31,7 @@
 #include <google/protobuf/map.h>  // IWYU pragma: export
 #include <google/protobuf/map_entry.h>
 #include <google/protobuf/map_field_inl.h>
+#include <google/protobuf/generated_enum_reflection.h>
 #include <google/protobuf/unknown_field_set.h>
 #include "data.pb.h"
 // @@protoc_insertion_point(includes)
@@ -671,6 +672,29 @@ extern values_typeDefaultTypeInternal _values_type_default_instance_;
 }  // namespace client
 namespace client {
 
+enum type {
+  UNKNOW = 0,
+  NOT_FOUND = 1,
+  HSET = 2,
+  HGET = 3,
+  type_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  type_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool type_IsValid(int value);
+const type type_MIN = UNKNOW;
+const type type_MAX = HGET;
+const int type_ARRAYSIZE = type_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* type_descriptor();
+inline const ::std::string& type_Name(type value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    type_descriptor(), value);
+}
+inline bool type_Parse(
+    const ::std::string& name, type* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<type>(
+    type_descriptor(), name, value);
+}
 // ===================================================================
 
 class command_reply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:client.command_reply) */ {
@@ -20893,6 +20917,18 @@ inline void command_meet::set_port(::google::protobuf::int64 value) {
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace client
+
+namespace google {
+namespace protobuf {
+
+template <> struct is_proto_enum< ::client::type> : ::google::protobuf::internal::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::client::type>() {
+  return ::client::type_descriptor();
+}
+
+}  // namespace protobuf
+}  // namespace google
 
 // @@protoc_insertion_point(global_scope)
 

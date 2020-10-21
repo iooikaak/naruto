@@ -18,16 +18,14 @@ naruto::narutoClient::narutoClient() {
     repl_db_size = 0;
     repl_off = 0;
     lastinteraction = std::chrono::steady_clock::now();
-    wbuf.resize(CLIENT_BUF_SIZE);
-    rbuf.resize(CLIENT_BUF_SIZE);
 }
 
-void naruto::narutoClient::onRead(ev::io &watcher, int events) {
+void naruto::narutoClient::onReadEvent(ev::io &watcher, int events) {
     if (ev::ERROR & events){
         LOG(ERROR) << "connect worker error";
         return;
     }
-    LOG(INFO) << "------>>onRead worker " << worker_id << " step 0";
+    LOG(INFO) << "onReadEvent------>> " << worker_id << " step 0";
 
     try {
         rbuf.clear();
@@ -37,40 +35,45 @@ void naruto::narutoClient::onRead(ev::io &watcher, int events) {
         return;
     }
 
-    LOG(INFO) << "onRead worker " << worker_id << " step 1";
     uint32_t pack_size = rbuf.getInt();
     uint8_t version = rbuf.get();
     uint8_t flag = rbuf.get();
     uint16_t type = rbuf.getShort();
-    LOG(INFO) <<" recv:" << remoteAddr() << " pack_size:"
+
+    LOG(INFO) << "onReadEvent------>> work:" << worker_id << " recv:" << remoteAddr() << " pack_size:"
               << pack_size << " version:" << (unsigned)version << " flag:"
               << (unsigned)flag << " type:" << (unsigned)type;
 
-    LOG(INFO) << "worker tid:" << workers[worker_id].tid;
-    wbuf.clear();
-    workers[worker_id].commands->fetch(type)->call(workers[worker_id].buckets, rbuf, wbuf);
+    workers[worker_id].commands->fetch(type)->exec(this);
 
-    LOG(INFO) << "onRead worker " << worker_id << " step 2";
-    connect->send(wbuf);
-    wbuf.clear();
-    rbuf.clear();
-    // feed slaves
-
+    // TODO: 复制给从服务器
+    // TODO: 写入复制缓冲
 }
 
-void naruto::narutoClient::onWrite(ev::io &watcher, int events) {
-    LOG(INFO) << "onWrite...";
+void naruto::narutoClient::onWriteEvent(ev::io &watcher, int events) {
+    LOG(INFO) << "onWriteEvent--->>1";
     if (wbuf.size() > 0){
-        LOG(INFO) << "onWrite...1";
+        LOG(INFO) << "onWriteEvent--->>2";
         connect->send(wbuf);
         wbuf.clear();
     }else{
-        LOG(INFO) << "onWrite...2";
+        LOG(INFO) << "onWriteEvent--->>3";
     }
+
+    // 删除写事件
+    watcher.stop();
 }
 
 void naruto::narutoClient::sendMsg(const ::google::protobuf::Message & msg,
-        uint16_t type) { wbuf.putMessage(msg, type); }
+        uint16_t type) {
+    // 安装写事件
+    wio.set<narutoClient, &narutoClient::onWriteEvent>(this);
+    wio.set(workers[worker_id].loop);
+    wio.start(connect->fd(), ev::WRITE);
+    // 写到 client wbuf
+    utils::Pack::serialize(msg, type, wbuf);
+    LOG(INFO) << "sendMsg--->>" << wbuf.size();
+}
 
 uint64_t naruto::narutoClient::recvMsg(::google::protobuf::Message &msg) {
     connect->recv(rbuf);
