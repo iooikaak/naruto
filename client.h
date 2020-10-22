@@ -48,14 +48,15 @@ public:
     std::string repl_run_id;
     state repl_state;
 
-    std::chrono::steady_clock::time_point repl_ack_time;
+
     int repl_fd{};
     ev::io wio;
 
+    // replication
     std::shared_ptr<ev::io> repl_ev_io_w;
     std::shared_ptr<ev::io> repl_ev_io_r;
-//    std::shared_ptr<Replication> repl;
-
+    uint64_t repl_ack_off; // 从服务器最后一次发送 REPLCONF ACK 时的偏移量
+    std::chrono::steady_clock::time_point repl_ack_time; // 从服务器最后一次发送 REPLCONF ACK 的时间
 
     // 读取主服务器传来的 RDB 文件的偏移量
     off_t repl_db_off{};

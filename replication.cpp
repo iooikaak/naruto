@@ -113,6 +113,8 @@ void naruto::Replication::onReplCron(ev::timer &, int) {
             _free_client(slave);
         }
     }
+
+    _merge_backlog_feed_slaves();
 }
 
 void naruto::Replication::onEvents(ev::io &, int) {
@@ -185,25 +187,14 @@ error:
 
 void naruto::Replication::slavesFeed(int tid, const ::google::protobuf::Message & msg, uint16_t type) {
     auto repl = repl_[repl_pos_.load()];
+
+    // 写到复制积压缓冲区
     auto& local_repl = (*repl)[tid];
     auto command_id = repl_command_incr_.load();
     repl_command_incr_++;
+    // 把 repl_command_incr_ 写在包的前面用于后续多路归并，八字节
     local_repl.putLong(command_id);
     utils::Pack::serialize(msg, type, local_repl);
-
-    // 写到复制积压缓冲区
-//    _local_backlog_feed(pack);
-//
-//    for (const auto& slave : slaves_){
-//        // 不要给正在等待 BGSAVE 开始的从服务器发送命令
-//        if (slave->repl_state == state::WAIT_BGSAVE_START) continue;
-//        // 向已经接收完 RDB 文件的从服务器发送命令
-//        try {
-//            slave->connect->send(pack);
-//        }catch (std::exception& e){
-//            LOG(ERROR) << "Feed slave:" << e.what();
-//        }
-//    }
 }
 
 void naruto::Replication::_backlog_feed(utils::Bytes& bytes) {
@@ -257,24 +248,19 @@ void naruto::Replication::_merge_backlog_feed_slaves() {
     // 多路归并
     auto repl_data = repl_[cur_pos];
     std::vector<int> p(repl_merge_size_);
-
     std::vector<indexLog> id_list(repl_merge_size_);
-    while (true){
-        int finished = 0;
-        for (int j = 0; j < repl_merge_size_; ++j) {
-            if (p[j] < repl_data->at(j).size()){
-                id_list.push_back(indexLog{
-                        .tid = j,
-                        .id = repl_data->at(j).getLong(p[j]),
-                });
-                p.at(j) += sizeof(uint64_t);
-            }else{
-                finished++;
-            }
+
+    for (int j = 0; j < repl_merge_size_; ++j) {
+        if (p[j] < repl_data->at(j).size()){
+            id_list.push_back(indexLog{
+                    .tid = j,
+                    .id = repl_data->at(j).getLong(p[j]),
+            });
+            p.at(j) += sizeof(uint64_t);
         }
+    }
 
-        if (finished == repl_merge_size_) break;
-
+    while (!id_list.empty()){
         std::sort(id_list.begin(), id_list.end(), [](const indexLog& l, const indexLog& r){
             return l.id < r.id;
         });
@@ -291,8 +277,29 @@ void naruto::Replication::_merge_backlog_feed_slaves() {
 
         // merge 到 全局 backlog 中
         _backlog_feed(pack);
+        // 删除最小的一个
+        id_list.erase(id_list.begin());
 
-        id_list.clear();
+        // 最小的那个 p[min_i] 指向下一个位置
+        if (p[min_i] < repl_data->at(min_i).size()){
+            id_list.push_back(indexLog{
+                    .tid = min_i,
+                    .id = repl_data->at(min_i).getLong(p[min_i]),
+            });
+            p.at(min_i) += sizeof(uint64_t);
+        }
+    }
+
+    // 发送给所有的 slaves
+    for (const auto& slave : slaves_){
+        // 不要给正在等待 BGSAVE 开始的从服务器发送命令
+        if (slave->repl_state == state::WAIT_BGSAVE_START) continue;
+        // 向已经接收完 RDB 文件的从服务器发送命令
+        try {
+//            slave->connect->send(pack);
+        }catch (std::exception& e){
+            LOG(ERROR) << "Feed slave:" << e.what();
+        }
     }
 }
 
