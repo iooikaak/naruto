@@ -47,6 +47,7 @@ void test_thread_request(){
         ts[j].join();
     }
 }
+
 int main(int argc, char* argv[]){
     naruto::connection::ConnectOptions options;
     options.host = "127.0.0.1";

@@ -5,6 +5,7 @@
 
 #include "commands.h"
 #include "protocol/message.pb.h"
+#include "protocol/replication.pb.h"
 
 naruto::command::Commands::Commands() {
     std::cout << "init commands" << std::endl;
@@ -12,6 +13,8 @@ naruto::command::Commands::Commands() {
     _cmd_nf = std::make_shared<CommandNF>();
     reg(client::HGET, std::make_shared<CommandHget>());
     reg(client::HSET, std::make_shared<CommandHset>());
+    reg(replication::SLAVEOF, std::make_shared<CommandSlaveof>());
+    reg(replication::PING, std::make_shared<CommandPing>());
 }
 
 void naruto::command::Commands::reg(int type, std::shared_ptr<Command> cmd) { _cmds.emplace(type, cmd); }

@@ -1,38 +1,9 @@
 //
 // Created by 王振奎 on 2020/8/14.
 //
-#include <gflags/gflags.h>
 
 #include "naruto.h"
-
-DEFINE_int32(port, 7290, "listen port");
-static bool valid_port(const char* flagname, int value){
-    LOG(INFO) << "argument port:" << value;
-    return true;
-}
-DEFINE_validator(port,&valid_port);
-
-DEFINE_int32(cron_interval,1, "server time cron seconds");
-static bool valid_cron_interval(const char* flagname, int value){
-    LOG(INFO) << "argument cron_interval:" << value;
-    return true;
-}
-DEFINE_validator(cron_interval,&valid_cron_interval);
-
-DEFINE_int32(tcp_backlog, 521, "tcp back log");
-static bool valid_tcp_backlog(const char* flagname, int value){
-    LOG(INFO) << "argument tcp_backlog:" << value;
-    return true;
-}
-DEFINE_validator(tcp_backlog,&valid_tcp_backlog);
-
-DEFINE_int32(bucket_num, 16, "database bucket num");
-static bool valid_bucket_num(const char* flagname, int value){
-    LOG(INFO) << "argument bucket_num:" << value;
-    return true;
-}
-DEFINE_validator(bucket_num,&valid_bucket_num);
-
+#include "parameter/parameter.h"
 
 namespace naruto{
 

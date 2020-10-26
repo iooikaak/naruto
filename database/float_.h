@@ -2,8 +2,8 @@
 // Created by 王振奎 on 2020/10/6.
 //
 
-#ifndef NARUTO_FLOAT_H
-#define NARUTO_FLOAT_H
+#ifndef NARUTO_FLOAT__H
+#define NARUTO_FLOAT__H
 
 #include "object.h"
 #include "utils/errors.h"
@@ -47,4 +47,4 @@ private:
 
 }
 
-#endif //NARUTO_FLOAT_H
+#endif //NARUTO_FLOAT__H

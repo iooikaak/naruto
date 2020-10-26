@@ -46,8 +46,8 @@ enum class state{
 class Replication {
 public:
     explicit Replication(int merge_threads_size);
-
-    void onEvents(ev::io&, int);
+    // 异步 RDB 文件读取函数
+    void onReadSyncBulkPayload(ev::io&, int);
     void onSyncWithMaster(ev::io&, int);
 
     const std::string &getMasterHost() const;
@@ -61,6 +61,10 @@ public:
     bool isIsMaster() const;
 
     void setIsMaster(bool isMaster);
+
+    state getReplState() const;
+
+    void setReplState(state replState);
 
     ~Replication();
 

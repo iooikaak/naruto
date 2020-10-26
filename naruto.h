@@ -15,6 +15,8 @@
 #include <glog/logging.h>
 #include <cstring>
 #include <arpa/inet.h>
+#include <float.h>
+#include <math.h>
 
 #include "types.h"
 #include "connect_worker.h"

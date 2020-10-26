@@ -10,6 +10,8 @@
 #include "command_nf.h"
 #include "command_hget.h"
 #include "command_hset.h"
+#include "command_slaveof.h"
+#include "command_ping.h"
 
 namespace naruto::command {
 

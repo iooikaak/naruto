@@ -89,13 +89,7 @@ void naruto::narutoClient::write(const ::google::protobuf::Message& msg, uint16_
 uint64_t naruto::narutoClient::read(::google::protobuf::Message& cmd) {
     utils::Bytes pack;
     connect->recv(pack);
-    auto len = pack.getInt();
-    auto version = pack.get();
-    auto flag = pack.get();
-    auto type = pack.getShort();
-
-    cmd.ParseFromArray(&pack.data()[PACK_HEAD_LEN], len-PACK_HEAD_LEN);
-    return (uint16_t)type;
+    return utils::Pack::deSerialize(pack, cmd);
 }
 
 std::string naruto::narutoClient::remoteAddr() { return ip + ":" + port; }

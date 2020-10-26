@@ -26,13 +26,13 @@ aux_source_directory(command COMMAND_SRC)
 
 list(REMOVE_ITEM NARUTO_SRC ./main.cpp)
 
-add_executable(client ./clients/example/c++/example.cpp
-        ${NARUTO_SRC}
-        ${UTILS_SRC}
-        ${PROTOCOL_SRC}
-        ${CONNECTION_SRC}
-        ${DATABASE_SRC}
-        ${COMMAND_SRC})
+#add_executable(client ./clients/example/c++/example.cpp
+#        ${NARUTO_SRC}
+#        ${UTILS_SRC}
+#        ${PROTOCOL_SRC}
+#        ${CONNECTION_SRC}
+#        ${DATABASE_SRC}
+#        ${COMMAND_SRC})
 
 add_executable(naruto main.cpp
         ${NARUTO_SRC}
@@ -42,7 +42,10 @@ add_executable(naruto main.cpp
         ${DATABASE_SRC}
         ${COMMAND_SRC})
 
-#add_executable(ut ./unittest/ut_main.cpp
-#        ${UTILS_SRC}
-#        ${PROTOCOL_SRC}
-#        ${COMMAND_SRC})
+add_executable(ut ./unittest/ut_main.cpp
+        ${NARUTO_SRC}
+        ${UTILS_SRC}
+        ${PROTOCOL_SRC}
+        ${CONNECTION_SRC}
+        ${DATABASE_SRC}
+        ${COMMAND_SRC})

@@ -2,30 +2,11 @@
 // Created by 王振奎 on 2020/9/18.
 //
 #include <chrono>
-#include <gflags/gflags.h>
 
 #include "protocol/message_type.h"
 #include "protocol/replication.pb.h"
 #include "replication.h"
-
-DEFINE_int32(repl_back_log_size, 7290, "listen port");
-static bool valid_repl_back_log_size(const char* flagname, int value){
-    return true;
-}
-DEFINE_validator(repl_back_log_size,&valid_repl_back_log_size);
-
-DEFINE_int32(repl_timeout_sec, 1, "listen port");
-static bool valid_repl_timeout_sec(const char* flagname, int value){
-    return true;
-}
-DEFINE_validator(repl_timeout_sec,&valid_repl_timeout_sec);
-
-DEFINE_double(repl_cron_interval, 1, "listen port");
-static bool valid_repl_cron_interval(const char* flagname, double value){
-    return true;
-}
-DEFINE_validator(repl_cron_interval,&valid_repl_cron_interval);
-
+#include "parameter/parameter_repl.h"
 
 naruto::Replication::Replication(int merge_threads_size) {
     master_host_ = "";
@@ -38,7 +19,7 @@ naruto::Replication::Replication(int merge_threads_size) {
     repl_command_incr_.store(0);
     back_log_.reserve(0);
     master_repl_offset_ = 0;
-    repl_ping_slave_period_ = 0;
+    repl_ping_slave_period_ = FLAGS_repl_ping_slave_period;
     repl_back_size_  = FLAGS_repl_back_log_size;
     repl_backlog_histlen_ = 0;
     repl_backlog_idx_ = 0;
@@ -72,52 +53,57 @@ void naruto::Replication::onReplCron(ev::timer &, int) {
         LOG(WARNING) <<  "Timeout connecting to the MASTER...";
         _undo_connect_master();
     }
-
+    LOG(INFO) << "onReplCron...1";
     // dump db 传送超时
     if (!master_host_.empty() && repl_state_ == state::TRANSFOR
         && (now - repl_transfer_lastio_).count() > repl_timeout_){
         LOG(WARNING) << "Timeout receiving bulk data from MASTER... If the problem persists try to set the 'repl-timeout' parameter in naruto.conf to a larger value.";
         _abort_sync_transfer();
     }
-
+    LOG(INFO) << "onReplCron...2";
     // 从服务器曾经连接上主服务器，但现在超时
     if (!master_host_.empty() && repl_state_ == state::CONNECTED &&
         (now - repl_last_interaction_).count() > repl_timeout_){
         LOG(WARNING) <<"MASTER timeout: no data nor PING received...";
         _free_client(master_);
     }
-
+    LOG(INFO) << "onReplCron...3";
     // 尝试连接主服务器
     if (!master_host_.empty() && repl_state_ == state::CONNECT){ _connect_master(); }
-
+    LOG(INFO) << "onReplCron...4";
     // 定期向主服务器发送 ACK 命令
-    if (!master_host_.empty() && master_){ _repl_send_ack(); }
-
+    if (!master_host_.empty() && master_ && repl_state_ == state::CONNECTED){ _repl_send_ack(); }
+    LOG(INFO) << "onReplCron...5";
     // ====================== master 情况 ===========================
     // 如果服务器有从服务器，定时向它们发送 PING 。
     // 这样从服务器就可以实现显式的 master 超时判断机制，
     // 即使 TCP 连接未断开也是如此。
     if ((cronloops_ % repl_ping_slave_period_) == 0 && !slaves_.empty()){
+        LOG(INFO) << "onReplCron...5....1";
         replication::command_ping ping;
         ping.set_ip("127.0.0.1");
-        _merge_backlog_feed_slaves();
-//        slavesFeed( ping, replication::PING);
-    }
-
-    // 断开超时从服务器
-    for (auto it = slaves_.begin(); it != slaves_.end(); ++it){
-        if ((*it)->repl_state != state::ONLINE) continue;
-        if ((repl_unixtime_ - (*it)->repl_ack_time).count() > repl_timeout_){
-            auto slave =  *it;
-            slaves_.erase(it);
-            _free_client(slave);
+        for (auto slave : slaves_){
+            slave->sendMsg(ping, replication::PING);
         }
     }
 
+    LOG(INFO) << "onReplCron...6";
+    // 断开超时从服务器
+    auto it = slaves_.begin();
+    while (it != slaves_.end()){
+        if ((*it)->repl_state != state::ONLINE) continue;
+        auto interval = std::chrono::duration_cast<std::chrono::milliseconds>(repl_unixtime_ - (*it)->repl_ack_time);
+        if (interval.count() > repl_timeout_){
+            slaves_.erase(it);
+            _free_client((*it));
+        }
+    }
+
+    LOG(INFO) << "onReplCron...7";
     _merge_backlog_feed_slaves();
 }
 
-void naruto::Replication::onEvents(ev::io &, int) {
+void naruto::Replication::onReadSyncBulkPayload(ev::io& watcher, int event) {
 
 }
 
@@ -146,7 +132,7 @@ void naruto::Replication::onSyncWithMaster(ev::io & watcher, int event) {
     if (repl_state_ == state::CONNECTING){
         LOG(INFO) << "Repl state CONNECTING, send PING to master";
         repl_state_ = state::RECEIVE_PONG;
-        repl_ev_io_r_->stop();
+        repl_ev_io_w_->stop();
 
         replication::command_ping ping;
         ping.set_ip("1111");
@@ -157,9 +143,10 @@ void naruto::Replication::onSyncWithMaster(ev::io & watcher, int event) {
 
     if (repl_state_ == state::RECEIVE_PONG){
         LOG(INFO) << "Repl state RECEIVE_PONG";
-        repl_ev_io_w_->stop();
+        repl_ev_io_r_->stop();
         replication::command_pong pong;
         uint16_t type = master_->read(pong);
+        LOG(INFO) << "Repl state RECEIVE_PONG, master_->read";
         if (type != replication::PONG){
             LOG(WARNING) << "Repl receive not pong";
             goto error;
@@ -237,8 +224,10 @@ void naruto::Replication::_backlog_feed(utils::Bytes& bytes) {
 }
 
 void naruto::Replication::_merge_backlog_feed_slaves() {
-    auto cur_pos = repl_pos_.load();
+    if (back_log_.empty())
+        return;
 
+    auto cur_pos = repl_pos_.load();
     auto next_pos = 1 - cur_pos;
     for (int i = 0; i < repl_merge_size_; ++i) {
         repl_[next_pos]->at(i).clear();
@@ -402,7 +391,7 @@ int naruto::Replication::_slave_try_partial_resynchronization() {
                   << cache_master_->repl_run_id << ":" << cache_master_->repl_off << ").";
     }else{
         psync.set_repl_off(-1);
-        psync.set_run_id(cache_master_->repl_run_id);
+        psync.set_run_id("?");
         LOG(INFO) << "Partial resynchronization not possible (no cached master)";
     }
 
@@ -410,11 +399,7 @@ int naruto::Replication::_slave_try_partial_resynchronization() {
 
     utils::Bytes pack;
     master_->connect->recv(pack);
-    uint32_t len = pack.getInt();
-    uint8_t version = pack.get();
-    uint8_t flag = pack.get();
     uint16_t type = pack.getShort();
-
     switch (type){
         case replication::FULLSYNC :
         {
@@ -447,7 +432,7 @@ int naruto::Replication::_slave_try_partial_resynchronization() {
 
     // 安装读事件
     master_->repl_ev_io_r = std::make_shared<ev::io>();
-    master_->repl_ev_io_r->set<Replication, &Replication::onEvents>(this);
+    master_->repl_ev_io_r->set<Replication, &Replication::onReadSyncBulkPayload>(this);
     master_->repl_ev_io_r->set(ev::get_default_loop());
     master_->repl_ev_io_r->start(master_->connect->fd(), ev::READ);
 
@@ -482,3 +467,7 @@ void naruto::Replication::setMasterPort(int masterPort) { master_port_ = masterP
 bool naruto::Replication::isIsMaster() const { return is_master_; }
 
 void naruto::Replication::setIsMaster(bool isMaster) { is_master_ = isMaster; }
+
+naruto::state naruto::Replication::getReplState() const { return repl_state_; }
+
+void naruto::Replication::setReplState(naruto::state repl_state) { repl_state_ = repl_state; }
