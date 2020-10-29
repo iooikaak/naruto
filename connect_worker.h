@@ -57,9 +57,6 @@ public:
 
     // 所有连接的client
     std::list<std::shared_ptr<narutoClient>> clients;
-
-private:
-    naruto::utils::Bytes _aof_bufs;
 };
 
 extern int workder_num;

@@ -38,11 +38,19 @@ void naruto::database::Buckets::flush() {
     for (int i = 0; i < _bucket_size; ++i) { _buckets[i]->flush(); }
 }
 
+int naruto::database::Buckets::getBucketSize() const {
+    return _bucket_size;
+}
+
+const std::vector<std::shared_ptr<naruto::database::bucket>> &naruto::database::Buckets::getBuckets() const { return _buckets; }
+
 naruto::database::bucket::bucket() {
     objs = std::make_shared<std::unordered_map<std::string, std::shared_ptr<columns>>>(DEFAULT_BUCKET_ELEMENT_SIZE);
 }
 
 // bucket
+std::shared_ptr<naruto::database::bucket::row> naruto::database::bucket::objects() const { return objs; }
+
 std::shared_ptr<naruto::database::element> naruto::database::bucket::get(const std::string & key, const std::string & field) {
     std::lock_guard<std::mutex> lock(mutex);
 

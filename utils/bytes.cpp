@@ -4,8 +4,7 @@
 
 #include "bytes.h"
 
-namespace naruto {
-namespace utils{
+namespace naruto::utils{
 
 Bytes::Bytes(uint32_t size) {
     buf.reserve(size);
@@ -338,5 +337,4 @@ void Bytes::printPosition() {
               << wpos << std::endl;
 }
 
-}
 }

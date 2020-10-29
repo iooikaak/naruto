@@ -5,13 +5,10 @@
 #ifndef NARUTO_COMMANDS_H
 #define NARUTO_COMMANDS_H
 
+#include <unordered_map>
 #include "command.h"
 #include "utils/nocopy.h"
 #include "command_nf.h"
-#include "command_hget.h"
-#include "command_hset.h"
-#include "command_slaveof.h"
-#include "command_ping.h"
 
 namespace naruto::command {
 
@@ -19,10 +16,6 @@ namespace naruto::command {
 class Commands : public utils::UnCopyable {
 public:
     Commands();
-//    static Commands& instance(){
-//        static Commands commands;
-//        return commands;
-//    }
 
     void reg(int type, std::shared_ptr<Command> cmd);
 

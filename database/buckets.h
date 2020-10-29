@@ -22,16 +22,21 @@ struct element{
     std::chrono::steady_clock::time_point create; // 写入时间
     std::chrono::steady_clock::time_point lru; // 最后一次被访问的时间
     std::chrono::steady_clock::time_point expire; // 过期时间
-    std::shared_ptr<::naruto::database::object> ptr;
+    std::shared_ptr<object> ptr;
+
+    template<typename T>
+    std::shared_ptr<T> cast(){ return std::dynamic_pointer_cast<T>(ptr); };
 };
 
 class bucket{
-    using columns = std::unordered_map<std::string, std::shared_ptr<element>>;
 public:
+    using columns = std::unordered_map<std::string, std::shared_ptr<element>>;
+    using row = std::unordered_map<std::string, std::shared_ptr<columns>>;
+
     bucket();
     bucket(const bucket&) = delete;
     bucket& operator= (const bucket&) = delete;
-
+    [[nodiscard]] std::shared_ptr<row> objects() const;
     std::shared_ptr<element> get(const std::string&,const std::string&);
     void put(const std::string&, const std::string&, std::shared_ptr<element>);
     void del(const std::string&,const std::string&);
@@ -40,7 +45,7 @@ public:
 
 private:
     std::mutex mutex;
-    std::shared_ptr<std::unordered_map<std::string, std::shared_ptr<columns>>> objs;
+    std::shared_ptr<row> objs;
 };
 
 class Buckets {
@@ -49,11 +54,8 @@ public:
     Buckets(const Buckets&) = delete;
     Buckets&operator=(const Buckets&) = delete;
 
-//    static const Buckets& instance(){
-//        static Buckets buckets;
-//        return buckets;
-//    }
-
+    int getBucketSize() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<bucket>> &getBuckets() const;
     std::shared_ptr<element> get(const std::string&,const std::string&);
     void put(const std::string&, const std::string&, std::shared_ptr<element>);
     void del(const std::string&,const std::string&);

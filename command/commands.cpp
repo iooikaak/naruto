@@ -4,15 +4,28 @@
 #include <glog/logging.h>
 
 #include "commands.h"
-#include "protocol/message.pb.h"
+
+#include "command_nf.h"
+#include "command_hset_str.h"
+#include "command_hset_int.h"
+#include "command_hget_str.h"
+#include "command_hget_int.h"
+#include "command_slaveof.h"
+#include "command_ping.h"
+
+#include "protocol/client.pb.h"
 #include "protocol/replication.pb.h"
 
 naruto::command::Commands::Commands() {
     std::cout << "init commands" << std::endl;
     // 初始化命令
     _cmd_nf = std::make_shared<CommandNF>();
-    reg(client::HGET, std::make_shared<CommandHget>());
-    reg(client::HSET, std::make_shared<CommandHset>());
+    reg(client::HGET_STRING, std::make_shared<CommandHgetStr>());
+    reg(client::HGET_INT, std::make_shared<CommandHgetInt>());
+
+    reg(client::HSET_STRING, std::make_shared<CommandHsetStr>());
+    reg(client::HSET_INT, std::make_shared<CommandHsetInt>());
+
     reg(replication::SLAVEOF, std::make_shared<CommandSlaveof>());
     reg(replication::PING, std::make_shared<CommandPing>());
 }

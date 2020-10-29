@@ -23,20 +23,16 @@
 #define CONNECT_RETRIES 10
 #define CONNECT_READ_BUF_SIZE (1024*16)
 
-
 /*******************************************************
- * 数据包
---------------------------------------------------------
+ * 数据包 和 aof 结构
+---------------------------------------------------------------------
  |    4byte      | 1byte |  1byte | 2byte |   data     |
---------------------------------------------------------
-   包长度          version   flag   消息类型
+---------------------------------------------------------------------
+   包长度         version  category data结构    数据
    包含head
  *******************************************************/
 
-
-namespace naruto{
-namespace connection{
-
+namespace naruto::connection{
 
 class ConnectOptions{
 public:
@@ -127,7 +123,6 @@ private:
     std::chrono::time_point<std::chrono::steady_clock> _last_active{};
 };
 
-}
 }
 
 

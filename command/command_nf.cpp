@@ -4,7 +4,7 @@
 
 #include <client.h>
 #include "command_nf.h"
-#include "protocol/message.pb.h"
+#include "protocol/client.pb.h"
 
 void naruto::command::CommandNF::exec(naruto::narutoClient *client) {
     client::command_reply reply;

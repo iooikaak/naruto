@@ -1,0 +1,51 @@
+syntax="proto3";
+package client;
+
+enum type{
+  UNKNOW = 0;
+  NOT_FOUND = 1;
+  HSET_STRING = 2;
+  HSET_INT = 3;
+  HGET_STRING = 4;
+  HGET_INT = 5;
+}
+
+// 通用返回码
+message command_reply{
+  int32 errcode = 1;
+  string errmsg = 2;
+}
+
+message command_hset_str{
+  string key = 1;
+  string field = 2;
+  string value = 3;
+  int64 ttl = 4; // 0 无过期时间,单位秒
+}
+
+message command_hset_int{
+  string key = 1;
+  string field = 2;
+  int64 value = 3;
+  int64 ttl = 4; // 0 无过期时间,单位秒
+}
+
+message command_hget_str{
+  string key = 1;
+  string field = 2;
+}
+
+message command_hget_str_reply{
+    command_reply state = 1;
+    string data = 2;
+}
+
+message command_hget_int{
+  string key = 1;
+  string field = 2;
+}
+
+message command_hget_int_reply{
+  command_reply state = 1;
+  int64 data = 2;
+}

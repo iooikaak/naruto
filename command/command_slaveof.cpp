@@ -7,10 +7,10 @@
 #include "client.h"
 #include "connect_worker.h"
 #include "naruto.h"
-#include "protocol/replication.pb.h"
-#include "protocol/message.pb.h"
 #include "utils/pack.h"
 #include "replication.h"
+#include "protocol/client.pb.h"
+#include "protocol/replication.pb.h"
 
 void naruto::command::CommandSlaveof::exec(naruto::narutoClient *client) {
     replication::command_slaveof cmd;

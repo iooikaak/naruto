@@ -6,47 +6,34 @@
 #define NARUTO_MAP_H
 
 #include <unordered_map>
-
+#include <shared_mutex>
 #include "object.h"
 #include "utils/errors.h"
 #include "protocol/data.pb.h"
 
-namespace naruto {
-namespace database {
+namespace naruto::database {
 
 class Map : public ::naruto::database::object{
 public:
     data::TYPE type() override;
 
-    void get(data::VALUE &value) override;
-
-    void set(const data::VALUE &value) override;
-
     void serialize(::naruto::utils::Bytes &bytes) override;
 
-    int len() override;
-
-    void lpop(data::VALUE &value) override;
-
-    void ltrim(int start, int end) override;
-
-    void lpush(const data::VALUE &value) override;
-
-    void lrange(int start, int end, data::VALUE &reply) override;
-
-    void incr(int v) override;
-
-    void mapdel(const std::string &string) override;
+    void deSeralize(utils::Bytes &bytes) override;
 
     void debugString() override ;
 
-    ~Map() override;
+    void del(const std::string& field);
+    std::string get(const std::string& field);
+    void put(const std::string& field, const std::string& v);
+
+    ~Map() override = default;
 
 private:
-    std::unordered_map<std::string, data::VALUE> _data;
+    std::shared_mutex mutex_;
+    std::unordered_map<std::string, std::string> _data;
 };
 
-}
 }
 
 #endif //NARUTO_MAP_H

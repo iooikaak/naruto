@@ -9,9 +9,9 @@
 
 #include "utils/pack.h"
 #include "protocol/replication.pb.h"
-#include "protocol/message.pb.h"
 #include "connection/connection.h"
 #include "connection/connection_pool.h"
+#include "protocol/client.pb.h"
 
 class TestSlaveof : public ::testing::Test{
 public:

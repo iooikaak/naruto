@@ -24,5 +24,5 @@ message VALUE{
   repeated float float_list = 5;
   string str = 6;
   repeated string str_list = 7;
-  map<string, VALUE> kvs = 8;
+  map<string, string> kvs = 8;
 }

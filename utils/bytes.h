@@ -18,7 +18,6 @@
 #include <glog/logging.h>
 
 #include "protocol/message_type.h"
-#include "protocol/message.pb.h"
 
 namespace naruto::utils{
 

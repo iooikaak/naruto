@@ -6,7 +6,6 @@
 #define NARUTO_COMMAND_NF_H
 
 #include "command.h"
-#include "protocol/message.pb.h"
 
 namespace naruto::command{
 

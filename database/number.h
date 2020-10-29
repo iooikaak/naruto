@@ -5,6 +5,7 @@
 #ifndef NARUTO_NUMBER_H
 #define NARUTO_NUMBER_H
 
+#include <atomic>
 #include "object.h"
 #include "utils/errors.h"
 
@@ -12,36 +13,21 @@ namespace naruto::database {
 
 class Number : public object{
 public:
-    explicit Number(int64_t v = 0) : _data(v){}
+    explicit Number(int64_t v = 0) : data_(v){}
 
     data::TYPE type() override;
-
-    void get(data::VALUE &value) override;
-
-    void set(const data::VALUE &value) override;
-
     void serialize(utils::Bytes &bytes) override;
+    void deSeralize(utils::Bytes &bytes) override;
+    void debugString() override;
 
-    int len() override;
-
-    void lpop(data::VALUE &value) override;
-
-    void ltrim(int start, int end) override;
-
-    void lpush(const data::VALUE &value) override;
-
-    void lrange(int start, int end, data::VALUE &reply) override;
-
-    void incr(int v) override;
-
-    void mapdel(const std::string &string) override;
-
-    void debugString() override ;
+    int64_t get() const;
+    void set(const int64_t);
+    void incr(const int64_t);
 
     ~Number() override = default;
 
 private:
-    int64_t _data;
+    std::atomic_int64_t data_;
 };
 
 }
