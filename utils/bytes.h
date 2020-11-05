@@ -111,7 +111,7 @@ public:
 
     // Write
 
-    void put(Bytes* src); // Relative write of the entire contents of another Bytes (src)
+    void put(Bytes& src); // Relative write of the entire contents of another Bytes (src)
     void put(uint8_t b); // Relative write
 
     void put(uint8_t b, uint32_t index); // Absolute write at index

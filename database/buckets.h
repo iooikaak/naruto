@@ -8,8 +8,12 @@
 #include <vector>
 #include <mutex>
 #include <unordered_map>
+#include <ostream>
+#include <fstream>
 
 #include "object.h"
+#include "protocol/data.pb.h"
+#include "protocol/client.pb.h"
 
 #define DEFAULT_BUCKET_SIZE 16
 #define DEFAULT_BUCKET_ELEMENT_SIZE 50000
@@ -36,7 +40,8 @@ public:
     bucket();
     bucket(const bucket&) = delete;
     bucket& operator= (const bucket&) = delete;
-    [[nodiscard]] std::shared_ptr<row> objects() const;
+    void dump(std::ostream* out);
+
     std::shared_ptr<element> get(const std::string&,const std::string&);
     void put(const std::string&, const std::string&, std::shared_ptr<element>);
     void del(const std::string&,const std::string&);
@@ -50,10 +55,11 @@ private:
 
 class Buckets {
 public:
-    Buckets();
+    explicit Buckets(int size = DEFAULT_BUCKET_SIZE);
     Buckets(const Buckets&) = delete;
     Buckets&operator=(const Buckets&) = delete;
 
+    int dump(const std::string& filename);
     int getBucketSize() const;
     [[nodiscard]] const std::vector<std::shared_ptr<bucket>> &getBuckets() const;
     std::shared_ptr<element> get(const std::string&,const std::string&);
@@ -63,10 +69,9 @@ public:
     void flush();
 
 private:
-
-    std::hash<std::string> _hash;
-    int _bucket_size;
-    std::vector<std::shared_ptr<bucket>> _buckets;
+    std::hash<std::string> hash_;
+    int bucket_size_;
+    std::vector<std::shared_ptr<bucket>> buckets_;
 };
 
 }

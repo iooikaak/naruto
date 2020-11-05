@@ -2,54 +2,83 @@
 // Created by 王振奎 on 2020/9/28.
 //
 
+#include <utils/pack.h>
 #include "buckets.h"
 
 // Buckets
-naruto::database::Buckets::Buckets() {
-    _bucket_size = DEFAULT_BUCKET_SIZE;
-    _buckets.resize(_bucket_size);
-    for (int i = 0; i < _bucket_size; ++i) {
-        _buckets[i] = std::make_shared<bucket>();
+naruto::database::Buckets::Buckets(int size) {
+    bucket_size_ = size;
+    buckets_.resize(bucket_size_);
+    for (int i = 0; i < bucket_size_; ++i) {
+        buckets_[i] = std::make_shared<bucket>();
     }
 }
 
+int naruto::database::Buckets::dump(const std::string& filename) {
+    std::fstream out(filename, std::ios::binary|std::ios::out|std::ios::trunc);
+    if (!out.is_open()){
+        LOG(INFO) << "Aof save open file " << tmpfile << " error:" << strerror(errno);
+        return -1;
+    }
+
+    for (int i = 0; i < bucket_size_; ++i) {
+         buckets_[i]->dump(&out);
+    }
+    return 0;
+}
+
 std::shared_ptr<naruto::database::element> naruto::database::Buckets::get(const std::string & key, const std::string & field) {
-    return _buckets[_hash(key) % _bucket_size]->get(key, field);
+    return buckets_[hash_(key) % bucket_size_]->get(key, field);
 }
 
 void naruto::database::Buckets::put(const std::string & key, const std::string & field , std::shared_ptr<element> v) {
     LOG(INFO) << "database put...";
-    return _buckets[_hash(key) % _bucket_size]->put(key, field, v);
+    return buckets_[hash_(key) % bucket_size_]->put(key, field, v);
 }
 
 void naruto::database::Buckets::del(const std::string & key, const std::string & field) {
-    _buckets[_hash(key) % _bucket_size]->del(key, field);
+    buckets_[hash_(key) % bucket_size_]->del(key, field);
 }
 
 int naruto::database::Buckets::size() {
     int cout = 0;
-    for (int i = 0; i < _bucket_size; ++i) {
-        cout +=  _buckets[i]->size();
+    for (int i = 0; i < bucket_size_; ++i) {
+        cout +=  buckets_[i]->size();
     }
     return cout;
 }
 
 void naruto::database::Buckets::flush() {
-    for (int i = 0; i < _bucket_size; ++i) { _buckets[i]->flush(); }
+    for (int i = 0; i < bucket_size_; ++i) { buckets_[i]->flush(); }
 }
 
 int naruto::database::Buckets::getBucketSize() const {
-    return _bucket_size;
+    return bucket_size_;
 }
 
-const std::vector<std::shared_ptr<naruto::database::bucket>> &naruto::database::Buckets::getBuckets() const { return _buckets; }
+const std::vector<std::shared_ptr<naruto::database::bucket>> &naruto::database::Buckets::getBuckets() const { return buckets_; }
 
 naruto::database::bucket::bucket() {
     objs = std::make_shared<std::unordered_map<std::string, std::shared_ptr<columns>>>(DEFAULT_BUCKET_ELEMENT_SIZE);
 }
 
 // bucket
-std::shared_ptr<naruto::database::bucket::row> naruto::database::bucket::objects() const { return objs; }
+void naruto::database::bucket::dump(std::ostream* out) {
+    for (const auto& object : *objs){
+        data::object row;
+        row.set_key(object.first);
+
+        for (const auto& v : (*object.second)){
+            auto column = row.add_columns();
+            column->set_field(v.first);
+
+            auto element =  column->mutable_value();
+            element->set_type(v.second->ptr->type());
+            v.second->ptr->serialize(*element);
+            utils::Pack::serialize(*element, client::ELEMENT, out);
+        }
+    }
+}
 
 std::shared_ptr<naruto::database::element> naruto::database::bucket::get(const std::string & key, const std::string & field) {
     std::lock_guard<std::mutex> lock(mutex);

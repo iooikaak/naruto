@@ -16,8 +16,8 @@ template <typename T, data::TYPE DT>
 class ListObject : public object {
 public:
     data::TYPE type() override { return DT; }
-    void serialize(utils::Bytes &bytes) override;
-    void deSeralize(utils::Bytes &bytes) override;
+    void serialize(data::element&) override;
+    void deSeralize(data::element&) override;
     void debugString() override;
 
     int len();

@@ -16,13 +16,13 @@ public:
     explicit Number(int64_t v = 0) : data_(v){}
 
     data::TYPE type() override;
-    void serialize(utils::Bytes &bytes) override;
-    void deSeralize(utils::Bytes &bytes) override;
+    void serialize(data::element&) override;
+    void deSeralize(data::element&) override;
     void debugString() override;
 
     int64_t get() const;
-    void set(const int64_t);
-    void incr(const int64_t);
+    void set(int64_t);
+    void incr(int64_t);
 
     ~Number() override = default;
 

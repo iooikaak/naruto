@@ -19,7 +19,7 @@ void naruto::command::CommandSlaveof::exec(naruto::narutoClient *client) {
     if (type != replication::SLAVEOF) return;
 
     auto server = workers[client->worker_id].server;
-    server->repl = std::make_shared<Replication>(workder_num);
+//    server->repl = std::make_shared<Replication>(workder_num);
 
     server->repl->setReplState(state::CONNECT);
     server->repl->setMasterPort(cmd.port());

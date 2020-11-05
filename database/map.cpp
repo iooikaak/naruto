@@ -6,11 +6,11 @@
 
 data::TYPE naruto::database::Map::type() { return data::MAP; }
 
-void naruto::database::Map::serialize(utils::Bytes &bytes) {
+void naruto::database::Map::serialize(data::element&) {
 
 }
 
-void naruto::database::Map::deSeralize(naruto::utils::Bytes &bytes) {
+void naruto::database::Map::deSeralize(data::element&) {
 
 }
 

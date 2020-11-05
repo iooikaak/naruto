@@ -8,18 +8,22 @@
 #include "replication.h"
 #include "parameter/parameter_repl.h"
 
-naruto::Replication::Replication(int merge_threads_size) {
+naruto::Replication::Replication(std::shared_ptr<database::Buckets> buckets, int merge_threads_size) {
     master_host_ = "";
     master_port_ = 0;
+    dirty_ = 0;
+    cronloops_ = 0;
     is_master_ = false;
+    use_aof_checksum_ = true;
+    aof_child_pid_ = -1;
     repl_timeout_ = FLAGS_repl_timeout_sec;
-    repl_incr_id_.store(0);
-    repl_pos_.store(0);
+    repl_pos_ = 0;
     repl_merge_size_ = merge_threads_size;
     repl_command_incr_.store(0);
     back_log_.reserve(0);
     master_repl_offset_ = 0;
-    repl_ping_slave_period_ = FLAGS_repl_ping_slave_period;
+    last_bgsave_status_ = 0;
+    repl_ping_slave_period_ = (int)FLAGS_repl_ping_slave_period;
     repl_back_size_  = FLAGS_repl_back_log_size;
     repl_backlog_histlen_ = 0;
     repl_backlog_idx_ = 0;
@@ -36,8 +40,10 @@ naruto::Replication::Replication(int merge_threads_size) {
     repl_down_since_ = std::chrono::steady_clock::now();
     repl_master_runid_ = "";
     repl_master_initial_offset_ = 0;
-
+    last_flush_backlog_off_ = 0;
     cron_interval_ = FLAGS_repl_cron_interval;
+    buckets_ = buckets;
+    bucket_num_ = buckets->size();
     time_watcher_.set<Replication, &Replication::onReplCron>(this);
     time_watcher_.set(ev::get_default_loop());
     time_watcher_.start(cron_interval_, cron_interval_);
@@ -47,32 +53,37 @@ void naruto::Replication::onReplCron(ev::timer &, int) {
     LOG(INFO) << "onReplCron...";
     // ====================== slave 情况 ===========================
     auto now = std::chrono::steady_clock::now();
+    auto last_transfer = std::chrono::duration_cast<std::chrono::milliseconds>(now - repl_transfer_lastio_);
     // 连接 master 超时
     if (!master_host_.empty() && (repl_state_ == state::CONNECTING ||
-                                  repl_state_ == state::RECEIVE_PONG) && (now - repl_transfer_lastio_).count() > repl_timeout_){
+                                  repl_state_ == state::RECEIVE_PONG) && last_transfer.count() > repl_timeout_){
         LOG(WARNING) <<  "Timeout connecting to the MASTER...";
         _undo_connect_master();
     }
     LOG(INFO) << "onReplCron...1";
     // dump db 传送超时
     if (!master_host_.empty() && repl_state_ == state::TRANSFOR
-        && (now - repl_transfer_lastio_).count() > repl_timeout_){
+        && last_transfer.count() > repl_timeout_){
         LOG(WARNING) << "Timeout receiving bulk data from MASTER... If the problem persists try to set the 'repl-timeout' parameter in naruto.conf to a larger value.";
         _abort_sync_transfer();
     }
+
+    auto last_interaction = std::chrono::duration_cast<std::chrono::milliseconds>(now - repl_transfer_lastio_);
     LOG(INFO) << "onReplCron...2";
     // 从服务器曾经连接上主服务器，但现在超时
     if (!master_host_.empty() && repl_state_ == state::CONNECTED &&
-        (now - repl_last_interaction_).count() > repl_timeout_){
+            last_interaction.count() > repl_timeout_){
         LOG(WARNING) <<"MASTER timeout: no data nor PING received...";
         _free_client(master_);
     }
+
     LOG(INFO) << "onReplCron...3";
     // 尝试连接主服务器
     if (!master_host_.empty() && repl_state_ == state::CONNECT){ _connect_master(); }
     LOG(INFO) << "onReplCron...4";
     // 定期向主服务器发送 ACK 命令
     if (!master_host_.empty() && master_ && repl_state_ == state::CONNECTED){ _repl_send_ack(); }
+
     LOG(INFO) << "onReplCron...5";
     // ====================== master 情况 ===========================
     // 如果服务器有从服务器，定时向它们发送 PING 。
@@ -172,7 +183,7 @@ error:
     return;
 }
 
-void naruto::Replication::slavesFeed(int tid, const ::google::protobuf::Message & msg, uint16_t type) {
+void naruto::Replication::backlogFeed(int tid, const ::google::protobuf::Message & msg, uint16_t type) {
     auto repl = repl_[repl_pos_.load()];
 
     // 写到复制积压缓冲区
@@ -184,10 +195,52 @@ void naruto::Replication::slavesFeed(int tid, const ::google::protobuf::Message 
     utils::Pack::serialize(msg, type, local_repl);
 }
 
-void naruto::Replication::_backlog_feed(utils::Bytes& bytes) {
-    size_t len = bytes.size();
-    master_repl_offset_ += (long long)len;
+void naruto::Replication::backlogFeed(int tid, utils::Bytes& pack) {
+    auto repl = repl_[repl_pos_.load()];
+    // 写到复制积压缓冲区
+    auto& local_repl = (*repl)[tid];
+    auto command_id = repl_command_incr_.load();
+    repl_command_incr_++;
+    // 把 repl_command_incr_ 写在包的前面用于后续多路归并，八字节
+    local_repl.putLong(command_id);
+    local_repl.put(pack);
+}
 
+void naruto::Replication::backgroundSave() {
+    if (aof_child_pid_ != -1) return;
+
+    lastbgsave_try_ = std::chrono::steady_clock::now();
+    pid_t childpid;
+
+    if ((childpid = fork()) == 0){ // child
+        char tmpfile[256];
+        std::snprintf(tmpfile, 256, "tmp-%d.aof",(int)getpid());
+        int ret = buckets_->dump(tmpfile);
+        _exit(ret);
+//        setproctitle("%s %s:%d%s",
+//                     "naruto-aof-bgsave",
+//                     "",
+//                     _port,
+//                     server_mode);
+    } else {
+        stat_fork_spends_ = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - lastbgsave_try_);
+        if (childpid == -1){
+            last_bgsave_status_ = -1;
+            LOG(INFO) << "Can't save in background, fork: " << strerror(errno);
+            return;
+        }
+        LOG(INFO) << "Background saving started by pid " << childpid;
+        aof_save_time_start_ = std::chrono::steady_clock::now();
+        aof_child_pid_ = childpid;
+        last_bgsave_status_ = 0;
+    }
+}
+
+void naruto::Replication::_backlog_feed(const unsigned char* data, size_t size) {
+    dirty_++;
+    auto* ptr = const_cast<unsigned char *>(data);
+    size_t len = size;
+    master_repl_offset_ += (long long)len;
     while (len){
         // 从 idx 到 backlog 尾部的字节数
         size_t thislen = repl_back_size_ - repl_backlog_idx_;
@@ -195,15 +248,16 @@ void naruto::Replication::_backlog_feed(utils::Bytes& bytes) {
         // 那么直接将写入数据长度设为 len
         // 在将这些 len 字节复制之后，这个 while 循环将跳出
         if (thislen > len) thislen = len;
-        for (int i = 0; i < thislen; ++i) {
-            back_log_.push_back(bytes.get(i));
-        }
+        memcpy((char*)&back_log_[repl_backlog_idx_], ptr, thislen);
+
         // 更新 idx ，指向新写入的数据之后
         repl_backlog_idx_ += thislen;
         // 如果写入达到尾部，那么将索引重置到头部
         if (repl_backlog_idx_ == repl_back_size_)
             repl_backlog_idx_ = 0;
         len -= thislen;
+        // 将指针移动到已被写入数据的后面，指向未被复制数据的开头
+        ptr += thislen;
         repl_backlog_histlen_ += thislen;
     }
 
@@ -220,13 +274,41 @@ void naruto::Replication::_backlog_feed(utils::Bytes& bytes) {
     // 10086 - 30 + 1 = 10056 + 1 = 10057
     // 这说明如果从服务器如果从 10057 至 10086 之间的任何时间断线
     // 那么从服务器都可以使用 PSYNC
-    repl_backlog_off_ = master_repl_offset_ - repl_backlog_histlen_ + 1;
+    // repl_backlog_off_ + 1 即为可部分重同步的 index
+    repl_backlog_off_ = master_repl_offset_ - repl_backlog_histlen_;
+
+    // 判断是否将 aof 刷到文件
+    auto interval = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - last_save_aof_time_);
+    bool is_save = false;
+    for (auto condition : saveparams_){
+        if (interval > condition.ms && dirty_ > condition.changes){
+            is_save = true;
+            break;
+        }
+    }
+    // aof flush
+    if (is_save){ _backlog_flush(); }
+}
+
+void naruto::Replication::_backlog_flush() {
+    std::ofstream out(aof_file_name_, std::ofstream::binary|std::ofstream::app|std::ofstream::out);
+    long long k, skip, flush_len;
+    skip = last_flush_backlog_off_ - repl_backlog_off_;
+    k = (repl_backlog_idx_ + (repl_back_size_ - repl_backlog_histlen_)) % repl_back_size_;
+    k = (k + skip) % repl_back_size_;
+    flush_len = repl_backlog_histlen_ - skip;
+    while (flush_len){
+        long long thislen = ((repl_back_size_ - k) < flush_len) ? (repl_back_size_ - k) : flush_len;
+        out.write((const char*)&back_log_[k], thislen);
+        flush_len -= thislen;
+        k = 0;
+    }
+    out.close();
+    last_flush_backlog_off_ += flush_len;
+    dirty_ = 0;
 }
 
 void naruto::Replication::_merge_backlog_feed_slaves() {
-    if (back_log_.empty())
-        return;
-
     auto cur_pos = repl_pos_.load();
     auto next_pos = 1 - cur_pos;
     for (int i = 0; i < repl_merge_size_; ++i) {
@@ -261,11 +343,11 @@ void naruto::Replication::_merge_backlog_feed_slaves() {
         auto& min_bucket = repl_data->at(min_i);
         auto pack_size = min_bucket.getLong(pos);
 
-        utils::Bytes pack((uint8_t*)(&min_bucket.data()[pos]), pack_size);
+        // merge 到 全局 backlog 中
+        // 需要去掉包头
+        _backlog_feed(&min_bucket.data()[pos + PACK_HEAD_LEN],pack_size - PACK_HEAD_LEN);
         p.at(min_i) += pack_size;
 
-        // merge 到 全局 backlog 中
-        _backlog_feed(pack);
         // 删除最小的一个
         id_list.erase(id_list.begin());
 
@@ -395,10 +477,10 @@ int naruto::Replication::_slave_try_partial_resynchronization() {
         LOG(INFO) << "Partial resynchronization not possible (no cached master)";
     }
 
-    master_->sendMsg(psync, replication::PSYNC);
-
+    master_->write(psync, replication::PSYNC);
     utils::Bytes pack;
     master_->connect->recv(pack);
+    
     uint16_t type = pack.getShort();
     switch (type){
         case replication::FULLSYNC :

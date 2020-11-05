@@ -14,17 +14,19 @@
 #include <array>
 #include <atomic>
 #include <algorithm>
+#include <cstring>
 
 #include "utils/bytes.h"
 #include "connection/connection.h"
 #include "client.h"
 #include "utils/pack.h"
+#include "database/buckets.h"
 
 namespace naruto{
 
 struct saveparam{
     // 多少秒之内
-    std::chrono::seconds seconds;
+    std::chrono::milliseconds ms;
 
     // 发生多少次修改
     int changes;
@@ -45,11 +47,11 @@ enum class state{
 
 class Replication {
 public:
-    explicit Replication(int merge_threads_size);
+    explicit Replication(std::shared_ptr<database::Buckets> buckets, int merge_threads_size);
     // 异步 RDB 文件读取函数
     void onReadSyncBulkPayload(ev::io&, int);
     void onSyncWithMaster(ev::io&, int);
-
+    void backgroundSave();
     const std::string &getMasterHost() const;
 
     void setMasterHost(const std::string &masterHost);
@@ -70,15 +72,16 @@ public:
 
     void onReplCron(ev::timer&, int);
 
-    void slavesFeed(int tid, const ::google::protobuf::Message&, uint16_t type);
-
+    void backlogFeed(int tid, const ::google::protobuf::Message&, uint16_t type);
+    void backlogFeed(int tid, utils::Bytes& pack);
 
 private:
     struct indexLog{
-        int tid;
-        uint64_t id;
+        int tid; // 线程id
+        uint64_t id; // 排序id
     };
-    void _backlog_feed(utils::Bytes&);
+    void _backlog_feed(const unsigned char* data, size_t size);
+    void _backlog_flush();
     void _merge_backlog_feed_slaves();
     void _undo_connect_master();
     void _connect_master();
@@ -87,44 +90,42 @@ private:
     void _abort_sync_transfer();
     void _free_client(std::shared_ptr<narutoClient>&);
     void _repl_send_ack();
-
     int _slave_try_partial_resynchronization();
 
     uint64_t cronloops_;
     double cron_interval_;
     ev::timer time_watcher_;
-    // 每个线程会持有一个 写命令的 双 buffer
-
     bool is_master_;
-
-    // 消息自增id，用于多线程命名重排序
-    std::atomic_uint64_t repl_incr_id_;
     std::chrono::steady_clock::time_point repl_unixtime_;
     std::chrono::steady_clock::time_point repl_no_slaves_since_;
     std::chrono::steady_clock::time_point repl_down_since_;
 
     // dump db
     // 负责执行 dump db 的 子进程 id
-    pid_t dump_db_child_pid_;
+    std::chrono::steady_clock::time_point last_save_aof_time_;
+    int dirty_;
     std::list<saveparam> saveparams_;
-
-    // connect to master
-    std::shared_ptr<narutoClient> master_;
-    // 为了实现 当正常同步时，master 连接中断
-    // 当尝试重连时，可以顺利执行 部分重同步
-    std::shared_ptr<narutoClient> cache_master_;
+    int bucket_num_;
+    std::shared_ptr<database::Buckets> buckets_;
+    int aof_child_pid_;
+    std::chrono::milliseconds stat_fork_spends_;
+    std::chrono::steady_clock::time_point aof_save_time_start_;
+    std::chrono::steady_clock::time_point lastbgsave_try_;
+    int last_bgsave_status_;
+    bool use_aof_checksum_;
+    std::string aof_file_name_;
+    std::shared_ptr<narutoClient> master_; // connect to master
+    std::shared_ptr<narutoClient> cache_master_; // 为了实现 当正常同步时，master 连接中断,当尝试重连时，可以顺利执行 部分重同步
     std::list<std::shared_ptr<narutoClient>> slaves_;
 
+    // replication
     std::shared_ptr<ev::io> repl_ev_io_w_;
     std::shared_ptr<ev::io> repl_ev_io_r_;
-
-    // replication
     std::atomic_int repl_pos_; // 当前使用的index
     using repl_workers = std::vector<naruto::utils::Bytes>;
     std::array<std::shared_ptr<repl_workers>,2> repl_;
     int repl_merge_size_; // 和 worker 数一致
     std::atomic_uint64_t repl_command_incr_; // 命令自增数
-
     std::vector<uint8_t> back_log_;
 
     // master
@@ -137,8 +138,10 @@ private:
     long long repl_back_size_;
     // backlog 中数据的长度(实际存储数据)
     long long repl_backlog_histlen_;
-    // backlog 的当前索引
+    // backlog 的当前索引,写一个可写入的数组index
     long long repl_backlog_idx_;
+    // 上次刷新 aof 缓存到文件的 offset
+    long long last_flush_backlog_off_;
     // backlog 中可以被还原的第一个字节的偏移量
     // 即可读的第一个位置
     long long repl_backlog_off_;

@@ -34,6 +34,7 @@ void naruto::Cluster::run(){
 }
 
 void naruto::Cluster::stop() {
+    if (_fd != -1) ::close(_fd);
     if (_cluster_ev_io_r) _cluster_ev_io_r->stop();
     if (_cluster_ev_io_w) _cluster_ev_io_w->stop();
 }
@@ -79,8 +80,8 @@ void naruto::Cluster::onPing(ev::timer &watcher, int events) {
 
         if (node.second->flags & (CLUSTER_NODE_MYSELF | CLUSTER_NODE_NOADDR)) continue;
 
-        auto time_span = std::chrono::duration_cast<std::chrono::duration<double >>(now - node.second->ctime);
-        if (node.second->inHandshake() && time_span.count() * 1000 > _cluster_node_timeout.count()){
+        auto time_span = std::chrono::duration_cast<std::chrono::milliseconds>(now - node.second->ctime);
+        if (node.second->inHandshake() && time_span.count() > _cluster_node_timeout.count()){
             _remove_node(nodename);
             continue;
         }

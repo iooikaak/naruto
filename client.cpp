@@ -6,6 +6,7 @@
 #include "replication.h"
 #include "global.h"
 #include "connect_worker.h"
+#include "naruto.h"
 
 naruto::narutoClient::narutoClient() {
     flags = 0;
@@ -45,9 +46,7 @@ void naruto::narutoClient::onReadEvent(ev::io &watcher, int events) {
               << (unsigned)flag << " type:" << (unsigned)type;
 
     workers[worker_id].commands->fetch(type)->exec(this);
-
-    // TODO: 复制给从服务器
-    // TODO: 写入复制缓冲
+    workers[worker_id].server->repl->backlogFeed(worker_id, rbuf);
 }
 
 void naruto::narutoClient::onWriteEvent(ev::io &watcher, int events) {

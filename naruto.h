@@ -34,13 +34,8 @@ namespace naruto{
 class Naruto{
 public:
     explicit Naruto();
-
     ~Naruto();
-
     void onAccept(ev::io&, int);
-    void backgroundSave(const std::string& name);
-    void databaseLoad(const std::string& name);
-
     static void onSignal(ev::sig&, int);
 
     // 向集群中的所有断线或者未连接节点发送消息
@@ -57,14 +52,7 @@ private:
     void _init_cluster();
     void _init_signal();
     void _listen();
-    int _dbsave(const std::string&);
 
-    // database
-    int _bucket_num;
-    std::shared_ptr<database::Buckets> buckets_;
-    int aof_child_pid_;
-    std::chrono::steady_clock::time_point lastbgsave_try_;
-    bool use_aof_checksum_;
     // 处理信号，任务线程执行频率
     int _hz;
     int _cron_loops;

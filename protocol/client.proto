@@ -2,7 +2,7 @@ syntax="proto3";
 package client;
 
 enum type{
-  UNKNOW = 0;
+  ELEMENT = 0;
   NOT_FOUND = 1;
   HSET_STRING = 2;
   HSET_INT = 3;

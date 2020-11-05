@@ -180,10 +180,10 @@ uint16_t Bytes::getShort(uint32_t index) const {
 
 // Write Functions
 
-void Bytes::put(Bytes* src) {
-    uint32_t len = src->size();
+void Bytes::put(Bytes& src) {
+    uint32_t len = src.size();
     for (uint32_t i = 0; i < len; i++)
-        append<uint8_t>(src->get(i));
+        append<uint8_t>(src.get(i));
 }
 
 void Bytes::put(uint8_t b) {
@@ -260,12 +260,11 @@ void Bytes::putMessage(const google::protobuf::Message &message, uint16_t type) 
     uint32_t pack_size = PACK_HEAD_LEN + body_size;
     // 包长度 4 字节
     putInt(pack_size);
-    // 包版本号 1 字节
-    uint8_t version = 1;
-    put(version);
-    uint8_t flag = 0;
+
+    uint16_t flag = 0;
     // 包 标志位 1 字节
-    put(flag);
+    putShort(flag);
+
     // 包消息类型 2 字节
     putShort(type);
 
@@ -276,8 +275,8 @@ void Bytes::putMessage(const google::protobuf::Message &message, uint16_t type) 
 
     message.SerializeToArray((void*)(&buf[wpos]), body_size);
     wpos += body_size;
-    LOG(INFO) << "putMessage pack_size:" << pack_size << " body size:" << body_size << " version:" << unsigned(version)
-        << " flag:" << unsigned(flag) << " type:" << unsigned(type) << " wpos:" << wpos << std::endl;
+    LOG(INFO) << "putMessage pack_size:" << pack_size << " body size:" << body_size
+        <<" flag:" << unsigned(flag) << " type:" << unsigned(type) << " wpos:" << wpos << std::endl;
 }
 
 void Bytes::setName(std::string n) {

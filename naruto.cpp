@@ -1,6 +1,7 @@
 //
 // Created by 王振奎 on 2020/8/14.
 //
+#include <fstream>
 
 #include "naruto.h"
 #include "parameter/parameter.h"
@@ -12,7 +13,6 @@ Naruto::Naruto() : _loop(), _cluster(FLAGS_port, FLAGS_tcp_backlog){
     _tcp_backlog = FLAGS_tcp_backlog;
     _port = FLAGS_port;
     _fd = -1;
-    aof_child_pid_ = -1;
     _stat_start_time = 0;
     _stat_num_commands = 0;
     _stat_num_connections = 0;
@@ -37,8 +37,6 @@ Naruto::Naruto() : _loop(), _cluster(FLAGS_port, FLAGS_tcp_backlog){
     _cron_interval = 1.0;
     _hz = 0;
     _cron_loops = 0;
-    _bucket_num = FLAGS_bucket_num;
-    repl = nullptr;
 }
 
 Naruto::~Naruto() { delete [] workers; }
@@ -84,35 +82,10 @@ void Naruto::onAccept(ev::io& watcher, int events) {
     _connect_nums++;
 }
 
-void Naruto::backgroundSave(const std::string &name) {
-    if (aof_child_pid_ != -1) return;
-    lastbgsave_try_ = std::chrono::steady_clock::now();
-    pid_t childpid;
-    std::string server_mode = "";
-    if ((childpid = fork()) == 0){ // child
-        if (_cluster_enable) server_mode = "[cluster]";
-//        setproctitle("%s %s:%d%s",
-//                     "naruto-aof-bgsave",
-//                     "",
-//                     _port,
-//                     server_mode);
-
-
-    }
-}
-
-int Naruto::_dbsave(const std::string& name) {
-    char tmpfile[256];
-    std::snprintf(tmpfile, 256, "tmp-%d.aof",(int)getpid());
-
-}
-
-void Naruto::databaseLoad(const std::string &name) {
-
-}
-
 void Naruto::onCron(ev::timer& watcher, int event) {
-//    LOG(INFO) << "onCron....";
+    auto s = static_cast<Naruto*>(watcher.data);
+    s->_cron_loops++;
+    LOG(INFO) << "onCron:" <<  s->_cron_loops;
 }
 
 void Naruto::onSignal(ev::sig& signal, int) {
@@ -144,10 +117,13 @@ void Naruto::onSignal(ev::sig& signal, int) {
 void Naruto::_init_workers() {
     LOG(INFO) << "_init_workers,workder_num=" << workder_num;
     auto cmds = std::make_shared<command::Commands>();
-    buckets_ = std::make_shared<database::Buckets>();
+    auto buckets = std::make_shared<database::Buckets>();
+    repl = std::make_shared<Replication>(buckets, workder_num);
+    repl->setReplState(state::NONE);
+
     for (int i = 0; i < workder_num; ++i) {
         workers[i].commands = cmds;
-        workers[i].buckets = buckets_;
+        workers[i].buckets = buckets;
         workers[i].server = this;
         workers[i].async_watcher.set<&ConnectWorker::onAsync>(&workers[i]);
         workers[i].async_watcher.set(workers[i].loop);

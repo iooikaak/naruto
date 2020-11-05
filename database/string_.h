@@ -12,13 +12,13 @@ namespace naruto::database {
 
 class String : public ::naruto::database::object {
 public:
-    explicit String(std::string v = "") : _data(std::move(v)) {}
+    explicit String(std::string v = "") : data_(std::move(v)) {}
 
     data::TYPE type() override;
 
-    void serialize(::naruto::utils::Bytes &bytes) override;
+    void serialize(data::element&) override;
 
-    void deSeralize(utils::Bytes &bytes) override;
+    void deSeralize(data::element&) override;
 
     void debugString() override ;
 
@@ -26,7 +26,7 @@ public:
 
     void set(const std::string&);
 private:
-    std::string _data;
+    std::string data_;
 };
 
 }

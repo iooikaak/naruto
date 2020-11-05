@@ -5,12 +5,12 @@
 #include "list_object.h"
 
 template<typename T, data::TYPE DT>
-void naruto::database::ListObject<T, DT>::serialize(naruto::utils::Bytes &bytes) {
+void naruto::database::ListObject<T, DT>::serialize(data::element&) {
 
 }
 
 template<typename T, data::TYPE DT>
-void naruto::database::ListObject<T, DT>::deSeralize(naruto::utils::Bytes &bytes) {
+void naruto::database::ListObject<T, DT>::deSeralize(data::element&) {
 
 }
 

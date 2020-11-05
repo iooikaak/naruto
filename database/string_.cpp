@@ -6,18 +6,14 @@
 
 data::TYPE naruto::database::String::type() { return data::STRING; }
 
-void naruto::database::String::serialize(::naruto::utils::Bytes &bytes) {
-
-}
+void naruto::database::String::serialize(data::element& element) { element.set_str(data_); }
 
 void naruto::database::String::debugString() {
-    LOG(INFO) << "database debug string data:" << _data;
+    LOG(INFO) << "database debug string data:" << data_;
 }
 
-void naruto::database::String::deSeralize(naruto::utils::Bytes &bytes) {
+void naruto::database::String::deSeralize(data::element& element) { data_ = element.str(); }
 
-}
+std::string naruto::database::String::get() { return data_; }
 
-std::string naruto::database::String::get() { return _data; }
-
-void naruto::database::String::set(const std::string &value) { _data = value; }
+void naruto::database::String::set(const std::string &value) { data_ = value; }

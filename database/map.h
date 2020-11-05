@@ -17,9 +17,9 @@ class Map : public ::naruto::database::object{
 public:
     data::TYPE type() override;
 
-    void serialize(::naruto::utils::Bytes &bytes) override;
+    void serialize(data::element&) override;
 
-    void deSeralize(utils::Bytes &bytes) override;
+    void deSeralize(data::element&) override;
 
     void debugString() override ;
 

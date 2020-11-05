@@ -17,9 +17,8 @@ class object {
 public:
     // 对象类型
     virtual data::TYPE type() = 0;
-    // 序列化对象为 bytes 数组
-    virtual void serialize(utils::Bytes &) = 0;
-    virtual void deSeralize(utils::Bytes& ) = 0;
+    virtual void serialize(data::element&) = 0;
+    virtual void deSeralize(data::element&) = 0;
     virtual void debugString() = 0;
     virtual ~object() = default;
 };
