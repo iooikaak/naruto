@@ -20,14 +20,12 @@ naruto::Replication::Replication(std::shared_ptr<database::Buckets> buckets, int
     repl_pos_ = 0;
     repl_merge_size_ = merge_threads_size;
     repl_command_incr_.store(0);
-    back_log_.reserve(0);
+    back_log_.reserve(FLAGS_repl_back_log_size);
     master_repl_offset_ = 0;
+    master_flush_repl_offset_ = 0;
     last_bgsave_status_ = 0;
     repl_ping_slave_period_ = (int)FLAGS_repl_ping_slave_period;
     repl_back_size_  = FLAGS_repl_back_log_size;
-    repl_backlog_histlen_ = 0;
-    repl_backlog_idx_ = 0;
-    repl_backlog_off_ = 0;
     repl_state_ = state::NONE;
     repl_transfer_size_ = 0;
     repl_transfer_read_ = 0;
@@ -40,10 +38,12 @@ naruto::Replication::Replication(std::shared_ptr<database::Buckets> buckets, int
     repl_down_since_ = std::chrono::steady_clock::now();
     repl_master_runid_ = "";
     repl_master_initial_offset_ = 0;
-    last_flush_backlog_off_ = 0;
+
     cron_interval_ = FLAGS_repl_cron_interval;
     buckets_ = buckets;
     bucket_num_ = buckets->size();
+    aof_file_ = std::make_shared<sink::RotateFileStream>(FLAGS_repl_aof_dir, FLAGS_repl_aof_rotate_size);
+
     time_watcher_.set<Replication, &Replication::onReplCron>(this);
     time_watcher_.set(ev::get_default_loop());
     time_watcher_.start(cron_interval_, cron_interval_);
@@ -242,43 +242,13 @@ void naruto::Replication::_backlog_feed(const unsigned char* data, size_t size) 
     size_t len = size;
     master_repl_offset_ += (long long)len;
     while (len){
-        // 从 idx 到 backlog 尾部的字节数
-        size_t thislen = repl_back_size_ - repl_backlog_idx_;
-        // 如果 idx 到 backlog 尾部这段空间足以容纳要写入的内容
-        // 那么直接将写入数据长度设为 len
-        // 在将这些 len 字节复制之后，这个 while 循环将跳出
-        if (thislen > len) thislen = len;
-        memcpy((char*)&back_log_[repl_backlog_idx_], ptr, thislen);
-
-        // 更新 idx ，指向新写入的数据之后
-        repl_backlog_idx_ += thislen;
-        // 如果写入达到尾部，那么将索引重置到头部
-        if (repl_backlog_idx_ == repl_back_size_)
-            repl_backlog_idx_ = 0;
-        len -= thislen;
-        // 将指针移动到已被写入数据的后面，指向未被复制数据的开头
-        ptr += thislen;
-        repl_backlog_histlen_ += thislen;
+        back_log_.push_back(*ptr);
+        ptr++;
+        len--;
     }
 
-    // histlen 的最大值只能等于 backlog_size
-    // 另外，当 histlen 大于 repl_backlog_size 时，
-    // 表示写入数据的前头有一部分数据被自己的尾部覆盖了
-    if (repl_backlog_histlen_ > repl_back_size_)
-        repl_backlog_histlen_ = repl_back_size_;
-
-    // 记录程序可以依靠 backlog 来还原的数据的第一个字节的偏移量
-    // 比如 master_repl_offset = 10086
-    // repl_backlog_histlen = 30
-    // 那么 backlog 所保存的数据的第一个字节的偏移量为
-    // 10086 - 30 + 1 = 10056 + 1 = 10057
-    // 这说明如果从服务器如果从 10057 至 10086 之间的任何时间断线
-    // 那么从服务器都可以使用 PSYNC
-    // repl_backlog_off_ + 1 即为可部分重同步的 index
-    repl_backlog_off_ = master_repl_offset_ - repl_backlog_histlen_;
-
     // 判断是否将 aof 刷到文件
-    auto interval = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - last_save_aof_time_);
+    auto interval = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - last_flush_aof_time_);
     bool is_save = false;
     for (auto condition : saveparams_){
         if (interval > condition.ms && dirty_ > condition.changes){
@@ -290,21 +260,12 @@ void naruto::Replication::_backlog_feed(const unsigned char* data, size_t size) 
     if (is_save){ _backlog_flush(); }
 }
 
+
 void naruto::Replication::_backlog_flush() {
-    std::ofstream out(aof_file_name_, std::ofstream::binary|std::ofstream::app|std::ofstream::out);
-    long long k, skip, flush_len;
-    skip = last_flush_backlog_off_ - repl_backlog_off_;
-    k = (repl_backlog_idx_ + (repl_back_size_ - repl_backlog_histlen_)) % repl_back_size_;
-    k = (k + skip) % repl_back_size_;
-    flush_len = repl_backlog_histlen_ - skip;
-    while (flush_len){
-        long long thislen = ((repl_back_size_ - k) < flush_len) ? (repl_back_size_ - k) : flush_len;
-        out.write((const char*)&back_log_[k], thislen);
-        flush_len -= thislen;
-        k = 0;
-    }
-    out.close();
-    last_flush_backlog_off_ += flush_len;
+    aof_file_->write((const char*)&back_log_[0], back_log_.size());
+    master_flush_repl_offset_ += back_log_.size();
+    last_flush_aof_time_ = std::chrono::steady_clock::now();
+    back_log_.clear();
     dirty_ = 0;
 }
 

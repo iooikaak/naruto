@@ -21,6 +21,7 @@
 #include "client.h"
 #include "utils/pack.h"
 #include "database/buckets.h"
+#include "sink/rotate_file_stream.h"
 
 namespace naruto{
 
@@ -51,23 +52,16 @@ public:
     // 异步 RDB 文件读取函数
     void onReadSyncBulkPayload(ev::io&, int);
     void onSyncWithMaster(ev::io&, int);
+
     void backgroundSave();
     const std::string &getMasterHost() const;
-
     void setMasterHost(const std::string &masterHost);
-
     int getMasterPort() const;
-
     void setMasterPort(int masterPort);
-
     bool isIsMaster() const;
-
     void setIsMaster(bool isMaster);
-
     state getReplState() const;
-
     void setReplState(state replState);
-
     ~Replication();
 
     void onReplCron(ev::timer&, int);
@@ -102,7 +96,7 @@ private:
 
     // dump db
     // 负责执行 dump db 的 子进程 id
-    std::chrono::steady_clock::time_point last_save_aof_time_;
+    std::chrono::steady_clock::time_point last_flush_aof_time_;
     int dirty_;
     std::list<saveparam> saveparams_;
     int bucket_num_;
@@ -122,35 +116,29 @@ private:
     std::shared_ptr<ev::io> repl_ev_io_w_;
     std::shared_ptr<ev::io> repl_ev_io_r_;
     std::atomic_int repl_pos_; // 当前使用的index
+
     using repl_workers = std::vector<naruto::utils::Bytes>;
     std::array<std::shared_ptr<repl_workers>,2> repl_;
+
     int repl_merge_size_; // 和 worker 数一致
     std::atomic_uint64_t repl_command_incr_; // 命令自增数
     std::vector<uint8_t> back_log_;
+    std::shared_ptr<sink::RotateFileStream> aof_file_;
 
     // master
     std::string master_host_;
     int master_port_;
     // 全局复制偏移量（一个累计值）
     long long master_repl_offset_;
+    // 已经flush到aof文件的大小
+    long long master_flush_repl_offset_;
+
     int repl_ping_slave_period_;
     // 环形缓冲长度
     long long repl_back_size_;
-    // backlog 中数据的长度(实际存储数据)
-    long long repl_backlog_histlen_;
-    // backlog 的当前索引,写一个可写入的数组index
-    long long repl_backlog_idx_;
-    // 上次刷新 aof 缓存到文件的 offset
-    long long last_flush_backlog_off_;
-    // backlog 中可以被还原的第一个字节的偏移量
-    // 即可读的第一个位置
-    long long repl_backlog_off_;
 
-    // slave
-    // 复制状态
-//    int _repl_state;
+    // slave 复制状态
     enum state repl_state_;
-
     int repl_timeout_;
     // RDB 文件的大小
     off_t repl_transfer_size_;

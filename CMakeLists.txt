@@ -23,7 +23,7 @@ aux_source_directory(protocol PROTOCOL_SRC)
 aux_source_directory(connection CONNECTION_SRC)
 aux_source_directory(database DATABASE_SRC)
 aux_source_directory(command COMMAND_SRC)
-
+aux_source_directory(sink SINK_SRC)
 list(REMOVE_ITEM NARUTO_SRC ./main.cpp)
 
 #add_executable(client ./clients/example/c++/example.cpp
@@ -40,7 +40,8 @@ add_executable(naruto main.cpp
         ${PROTOCOL_SRC}
         ${CONNECTION_SRC}
         ${DATABASE_SRC}
-        ${COMMAND_SRC})
+        ${COMMAND_SRC}
+        ${SINK_SRC})
 
 add_executable(ut ./unittest/ut_main.cpp
         ${NARUTO_SRC}
@@ -48,4 +49,5 @@ add_executable(ut ./unittest/ut_main.cpp
         ${PROTOCOL_SRC}
         ${CONNECTION_SRC}
         ${DATABASE_SRC}
-        ${COMMAND_SRC})
+        ${COMMAND_SRC}
+        ${SINK_SRC})

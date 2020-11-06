@@ -9,7 +9,7 @@
 
 // ======================== replication ========================
 #define DEFAULT_REPL_BACK_LOG_SIZE (10*1024*1024)
-DEFINE_int32(repl_back_log_size, DEFAULT_REPL_BACK_LOG_SIZE, "repl listen port"); /* NOLINT */
+DEFINE_int32(repl_back_log_size, DEFAULT_REPL_BACK_LOG_SIZE, "repl back log fize"); /* NOLINT */
 static bool valid_repl_back_log_size(const char* flagname, int value){
     return value > 0;
 }
@@ -33,5 +33,23 @@ static bool valid_repl_ping_slave_period(const char* flagname, double value){
 }
 DEFINE_validator(repl_ping_slave_period,&valid_repl_ping_slave_period); /* NOLINT */
 
+
+DEFINE_int32(repl_aof_rotate_size, 10, "aof file rotate size"); /* NOLINT */
+static bool valid_repl_aof_rotate_size(const char* flagname, int value){
+    return value > 1;
+}
+DEFINE_validator(repl_aof_rotate_size,&valid_repl_aof_rotate_size); /* NOLINT */
+
+DEFINE_string(repl_aof_dir, "", "aof file rotate size"); /* NOLINT */
+static bool valid_repl_aof_dir(const char* flagname, const std::string& value){
+    return value != "";
+}
+DEFINE_validator(repl_aof_dir,&valid_repl_aof_dir); /* NOLINT */
+
+DEFINE_int32(repl_aof_ring_size, 1024 * 1024 * 10, "aof file ring buffer size"); /* NOLINT */
+static bool valid_repl_aof_ring_size(const char* flagname, int value){
+    return value > 1024 * 1024 * 10;
+}
+DEFINE_validator(repl_aof_ring_size,&valid_repl_aof_ring_size); /* NOLINT */
 
 #endif //NARUTO_PARAMETER_REPL_H
