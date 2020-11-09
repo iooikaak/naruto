@@ -7,10 +7,10 @@
 
 #include <ev++.h>
 
-#include "connection/connection.h"
 #include "utils/errors.h"
 #include "utils/bytes.h"
 #include "utils/pack.h"
+#include "connection/connection.h"
 
 #define CLIENT_BUF_SIZE (1024*1024)
 
@@ -20,8 +20,6 @@
 namespace naruto{
 
 enum class state;
-class Replication;
-class ConnectWorker;
 
 class narutoClient {
 public:

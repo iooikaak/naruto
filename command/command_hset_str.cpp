@@ -4,18 +4,12 @@
 
 
 #include "command_hset_str.h"
-#include "client.h"
-#include "database/string_.h"
-#include "utils/pack.h"
-#include "connect_worker.h"
-#include "protocol/client.pb.h"
 
 void naruto::command::CommandHsetStr::exec(naruto::narutoClient *client) {
     client::command_hset_str cmd;
     auto type = utils::Pack::deSerialize(client->rbuf, cmd);
 
-    auto buckets = workers[client->worker_id].buckets;
-    auto element = buckets->get(cmd.key(), cmd.field());
+    auto element =  database::buckets->get(cmd.key(), cmd.field());
 
     std::shared_ptr<database::String> ptr;
     if (!element){
@@ -28,7 +22,7 @@ void naruto::command::CommandHsetStr::exec(naruto::narutoClient *client) {
 
         ptr = std::make_shared<database::String>();
         element->ptr=ptr;
-        buckets->put(cmd.key(), cmd.field(), element);
+        database::buckets->put(cmd.key(), cmd.field(), element);
     } else {
         ptr = element->cast<database::String>();
     }

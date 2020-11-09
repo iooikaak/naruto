@@ -6,6 +6,7 @@
 #define NARUTO_COMMAND_HGET_STR_H
 
 #include "command.h"
+#include "database/buckets.h"
 
 namespace naruto::command{
 

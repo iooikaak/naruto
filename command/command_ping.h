@@ -12,7 +12,7 @@ namespace naruto::command {
 class CommandPing : public Command {
 public:
     void exec(narutoClient *client) override;
-    ~CommandPing() = default;
+    ~CommandPing() override = default;
 };
 
 }

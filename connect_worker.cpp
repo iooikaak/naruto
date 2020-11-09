@@ -5,7 +5,6 @@
 
 
 #include "connect_worker.h"
-#include "naruto.h"
 
 namespace naruto{
 
@@ -80,7 +79,7 @@ void ConnectWorker::onStopAsync(ev::async &watcher, int events) {
 void ConnectWorker::stop() { stop_async_watcher.send(); }
 
 
-int workder_num = (int)(sysconf(_SC_NPROCESSORS_CONF) *2) -1;;
-ConnectWorker* workers = new ConnectWorker[workder_num];
+int worker_num = (int)(sysconf(_SC_NPROCESSORS_CONF) * 2) - 1;;
+ConnectWorker* workers = new ConnectWorker[worker_num];
 
 }

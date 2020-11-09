@@ -1,10 +1,13 @@
 //
 // Created by 王振奎 on 2020/8/14.
 //
-#include <fstream>
-
 #include "naruto.h"
+
+#include <fstream>
+#include "client.h"
 #include "parameter/parameter.h"
+#include "connect_worker.h"
+#include "replication.h"
 
 namespace naruto{
 
@@ -73,7 +76,7 @@ void Naruto::onAccept(ev::io& watcher, int events) {
     LOG(INFO) << "onAccept OK! dispatch connect, client_sd=" << client->connect->fd() << " watcher.fd=" << watcher.fd
         << " addr:" << client->ip << ":" << client->port;
 
-    int index = _connect_nums % workder_num;
+    int index = _connect_nums % worker_num;
     client->worker_id = index; // record work id
 
     workers[index].conns.push_back(client);
@@ -96,13 +99,13 @@ void Naruto::onSignal(ev::sig& signal, int) {
     LOG(INFO) << "onSignal start...1";
     // 关闭工作线程
     exit_success_workers = 0;
-    for (int i = 0; i < workder_num; ++i)  workers[i].stop();
+    for (int i = 0; i < worker_num; ++i)  workers[i].stop();
     LOG(INFO) << "onSignal start...2";
     // 关闭cluster工作线程
     s->_cluster.stop();
 
     std::unique_lock<std::mutex> lck(mux);
-    while (exit_success_workers < workder_num){
+    while (exit_success_workers < worker_num){
         LOG(INFO) << "onSignal..." << exit_success_workers;
         cond.wait(lck);
     }
@@ -115,16 +118,10 @@ void Naruto::onSignal(ev::sig& signal, int) {
 }
 
 void Naruto::_init_workers() {
-    LOG(INFO) << "_init_workers,workder_num=" << workder_num;
-    auto cmds = std::make_shared<command::Commands>();
-    auto buckets = std::make_shared<database::Buckets>();
-    repl = std::make_shared<Replication>(buckets, workder_num);
+    LOG(INFO) << "_init_workers,worker_num=" << worker_num;
+    repl = std::make_shared<Replication>(worker_num);
     repl->setReplState(state::NONE);
-
-    for (int i = 0; i < workder_num; ++i) {
-        workers[i].commands = cmds;
-        workers[i].buckets = buckets;
-        workers[i].server = this;
+    for (int i = 0; i < worker_num; ++i) {
         workers[i].async_watcher.set<&ConnectWorker::onAsync>(&workers[i]);
         workers[i].async_watcher.set(workers[i].loop);
         workers[i].async_watcher.start();
@@ -137,7 +134,7 @@ void Naruto::_init_workers() {
     LOG(INFO) << "_init_workers...2";
 
     // run workers in thread
-    for (int j = 0; j < workder_num; ++j) {
+    for (int j = 0; j < worker_num; ++j) {
         auto worker = &workers[j];
         std::thread([worker,j](){
             worker->run(j);
@@ -151,7 +148,7 @@ void Naruto::_init_workers() {
     LOG(INFO) << "_init_workers...5";
     // 等待 worker 线程初始化完毕
     std::unique_lock<std::mutex> lck(mux);
-    while (init_success_workers < workder_num){
+    while (init_success_workers < worker_num){
         cond.wait(lck);
     }
     LOG(INFO) << "_init_workers end..." << init_success_workers;
@@ -195,5 +192,7 @@ void Naruto::_init_cron() {
     _timer_watcher.set(_loop);
     _timer_watcher.start(_cron_interval, _cron_interval);
 }
+
+Naruto* server = new Naruto();
 
 }

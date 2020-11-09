@@ -46,10 +46,4 @@ static bool valid_repl_aof_dir(const char* flagname, const std::string& value){
 }
 DEFINE_validator(repl_aof_dir,&valid_repl_aof_dir); /* NOLINT */
 
-DEFINE_int32(repl_aof_ring_size, 1024 * 1024 * 10, "aof file ring buffer size"); /* NOLINT */
-static bool valid_repl_aof_ring_size(const char* flagname, int value){
-    return value > 1024 * 1024 * 10;
-}
-DEFINE_validator(repl_aof_ring_size,&valid_repl_aof_ring_size); /* NOLINT */
-
 #endif //NARUTO_PARAMETER_REPL_H

@@ -19,21 +19,16 @@
 #include <math.h>
 
 #include "types.h"
-#include "connect_worker.h"
 #include "cluster.h"
-#include "database/buckets.h"
-#include "command/command.h"
-#include "command/commands.h"
-#include "command/command_nf.h"
-#include "command/command_hget_str.h"
 #include "utils/net.h"
 #include "replication.h"
+#include "connect_worker.h"
 
 namespace naruto{
 
 class Naruto{
 public:
-    explicit Naruto();
+    Naruto();
     ~Naruto();
     void onAccept(ev::io&, int);
     static void onSignal(ev::sig&, int);
@@ -46,7 +41,6 @@ public:
     std::shared_ptr<Replication> repl;
 
 private:
-
     void _init_workers();
     void _init_cron();
     void _init_cluster();
@@ -119,6 +113,8 @@ private:
     // PSYNC 执行失败的次数
     long long _stat_sync_partial_err;
 };
+
+extern Naruto* server;
 
 }
 

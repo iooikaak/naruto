@@ -3,8 +3,9 @@
 //
 
 #include "command_ping.h"
-#include "protocol/replication.pb.h"
+
 #include "client.h"
+#include "protocol/replication.pb.h"
 
 void naruto::command::CommandPing::exec(naruto::narutoClient *client) {
     LOG(INFO) << "naruto::command::CommandPing::exec...";

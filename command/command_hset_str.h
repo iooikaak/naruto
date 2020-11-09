@@ -7,6 +7,12 @@
 
 #include "command.h"
 
+#include "database/buckets.h"
+#include "client.h"
+#include "database/string_.h"
+#include "utils/pack.h"
+#include "protocol/client.pb.h"
+
 namespace naruto::command {
 
 class CommandHsetStr : public Command {

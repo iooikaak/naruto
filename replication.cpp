@@ -1,14 +1,16 @@
 //
 // Created by 王振奎 on 2020/9/18.
 //
-#include <chrono>
 
+
+#include "replication.h"
+
+#include <chrono>
 #include "protocol/message_type.h"
 #include "protocol/replication.pb.h"
-#include "replication.h"
 #include "parameter/parameter_repl.h"
 
-naruto::Replication::Replication(std::shared_ptr<database::Buckets> buckets, int merge_threads_size) {
+naruto::Replication::Replication(int worker_num) {
     master_host_ = "";
     master_port_ = 0;
     dirty_ = 0;
@@ -18,7 +20,7 @@ naruto::Replication::Replication(std::shared_ptr<database::Buckets> buckets, int
     aof_child_pid_ = -1;
     repl_timeout_ = FLAGS_repl_timeout_sec;
     repl_pos_ = 0;
-    repl_merge_size_ = merge_threads_size;
+    repl_merge_size_ = worker_num;
     repl_command_incr_.store(0);
     back_log_.reserve(FLAGS_repl_back_log_size);
     master_repl_offset_ = 0;
@@ -40,8 +42,6 @@ naruto::Replication::Replication(std::shared_ptr<database::Buckets> buckets, int
     repl_master_initial_offset_ = 0;
 
     cron_interval_ = FLAGS_repl_cron_interval;
-    buckets_ = buckets;
-    bucket_num_ = buckets->size();
     aof_file_ = std::make_shared<sink::RotateFileStream>(FLAGS_repl_aof_dir, FLAGS_repl_aof_rotate_size);
 
     time_watcher_.set<Replication, &Replication::onReplCron>(this);
@@ -215,8 +215,8 @@ void naruto::Replication::backgroundSave() {
     if ((childpid = fork()) == 0){ // child
         char tmpfile[256];
         std::snprintf(tmpfile, 256, "tmp-%d.aof",(int)getpid());
-        int ret = buckets_->dump(tmpfile);
-        _exit(ret);
+//        int ret = database::buckets->dump(tmpfile);
+//        _exit(ret);
 //        setproctitle("%s %s:%d%s",
 //                     "naruto-aof-bgsave",
 //                     "",

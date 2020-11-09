@@ -6,15 +6,12 @@
 #define NARUTO_RING_BUFFER_H
 
 #include <vector>
-#include <gflags/gflags.h>
-
-DECLARE_int32(repl_aof_ring_size);
 
 namespace naruto::utils{
 template <typename T>
 class RingBuffer {
 public:
-    explicit RingBuffer(int capacity = FLAGS_repl_aof_ring_size);
+    explicit RingBuffer(int capacity);
     void put(T);
 
 private:

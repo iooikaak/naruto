@@ -1,10 +1,10 @@
 //
 // Created by 王振奎 on 2020/10/3.
 //
-#include <glog/logging.h>
 
 #include "commands.h"
 
+#include <glog/logging.h>
 #include "command_nf.h"
 #include "command_hset_str.h"
 #include "command_hset_int.h"
@@ -12,11 +12,12 @@
 #include "command_hget_int.h"
 #include "command_slaveof.h"
 #include "command_ping.h"
-
 #include "protocol/client.pb.h"
 #include "protocol/replication.pb.h"
 
-naruto::command::Commands::Commands() {
+namespace naruto::command{
+
+Commands::Commands() {
     std::cout << "init commands" << std::endl;
     // 初始化命令
     _cmd_nf = std::make_shared<CommandNF>();
@@ -30,11 +31,21 @@ naruto::command::Commands::Commands() {
     reg(replication::PING, std::make_shared<CommandPing>());
 }
 
-void naruto::command::Commands::reg(int type, std::shared_ptr<Command> cmd) { _cmds.emplace(type, cmd); }
+void Commands::reg(int type, std::shared_ptr<Command> cmd) { _cmds.emplace(type, cmd); }
 
-
-std::shared_ptr<naruto::command::Command> naruto::command::Commands::fetch(int type) {
+std::shared_ptr<Command> Commands::fetch(int type) {
     LOG(INFO) << "command fetch type:" << type;
     auto it = _cmds.find(type);
     return it != _cmds.end() ? it->second : _cmd_nf;
 }
+
+std::shared_ptr<Commands> commands = std::make_shared<Commands>();
+
+}
+
+
+
+
+
+
+

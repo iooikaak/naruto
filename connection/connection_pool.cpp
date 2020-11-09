@@ -5,8 +5,7 @@
 #include "connection_pool.h"
 #include "utils/errors.h"
 
-namespace naruto{
-namespace connection{
+namespace naruto::connection{
 
 ConnectionPool::ConnectionPool(const ConnectionPoolOptions &pool_opts,
                                const ConnectOptions &opts) : _pool_opts(pool_opts), _opts(opts) {
@@ -102,5 +101,4 @@ void ConnectionPool::_wait_for_connect(std::unique_lock<std::mutex>& lock) {
     }
 }
 
-}
 }

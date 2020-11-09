@@ -2,8 +2,8 @@
 // Created by 王振奎 on 2020/9/28.
 //
 
-#include <utils/pack.h>
 #include "buckets.h"
+#include "utils/pack.h"
 
 // Buckets
 naruto::database::Buckets::Buckets(int size) {
@@ -118,3 +118,6 @@ void naruto::database::bucket::del(const std::string & key, const std::string & 
 int naruto::database::bucket::size() { return objs->size(); }
 
 void naruto::database::bucket::flush() { objs = std::make_shared<std::unordered_map<std::string, std::shared_ptr<columns>>>(); }
+
+
+std::shared_ptr<naruto::database::Buckets> naruto::database::buckets = std::make_shared<naruto::database::Buckets>();

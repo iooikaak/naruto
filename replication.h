@@ -16,11 +16,11 @@
 #include <algorithm>
 #include <cstring>
 
-#include "utils/bytes.h"
-#include "connection/connection.h"
 #include "client.h"
-#include "utils/pack.h"
+#include "utils/bytes.h"
 #include "database/buckets.h"
+#include "connection/connection.h"
+#include "utils/pack.h"
 #include "sink/rotate_file_stream.h"
 
 namespace naruto{
@@ -48,7 +48,7 @@ enum class state{
 
 class Replication {
 public:
-    explicit Replication(std::shared_ptr<database::Buckets> buckets, int merge_threads_size);
+    Replication(int worker_num);
     // 异步 RDB 文件读取函数
     void onReadSyncBulkPayload(ev::io&, int);
     void onSyncWithMaster(ev::io&, int);
@@ -99,15 +99,13 @@ private:
     std::chrono::steady_clock::time_point last_flush_aof_time_;
     int dirty_;
     std::list<saveparam> saveparams_;
-    int bucket_num_;
-    std::shared_ptr<database::Buckets> buckets_;
+
     int aof_child_pid_;
     std::chrono::milliseconds stat_fork_spends_;
     std::chrono::steady_clock::time_point aof_save_time_start_;
     std::chrono::steady_clock::time_point lastbgsave_try_;
     int last_bgsave_status_;
     bool use_aof_checksum_;
-    std::string aof_file_name_;
     std::shared_ptr<narutoClient> master_; // connect to master
     std::shared_ptr<narutoClient> cache_master_; // 为了实现 当正常同步时，master 连接中断,当尝试重连时，可以顺利执行 部分重同步
     std::list<std::shared_ptr<narutoClient>> slaves_;

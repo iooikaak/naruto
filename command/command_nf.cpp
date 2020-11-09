@@ -2,8 +2,9 @@
 // Created by 王振奎 on 2020/10/3.
 //
 
-#include <client.h>
 #include "command_nf.h"
+
+#include "client.h"
 #include "protocol/client.pb.h"
 
 void naruto::command::CommandNF::exec(naruto::narutoClient *client) {

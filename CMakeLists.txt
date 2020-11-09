@@ -35,19 +35,19 @@ list(REMOVE_ITEM NARUTO_SRC ./main.cpp)
 #        ${COMMAND_SRC})
 
 add_executable(naruto main.cpp
+        ${DATABASE_SRC}
+        ${COMMAND_SRC}
         ${NARUTO_SRC}
         ${UTILS_SRC}
         ${PROTOCOL_SRC}
         ${CONNECTION_SRC}
-        ${DATABASE_SRC}
-        ${COMMAND_SRC}
         ${SINK_SRC})
 
 add_executable(ut ./unittest/ut_main.cpp
+        ${DATABASE_SRC}
+        ${COMMAND_SRC}
         ${NARUTO_SRC}
         ${UTILS_SRC}
         ${PROTOCOL_SRC}
         ${CONNECTION_SRC}
-        ${DATABASE_SRC}
-        ${COMMAND_SRC}
         ${SINK_SRC})

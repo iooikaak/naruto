@@ -74,6 +74,8 @@ private:
     std::vector<std::shared_ptr<bucket>> buckets_;
 };
 
+extern std::shared_ptr<Buckets> buckets;
+
 }
 
 

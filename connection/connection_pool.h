@@ -11,10 +11,7 @@
 #include "utils/nocopy.h"
 #include "connection.h"
 
-
-namespace naruto{
-namespace connection{
-
+namespace naruto::connection{
 
 struct ConnectionPoolOptions {
     // 最大连接数，包含使用中 和 空闲
@@ -54,7 +51,6 @@ private:
     std::condition_variable _cv;
 };
 
-}
 }
 
 

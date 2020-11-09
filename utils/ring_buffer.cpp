@@ -23,7 +23,7 @@ void RingBuffer<T>::put(T t) {
 
 template<typename T>
 bool RingBuffer<T>::full() {
-    return front_ == (rear_ + 1) % capacity_;
+    return get_ == (put_ + 1) % capacity_;
 }
 
 }

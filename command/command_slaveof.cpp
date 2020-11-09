@@ -5,7 +5,6 @@
 #include "command_slaveof.h"
 
 #include "client.h"
-#include "connect_worker.h"
 #include "naruto.h"
 #include "utils/pack.h"
 #include "replication.h"
@@ -17,9 +16,6 @@ void naruto::command::CommandSlaveof::exec(naruto::narutoClient *client) {
     auto type = utils::Pack::deSerialize(client->rbuf, cmd);
 
     if (type != replication::SLAVEOF) return;
-
-    auto server = workers[client->worker_id].server;
-//    server->repl = std::make_shared<Replication>(workder_num);
 
     server->repl->setReplState(state::CONNECT);
     server->repl->setMasterPort(cmd.port());

@@ -2,10 +2,10 @@
 // Created by kwins on 2020/11/6.
 //
 
+#include "rotate_file_stream.h"
+
 #include <dirent.h>
 #include <algorithm>
-
-#include "rotate_file_stream.h"
 #include "utils/errors.h"
 
 namespace naruto::sink {
@@ -17,6 +17,22 @@ RotateFileStream::RotateFileStream(const std::string &dir, long long int rotate_
     }
     rotate_aof_file_size_ = rotate_aof_file_size;
     _rotate_init();
+}
+
+void RotateFileStream::listAof(const std::string& dir, std::vector<std::string> & list) {
+    DIR* dirp = opendir(dir.c_str());
+    dirent* ptr;
+    while ((ptr = readdir(dirp)) != nullptr){
+        std::string name(ptr->d_name);
+        if (ptr->d_type == DT_REG && name.find("aof") != std::string::npos){
+            list.emplace_back(ptr->d_name);
+        }
+    }
+
+    std::sort(list.begin(), list.end(), [](const std::string& x, const std::string& y){
+        return x < y;
+    });
+    closedir(dirp);
 }
 
 long long RotateFileStream::write(const char * s, size_t n) {
@@ -41,28 +57,12 @@ void RotateFileStream::_rotate() {
 std::string RotateFileStream::_gen_aof_filename(int idx) { return dir_ + "naruto.aof." + std::to_string(idx); }
 
 void RotateFileStream::_rotate_init() {
-    DIR* dir = opendir(dir_.c_str());
-    unsigned char isfile =0x8;
-    dirent* ptr;
     std::vector<std::string> list;
-    while ((ptr = readdir(dir)) != nullptr){
-        std::string name(ptr->d_name);
-        if (ptr->d_type == isfile && name.find("aof") != std::string::npos){
-            list.emplace_back(ptr->d_name);
-        }
-    }
-
-    std::sort(list.begin(), list.end(), [](const std::string& x, const std::string& y){
-        return x < y;
-    });
-
-//    std::for_each(list.begin(), list.end(), [](const std::string& x){
-//        std::cout << x << std::endl;
-//    });
+    listAof(dir_, list);
 
     if (!list.empty()){
         auto last = list[list.size()-1];
-        auto pos = last.find_last_of(".");
+        auto pos = last.find_last_of('.');
         if (pos == std::string::npos){
             throw utils::Error("bad file:" + last);
         }
@@ -74,8 +74,6 @@ void RotateFileStream::_rotate_init() {
 
     cur_aof_file_ = _gen_aof_filename(rotate_aof_idx_);
     stream_ = std::make_shared<std::ofstream>(cur_aof_file_,std::ios::binary|std::ios::app|std::ios::out);
-    std::cout << "cur_aof_file_:" << cur_aof_file_ << "    rotate_aof_idx_:" << rotate_aof_idx_ << std::endl;
-    closedir(dir);
 }
 
 }

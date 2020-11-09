@@ -3,10 +3,12 @@
 //
 
 #include "client.h"
-#include "replication.h"
+
 #include "global.h"
-#include "connect_worker.h"
 #include "naruto.h"
+#include "connect_worker.h"
+#include "replication.h"
+#include "command/commands.h"
 
 naruto::narutoClient::narutoClient() {
     flags = 0;
@@ -45,8 +47,9 @@ void naruto::narutoClient::onReadEvent(ev::io &watcher, int events) {
               << pack_size << " version:" << (unsigned)version << " flag:"
               << (unsigned)flag << " type:" << (unsigned)type;
 
-    workers[worker_id].commands->fetch(type)->exec(this);
-    workers[worker_id].server->repl->backlogFeed(worker_id, rbuf);
+
+    command::commands->fetch(type)->exec(this);
+    server->repl->backlogFeed(worker_id, rbuf);
 }
 
 void naruto::narutoClient::onWriteEvent(ev::io &watcher, int events) {

@@ -19,7 +19,7 @@ public:
     explicit RotateFileStream(const std::string& dir, long long rotate_file_size);
     long long write(const char*, size_t);
     void flush();
-
+    static void listAof(const std::string& dir, std::vector<std::string>&);
 private:
     void _rotate_init();
     void _rotate();
