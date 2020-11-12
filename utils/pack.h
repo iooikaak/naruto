@@ -34,7 +34,7 @@ public:
      * */
     static uint64_t deSerialize(utils::Bytes& pack, ::google::protobuf::Message& msg);
 
-
+    static uint64_t deSerialize(const unsigned char* data, size_t n, ::google::protobuf::Message& msg);
 };
 
 }

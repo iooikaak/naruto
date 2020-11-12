@@ -269,14 +269,14 @@ void Bytes::putMessage(const google::protobuf::Message &message, uint16_t type) 
     putShort(type);
 
     if (size() < (wpos + body_size)){
-        LOG(INFO) << "wpos add...";
+//        LOG(INFO) << "wpos add...";
         buf.resize(wpos + body_size);
     }
 
     message.SerializeToArray((void*)(&buf[wpos]), body_size);
     wpos += body_size;
-    LOG(INFO) << "putMessage pack_size:" << pack_size << " body size:" << body_size
-        <<" flag:" << unsigned(flag) << " type:" << unsigned(type) << " wpos:" << wpos << std::endl;
+//    LOG(INFO) << "putMessage pack_size:" << pack_size << " body size:" << body_size
+//        <<" flag:" << unsigned(flag) << " type:" << unsigned(type) << " wpos:" << wpos << std::endl;
 }
 
 void Bytes::setName(std::string n) {

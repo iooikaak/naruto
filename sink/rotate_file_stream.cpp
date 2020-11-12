@@ -4,6 +4,7 @@
 
 #include "rotate_file_stream.h"
 
+#include <glog/logging.h>
 #include <dirent.h>
 #include <algorithm>
 #include "utils/errors.h"
@@ -12,6 +13,7 @@ namespace naruto::sink {
 
 RotateFileStream::RotateFileStream(const std::string &dir, long long int rotate_aof_file_size) {
     dir_ = dir;
+    LOG(INFO) << "rotate file stream dir:" << dir_;
     if (dir[dir.size()-1] != '/'){
         dir_ += "/";
     }
@@ -35,10 +37,12 @@ void RotateFileStream::listAof(const std::string& dir, std::vector<std::string> 
     closedir(dirp);
 }
 
+std::string RotateFileStream::curRollFile() { return cur_aof_file_;}
+
 long long RotateFileStream::write(const char * s, size_t n) {
-    stream_->write(s, n);
     auto size = stream_->tellp();
     if (size >= rotate_aof_file_size_){ _rotate(); }
+    stream_->write(s, n);
     return size;
 }
 

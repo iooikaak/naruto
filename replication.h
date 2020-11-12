@@ -98,6 +98,7 @@ private:
     // 负责执行 dump db 的 子进程 id
     std::chrono::steady_clock::time_point last_flush_aof_time_;
     int dirty_;
+    long long changes_;
     std::list<saveparam> saveparams_;
 
     int aof_child_pid_;
@@ -115,10 +116,10 @@ private:
     std::shared_ptr<ev::io> repl_ev_io_r_;
     std::atomic_int repl_pos_; // 当前使用的index
 
+    int repl_merge_size_; // 和 worker 数一致
     using repl_workers = std::vector<naruto::utils::Bytes>;
     std::array<std::shared_ptr<repl_workers>,2> repl_;
 
-    int repl_merge_size_; // 和 worker 数一致
     std::atomic_uint64_t repl_command_incr_; // 命令自增数
     std::vector<uint8_t> back_log_;
     std::shared_ptr<sink::RotateFileStream> aof_file_;

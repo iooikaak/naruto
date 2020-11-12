@@ -25,3 +25,10 @@ uint64_t naruto::utils::Pack::deSerialize(naruto::utils::Bytes &pack, ::google::
     msg.ParseFromArray(&pack.data()[PACK_HEAD_LEN], len - PACK_HEAD_LEN);
     return type;
 }
+
+uint64_t naruto::utils::Pack::deSerialize(const unsigned char *data, size_t n, google::protobuf::Message &msg) {
+    auto len = (uint32_t)data[PACK_HEAD_SIZE_INDEX];
+    auto type = (uint16_t)data[PACK_HEAD_TYPE_INDEX];
+    msg.ParseFromArray(&data[PACK_HEAD_LEN], len - PACK_HEAD_LEN);
+    return type;
+}

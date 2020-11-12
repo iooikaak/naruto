@@ -41,6 +41,20 @@ naruto::Replication::Replication(int worker_num) {
     repl_master_runid_ = "";
     repl_master_initial_offset_ = 0;
 
+    saveparams_.push_back(saveparam{
+        .ms=std::chrono::milliseconds(5),
+        .changes=10,
+    });
+
+    saveparams_.push_back(saveparam{
+            .ms=std::chrono::milliseconds(100),
+            .changes=100,
+    });
+
+    for (int i = 0; i < 2; ++i) {
+        repl_[i] = std::make_shared<repl_workers>();
+        repl_[i]->resize(repl_merge_size_);
+    }
     cron_interval_ = FLAGS_repl_cron_interval;
     aof_file_ = std::make_shared<sink::RotateFileStream>(FLAGS_repl_aof_dir, FLAGS_repl_aof_rotate_size);
 
@@ -237,10 +251,16 @@ void naruto::Replication::backgroundSave() {
 }
 
 void naruto::Replication::_backlog_feed(const unsigned char* data, size_t size) {
+//    client::command_hget_int cmd;
+//    utils::Pack::deSerialize(data, size, cmd);
+//
+//    LOG(INFO) << "_backlog_feed:" << cmd.DebugString();
+    changes_++;
     dirty_++;
     auto* ptr = const_cast<unsigned char *>(data);
     size_t len = size;
     master_repl_offset_ += (long long)len;
+
     while (len){
         back_log_.push_back(*ptr);
         ptr++;
@@ -256,10 +276,12 @@ void naruto::Replication::_backlog_feed(const unsigned char* data, size_t size) 
             break;
         }
     }
+//    if (changes_ == 100000){
+//        LOG(INFO) << " changes_ flush spends" << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - repl_transfer_lastio_).count() << "ms";
+//    }
     // aof flush
     if (is_save){ _backlog_flush(); }
 }
-
 
 void naruto::Replication::_backlog_flush() {
     aof_file_->write((const char*)&back_log_[0], back_log_.size());
@@ -276,11 +298,11 @@ void naruto::Replication::_merge_backlog_feed_slaves() {
         repl_[next_pos]->at(i).clear();
     }
     repl_pos_.store(next_pos);
-
     // 多路归并
     auto repl_data = repl_[cur_pos];
     std::vector<int> p(repl_merge_size_);
-    std::vector<indexLog> id_list(repl_merge_size_);
+    std::vector<indexLog> id_list;
+    id_list.reserve(repl_merge_size_);
 
     for (int j = 0; j < repl_merge_size_; ++j) {
         if (p[j] < repl_data->at(j).size()){
@@ -296,17 +318,17 @@ void naruto::Replication::_merge_backlog_feed_slaves() {
         std::sort(id_list.begin(), id_list.end(), [](const indexLog& l, const indexLog& r){
             return l.id < r.id;
         });
-
+//        for (int i = 0; i < repl_merge_size_; ++i) {
+//            LOG(INFO) << "id_list[" << i << "].tid=" << id_list[i].tid << " id=" << id_list[i].id;
+//        }
         // 找到最小的
         auto min_i = id_list.at(0).tid;
         auto pos = p[min_i];
         // 读取 min_i bucket 一个包
         auto& min_bucket = repl_data->at(min_i);
-        auto pack_size = min_bucket.getLong(pos);
-
+        auto pack_size = min_bucket.getInt(pos);
         // merge 到 全局 backlog 中
-        // 需要去掉包头
-        _backlog_feed(&min_bucket.data()[pos + PACK_HEAD_LEN],pack_size - PACK_HEAD_LEN);
+        _backlog_feed(&min_bucket.data()[pos],pack_size);
         p.at(min_i) += pack_size;
 
         // 删除最小的一个
