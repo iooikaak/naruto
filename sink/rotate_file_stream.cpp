@@ -37,7 +37,12 @@ void RotateFileStream::listAof(const std::string& dir, std::vector<std::string> 
     closedir(dirp);
 }
 
-std::string RotateFileStream::curRollFile() { return cur_aof_file_;}
+RotateFileStream::fileState RotateFileStream::curRollFile() {
+    return fileState{
+        .name = cur_aof_file_,
+        .offset = stream_->tellp(),
+    };
+}
 
 long long RotateFileStream::write(const char * s, size_t n) {
     auto size = stream_->tellp();

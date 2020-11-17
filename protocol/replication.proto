@@ -2,7 +2,7 @@ syntax="proto3";
 package replication;
 
 enum type{
-    UNKNOW = 0;
+    TYPE_NULL = 0;
     PING = 1;
     PONG = 2;
     ACK = 3;
@@ -28,20 +28,24 @@ message command_pong{
 
 // ======================== repl sync ==============================
 message command_ack{
-  uint64 repl_off = 1;
+  string repl_aof_file_name = 1;
+  uint64 repl_aof_off = 2;
 }
 
 message command_psync{
-  int64 repl_off = 1;
-  string run_id = 2;
+  string run_id = 1;
+  string repl_aof_file_name = 2;
+  uint64 repl_aof_off = 3;
 }
 
-message command_fullsync{
-  int64 repl_off = 1;
-  string run_id = 2;
-}
-
-message command_partsync{
-  int64 repl_off = 1;
-  string run_id = 2;
+message command_psync_reply{
+  int32 errcode = 1;
+  string errmsg = 2;
+  type psync_type = 3;
+  string run_id = 4;
+  int64 repl_database_size = 5; // 全量同步字段
+  // 当全量同步时，值为dump database时之后的增量位置
+  // 当部分同步时，值为已经同步完成的增量位置
+  string repl_aof_file_name = 6;
+  int64 repl_aof_off = 7;
 }

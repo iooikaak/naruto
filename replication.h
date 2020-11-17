@@ -22,6 +22,7 @@
 #include "connection/connection.h"
 #include "utils/pack.h"
 #include "sink/rotate_file_stream.h"
+#include "protocol/replication.pb.h"
 
 namespace naruto{
 
@@ -49,11 +50,6 @@ enum class state{
 class Replication {
 public:
     Replication(int worker_num);
-    // 异步 RDB 文件读取函数
-    void onReadSyncBulkPayload(ev::io&, int);
-    void onSyncWithMaster(ev::io&, int);
-
-    void backgroundSave();
     const std::string &getMasterHost() const;
     void setMasterHost(const std::string &masterHost);
     int getMasterPort() const;
@@ -62,12 +58,15 @@ public:
     void setIsMaster(bool isMaster);
     state getReplState() const;
     void setReplState(state replState);
-    ~Replication();
 
-    void onReplCron(ev::timer&, int);
-
+    void onReadSyncBulkPayload(ev::io&, int);
+    void onSyncWithMaster(ev::io&, int);
+    void onReplCron();
     void backlogFeed(int tid, const ::google::protobuf::Message&, uint16_t type);
     void backlogFeed(int tid, utils::Bytes& pack);
+    void bgsave();
+
+    ~Replication();
 
 private:
     struct indexLog{
@@ -84,9 +83,10 @@ private:
     void _abort_sync_transfer();
     void _free_client(std::shared_ptr<narutoClient>&);
     void _repl_send_ack();
-    int _slave_try_partial_resynchronization();
+    replication::type _slave_try_partial_resynchronization(int fd);
 
     uint64_t cronloops_;
+    bool cron_run_;
     double cron_interval_;
     ev::timer time_watcher_;
     bool is_master_;
@@ -94,26 +94,29 @@ private:
     std::chrono::steady_clock::time_point repl_no_slaves_since_;
     std::chrono::steady_clock::time_point repl_down_since_;
 
-    // dump db
-    // 负责执行 dump db 的 子进程 id
+
     std::chrono::steady_clock::time_point last_flush_aof_time_;
     int dirty_;
     long long changes_;
     std::list<saveparam> saveparams_;
 
-    int aof_child_pid_;
-    std::chrono::milliseconds stat_fork_spends_;
-    std::chrono::steady_clock::time_point aof_save_time_start_;
-    std::chrono::steady_clock::time_point lastbgsave_try_;
-    int last_bgsave_status_;
+    // bgsave dump db
+    int bgsave_child_pid_; // bgsave 子进程 pid
+    std::chrono::milliseconds bgsave_fork_spends_; // bgsave fork 耗时
+    std::chrono::steady_clock::time_point bgsave_time_start_; // bgsave开始时间
+    std::chrono::steady_clock::time_point bgsave_last_try_; // 最后一次执行时间
+    std::string bgsave_aof_filename_; // 执行bgsave是 aof 文件名
+    int64_t bgsave_aof_off; // 执行bgsave时 aof offset
+    int bgsave_last_status_; // bgsave 最后一次执行状态
+
     bool use_aof_checksum_;
+
     std::shared_ptr<narutoClient> master_; // connect to master
     std::shared_ptr<narutoClient> cache_master_; // 为了实现 当正常同步时，master 连接中断,当尝试重连时，可以顺利执行 部分重同步
+
     std::list<std::shared_ptr<narutoClient>> slaves_;
 
     // replication
-    std::shared_ptr<ev::io> repl_ev_io_w_;
-    std::shared_ptr<ev::io> repl_ev_io_r_;
     std::atomic_int repl_pos_; // 当前使用的index
 
     int repl_merge_size_; // 和 worker 数一致
@@ -125,20 +128,24 @@ private:
     std::shared_ptr<sink::RotateFileStream> aof_file_;
 
     // master
-    std::string master_host_;
-    int master_port_;
     // 全局复制偏移量（一个累计值）
     long long master_repl_offset_;
     // 已经flush到aof文件的大小
     long long master_flush_repl_offset_;
-
     int repl_ping_slave_period_;
     // 环形缓冲长度
     long long repl_back_size_;
 
-    // slave 复制状态
+    // slave
+    std::string master_host_;
+    int master_port_;
     enum state repl_state_;
+    std::shared_ptr<ev::io> repl_ev_io_w_;
+    std::shared_ptr<ev::io> repl_ev_io_r_;
+    off_t repl_database_size; // 主服务器传来的 RDB 文件的大小
+    off_t repl_database_synced_size; // 已读取主服务器传来的 RDB 文件的大小
     int repl_timeout_;
+
     // RDB 文件的大小
     off_t repl_transfer_size_;
     // 已读 RDB 文件内容的字节数

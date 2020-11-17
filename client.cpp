@@ -16,10 +16,6 @@ naruto::narutoClient::narutoClient() {
     repl_run_id = "";
     repl_state = state::NONE;
     repl_ack_time = std::chrono::steady_clock::now();
-    repl_fd = -1;
-    repl_db_off = 0;
-    repl_db_size = 0;
-    repl_off = 0;
     lastinteraction = std::chrono::steady_clock::now();
 }
 
@@ -75,6 +71,12 @@ void naruto::narutoClient::sendMsg(const ::google::protobuf::Message & msg,
     // 写到 client wbuf
     utils::Pack::serialize(msg, type, wbuf);
     LOG(INFO) << "sendMsg--->>" << wbuf.size();
+}
+
+uint16_t naruto::narutoClient::sendMsg(const ::google::protobuf::Message &question, uint16_t type,
+                                       ::google::protobuf::Message &answer) {
+    write(question, type);
+    return read(answer);
 }
 
 uint64_t naruto::narutoClient::recvMsg(::google::protobuf::Message &msg) {

@@ -15,15 +15,17 @@ naruto::database::Buckets::Buckets(int size) {
 }
 
 int naruto::database::Buckets::dump(const std::string& filename) {
+    if (size() == 0) return 0;
+
     std::fstream out(filename, std::ios::binary|std::ios::out|std::ios::trunc);
     if (!out.is_open()){
-        LOG(INFO) << "Aof save open file " << tmpfile << " error:" << strerror(errno);
+        LOG(INFO) << "Db save open file " << tmpfile << " error:" << strerror(errno);
         return -1;
     }
-
     for (int i = 0; i < bucket_size_; ++i) {
          buckets_[i]->dump(&out);
     }
+    out.close();
     return 0;
 }
 
@@ -67,16 +69,14 @@ void naruto::database::bucket::dump(std::ostream* out) {
     for (const auto& object : *objs){
         data::object row;
         row.set_key(object.first);
-
         for (const auto& v : (*object.second)){
             auto column = row.add_columns();
             column->set_field(v.first);
-
             auto element =  column->mutable_value();
             element->set_type(v.second->ptr->type());
             v.second->ptr->serialize(*element);
-            utils::Pack::serialize(*element, client::ELEMENT, out);
         }
+        utils::Pack::serialize(row, client::OBJECT, out);
     }
 }
 

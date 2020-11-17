@@ -28,48 +28,33 @@ public:
     void onReadEvent(ev::io& watcher, int events);
     void onWriteEvent(ev::io& watcher, int events);
 
-    // 异步
-    void sendMsg(const ::google::protobuf::Message& msg, uint16_t type);
+    void sendMsg(const ::google::protobuf::Message& msg, uint16_t type); // 异步
+    uint16_t sendMsg(const ::google::protobuf::Message& question, uint16_t type, ::google::protobuf::Message& answer);
     uint64_t recvMsg(::google::protobuf::Message& msg);
+    void write(const ::google::protobuf::Message& msg, uint16_t type); // 同步
+    uint64_t read(::google::protobuf::Message& msg); // 同步
 
-    // 同步
-    void write(const ::google::protobuf::Message& msg, uint16_t type);
-    uint64_t read(::google::protobuf::Message& msg);
 
     std::string remoteAddr();
+
     int worker_id;
     std::string ip;
     std::string port;
     std::shared_ptr<connection::Connect> connect;
-
     uint32_t flags;
-    std::string repl_run_id;
-    state repl_state;
-
-
-    int repl_fd{};
     ev::io wio;
-
-    // replication
-    std::shared_ptr<ev::io> repl_ev_io_w;
-    std::shared_ptr<ev::io> repl_ev_io_r;
-    uint64_t repl_ack_off; // 从服务器最后一次发送 REPLCONF ACK 时的偏移量
-    std::chrono::steady_clock::time_point repl_ack_time; // 从服务器最后一次发送 REPLCONF ACK 的时间
-
-    // 读取主服务器传来的 RDB 文件的偏移量
-    off_t repl_db_off{};
-    // 主服务器传来的 RDB 文件的大小
-    off_t repl_db_size{};
-
-    // 主服务器的复制偏移量
-    long long repl_off{};
-
-
     std::chrono::steady_clock::time_point ctime;
     std::chrono::steady_clock::time_point lastinteraction;
-
     utils::Bytes wbuf;
     utils::Bytes rbuf;
+    // 从服务器状态
+    state repl_state;
+
+    // 主服务器状态
+    std::string repl_run_id; // 主服务器 run_id
+    std::string repl_aof_file_name; // 同步aof文件名
+    long long repl_aof_off; // 同步aof位置
+    std::chrono::steady_clock::time_point repl_ack_time; // 从服务器最后一次发送 REPLCONF ACK 的时间
 };
 
 

@@ -37,9 +37,9 @@ Naruto::Naruto() : _loop(), _cluster(FLAGS_port, FLAGS_tcp_backlog){
     _loading_process_events_interval_bytes = 0;
     _clients_paused = false;
     _clients_pause_end_time = 0;
-    _cron_interval = 1.0;
-    _hz = 0;
-    _cron_loops = 0;
+    cron_interval_ = 0.001;
+    hz_ = 1000;
+    cron_loops_ = 0;
 }
 
 Naruto::~Naruto() { delete [] workers; }
@@ -86,9 +86,10 @@ void Naruto::onAccept(ev::io& watcher, int events) {
 }
 
 void Naruto::onCron(ev::timer& watcher, int event) {
-    auto s = static_cast<Naruto*>(watcher.data);
-    s->_cron_loops++;
-    LOG(INFO) << "onCron:" <<  s->_cron_loops;
+    cron_loops_++;
+    LOG(INFO) << "onCron...." << cron_loops_;
+    RUN_WITH_PERIOD(1){ repl->onReplCron(); }
+    RUN_WITH_PERIOD(3600 * 1000){ repl->bgsave(); }
 }
 
 void Naruto::onSignal(ev::sig& signal, int) {
@@ -188,9 +189,9 @@ void Naruto::_init_cluster() {
 }
 
 void Naruto::_init_cron() {
-    _timer_watcher.set<&Naruto::onCron>(this);
+    _timer_watcher.set<Naruto, &Naruto::onCron>(this);
     _timer_watcher.set(_loop);
-    _timer_watcher.start(_cron_interval, _cron_interval);
+    _timer_watcher.start(cron_interval_, cron_interval_);
 }
 
 Naruto* server = new Naruto();

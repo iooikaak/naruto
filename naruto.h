@@ -24,6 +24,8 @@
 #include "replication.h"
 #include "connect_worker.h"
 
+#define RUN_WITH_PERIOD(_ms_) if (!(cron_loops_%(_ms_)))
+
 namespace naruto{
 
 class Naruto{
@@ -35,7 +37,7 @@ public:
 
     // 向集群中的所有断线或者未连接节点发送消息
     // 遍历所有节点，检查是否需要将某个节点标记为下线
-    static void onCron(ev::timer&, int);
+    void onCron(ev::timer&, int);
     void run();
 
     std::shared_ptr<Replication> repl;
@@ -48,9 +50,9 @@ private:
     void _listen();
 
     // 处理信号，任务线程执行频率
-    int _hz;
-    int _cron_loops;
-    double _cron_interval;
+    int hz_;
+    int cron_loops_;
+    double cron_interval_;
 
     bool _cluster_enable;
     ev::io _accept_watcher;

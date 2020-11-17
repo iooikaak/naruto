@@ -17,7 +17,7 @@ naruto::Replication::Replication(int worker_num) {
     cronloops_ = 0;
     is_master_ = false;
     use_aof_checksum_ = true;
-    aof_child_pid_ = -1;
+    bgsave_child_pid_ = -1;
     repl_timeout_ = FLAGS_repl_timeout_sec;
     repl_pos_ = 0;
     repl_merge_size_ = worker_num;
@@ -25,7 +25,7 @@ naruto::Replication::Replication(int worker_num) {
     back_log_.reserve(FLAGS_repl_back_log_size);
     master_repl_offset_ = 0;
     master_flush_repl_offset_ = 0;
-    last_bgsave_status_ = 0;
+    bgsave_last_status_ = 0;
     repl_ping_slave_period_ = (int)FLAGS_repl_ping_slave_period;
     repl_back_size_  = FLAGS_repl_back_log_size;
     repl_state_ = state::NONE;
@@ -40,7 +40,7 @@ naruto::Replication::Replication(int worker_num) {
     repl_down_since_ = std::chrono::steady_clock::now();
     repl_master_runid_ = "";
     repl_master_initial_offset_ = 0;
-
+    cron_run_ = false;
     saveparams_.push_back(saveparam{
         .ms=std::chrono::milliseconds(5),
         .changes=10,
@@ -57,13 +57,11 @@ naruto::Replication::Replication(int worker_num) {
     }
     cron_interval_ = FLAGS_repl_cron_interval;
     aof_file_ = std::make_shared<sink::RotateFileStream>(FLAGS_repl_aof_dir, FLAGS_repl_aof_rotate_size);
-
-    time_watcher_.set<Replication, &Replication::onReplCron>(this);
-    time_watcher_.set(ev::get_default_loop());
-    time_watcher_.start(cron_interval_, cron_interval_);
 }
 
-void naruto::Replication::onReplCron(ev::timer &, int) {
+void naruto::Replication::onReplCron() {
+    if (cron_run_) return;
+    cron_run_ = true;
     LOG(INFO) << "onReplCron...";
     // ====================== slave 情况 ===========================
     auto now = std::chrono::steady_clock::now();
@@ -126,6 +124,7 @@ void naruto::Replication::onReplCron(ev::timer &, int) {
 
     LOG(INFO) << "onReplCron...7";
     _merge_backlog_feed_slaves();
+    cron_run_ = false;
 }
 
 void naruto::Replication::onReadSyncBulkPayload(ev::io& watcher, int event) {
@@ -181,12 +180,13 @@ void naruto::Replication::onSyncWithMaster(ev::io & watcher, int event) {
         }
     }
 
-    type = _slave_try_partial_resynchronization();
-    if (type == COMMAND_REPL_PARTSYNC) {
+    type = _slave_try_partial_resynchronization(watcher.fd);
+    if (type == replication::PARTSYNC) {
         LOG(INFO) << "MASTER <-> SLAVE sync: Master accepted a Partial Resynchronization.";
         return;
-    }else if (type == COMMAND_REPL_FULLSYNC){
-
+    }else if (type == replication::FULLSYNC){
+        LOG(INFO) << "MASTER <-> SLAVE sync: Master accepted a Full Resynchronization.";
+        return;
     }
 
     // 走到这则type不可识别
@@ -220,16 +220,15 @@ void naruto::Replication::backlogFeed(int tid, utils::Bytes& pack) {
     local_repl.put(pack);
 }
 
-void naruto::Replication::backgroundSave() {
-    if (aof_child_pid_ != -1) return;
+void naruto::Replication::bgsave() {
+    if (bgsave_child_pid_ != -1) return;
 
-    lastbgsave_try_ = std::chrono::steady_clock::now();
+    bgsave_last_try_ = std::chrono::steady_clock::now();
     pid_t childpid;
 
     if ((childpid = fork()) == 0){ // child
-        char tmpfile[256];
-        std::snprintf(tmpfile, 256, "tmp-%d.aof",(int)getpid());
-//        int ret = database::buckets->dump(tmpfile);
+        std::string tmpfile = FLAGS_repl_aof_dir + "/tmp-" + std::to_string(getpid()) + ".db";
+        int ret = database::buckets->dump(tmpfile);
 //        _exit(ret);
 //        setproctitle("%s %s:%d%s",
 //                     "naruto-aof-bgsave",
@@ -237,16 +236,19 @@ void naruto::Replication::backgroundSave() {
 //                     _port,
 //                     server_mode);
     } else {
-        stat_fork_spends_ = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - lastbgsave_try_);
+        auto curFile = aof_file_->curRollFile();
+        bgsave_aof_filename_ = curFile.name;
+        bgsave_aof_off = curFile.offset;
+        bgsave_fork_spends_ = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - bgsave_last_try_);
         if (childpid == -1){
-            last_bgsave_status_ = -1;
+            bgsave_last_status_ = -1;
             LOG(INFO) << "Can't save in background, fork: " << strerror(errno);
             return;
         }
         LOG(INFO) << "Background saving started by pid " << childpid;
-        aof_save_time_start_ = std::chrono::steady_clock::now();
-        aof_child_pid_ = childpid;
-        last_bgsave_status_ = 0;
+        bgsave_time_start_ = std::chrono::steady_clock::now();
+        bgsave_child_pid_ = childpid;
+        bgsave_last_status_ = 0;
     }
 }
 
@@ -292,6 +294,7 @@ void naruto::Replication::_backlog_flush() {
 }
 
 void naruto::Replication::_merge_backlog_feed_slaves() {
+    LOG(INFO) << "_merge_backlog_feed_slaves...1";
     auto cur_pos = repl_pos_.load();
     auto next_pos = 1 - cur_pos;
     for (int i = 0; i < repl_merge_size_; ++i) {
@@ -314,6 +317,7 @@ void naruto::Replication::_merge_backlog_feed_slaves() {
         }
     }
 
+    LOG(INFO) << "_merge_backlog_feed_slaves...2";
     while (!id_list.empty()){
         std::sort(id_list.begin(), id_list.end(), [](const indexLog& l, const indexLog& r){
             return l.id < r.id;
@@ -344,6 +348,7 @@ void naruto::Replication::_merge_backlog_feed_slaves() {
         }
     }
 
+    LOG(INFO) << "_merge_backlog_feed_slaves...3";
     // 发送给所有的 slaves
     for (const auto& slave : slaves_){
         // 不要给正在等待 BGSAVE 开始的从服务器发送命令
@@ -371,7 +376,6 @@ void naruto::Replication::_connect_master() {
     connection::ConnectOptions ops;
     ops.host = master_host_;
     ops.port = master_port_;
-
     LOG(ERROR) << "Try connecting to MASTER "<< ops.host << ":" << ops.port;
     // 连接并监听主服务的读写事件
     master_ = std::make_shared<narutoClient>();
@@ -427,7 +431,7 @@ void naruto::Replication::_free_client(std::shared_ptr<narutoClient> & client) {
     if (client->flags & (uint32_t)CLIENT_FLAG_SLAVE){
         LOG(WARNING) << "Connect with slave lost:" << client->remoteAddr();
         if (client->repl_state == state::SEND_BULK){
-            if (client->repl_fd != -1) ::close(client->repl_fd);
+            client->connect->close();
         }
         if (slaves_.empty()){
             repl_no_slaves_since_ = std::chrono::steady_clock::now();
@@ -438,72 +442,57 @@ void naruto::Replication::_free_client(std::shared_ptr<narutoClient> & client) {
 void naruto::Replication::_repl_send_ack() {
     if (master_ != nullptr){
         replication::command_ack ack;
-        ack.set_repl_off(master_->repl_off);
+        ack.set_repl_aof_file_name(master_->repl_aof_file_name);
+        ack.set_repl_aof_off(master_->repl_aof_off);
         master_->sendMsg(ack , replication::ACK);
     }
 }
 
-int naruto::Replication::_slave_try_partial_resynchronization() {
-    // 设置为 -1 表示当时 run id 是不可用的
-    repl_master_initial_offset_ = -1;
+replication::type naruto::Replication::_slave_try_partial_resynchronization(int fd) {
     replication::command_psync psync;
-
     if (cache_master_){
         // 缓存存在，尝试部分重同步
-        psync.set_repl_off(cache_master_->repl_off);
         psync.set_run_id(cache_master_->repl_run_id);
+        psync.set_repl_aof_file_name(cache_master_->repl_aof_file_name);
+        psync.set_repl_aof_off(cache_master_->repl_aof_off);
         LOG(INFO) << "Trying a partial resynchronization (request "
-                  << cache_master_->repl_run_id << ":" << cache_master_->repl_off << ").";
+                  << cache_master_->repl_run_id << ":" << cache_master_->repl_aof_file_name << ":" << cache_master_->repl_aof_off << ").";
     }else{
-        psync.set_repl_off(-1);
         psync.set_run_id("?");
+        psync.set_repl_aof_file_name("");
+        psync.set_repl_aof_off(-1);
         LOG(INFO) << "Partial resynchronization not possible (no cached master)";
     }
 
-    master_->write(psync, replication::PSYNC);
-    utils::Bytes pack;
-    master_->connect->recv(pack);
-    
-    uint16_t type = pack.getShort();
-    switch (type){
-        case replication::FULLSYNC :
-        {
-            replication::command_fullsync fullsync;
-            utils::Pack::deSerialize(pack, fullsync);
+    replication::command_psync_reply reply;
+    uint16_t type = master_->sendMsg(psync, replication::PSYNC, reply);
+    if (type != replication::PSYNC || reply.errcode() != 0){
+        LOG(ERROR) << "Unexpected reply to PSYNC from master,type:" << type << " errmsg:" << reply.errmsg();
+        return replication::TYPE_NULL;
+    }
 
-            master_->repl_run_id = fullsync.run_id();
-            master_->repl_off = fullsync.repl_off();
-            repl_master_initial_offset_ = fullsync.repl_off();
-            LOG(INFO) << "Full resync from master " << master_->repl_run_id << ":" << master_->repl_off;
-            break;
-        }
-        case replication::PARTSYNC:
-        {
-            replication::command_partsync partsync;
-            utils::Pack::deSerialize(pack, partsync);
+    if (reply.psync_type() == replication::FULLSYNC){
+        master_->repl_run_id = reply.run_id();
+        master_->repl_aof_file_name = reply.repl_aof_file_name();
+        master_->repl_aof_off = reply.repl_aof_off();
+        repl_database_size = reply.repl_database_size();
+        repl_database_synced_size = 0;
+        // 安装读事件
+        repl_ev_io_r_ = std::make_shared<ev::io>();
+        repl_ev_io_r_->set<Replication, &Replication::onReadSyncBulkPayload>(this);
+        repl_ev_io_r_->set(ev::get_default_loop());
+        repl_ev_io_r_->start(master_->connect->fd(), ev::READ);
+        _repl_discard_cache_master(); // cache master 已经不需要了
 
-            master_->repl_run_id = partsync.run_id();
-            master_->repl_off = partsync.repl_off();
-            repl_master_initial_offset_ = partsync.repl_off();
-            break;
-        }
-        default:
-            LOG(INFO) << "Unexpected reply to PSYNC from master";
-            return type;
+    } else if (reply.psync_type() == replication::PARTSYNC){
+        if (cache_master_->connect) cache_master_->connect->close();
+        master_ = cache_master_;
+        master_->connect = std::make_shared<connection::Connect>(fd);
     }
 
     master_->lastinteraction = std::chrono::steady_clock::now();
-    master_->repl_state = state::CONNECTED;
-
-    // 安装读事件
-    master_->repl_ev_io_r = std::make_shared<ev::io>();
-    master_->repl_ev_io_r->set<Replication, &Replication::onReadSyncBulkPayload>(this);
-    master_->repl_ev_io_r->set(ev::get_default_loop());
-    master_->repl_ev_io_r->start(master_->connect->fd(), ev::READ);
-
-    // cache master 已经不需要了
-    _repl_discard_cache_master();
-    return type;
+    repl_state_ = state::CONNECTED;
+    return reply.psync_type();
 }
 
 void naruto::Replication::_repl_cache_master() {
@@ -516,6 +505,7 @@ void naruto::Replication::_repl_discard_cache_master() {
     if (!cache_master_) return;
     LOG(INFO) << "Discarding previously cached master state.";
     cache_master_->flags &= ~CLIENT_FLAG_MASTER;
+    _free_client(cache_master_);
     cache_master_ = nullptr;
 }
 
