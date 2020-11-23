@@ -33,32 +33,6 @@ int naruto::database::Buckets::dump(const std::string& filename) {
     return 0;
 }
 
-void naruto::database::Buckets::load(const std::string &filename) {
-    std::ifstream in(filename, std::ios::binary|std::ios::in);
-    if (!in.is_open()) return;
-
-    char buf[4096];
-    utils::Bytes bytes;
-    while (!in.eof()){
-        in.read(buf, sizeof(buf));
-        bytes.putBytes((uint8_t*)buf, in.gcount());
-        while (bytes.bytesRemaining() > PACK_SIZE_LEN){
-            uint32_t pack_size = bytes.getInt();
-            if (bytes.bytesRemaining() < pack_size - sizeof(pack_size)){
-                break; // 读取不够一个包
-            }
-            bytes.getShort();
-            bytes.getShort();
-
-            unsigned body_size = pack_size - PACK_HEAD_LEN;
-            char msg[body_size];
-            bytes.getBytes((uint8_t*)msg, body_size);
-            _parse(msg, body_size);
-        }
-    }
-    in.close();
-}
-
 std::shared_ptr<naruto::database::element> naruto::database::Buckets::get(const std::string & key, const std::string & field) {
     return buckets_[hash_(key) % bucket_size_]->get(key, field);
 }
@@ -84,7 +58,9 @@ void naruto::database::Buckets::flush() {
     for (int i = 0; i < bucket_size_; ++i) { buckets_[i]->flush(); }
 }
 
-void naruto::database::Buckets::_parse(const char * msg, size_t body_size) {
+void naruto::database::Buckets::parse(uint16_t flag, uint16_t type, const unsigned char * msg, size_t body_size) {
+    if (type != client::OBJECT) return;
+
     tensorflow::Features features;
     features.ParseFromArray(msg, int(body_size));
     std::cout << "msg:" << features.DebugString();

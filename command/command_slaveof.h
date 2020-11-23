@@ -13,6 +13,8 @@ class CommandSlaveof : public Command {
 public:
     void exec(narutoClient *client) override;
 
+    void execMsg(uint16_t flag, uint16_t type, const unsigned char *msg, size_t n) override;
+
     ~CommandSlaveof() override = default;
 };
 

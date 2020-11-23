@@ -25,3 +25,7 @@ void naruto::command::CommandHget::exec(naruto::narutoClient *client) {
     }
     client->sendMsg(reply, type);
 }
+
+void naruto::command::CommandHget::execMsg(uint16_t flag, uint16_t type, const unsigned char *msg, size_t n) {
+
+}

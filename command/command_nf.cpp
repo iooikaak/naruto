@@ -13,3 +13,7 @@ void naruto::command::CommandNF::exec(naruto::narutoClient *client) {
     reply.set_errmsg("command not found");
     client->sendMsg(reply, client::NOT_FOUND);
 }
+
+void naruto::command::CommandNF::execMsg(uint16_t flag, uint16_t type, const unsigned char *msg, size_t n) {
+
+}

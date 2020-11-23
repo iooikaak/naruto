@@ -25,8 +25,7 @@ public:
     long long write(const char*, size_t);
     fileState curRollFile();
     void flush();
-    static void listAof(const std::string& dir, std::vector<std::string>&);
-    static int parseFileName(const std::string&);
+
 private:
     void _rotate_init();
     void _rotate();

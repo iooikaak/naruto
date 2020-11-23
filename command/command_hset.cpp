@@ -12,8 +12,20 @@
 #include "database/string_.h"
 
 void naruto::command::CommandHset::exec(naruto::narutoClient *client) {
+    auto len =  client->rbuf.getInt();
+    auto flag = client->rbuf.getShort();
+    auto type = client->rbuf.getShort();
+
+    execMsg(flag, type, &client->rbuf.data()[PACK_HEAD_LEN], (len - PACK_HEAD_LEN));
+
+    client::CommandReply reply;
+    reply.set_errcode(0);
+    client->sendMsg(reply, client::HSET);
+}
+
+void naruto::command::CommandHset::execMsg(uint16_t flag, uint16_t type, const unsigned char* s, size_t n) {
     client::CommandHset hset;
-    auto type = utils::Pack::deSerialize(client->rbuf, hset);
+    hset.ParseFromArray(s, n);
 
     for (int i = 0; i < hset.fields_size(); ++i) {
         std::shared_ptr<database::element> data = database::buckets->get(hset.key(), hset.fields(i));
@@ -50,8 +62,4 @@ void naruto::command::CommandHset::exec(naruto::narutoClient *client) {
             element->set(hset.values(i).bytes_value().value());
         }
     }
-
-    client::CommandReply reply;
-    reply.set_errcode(0);
-    client->sendMsg(reply, type);
 }

@@ -9,6 +9,7 @@
 #include "protocol/message_type.h"
 #include "protocol/replication.pb.h"
 #include "parameter/parameter_repl.h"
+#include "utils/file.h"
 
 naruto::Replication::Replication(int worker_num) {
     master_host_ = "";
@@ -257,12 +258,25 @@ void naruto::Replication::onBgsaveFinish(ev::child& child, int events) {
 
 void naruto::Replication::databaseLoad() {
     // load database
-    database::buckets->load(FLAGS_repl_dir + "/" + FLAGS_repl_database_filename);
+    std::string dbname = FLAGS_repl_dir + "/" + FLAGS_repl_database_filename;
+    utils::File::loadFile(dbname, [](uint16_t flag, uint16_t type, const unsigned char * s, size_t n)->void{
+        database::buckets->parse(flag,type, s, n);
+    });
+
     // load aof
     std::vector<std::string> list;
-    sink::RotateFileStream::listAof(FLAGS_repl_dir, list);
+    utils::File::listAof(FLAGS_repl_dir, list);
     for(const auto& filename : list){
+        std::string aofname;
+        aofname += FLAGS_repl_dir;
+        aofname += "/";
+        aofname += filename;
 
+//        LOG(INFO) << "aof file name:" << aofname;
+        utils::File::loadFile(aofname, [](uint16_t flag, uint16_t type, const unsigned char* s, size_t n)->void{
+            auto cmd = command::commands->fetch(type);
+            if (cmd) cmd->execMsg(flag, type, s, n);
+        });
     }
 }
 

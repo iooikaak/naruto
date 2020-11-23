@@ -62,7 +62,7 @@ public:
     Buckets&operator=(const Buckets&) = delete;
 
     int dump(const std::string& filename);
-    void load(const std::string& filename);
+    void parse(uint16_t, uint16_t, const unsigned char*, size_t);
 
     std::shared_ptr<element> get(const std::string&,const std::string&);
     void put(const std::string&, const std::string&, std::shared_ptr<element>);
@@ -71,7 +71,7 @@ public:
     void flush();
 
 private:
-    void _parse(const char*, size_t);
+
     std::hash<std::string> hash_;
     int bucket_size_;
     std::vector<std::shared_ptr<bucket>> buckets_;

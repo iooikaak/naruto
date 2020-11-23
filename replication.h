@@ -24,6 +24,7 @@
 #include "utils/pack.h"
 #include "sink/rotate_file_stream.h"
 #include "protocol/replication.pb.h"
+#include "command/commands.h"
 
 namespace naruto{
 
@@ -74,7 +75,7 @@ public:
     void backlogFeed(int tid, const ::google::protobuf::Message&, uint16_t type);
     void backlogFeed(int tid, utils::Bytes& pack);
     void bgsave();
-    void databaseLoad();
+    static void databaseLoad();
     ~Replication();
 
 private:

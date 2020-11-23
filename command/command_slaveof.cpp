@@ -27,3 +27,7 @@ void naruto::command::CommandSlaveof::exec(naruto::narutoClient *client) {
     reply.set_errmsg("success");
     client->sendMsg(reply, replication::SLAVEOF);
 }
+
+void naruto::command::CommandSlaveof::execMsg(uint16_t flag, uint16_t type, const unsigned char *msg, size_t n) {
+
+}

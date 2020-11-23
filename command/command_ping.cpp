@@ -13,3 +13,7 @@ void naruto::command::CommandPing::exec(naruto::narutoClient *client) {
     pong.set_ip("127.0.0.1");
     client->sendMsg(pong, replication::PONG);
 }
+
+void naruto::command::CommandPing::execMsg(uint16_t flag, uint16_t type, const unsigned char *msg, size_t n) {
+
+}

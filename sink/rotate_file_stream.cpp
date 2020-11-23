@@ -8,6 +8,7 @@
 #include <dirent.h>
 #include <algorithm>
 #include "utils/errors.h"
+#include "utils/file.h"
 
 namespace naruto::sink {
 
@@ -19,36 +20,6 @@ RotateFileStream::RotateFileStream(const std::string &dir, long long int rotate_
     }
     rotate_aof_file_size_ = rotate_aof_file_size;
     _rotate_init();
-}
-
-void RotateFileStream::listAof(const std::string& dir, std::vector<std::string> & list) {
-    DIR* dirp = opendir(dir.c_str());
-    dirent* ptr;
-    while ((ptr = readdir(dirp)) != nullptr){
-        std::string name(ptr->d_name);
-        if (ptr->d_type == DT_REG && name.find("aof") != std::string::npos){
-            if (parseFileName(ptr->d_name) != -1){
-                list.emplace_back(ptr->d_name);
-            }
-        }
-    }
-
-    std::sort(list.begin(), list.end(), [](const std::string& x, const std::string& y){
-        auto xidx = parseFileName(x);
-        auto yidx = parseFileName(y);
-        return xidx < yidx;
-    });
-    closedir(dirp);
-}
-
-int RotateFileStream::parseFileName(const std::string & v) {
-    auto pos = v.find_last_of('.');
-    if (pos == std::string::npos){
-        LOG(WARNING) << "Bad Aof file name:" << v;
-        return -1;
-    }
-    auto stridx = v.substr(pos+1);
-    return std::stoi(stridx);
 }
 
 RotateFileStream::fileState RotateFileStream::curRollFile() {
@@ -81,11 +52,11 @@ std::string RotateFileStream::_gen_aof_filename(int idx) { return dir_ + "naruto
 
 void RotateFileStream::_rotate_init() {
     std::vector<std::string> list;
-    listAof(dir_, list);
+    utils::File::listAof(dir_, list);
 
     if (!list.empty()){
         auto last = list[list.size()-1];
-        auto stridx = parseFileName(last);
+        auto stridx = utils::File::parseFileName(last);
         rotate_aof_idx_ = stridx + 1;
     }else{
         rotate_aof_idx_ = 0;

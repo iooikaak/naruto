@@ -4,12 +4,14 @@
 
 #ifndef NARUTO_UT_BUCKETS_H
 #define NARUTO_UT_BUCKETS_H
+
 #include <gtest/gtest.h>
 #include <chrono>
 #include "database/buckets.h"
 #include "database/number.h"
 #include "database/string_.h"
 #include "database/map.h"
+#include "replication.h"
 
 class TestBuckets : public ::testing::Test{
 public:
@@ -44,21 +46,20 @@ public:
                     element->ptr = std::make_shared<naruto::database::Map>(ms);
                     break;
             }
-            buckets_.put("test_" + std::to_string(i),"field_" + std::to_string(i), element);
+            naruto::database::buckets->put("test_" + std::to_string(i),"field_" + std::to_string(i), element);
         }
-        buckets_.dump("naruto.db");
-    }
-    void loadTestData(){
-        buckets_.load("naruto.db");
+        naruto::database::buckets->dump("naruto.db");
     }
 
-    naruto::database::Buckets buckets_{};
+    void loadTestData(){
+        naruto::Replication::databaseLoad();
+    }
 };
 
 TEST_F(TestBuckets, buckets){
     genTestData();
     loadTestData();
-    LOG(INFO) << "size:" << buckets_.size();
+    LOG(INFO) << "size:" << naruto::database::buckets->size();
 }
 
 #endif //NARUTO_UT_BUCKETS_H

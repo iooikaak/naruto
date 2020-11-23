@@ -7,11 +7,14 @@
 
 #include "command.h"
 
+#include "utils/bytes.h"
+
 namespace naruto::command {
 
 class CommandHset : public Command{
 public:
     void exec(narutoClient *client) override;
+    void execMsg(uint16_t,uint16_t,const unsigned char*, size_t);
     ~CommandHset() override = default;
 };
 

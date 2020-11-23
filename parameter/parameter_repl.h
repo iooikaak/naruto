@@ -66,7 +66,7 @@ static bool valid_repl_conf_flush_interval(const char* flagname, double value){
 DEFINE_validator(repl_conf_flush_interval,&valid_repl_conf_flush_interval); /* NOLINT */
 
 // database 文件名
-DEFINE_string(repl_database_filename, "naruto.db", "repl conf file name"); /* NOLINT */
+DEFINE_string(repl_database_filename, "naruto.db", "repl database file name"); /* NOLINT */
 static bool valid_repl_database_filename(const char* flagname, const std::string& value){
     return value != "";
 }
