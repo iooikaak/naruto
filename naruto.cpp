@@ -87,9 +87,9 @@ void Naruto::onAccept(ev::io& watcher, int events) {
 
 void Naruto::onCron(ev::timer& watcher, int event) {
     cron_loops_++;
-    LOG(INFO) << "onCron...." << cron_loops_;
-    RUN_WITH_PERIOD(1){ repl->onReplCron(); }
-    RUN_WITH_PERIOD(3600 * 1000){ repl->bgsave(); }
+//    LOG(INFO) << "onCron...." << cron_loops_;
+    RUN_WITH_PERIOD(1 * 1000){ repl->onReplCron(); }
+    RUN_WITH_PERIOD(10 * 1000){ repl->bgsave(); }
 }
 
 void Naruto::onSignal(ev::sig& signal, int) {
@@ -132,7 +132,7 @@ void Naruto::_init_workers() {
         workers[i].stop_async_watcher.start();
     }
 
-    LOG(INFO) << "_init_workers...2";
+//    LOG(INFO) << "_init_workers...2";
 
     // run workers in thread
     for (int j = 0; j < worker_num; ++j) {
@@ -142,17 +142,17 @@ void Naruto::_init_workers() {
         }).detach();
     }
 
-    LOG(INFO) << "_init_workers...3";
+//    LOG(INFO) << "_init_workers...3";
 //    std::this_thread::sleep_for(std::chrono::seconds(5));
-    LOG(INFO) << "_init_workers...4, init_success_workers:" << init_success_workers;
+//    LOG(INFO) << "_init_workers...4, init_success_workers:" << init_success_workers;
     if (_cluster_enable) _init_cluster();
-    LOG(INFO) << "_init_workers...5";
+//    LOG(INFO) << "_init_workers...5";
     // 等待 worker 线程初始化完毕
     std::unique_lock<std::mutex> lck(mux);
     while (init_success_workers < worker_num){
         cond.wait(lck);
     }
-    LOG(INFO) << "_init_workers end..." << init_success_workers;
+//    LOG(INFO) << "_init_workers end..." << init_success_workers;
 }
 
 void Naruto::_listen() {

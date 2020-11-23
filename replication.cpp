@@ -56,13 +56,18 @@ naruto::Replication::Replication(int worker_num) {
         repl_[i]->resize(repl_merge_size_);
     }
     cron_interval_ = FLAGS_repl_cron_interval;
-    aof_file_ = std::make_shared<sink::RotateFileStream>(FLAGS_repl_aof_dir, FLAGS_repl_aof_rotate_size);
+    aof_file_ = std::make_shared<sink::RotateFileStream>(FLAGS_repl_dir, FLAGS_repl_aof_rotate_size);
+}
+
+void naruto::Replication::_remove_bgsave_tmp_file(pid_t childpid) {
+    std::string tmpfile = _bgsave_file_name(childpid);
+    unlink(tmpfile.c_str());
 }
 
 void naruto::Replication::onReplCron() {
     if (cron_run_) return;
     cron_run_ = true;
-    LOG(INFO) << "onReplCron...";
+//    LOG(INFO) << "onReplCron...";
     // ====================== slave 情况 ===========================
     auto now = std::chrono::steady_clock::now();
     auto last_transfer = std::chrono::duration_cast<std::chrono::milliseconds>(now - repl_transfer_lastio_);
@@ -72,7 +77,7 @@ void naruto::Replication::onReplCron() {
         LOG(WARNING) <<  "Timeout connecting to the MASTER...";
         _undo_connect_master();
     }
-    LOG(INFO) << "onReplCron...1";
+//    LOG(INFO) << "onReplCron...1";
     // dump db 传送超时
     if (!master_host_.empty() && repl_state_ == state::TRANSFOR
         && last_transfer.count() > repl_timeout_){
@@ -81,7 +86,7 @@ void naruto::Replication::onReplCron() {
     }
 
     auto last_interaction = std::chrono::duration_cast<std::chrono::milliseconds>(now - repl_transfer_lastio_);
-    LOG(INFO) << "onReplCron...2";
+//    LOG(INFO) << "onReplCron...2";
     // 从服务器曾经连接上主服务器，但现在超时
     if (!master_host_.empty() && repl_state_ == state::CONNECTED &&
             last_interaction.count() > repl_timeout_){
@@ -89,14 +94,14 @@ void naruto::Replication::onReplCron() {
         _free_client(master_);
     }
 
-    LOG(INFO) << "onReplCron...3";
+//    LOG(INFO) << "onReplCron...3";
     // 尝试连接主服务器
     if (!master_host_.empty() && repl_state_ == state::CONNECT){ _connect_master(); }
-    LOG(INFO) << "onReplCron...4";
+//    LOG(INFO) << "onReplCron...4";
     // 定期向主服务器发送 ACK 命令
     if (!master_host_.empty() && master_ && repl_state_ == state::CONNECTED){ _repl_send_ack(); }
 
-    LOG(INFO) << "onReplCron...5";
+//    LOG(INFO) << "onReplCron...5";
     // ====================== master 情况 ===========================
     // 如果服务器有从服务器，定时向它们发送 PING 。
     // 这样从服务器就可以实现显式的 master 超时判断机制，
@@ -105,12 +110,12 @@ void naruto::Replication::onReplCron() {
         LOG(INFO) << "onReplCron...5....1";
         replication::command_ping ping;
         ping.set_ip("127.0.0.1");
-        for (auto slave : slaves_){
+        for (const auto& slave : slaves_){
             slave->sendMsg(ping, replication::PING);
         }
     }
 
-    LOG(INFO) << "onReplCron...6";
+//    LOG(INFO) << "onReplCron...6";
     // 断开超时从服务器
     auto it = slaves_.begin();
     while (it != slaves_.end()){
@@ -122,9 +127,14 @@ void naruto::Replication::onReplCron() {
         }
     }
 
-    LOG(INFO) << "onReplCron...7";
+//    LOG(INFO) << "onReplCron...7";
     _merge_backlog_feed_slaves();
     cron_run_ = false;
+}
+
+// 定时把复制的一些持久状态保存到文件，重启时需要加载
+void naruto::Replication::onReplConfFlush() {
+
 }
 
 void naruto::Replication::onReadSyncBulkPayload(ev::io& watcher, int event) {
@@ -194,7 +204,6 @@ error:
     ::close(watcher.fd);
     repl_transfer_fd_ = -1;
     repl_state_ = state::CONNECT;
-    return;
 }
 
 void naruto::Replication::backlogFeed(int tid, const ::google::protobuf::Message & msg, uint16_t type) {
@@ -220,35 +229,74 @@ void naruto::Replication::backlogFeed(int tid, utils::Bytes& pack) {
     local_repl.put(pack);
 }
 
+void naruto::Replication::onBgsaveFinish(ev::child& child, int events) {
+    LOG(INFO) << "Replication::onBgsave.....0";
+    if (bgsave_child_pid_ == -1) return;
+    LOG(INFO) << "Replication::onBgsave.....1 bgsave_child_pid_:" << bgsave_child_pid_;
+
+    if (child.pid == bgsave_child_pid_){
+        LOG(INFO) << "Background saving terminated with success";
+        dirty_ = dirty_ - dirty_before_bgsave_;
+        bgsave_last_status_ = 0;
+        auto now = std::chrono::steady_clock::now();
+        bgsave_time_last_ = std::chrono::duration_cast<std::chrono::milliseconds>(now - bgsave_time_start_);
+        std::string tempfile = _bgsave_file_name(child.pid);
+
+        if (::rename(tempfile.c_str(), DATABASE_NAME) == -1){
+            LOG(ERROR) << "Error trying to rename the temporary DB file: " << strerror(errno);
+        }
+    } else{
+        if (child.pid == -1) LOG(INFO) << "Error bgsave callback: " << strerror(errno);
+        _remove_bgsave_tmp_file(child.pid);
+    }
+
+    bgsave_child_pid_ = -1;
+    child.stop();
+    delete &child;
+}
+
+void naruto::Replication::databaseLoad() {
+    // load database
+    database::buckets->load(FLAGS_repl_dir + "/" + FLAGS_repl_database_filename);
+    // load aof
+    std::vector<std::string> list;
+    sink::RotateFileStream::listAof(FLAGS_repl_dir, list);
+    for(const auto& filename : list){
+
+    }
+}
+
 void naruto::Replication::bgsave() {
     if (bgsave_child_pid_ != -1) return;
-
     bgsave_last_try_ = std::chrono::steady_clock::now();
     pid_t childpid;
-
-    if ((childpid = fork()) == 0){ // child
-        std::string tmpfile = FLAGS_repl_aof_dir + "/tmp-" + std::to_string(getpid()) + ".db";
+    if ((childpid = ::fork()) == 0){ // child
+        std::string tmpfile = _bgsave_file_name(getpid());
         int ret = database::buckets->dump(tmpfile);
-//        _exit(ret);
-//        setproctitle("%s %s:%d%s",
-//                     "naruto-aof-bgsave",
-//                     "",
-//                     _port,
-//                     server_mode);
+        sleep(1);
+        _exit(ret);
     } else {
-        auto curFile = aof_file_->curRollFile();
-        bgsave_aof_filename_ = curFile.name;
-        bgsave_aof_off = curFile.offset;
-        bgsave_fork_spends_ = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - bgsave_last_try_);
         if (childpid == -1){
             bgsave_last_status_ = -1;
             LOG(INFO) << "Can't save in background, fork: " << strerror(errno);
             return;
         }
-        LOG(INFO) << "Background saving started by pid " << childpid;
+
+        auto* childw = new ev::child;
+        childw->set(ev::get_default_loop());
+        childw->set<Replication, &Replication::onBgsaveFinish>(this);
+        childw->start(childpid);
+
         bgsave_time_start_ = std::chrono::steady_clock::now();
+        dirty_before_bgsave_ = dirty_;
+        auto curFile = aof_file_->curRollFile();
+        bgsave_aof_filename_ = curFile.name;
+        bgsave_aof_off = curFile.offset;
+        bgsave_fork_spends_ = std::chrono::duration_cast<std::chrono::milliseconds>(bgsave_time_start_ - bgsave_last_try_);
         bgsave_child_pid_ = childpid;
         bgsave_last_status_ = 0;
+        LOG(INFO) << "Background saving started by pid " << childpid
+                    << " bgsave aof filename " << bgsave_aof_filename_ << " bgsave aof off " << bgsave_aof_off;
     }
 }
 
@@ -294,7 +342,7 @@ void naruto::Replication::_backlog_flush() {
 }
 
 void naruto::Replication::_merge_backlog_feed_slaves() {
-    LOG(INFO) << "_merge_backlog_feed_slaves...1";
+//    LOG(INFO) << "_merge_backlog_feed_slaves...1";
     auto cur_pos = repl_pos_.load();
     auto next_pos = 1 - cur_pos;
     for (int i = 0; i < repl_merge_size_; ++i) {
@@ -317,7 +365,7 @@ void naruto::Replication::_merge_backlog_feed_slaves() {
         }
     }
 
-    LOG(INFO) << "_merge_backlog_feed_slaves...2";
+//    LOG(INFO) << "_merge_backlog_feed_slaves...2";
     while (!id_list.empty()){
         std::sort(id_list.begin(), id_list.end(), [](const indexLog& l, const indexLog& r){
             return l.id < r.id;
@@ -348,7 +396,7 @@ void naruto::Replication::_merge_backlog_feed_slaves() {
         }
     }
 
-    LOG(INFO) << "_merge_backlog_feed_slaves...3";
+//    LOG(INFO) << "_merge_backlog_feed_slaves...3";
     // 发送给所有的 slaves
     for (const auto& slave : slaves_){
         // 不要给正在等待 BGSAVE 开始的从服务器发送命令
@@ -507,6 +555,10 @@ void naruto::Replication::_repl_discard_cache_master() {
     cache_master_->flags &= ~CLIENT_FLAG_MASTER;
     _free_client(cache_master_);
     cache_master_ = nullptr;
+}
+
+std::string naruto::Replication::_bgsave_file_name(pid_t pid) {
+    return FLAGS_repl_dir + "/tmp-" + std::to_string(pid) + ".db";
 }
 
 naruto::Replication::~Replication() { }

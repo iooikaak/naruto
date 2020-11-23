@@ -22,7 +22,7 @@ void naruto::command::CommandSlaveof::exec(naruto::narutoClient *client) {
     server->repl->setMasterHost(cmd.ip());
     server->repl->setIsMaster(false);
 
-    client::command_reply reply;
+    client::CommandReply reply;
     reply.set_errcode(0);
     reply.set_errmsg("success");
     client->sendMsg(reply, replication::SLAVEOF);

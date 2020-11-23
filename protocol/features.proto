@@ -1,0 +1,144 @@
+// Protocol messages for describing features for machine learning model
+// training or inference.
+//
+// There are three base Feature types:
+//   - bytes
+//   - float
+//   - int64
+//
+// A Feature contains Lists which may hold zero or more values.  These
+// lists are the base values BytesList, FloatList, Int64List.
+//
+// Features are organized into categories by name.  The Features message
+// contains the mapping from name to Feature.
+//
+// Example Features for a movie recommendation application:
+//   feature {
+//     key: "age"
+//     value { float_list {
+//       value: 29.0
+//     }}
+//   }
+//   feature {
+//     key: "movie"
+//     value { bytes_list {
+//       value: "The Shawshank Redemption"
+//       value: "Fight Club"
+//     }}
+//   }
+//   feature {
+//     key: "movie_ratings"
+//     value { float_list {
+//       value: 9.0
+//       value: 9.7
+//     }}
+//   }
+//   feature {
+//     key: "suggestion"
+//     value { bytes_list {
+//       value: "Inception"
+//     }}
+//   }
+//   feature {
+//     key: "suggestion_purchased"
+//     value { int64_list {
+//       value: 1
+//     }}
+//   }
+//   feature {
+//     key: "purchase_price"
+//     value { float_list {
+//       value: 9.99
+//     }}
+//   }
+//
+
+syntax = "proto3";
+
+package tensorflow;
+
+option cc_enable_arenas = true;
+option java_outer_classname = "FeatureProtos";
+option java_multiple_files = true;
+option java_package = "org.tensorflow.example";
+option go_package = "github.com/tensorflow/tensorflow/tensorflow/go/core/example/example_protos_go_proto";
+
+enum Type{
+  UNKNOW = 0;
+  INT = 1; // 数值
+  INT_LIST = 2; // 数值列表
+  FLOAT = 3;
+  FLOAT_LIST = 4;
+  BYTES = 5; // 字符串
+  BYTES_LIST = 6; // 字符串列表
+  MAP = 7; // map
+}
+
+message Bytes{
+  bytes value = 1;
+}
+message Float{
+  float value = 1;
+}
+message Int64{
+  int64 value = 1;
+}
+// Containers to hold repeated fundamental values.
+message BytesList {
+  repeated bytes value = 1;
+}
+message FloatList {
+  repeated float value = 1 [packed = true];
+}
+message Int64List {
+  repeated int64 value = 1 [packed = true];
+}
+message BytesMap{
+  map<string,bytes> value = 1;
+}
+
+// Containers for non-sequential data.
+message Feature {
+  Type type = 1;
+  uint32 encoding = 2;
+  uint64 create = 3; // 写入时间
+  uint64 lru = 4; // 最后一次被访问的时间
+  uint64 expire = 5; // 过期时间
+  // Each feature can be exactly one kind.
+  oneof kind {
+    Bytes bytes_value = 10;
+    Float float_value = 11;
+    Int64 int64_value = 12;
+    BytesList bytes_list = 13;
+    FloatList float_list = 14;
+    Int64List int64_list = 15;
+    BytesMap bytes_map = 16;
+  }
+}
+
+message Features {
+  string id = 1;
+  // Map from feature name to feature.
+  map<string, Feature> feature = 2;
+}
+
+message BatchFeatures{
+  repeated Features features = 1;
+}
+
+// Containers for sequential data.
+//
+// A FeatureList contains lists of Features.  These may hold zero or more
+// Feature values.
+//
+// FeatureLists are organized into categories by name.  The FeatureLists message
+// contains the mapping from name to FeatureList.
+//
+message FeatureList {
+  repeated Feature feature = 1;
+}
+
+message FeatureLists {
+  // Map from feature name to feature list.
+  map<string, FeatureList> feature_list = 2;
+}

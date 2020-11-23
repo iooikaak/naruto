@@ -17,6 +17,9 @@
 #include <arpa/inet.h>
 #include <float.h>
 #include <math.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+
 
 #include "types.h"
 #include "cluster.h"

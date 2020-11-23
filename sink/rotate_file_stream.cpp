@@ -27,14 +27,28 @@ void RotateFileStream::listAof(const std::string& dir, std::vector<std::string> 
     while ((ptr = readdir(dirp)) != nullptr){
         std::string name(ptr->d_name);
         if (ptr->d_type == DT_REG && name.find("aof") != std::string::npos){
-            list.emplace_back(ptr->d_name);
+            if (parseFileName(ptr->d_name) != -1){
+                list.emplace_back(ptr->d_name);
+            }
         }
     }
 
     std::sort(list.begin(), list.end(), [](const std::string& x, const std::string& y){
-        return x < y;
+        auto xidx = parseFileName(x);
+        auto yidx = parseFileName(y);
+        return xidx < yidx;
     });
     closedir(dirp);
+}
+
+int RotateFileStream::parseFileName(const std::string & v) {
+    auto pos = v.find_last_of('.');
+    if (pos == std::string::npos){
+        LOG(WARNING) << "Bad Aof file name:" << v;
+        return -1;
+    }
+    auto stridx = v.substr(pos+1);
+    return std::stoi(stridx);
 }
 
 RotateFileStream::fileState RotateFileStream::curRollFile() {
@@ -71,12 +85,8 @@ void RotateFileStream::_rotate_init() {
 
     if (!list.empty()){
         auto last = list[list.size()-1];
-        auto pos = last.find_last_of('.');
-        if (pos == std::string::npos){
-            throw utils::Error("bad file:" + last);
-        }
-        auto stridx = last.substr(pos+1);
-        rotate_aof_idx_ = std::stoi(stridx) + 1;
+        auto stridx = parseFileName(last);
+        rotate_aof_idx_ = stridx + 1;
     }else{
         rotate_aof_idx_ = 0;
     }

@@ -17,6 +17,7 @@
 #include <cstring>
 
 #include "client.h"
+#include "defines.h"
 #include "utils/bytes.h"
 #include "database/buckets.h"
 #include "connection/connection.h"
@@ -34,6 +35,12 @@ struct saveparam{
     int changes;
 };
 
+struct replConf{
+    std::string aof_file_name;
+    uint64_t  aof_off_set;
+
+};
+
 enum class state{
     NONE = 0,          // 未开始复制
     CONNECT,           // 准备和 master 建立连接
@@ -47,7 +54,7 @@ enum class state{
     ONLINE,            // 全量db 文件已经发送完成，只需要增量更新即可
 };
 
-class Replication {
+class Replication{
 public:
     Replication(int worker_num);
     const std::string &getMasterHost() const;
@@ -61,11 +68,13 @@ public:
 
     void onReadSyncBulkPayload(ev::io&, int);
     void onSyncWithMaster(ev::io&, int);
+    void onBgsaveFinish(ev::child& child, int events);
     void onReplCron();
+    void onReplConfFlush();
     void backlogFeed(int tid, const ::google::protobuf::Message&, uint16_t type);
     void backlogFeed(int tid, utils::Bytes& pack);
     void bgsave();
-
+    void databaseLoad();
     ~Replication();
 
 private:
@@ -83,7 +92,9 @@ private:
     void _abort_sync_transfer();
     void _free_client(std::shared_ptr<narutoClient>&);
     void _repl_send_ack();
+    void _remove_bgsave_tmp_file(pid_t childpid);
     replication::type _slave_try_partial_resynchronization(int fd);
+    std::string _bgsave_file_name(pid_t pid);
 
     uint64_t cronloops_;
     bool cron_run_;
@@ -97,6 +108,7 @@ private:
 
     std::chrono::steady_clock::time_point last_flush_aof_time_;
     int dirty_;
+    int dirty_before_bgsave_;
     long long changes_;
     std::list<saveparam> saveparams_;
 
@@ -104,6 +116,7 @@ private:
     int bgsave_child_pid_; // bgsave 子进程 pid
     std::chrono::milliseconds bgsave_fork_spends_; // bgsave fork 耗时
     std::chrono::steady_clock::time_point bgsave_time_start_; // bgsave开始时间
+    std::chrono::milliseconds bgsave_time_last_; // bgsave 耗时
     std::chrono::steady_clock::time_point bgsave_last_try_; // 最后一次执行时间
     std::string bgsave_aof_filename_; // 执行bgsave是 aof 文件名
     int64_t bgsave_aof_off; // 执行bgsave时 aof offset

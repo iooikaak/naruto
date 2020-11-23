@@ -12,7 +12,8 @@
 #include <fstream>
 
 #include "object.h"
-#include "protocol/data.pb.h"
+#include "list_object.h"
+#include "protocol/features.pb.h"
 #include "protocol/client.pb.h"
 
 #define DEFAULT_BUCKET_SIZE 16
@@ -20,12 +21,13 @@
 #define DEFAULT_BUCKET_ELEMENT_COLUMN_SIZE 10
 
 namespace naruto::database{
+using namespace std::chrono;
 
 struct element{
     unsigned encoding;
-    std::chrono::steady_clock::time_point create; // 写入时间
-    std::chrono::steady_clock::time_point lru; // 最后一次被访问的时间
-    std::chrono::steady_clock::time_point expire; // 过期时间
+    system_clock::time_point create; // 写入时间时间戳，单位毫秒
+    system_clock::time_point lru; // 最后一次被访问的时间
+    system_clock::time_point expire; // 过期时间
     std::shared_ptr<object> ptr;
 
     template<typename T>
@@ -60,8 +62,8 @@ public:
     Buckets&operator=(const Buckets&) = delete;
 
     int dump(const std::string& filename);
-    int getBucketSize() const;
-    [[nodiscard]] const std::vector<std::shared_ptr<bucket>> &getBuckets() const;
+    void load(const std::string& filename);
+
     std::shared_ptr<element> get(const std::string&,const std::string&);
     void put(const std::string&, const std::string&, std::shared_ptr<element>);
     void del(const std::string&,const std::string&);
@@ -69,6 +71,7 @@ public:
     void flush();
 
 private:
+    void _parse(const char*, size_t);
     std::hash<std::string> hash_;
     int bucket_size_;
     std::vector<std::shared_ptr<bucket>> buckets_;

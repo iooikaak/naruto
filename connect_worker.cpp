@@ -11,7 +11,7 @@ namespace naruto{
 ConnectWorker::ConnectWorker(): loop(), async_watcher(),conns(0),tid(0){}
 
 ConnectWorker::~ConnectWorker() {
-    LOG(INFO) << "~ConnectWorker stop, close conns..." << tid;
+//    LOG(INFO) << "~ConnectWorker stop, close conns..." << tid;
     while (!conns.empty()){
         auto c = conns.front();
         conns.pop_front();
@@ -23,19 +23,19 @@ ConnectWorker::~ConnectWorker() {
 
 void ConnectWorker::run(int id) {
     tid = id;
-    LOG(INFO) << "connect worker run..." << tid;
+//    LOG(INFO) << "connect worker run..." << tid;
     std::unique_lock<std::mutex> lck(mux);
     init_success_workers++;
     cond.notify_one();
     lck.unlock();
 
-    LOG(INFO) << "connect worker run tid: " << tid << " init_success_workers: " << init_success_workers;
+//    LOG(INFO) << "connect worker run tid: " << tid << " init_success_workers: " << init_success_workers;
     loop.loop(0);
-    LOG(INFO) << "connect worker run tid: " << tid << " break.";
+//    LOG(INFO) << "connect worker run tid: " << tid << " break.";
     std::unique_lock<std::mutex> lck1(mux);
     exit_success_workers++;
     cond.notify_one();
-    LOG(INFO) << "connect worker run end......" << tid;
+//    LOG(INFO) << "connect worker run end......" << tid;
 }
 
 void ConnectWorker::freeClient(ev::io &watcher, narutoClient *client) {

@@ -8,7 +8,7 @@
 #include "protocol/client.pb.h"
 
 void naruto::command::CommandNF::exec(naruto::narutoClient *client) {
-    client::command_reply reply;
+    client::CommandReply reply;
     reply.set_errcode(1);
     reply.set_errmsg("command not found");
     client->sendMsg(reply, client::NOT_FOUND);

@@ -9,16 +9,15 @@
 #include <glog/logging.h>
 
 #include "utils/bytes.h"
-#include "protocol/data.pb.h"
+#include "protocol/features.pb.h"
 
 namespace naruto::database {
 
 class object {
 public:
     // 对象类型
-    virtual data::TYPE type() = 0;
-    virtual void serialize(data::element&) = 0;
-    virtual void deSeralize(data::element&) = 0;
+    virtual void serialize(tensorflow::Feature&) = 0;
+    virtual void deSeralize(const tensorflow::Feature&) = 0;
     virtual void debugString() = 0;
     virtual ~object() = default;
 };
