@@ -27,8 +27,6 @@
 #include "replication.h"
 #include "connect_worker.h"
 
-#define RUN_WITH_PERIOD(_ms_) if (!(cron_loops_%(_ms_)))
-
 namespace naruto{
 
 class Naruto{
@@ -43,7 +41,7 @@ public:
     void onCron(ev::timer&, int);
     void run();
 
-    std::shared_ptr<Replication> repl;
+//    std::shared_ptr<Replication> repl;
 
 private:
     void _init_workers();
@@ -53,16 +51,12 @@ private:
     void _listen();
 
     // 处理信号，任务线程执行频率
-    int hz_;
-    int cron_loops_;
-    double cron_interval_;
-
     bool _cluster_enable;
     ev::io _accept_watcher;
     ev::sig _sigint;
     ev::sig _sigterm;
     ev::sig _sigkill;
-    ev::timer _timer_watcher;
+    ev::timer timer_watcher_;
     ev::default_loop _loop;
     Cluster _cluster;
 

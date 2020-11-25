@@ -17,7 +17,7 @@ static bool valid_repl_back_log_size(const char* flagname, int value){
 DEFINE_validator(repl_back_log_size,&valid_repl_back_log_size); /* NOLINT */
 
 // 复制协议超时时间
-DEFINE_int32(repl_timeout_sec, 1, "repl timeout sec"); /* NOLINT */
+DEFINE_int32(repl_timeout_sec, 3, "repl timeout sec"); /* NOLINT */
 static bool valid_repl_timeout_sec(const char* flagname, int value){
     return value > 0;
 }
@@ -58,12 +58,20 @@ static bool valid_repl_conf_filename(const char* flagname, const std::string& va
 }
 DEFINE_validator(repl_conf_filename,&valid_repl_conf_filename); /* NOLINT */
 
-// 复制状态文件刷新间隔
+// 复制状态文件刷新间隔 sec
 DEFINE_double(repl_conf_flush_interval, 1, "repl conf flush interval"); /* NOLINT */
 static bool valid_repl_conf_flush_interval(const char* flagname, double value){
     return value > 0;
 }
 DEFINE_validator(repl_conf_flush_interval,&valid_repl_conf_flush_interval); /* NOLINT */
+
+// bgsve sec
+DEFINE_double(repl_bgsave_interval, 60, "repl bgsave interval"); /* NOLINT */
+static bool valid_repl_bgsave_interval(const char* flagname, double value){
+    return value > 0;
+}
+DEFINE_validator(repl_bgsave_interval,&valid_repl_bgsave_interval); /* NOLINT */
+
 
 // database 文件名
 DEFINE_string(repl_database_filename, "naruto.db", "repl database file name"); /* NOLINT */
@@ -71,6 +79,7 @@ static bool valid_repl_database_filename(const char* flagname, const std::string
     return value != "";
 }
 DEFINE_validator(repl_database_filename,&valid_repl_database_filename); /* NOLINT */
+
 
 
 #endif //NARUTO_PARAMETER_REPL_H

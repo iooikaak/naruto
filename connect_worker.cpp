@@ -6,6 +6,8 @@
 
 #include "connect_worker.h"
 
+#include "replication.h"
+
 namespace naruto{
 
 ConnectWorker::ConnectWorker(): loop(), async_watcher(),conns(0),tid(0){}
@@ -38,35 +40,45 @@ void ConnectWorker::run(int id) {
 //    LOG(INFO) << "connect worker run end......" << tid;
 }
 
-void ConnectWorker::freeClient(ev::io &watcher, narutoClient *client) {
-    LOG(INFO) << "connect worker: peer " << client->remoteAddr()  <<  " " << client->connect->errmsg();
+void ConnectWorker::clientFree(narutoClient *nc) {
+    if (nc == nullptr) return;
+    conn_nums--;
+    LOG(INFO) << "connect worker: peer " << nc->remoteAddr()  <<  " " << nc->connect->errmsg();
     // 停止 io 事件
-    watcher.stop();
-    delete &watcher;
-    client->connect->close();
-    if (client->flags & CLIENT_FLAG_MASTER){
+    nc->cw_io->stop();
+    if (nc->connect)
+        nc->connect->close();
 
+    switch (nc->flag) {
+        case narutoClient::flags::MASTER:
+            replica->cacheMaster();
+            break;
+        case narutoClient::flags::SLAVE:
+            replica->statSlave();
+            break;
+        default:
+            break;
     }
 
-    if (client->flags & CLIENT_FLAG_SLAVE){
-
-    }
-    delete client;
+    delete nc;
 }
+
+void ConnectWorker::clientFree(std::shared_ptr<narutoClient>& nc) { clientFree(nc.get()); }
 
 void ConnectWorker::onAsync(ev::async& watcher, int events) {
     auto worker = static_cast<ConnectWorker*>(watcher.data);
     while (!worker->conns.empty()){
         // 这里的连接包含了slave的连接
-        narutoClient* client = worker->conns.front();
-        if (!client) return;
+        narutoClient* nc = worker->conns.front();
+        if (!nc) return;
 
         worker->conns.pop_front();
 
-        auto* r = new ev::io;
-        r->set<naruto::narutoClient, &naruto::narutoClient::onReadEvent>(client);
-        r->set(worker->loop);
-        r->start(client->connect->fd(), ev::READ);
+        nc->cw_io = std::make_shared<ev::io>();
+        nc->cw_io->set<naruto::narutoClient, &naruto::narutoClient::onRead>(nc);
+        nc->cw_io->set(worker->loop);
+        nc->cw_io->start(nc->connect->fd(), ev::READ);
+        worker->conn_nums++;
     }
 }
 

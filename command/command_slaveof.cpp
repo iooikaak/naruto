@@ -5,7 +5,6 @@
 #include "command_slaveof.h"
 
 #include "client.h"
-#include "naruto.h"
 #include "utils/pack.h"
 #include "replication.h"
 #include "protocol/client.pb.h"
@@ -17,10 +16,12 @@ void naruto::command::CommandSlaveof::exec(naruto::narutoClient *client) {
 
     if (type != replication::SLAVEOF) return;
 
-    server->repl->setReplState(state::CONNECT);
-    server->repl->setMasterPort(cmd.port());
-    server->repl->setMasterHost(cmd.ip());
-    server->repl->setIsMaster(false);
+    replica->setReplState(replState::CONNECT);
+    replica->setMasterPort(cmd.port());
+    replica->setMasterHost(cmd.ip());
+    replica->setIsMaster(false);
+
+    client->flag = narutoClient::flags::SLAVE;
 
     client::CommandReply reply;
     reply.set_errcode(0);

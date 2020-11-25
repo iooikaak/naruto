@@ -40,10 +40,12 @@ int naruto::utils::File::parseFileName(const std::string & v) {
 }
 
 void naruto::utils::File::loadFile(const std::string &filename,
+                                   uint64_t offset,
                                    const std::function<void(uint16_t flag, uint16_t type, const unsigned char * s, size_t n)>& f) {
     std::ifstream in(filename, std::ios::binary|std::ios::in);
     if (!in.is_open()) return;
-
+    in.seekg(offset);
+    
     char buf[4096];
     utils::Bytes bytes;
     while (!in.eof()){
@@ -64,4 +66,10 @@ void naruto::utils::File::loadFile(const std::string &filename,
         }
     }
     in.close();
+}
+
+void naruto::utils::File::saveJson(nlohmann::json &j, const std::string &filename) {
+    std::ofstream out(filename, std::ios::in|std::ios::trunc);
+    out << j.dump(4);
+    out.close();
 }

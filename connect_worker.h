@@ -28,8 +28,8 @@ public:
     ConnectWorker();
     ~ConnectWorker();
     void run(int id);
-    void freeClient(ev::io &watcher, narutoClient* client);
-
+    void clientFree(narutoClient* nc);
+    void clientFree(std::shared_ptr<narutoClient>& nc);
     static void onAsync(ev::async& watcher, int events);
     static void onStopAsync(ev::async& watcher, int events);
 
@@ -42,10 +42,7 @@ public:
     // 用于触发停止worker线程
     ev::async stop_async_watcher;
     std::deque<narutoClient*> conns;
-
-    // 所有连接的client
-    std::list<std::shared_ptr<narutoClient>> clients;
-
+    uint64_t conn_nums;
 private:
 };
 

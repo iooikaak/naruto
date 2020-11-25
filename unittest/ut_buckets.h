@@ -52,7 +52,7 @@ public:
     }
 
     void loadTestData(){
-        naruto::Replication::databaseLoad();
+        naruto::replica->bootStrap();
     }
 };
 

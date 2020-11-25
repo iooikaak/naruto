@@ -11,6 +11,7 @@ include_directories(unittest)
 include_directories(connection)
 include_directories(command)
 include_directories(database)
+include_directories(third_party)
 include_directories(/usr/local/include)
 
 link_directories(/usr/local/lib)

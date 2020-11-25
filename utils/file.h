@@ -6,6 +6,7 @@
 #define NARUTO_FILE_H
 
 #include <vector>
+#include <nlohmann/json.hpp>
 #include "bytes.h"
 
 namespace naruto::utils {
@@ -16,7 +17,9 @@ public:
 
     static int parseFileName(const std::string &);
 
-    static void loadFile(const std::string& filename, const std::function<void(uint16_t,uint16_t,const unsigned char*, size_t)>&);
+    static void loadFile(const std::string& filename,  uint64_t offset, const std::function<void(uint16_t,uint16_t,const unsigned char*, size_t)>&);
+
+    static void saveJson(nlohmann::json& j, const std::string& filename);
 };
 
 }
