@@ -6,6 +6,7 @@
 
 #include "client.h"
 #include "protocol/client.pb.h"
+#include "protocol/command_types.pb.h"
 #include "utils/pack.h"
 #include "database/buckets.h"
 #include "database/number.h"
@@ -18,13 +19,13 @@ void naruto::command::CommandHset::exec(naruto::narutoClient *client) {
 
     execMsg(flag, type, &client->rbuf.data()[PACK_HEAD_LEN], (len - PACK_HEAD_LEN));
 
-    client::CommandReply reply;
+    client::command_reply reply;
     reply.set_errcode(0);
     client->sendMsg(reply, client::HSET);
 }
 
 void naruto::command::CommandHset::execMsg(uint16_t flag, uint16_t type, const unsigned char* s, size_t n) {
-    client::CommandHset hset;
+    client::command_hset hset;
     hset.ParseFromArray(s, n);
 
     for (int i = 0; i < hset.fields_size(); ++i) {

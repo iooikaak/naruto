@@ -17,6 +17,7 @@
 #include <arpa/inet.h>
 
 #include "utils/errors.h"
+#include "utils/basic.h"
 #include "connection.h"
 
 namespace naruto::connection{
@@ -44,7 +45,6 @@ Connect::Connect(ConnectOptions opts) : _opts(std::move(opts)) {
 }
 
 int Connect::connect() {
-    LOG(INFO) << "connecting port:" << _opts.port;
     if (_flags & CONNECT_FLAGS_CONNECTED) return CONNECT_RT_OK;
 
     int client_fd;
@@ -103,6 +103,15 @@ int Connect::connect() {
 
 void Connect::setOps(const ConnectOptions & ops) { _opts = ops; }
 
+std::string Connect::remoteAddr() {
+    sockaddr_in sa{};
+    socklen_t len = sizeof(sa);
+    ::getpeername(fd(), (struct sockaddr*)&sa, &len);
+    char* ip = inet_ntoa(sa.sin_addr);
+    int port = ntohs(sa.sin_port);
+    return std::string(ip) + ":" + std::to_string(port);
+}
+
 void Connect::reset() noexcept { _err = 0; _errmsg.clear(); }
 
 // 重连
@@ -137,8 +146,8 @@ void swap(Connect &lc, Connect &rc) noexcept {
 }
 
 int Connect::_set_connect_timeout(){
-    timeval read_timeout = _to_timeval(_opts.read_timeout);
-    timeval write_timeout = _to_timeval(_opts.write_timeout);
+    timeval read_timeout = utils::Basic::to_timeval(_opts.read_timeout);
+    timeval write_timeout = utils::Basic::to_timeval(_opts.write_timeout);
     if (setsockopt(_fd, SOL_SOCKET, SO_RCVTIMEO, &read_timeout, sizeof(read_timeout))){
         _set_error(CONNECT_ERROR_IO,"setsockopt(SO_RCVTIMEO)");
         return CONNECT_RT_ERR;
@@ -231,15 +240,6 @@ int Connect::_check_socket_error(){
         return CONNECT_RT_ERR;
     }
     return CONNECT_RT_OK;
-}
-
-timeval Connect::_to_timeval(const std::chrono::milliseconds& duration) const {
-    auto sec = std::chrono::duration_cast<std::chrono::seconds>(duration);
-    auto msec = std::chrono::duration_cast<std::chrono::microseconds>(duration - sec);
-    timeval t;
-    t.tv_sec = sec.count();
-    t.tv_usec = msec.count();
-    return t;
 }
 
 int Connect::_set_blocking(bool blocking){

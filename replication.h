@@ -28,7 +28,6 @@
 #include "protocol/replication.pb.h"
 #include "command/commands.h"
 
-
 namespace naruto{
 using namespace std::chrono;
 
@@ -51,26 +50,30 @@ enum class replState{
 
 struct replConf {
     bool is_master = false;
-    std::string run_id = "";
-    std::string aof_name = "";
-    int64_t aof_off = -1;
-    std::string master_run_id = "";
-    std::string master_aof_filename = "";
-    int64_t master_aof_off = -1;
+    std::string run_id;             // 服务器id
+    std::string db_dump_aof_name;   // DB文件 Dump 时的aof文件名
+    int64_t db_dump_aof_off = 0;    // DB文件 Dump 时aof文件位置
+    std::string master_run_id;      // 如果是slave则代表master id
+    std::string master_aof_name;    // 如果是slave则代表已同步完成的aof文件名
+    int64_t master_aof_off = 0;     // 如果是slave则代表已同步完成的aof文件位置
 
     void toJson(nlohmann::json& j){
         j["master"] = is_master;
         j["run_id"] = run_id;
-        j["aof_name"] = aof_name;
-        j["aof_off"] = aof_off;
+        j["db_dump_aof_name"] = db_dump_aof_name;
+        j["db_dump_aof_off"] = db_dump_aof_off;
         j["master_run_id"] = master_run_id;
-        j["master_aof_filename"] = master_aof_filename;
+        j["master_aof_name"] = master_aof_name;
         j["master_aof_off"] = master_aof_off;
     }
 
     void toJson(const std::string& filename){
         std::string tmpfile = filename + ".tmp";
         std::ofstream out(tmpfile, std::ios::out| std::ios::trunc);
+        if (!out.is_open()) {
+            LOG(ERROR) << "Replica conf toJson " << strerror(errno);
+            return;
+        }
         nlohmann::json j;
         toJson(j);
         out << j.dump(4);
@@ -83,17 +86,17 @@ struct replConf {
     void fromJson(const nlohmann::json& j){
         j.at("master").get_to(is_master);
         j.at("run_id").get_to(run_id);
-        j.at("aof_name").get_to(aof_name);
-        j.at("aof_off").get_to(aof_off);
+        j.at("db_dump_aof_name").get_to(db_dump_aof_name);
+        j.at("db_dump_aof_off").get_to(db_dump_aof_off);
         j.at("master_run_id").get_to(master_run_id);
-        j.at("master_aof_filename").get_to(master_aof_filename);
+        j.at("master_aof_name").get_to(master_aof_name);
         j.at("master_aof_off").get_to(master_aof_off);
     }
 
     void fromJson(const std::string& filename){
         std::ifstream in(filename, std::ios::in);
         if (!in.is_open()) {
-            LOG(INFO) << "Replica conf file " << strerror(errno);
+            LOG(WARNING) << "Replica parse conf file " << strerror(errno);
             return;
         }
         nlohmann::json j;
@@ -102,20 +105,21 @@ struct replConf {
     }
 
     friend std::ostream& operator<<(std::ostream& out, const replConf& repl_conf){
-        out << "master:" << repl_conf.is_master
-            << " run_id:" << repl_conf.run_id
-            << " aof_name:" << repl_conf.aof_name
-            << " aof_off:" << repl_conf.aof_off
-            << " master_run_id:" << repl_conf.master_run_id
-            << " master_aof_filename:" << repl_conf.master_aof_filename
-            << " master_aof_off:" << repl_conf.master_aof_off;
+        out << "master:" << repl_conf.is_master << "\n"
+            << "run_id:" << repl_conf.run_id << "\n"
+            << "db_dump_aof_name:" << repl_conf.db_dump_aof_name << "\n"
+            << "db_dump_aof_off:" << repl_conf.db_dump_aof_off << "\n"
+            << "master_run_id:" << repl_conf.master_run_id << "\n"
+            << "master_aof_name:" << repl_conf.master_aof_name << "\n"
+            << "master_aof_off:" << repl_conf.master_aof_off << "\n"
+            ;
         return out;
     }
 };
 
 class Replication{
 public:
-    Replication();
+    void initializer();
     const std::string &getMasterHost() const;
     void setMasterHost(const std::string &masterHost);
     int getMasterPort() const;
@@ -124,8 +128,8 @@ public:
     void setIsMaster(bool isMaster);
     replState getReplState() const;
     void setReplState(replState replState);
+    const replConf &getReplConf() const;
 
-    void bootStrap();
     void onReadSyncBulkPayload(ev::io&, int);
     void onSyncWithMaster(ev::io&, int);
     void onBgsaveFinish(ev::child& child, int events);
@@ -136,10 +140,12 @@ public:
 
     void backlogFeed(int tid, const ::google::protobuf::Message&, uint16_t type);
     void backlogFeed(int tid, utils::Bytes& pack);
+    void release(std::shared_ptr<narutoClient>&);
+    void addSlave(narutoClient*);
     void cacheMaster();
     void discardCacheMaster();
     void statSlave(); // close slave 时记录一些统计数据
-
+    void stop();
     ~Replication();
 
 private:
@@ -148,7 +154,7 @@ private:
         uint64_t id; // 排序id
     };
 
-    void _init_cronloops();
+    void _init();
     void _backlog_feed(const unsigned char* data, size_t size);
     void _backlog_flush();
     void _merge_backlog_feed_slaves();
@@ -156,7 +162,7 @@ private:
     void _connect_master();
 
     void _abort_sync_transfer();
-    void _repl_send_ack();
+    void _heartbeat();
     void _remove_bgsave_tmp_file(pid_t childpid);
     int _slave_try_partial_resynchronization(int fd);
     std::string _bgsave_file_name(pid_t pid);
@@ -170,9 +176,8 @@ private:
     std::chrono::steady_clock::time_point repl_unixtime_;
     std::chrono::system_clock::time_point repl_no_slaves_since_;
     std::chrono::steady_clock::time_point repl_down_since_;
-
-
     std::chrono::steady_clock::time_point last_flush_aof_time_;
+
     int dirty_;
     int dirty_before_bgsave_;
     long long changes_;
@@ -187,8 +192,7 @@ private:
     int bgsave_last_status_; // bgsave 最后一次执行状态
     bool use_aof_checksum_;
     std::shared_ptr<narutoClient> master_; // connect to master
-    std::shared_ptr<narutoClient> cache_master_; // 为了实现 当正常同步时，master 连接中断,当尝试重连时，可以顺利执行 部分重同步
-    std::list<std::shared_ptr<narutoClient>> slaves_;
+    std::list<narutoClient*> slaves_;
 
     // 本机 aof
     std::atomic_int repl_pos_; // 当前使用的index

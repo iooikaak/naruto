@@ -62,6 +62,7 @@ public:
 
     void send(naruto::utils::Bytes&);
     void recv(naruto::utils::Bytes&);
+    std::string remoteAddr();
 
     int fd();
     void setOps(const ConnectOptions&);
@@ -80,8 +81,6 @@ public:
     friend void swap(Connect& lc, Connect& rc) noexcept;
 
 private:
-
-    timeval _to_timeval(const std::chrono::milliseconds& duration) const;
 
     int _set_blocking(bool blocking);
 

@@ -141,26 +141,10 @@ public:
     void putMessage(const google::protobuf::Message& message, uint16_t type);
 
     // Buffer Position Accessors & Mutators
-
-    void setReadPos(uint32_t r)
-    {
-        rpos = r;
-    }
-
-    uint32_t getReadPos() const
-    {
-        return rpos;
-    }
-
-    void setWritePos(uint32_t w)
-    {
-        wpos = w;
-    }
-
-    uint32_t getWritePos() const
-    {
-        return wpos;
-    }
+    void setReadPos(uint32_t r){ rpos = r; }
+    uint32_t getReadPos() const{ return rpos; }
+    void setWritePos(uint32_t w) { wpos = w; }
+    uint32_t getWritePos() const{ return wpos; }
 
     void setName(std::string n);
     std::string getName();

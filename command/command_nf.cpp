@@ -6,12 +6,13 @@
 
 #include "client.h"
 #include "protocol/client.pb.h"
+#include "protocol/command_types.pb.h"
 
 void naruto::command::CommandNF::exec(naruto::narutoClient *client) {
-    client::CommandReply reply;
+    client::command_reply reply;
     reply.set_errcode(1);
-    reply.set_errmsg("command not found");
-    client->sendMsg(reply, client::NOT_FOUND);
+    reply.set_errmsg("Command Not Found");
+    client->sendMsg(reply, client::Type::NF);
 }
 
 void naruto::command::CommandNF::execMsg(uint16_t flag, uint16_t type, const unsigned char *msg, size_t n) {

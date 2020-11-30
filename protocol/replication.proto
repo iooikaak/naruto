@@ -1,15 +1,10 @@
 syntax="proto3";
 package replication;
 
-enum type{
-    TYPE_NULL = 0;
-    PING = 1;
-    PONG = 2;
-    ACK = 3;
-    PSYNC = 4;
-    FULLSYNC = 5;
-    PARTSYNC = 6;
-    SLAVEOF = 7;
+enum synctype{
+  NF = 0;
+  FULLSYNC = 1;
+  PARTSYNC = 2;
 }
 
 message command_slaveof{
@@ -41,7 +36,7 @@ message command_psync{
 message command_psync_reply{
   int32 errcode = 1;
   string errmsg = 2;
-  type psync_type = 3;
+  synctype psync_type = 3; // 1-全量同步 2-部分同步
   string run_id = 4;
   int64 repl_database_size = 5; // 全量同步字段
   // 当全量同步时，值为dump database时之后的增量位置

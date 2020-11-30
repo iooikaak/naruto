@@ -31,7 +31,7 @@ namespace naruto{
 
 class Naruto{
 public:
-    Naruto();
+    void initializer();
     ~Naruto();
     void onAccept(ev::io&, int);
     static void onSignal(ev::sig&, int);
@@ -39,10 +39,7 @@ public:
     // 向集群中的所有断线或者未连接节点发送消息
     // 遍历所有节点，检查是否需要将某个节点标记为下线
     void onCron(ev::timer&, int);
-    void run();
-
-//    std::shared_ptr<Replication> repl;
-
+    void start();
 private:
     void _init_workers();
     void _init_cron();
@@ -52,13 +49,13 @@ private:
 
     // 处理信号，任务线程执行频率
     bool _cluster_enable;
-    ev::io _accept_watcher;
-    ev::sig _sigint;
-    ev::sig _sigterm;
-    ev::sig _sigkill;
+    ev::io accept_watcher_;
+    ev::sig sigint_;
+    ev::sig sigterm_;
+    ev::sig sigkill_;
     ev::timer timer_watcher_;
-    ev::default_loop _loop;
-    Cluster _cluster;
+    ev::default_loop _loop{};
+    std::shared_ptr<Cluster> cluster_;
 
     // 本服务器运行时的ID，每次重启都会变化，运行中则不会变
     // 唯一标识一个运行中的实例

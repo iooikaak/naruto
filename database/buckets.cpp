@@ -8,6 +8,7 @@
 #include "number.h"
 #include "map.h"
 #include "string_.h"
+#include "protocol/command_types.pb.h"
 
 // Buckets
 naruto::database::Buckets::Buckets(int size) {
@@ -21,7 +22,7 @@ naruto::database::Buckets::Buckets(int size) {
 int naruto::database::Buckets::dump(const std::string& filename) {
     if (size() == 0) return 0;
 
-    std::fstream out(filename, std::ios::binary|std::ios::out|std::ios::trunc);
+    std::ofstream out(filename, std::ios::binary|std::ios::out|std::ios::trunc);
     if (!out.is_open()){
         LOG(INFO) << "Db save open file " << filename << " error:" << strerror(errno);
         return -1;
@@ -29,8 +30,9 @@ int naruto::database::Buckets::dump(const std::string& filename) {
     for (int i = 0; i < bucket_size_; ++i) {
          buckets_[i]->dump(&out);
     }
+    auto pos = out.tellp();
     out.close();
-    return 0;
+    return pos;
 }
 
 std::shared_ptr<naruto::database::element> naruto::database::Buckets::get(const std::string & key, const std::string & field) {
@@ -59,7 +61,7 @@ void naruto::database::Buckets::flush() {
 }
 
 void naruto::database::Buckets::parse(uint16_t flag, uint16_t type, const unsigned char * msg, size_t body_size) {
-    if (type != client::OBJECT) return;
+    if (type != client::Type::OBJECT) return;
 
     tensorflow::Features features;
     features.ParseFromArray(msg, int(body_size));
@@ -153,7 +155,7 @@ void naruto::database::bucket::dump(std::ostream* out) {
             v.second->ptr->serialize(feature);
             (*features.mutable_feature())[v.first] = std::move(feature);
         }
-        utils::Pack::serialize(features, client::OBJECT, out);
+        utils::Pack::serialize(features, client::Type::OBJECT, out);
     }
 }
 

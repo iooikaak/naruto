@@ -1,0 +1,15 @@
+syntax="proto3";
+package client;
+
+enum Type{
+  NF = 0;
+  OBJECT = 1;
+  MULTI = 2;
+  PING = 3;
+  PONG = 4;
+  ACK = 5;
+  PSYNC = 6;
+  SLAVEOF = 7;
+  HSET = 8;
+  HGET = 9;
+}

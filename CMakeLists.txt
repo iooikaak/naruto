@@ -39,13 +39,11 @@ list(REMOVE_ITEM NARUTO_SRC ./main.cpp)
 #source_header_dir(H_D sink)
 #gen_preprocessor_file(${H_D} ${NARUTO_SRC} ${DATABASE_SRC})
 
-#add_executable(client ./clients/example/c++/example.cpp
-#        ${NARUTO_SRC}
-#        ${UTILS_SRC}
-#        ${PROTOCOL_SRC}
-#        ${CONNECTION_SRC}
-#        ${DATABASE_SRC}
-#        ${COMMAND_SRC})
+add_executable(client ./clients/example/c++/example.cpp
+        ${CLIENT_SRC}
+        ${UTILS_SRC}
+        ${PROTOCOL_SRC}
+        ${CONNECTION_SRC})
 
 add_executable(naruto main.cpp
         ${DATABASE_SRC}

@@ -45,10 +45,11 @@ void RotateFileStream::_rotate() {
     }
     rotate_aof_idx_++;
     cur_aof_file_ = _gen_aof_filename(rotate_aof_idx_);
-    stream_ = std::make_shared<std::ofstream>(cur_aof_file_,std::ios::binary|std::ios::app|std::ios::out);
+    stream_ = std::make_shared<std::ofstream>((dir_ + cur_aof_file_),
+                                              std::ios::binary|std::ios::app|std::ios::out);
 }
 
-std::string RotateFileStream::_gen_aof_filename(int idx) { return dir_ + "naruto.aof." + std::to_string(idx); }
+std::string RotateFileStream::_gen_aof_filename(int idx) { return "naruto.aof." + std::to_string(idx); }
 
 void RotateFileStream::_rotate_init() {
     std::vector<std::string> list;
@@ -63,7 +64,7 @@ void RotateFileStream::_rotate_init() {
     }
 
     cur_aof_file_ = _gen_aof_filename(rotate_aof_idx_);
-    stream_ = std::make_shared<std::ofstream>(cur_aof_file_,std::ios::binary|std::ios::app|std::ios::out);
+    stream_ = std::make_shared<std::ofstream>(dir_ + cur_aof_file_,std::ios::binary|std::ios::app|std::ios::out);
 }
 
 }

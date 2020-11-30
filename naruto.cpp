@@ -11,7 +11,7 @@
 
 namespace naruto{
 
-Naruto::Naruto() : _loop(), _cluster(FLAGS_port, FLAGS_tcp_backlog){
+void Naruto::initializer() {
     // 统计信息初始化
     _tcp_backlog = FLAGS_tcp_backlog;
     _port = FLAGS_port;
@@ -37,11 +37,13 @@ Naruto::Naruto() : _loop(), _cluster(FLAGS_port, FLAGS_tcp_backlog){
     _loading_process_events_interval_bytes = 0;
     _clients_paused = false;
     _clients_pause_end_time = 0;
+    cluster_ = std::make_shared<Cluster>(FLAGS_port, FLAGS_tcp_backlog);
 }
 
 Naruto::~Naruto() { delete [] workers; }
 
-void Naruto::run() {
+void Naruto::start() {
+    initializer();
     _init_workers();
     _init_signal();
     _init_cron();
@@ -96,7 +98,8 @@ void Naruto::onSignal(ev::sig& signal, int) {
     for (int i = 0; i < worker_num; ++i)  workers[i].stop();
     LOG(INFO) << "onSignal start...2";
     // 关闭cluster工作线程
-    s->_cluster.stop();
+    s->cluster_->stop();
+    replica->stop();
 
     std::unique_lock<std::mutex> lck(mux);
     while (exit_success_workers < worker_num){
@@ -105,15 +108,16 @@ void Naruto::onSignal(ev::sig& signal, int) {
     }
 
     // 停止主线程 ev loop
-    s->_accept_watcher.stop();
+    s->accept_watcher_.stop();
     s->timer_watcher_.stop();
     s->_loop.break_loop(ev::ALL);
     LOG(INFO) << "onSignal end...";
 }
 
 void Naruto::_init_workers() {
+    srand(time(nullptr)^getpid());
     LOG(INFO) << "Init workers worker num is:" << worker_num;
-    replica->bootStrap();
+    replica->initializer();
 
     for (int i = 0; i < worker_num; ++i) {
         workers[i].async_watcher.set<&ConnectWorker::onAsync>(&workers[i]);
@@ -145,24 +149,24 @@ void Naruto::_listen() {
     if ((_fd = naruto::utils::Net::listen(_port, _tcp_backlog)) == -1){
         return;
     }
-    _accept_watcher.set(_loop);
-    _accept_watcher.set<Naruto, &Naruto::onAccept>(this);
-    _accept_watcher.start(_fd, ev::READ);
+    accept_watcher_.set(_loop);
+    accept_watcher_.set<Naruto, &Naruto::onAccept>(this);
+    accept_watcher_.start(_fd, ev::READ);
     LOG(INFO) << "Naruto listen in " << _port;
     _loop.loop(0);
     LOG(INFO) << "Naruto stop listen.";
 }
 
 void Naruto::_init_signal() {
-    _sigint.set<&Naruto::onSignal>(this);
-    _sigint.set(_loop);
-    _sigint.start(SIGINT);
-    _sigterm.set<&Naruto::onSignal>(this);
-    _sigterm.set(_loop);
-    _sigterm.start(SIGTERM);
-    _sigkill.set<&Naruto::onSignal>(this);
-    _sigkill.set(_loop);
-    _sigkill.start(SIGKILL);
+    sigint_.set<&Naruto::onSignal>(this);
+    sigint_.set(_loop);
+    sigint_.start(SIGINT);
+    sigterm_.set<&Naruto::onSignal>(this);
+    sigterm_.set(_loop);
+    sigterm_.start(SIGTERM);
+    sigkill_.set<&Naruto::onSignal>(this);
+    sigkill_.set(_loop);
+    sigkill_.start(SIGKILL);
 }
 
 void Naruto::_init_cluster() {
@@ -170,7 +174,7 @@ void Naruto::_init_cluster() {
     std::unique_lock<std::mutex> lck(mux);
     init_success_workers++;
     cond.notify_one();
-    _cluster.run();
+    cluster_->run();
     lck.unlock();
 }
 

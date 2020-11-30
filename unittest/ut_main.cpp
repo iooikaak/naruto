@@ -17,7 +17,8 @@
 //#include "ut_libev_file.h"
 //#include "ut_rotate_file_stream.h"
 //#include "ut_repl_backlog_feed.h"
-#include "ut_buckets.h"
+//#include "ut_buckets.h"
+#include "ut_utils.h"
 int main(int argc, char* argv[]){
     gflags::ParseCommandLineFlags(&argc, &argv, true);
     ::testing::InitGoogleTest(&argc, argv);

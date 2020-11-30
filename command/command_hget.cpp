@@ -10,12 +10,12 @@
 #include "database/buckets.h"
 
 void naruto::command::CommandHget::exec(naruto::narutoClient *client) {
-    client::CommandHget hget;
+    client::command_hget hget;
     auto type = utils::Pack::deSerialize(client->rbuf, hget);
 
-    client::CommandHgetReply reply;
+    client::command_hget_reply reply;
     reply.mutable_state()->set_errcode(0);
-
+    reply.mutable_state()->set_errmsg("success");
     for (int i = 0; i < hget.fields_size(); ++i) {
         auto feature = reply.add_features();
         std::shared_ptr<database::element> data = database::buckets->get(hget.key(), hget.fields(i));

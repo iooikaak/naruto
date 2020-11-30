@@ -3,32 +3,33 @@ package client;
 
 import "features.proto";
 
-enum Type{
-  NOT_FOUND = 0;
-  OBJECT = 1;
-  HSET = 2;
-  HGET = 3;
-}
-
 // 通用返回码
-message CommandReply{
+message command_reply{
   int32 errcode = 1;
   string errmsg = 2;
 }
 
-message CommandHset{
+message command_hset{
     string key = 1;
     repeated string fields = 2;
     repeated tensorflow.Feature values = 3;
     repeated int64 ttls = 4;
 }
 
-message CommandHget{
+message command_hget{
   string key = 1;
   repeated string fields = 2;
 }
 
-message CommandHgetReply{
-  CommandReply state = 1;
+message command_hget_reply{
+  command_reply state = 1;
   repeated tensorflow.Feature features = 2;
 }
+
+message command_multi{
+  string aof_name = 1;
+  int64 aof_off = 2;
+  repeated int32 types = 3;
+  repeated bytes commands = 4;
+}
+

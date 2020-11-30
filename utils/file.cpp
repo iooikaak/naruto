@@ -9,14 +9,25 @@
 #include <glog/logging.h>
 #include <fstream>
 
-void naruto::utils::File::listAof(const std::string &dir, std::vector<std::string>& list) {
+void naruto::utils::File::listAof(const std::string &dir, std::vector<std::string>& list, const std::string& after) {
     DIR* dirp = opendir(dir.c_str());
     dirent* ptr;
+    int after_idx = -1;
+    if (!after.empty()){
+        after_idx = parseFileName(after);
+    }
     while ((ptr = readdir(dirp)) != nullptr){
         std::string name(ptr->d_name);
         if (ptr->d_type == DT_REG && name.find("aof") != std::string::npos){
-            if (parseFileName(ptr->d_name) != -1){
-                list.emplace_back(ptr->d_name);
+            int idx;
+            if ((idx = parseFileName(ptr->d_name))!= -1){
+                if (after_idx != -1){ // 只获取 after和after之后的aof文件
+                    if (idx >= after_idx){
+                        list.emplace_back(ptr->d_name);
+                    }
+                }else{
+                    list.emplace_back(ptr->d_name);
+                }
             }
         }
     }
@@ -27,6 +38,12 @@ void naruto::utils::File::listAof(const std::string &dir, std::vector<std::strin
         return xidx < yidx;
     });
     closedir(dirp);
+}
+
+std::string naruto::utils::File::nextAof(const std::string &aofname) {
+    int idx;
+    if ((idx = parseFileName(aofname)) == -1) return "";
+    return "naruto.aof."+ std::to_string(idx + 1);
 }
 
 int naruto::utils::File::parseFileName(const std::string & v) {
@@ -44,8 +61,8 @@ void naruto::utils::File::loadFile(const std::string &filename,
                                    const std::function<void(uint16_t flag, uint16_t type, const unsigned char * s, size_t n)>& f) {
     std::ifstream in(filename, std::ios::binary|std::ios::in);
     if (!in.is_open()) return;
-    in.seekg(offset);
-    
+    in.seekg(offset,std::ios::beg);
+    in.peek();
     char buf[4096];
     utils::Bytes bytes;
     while (!in.eof()){
@@ -72,4 +89,14 @@ void naruto::utils::File::saveJson(nlohmann::json &j, const std::string &filenam
     std::ofstream out(filename, std::ios::in|std::ios::trunc);
     out << j.dump(4);
     out.close();
+}
+
+int64_t naruto::utils::File::size(const std::string &filename) {
+    std::ifstream in(filename, std::ios::in);
+    if (!in.is_open()) return -1;
+
+    in.seekg(0, std::ios::end);
+    auto pos = in.tellg();
+    in.close();
+    return pos;
 }

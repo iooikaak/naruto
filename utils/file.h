@@ -13,13 +13,15 @@ namespace naruto::utils {
 
 class File {
 public:
-    static void listAof(const std::string &dir, std::vector<std::string> &);
-
+    static void listAof(const std::string&dir, std::vector<std::string>&, const std::string& after = "");
+    static std::string nextAof(const std::string& aofname);
     static int parseFileName(const std::string &);
 
     static void loadFile(const std::string& filename,  uint64_t offset, const std::function<void(uint16_t,uint16_t,const unsigned char*, size_t)>&);
 
     static void saveJson(nlohmann::json& j, const std::string& filename);
+
+    static int64_t size(const std::string& file);
 };
 
 }

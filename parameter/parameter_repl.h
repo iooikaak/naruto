@@ -17,7 +17,7 @@ static bool valid_repl_back_log_size(const char* flagname, int value){
 DEFINE_validator(repl_back_log_size,&valid_repl_back_log_size); /* NOLINT */
 
 // 复制协议超时时间
-DEFINE_int32(repl_timeout_sec, 3, "repl timeout sec"); /* NOLINT */
+DEFINE_int32(repl_timeout_sec, 10, "repl timeout sec"); /* NOLINT */
 static bool valid_repl_timeout_sec(const char* flagname, int value){
     return value > 0;
 }
@@ -31,7 +31,7 @@ static bool valid_repl_cron_interval(const char* flagname, double value){
 DEFINE_validator(repl_cron_interval,&valid_repl_cron_interval); /* NOLINT */
 
 // master ping slave 时间周期
-DEFINE_double(repl_ping_slave_period, 100, "repl ping slave period, ms"); /* NOLINT */
+DEFINE_double(repl_ping_slave_period, 1, "repl ping slave period, ms"); /* NOLINT */
 static bool valid_repl_ping_slave_period(const char* flagname, double value){
     return true;
 }
@@ -45,16 +45,16 @@ static bool valid_repl_aof_rotate_size(const char* flagname, int value){
 DEFINE_validator(repl_aof_rotate_size,&valid_repl_aof_rotate_size); /* NOLINT */
 
 // 持久化文件目录
-DEFINE_string(repl_dir, "", "repl file dir"); /* NOLINT */
+DEFINE_string(repl_dir, ".", "repl file dir"); /* NOLINT */
 static bool valid_repl_dir(const char* flagname, const std::string& value){
-    return value != "";
+    return !value.empty();
 }
 DEFINE_validator(repl_dir,&valid_repl_dir); /* NOLINT */
 
 // 复制状态文件，存储服务运行过程中一些需要持久化的配置
 DEFINE_string(repl_conf_filename, "repl.conf", "repl conf file name"); /* NOLINT */
 static bool valid_repl_conf_filename(const char* flagname, const std::string& value){
-    return value != "";
+    return !value.empty();
 }
 DEFINE_validator(repl_conf_filename,&valid_repl_conf_filename); /* NOLINT */
 
@@ -72,11 +72,18 @@ static bool valid_repl_bgsave_interval(const char* flagname, double value){
 }
 DEFINE_validator(repl_bgsave_interval,&valid_repl_bgsave_interval); /* NOLINT */
 
+// 复制状态文件刷新间隔 sec
+DEFINE_double(repl_aof_interval, 1, "repl conf flush interval"); /* NOLINT */
+static bool valid_repl_aof_interval(const char* flagname, double value){
+    return value > 0;
+}
+DEFINE_validator(repl_aof_interval,&valid_repl_aof_interval); /* NOLINT */
+
 
 // database 文件名
 DEFINE_string(repl_database_filename, "naruto.db", "repl database file name"); /* NOLINT */
 static bool valid_repl_database_filename(const char* flagname, const std::string& value){
-    return value != "";
+    return !value.empty();
 }
 DEFINE_validator(repl_database_filename,&valid_repl_database_filename); /* NOLINT */
 

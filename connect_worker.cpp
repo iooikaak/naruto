@@ -41,29 +41,17 @@ void ConnectWorker::run(int id) {
 }
 
 void ConnectWorker::clientFree(narutoClient *nc) {
-    if (nc == nullptr) return;
-    conn_nums--;
-    LOG(INFO) << "connect worker: peer " << nc->remoteAddr()  <<  " " << nc->connect->errmsg();
-    // 停止 io 事件
-    nc->cw_io->stop();
-    if (nc->connect)
-        nc->connect->close();
-
-    switch (nc->flag) {
-        case narutoClient::flags::MASTER:
-            replica->cacheMaster();
-            break;
-        case narutoClient::flags::SLAVE:
-            replica->statSlave();
-            break;
-        default:
-            break;
-    }
-
+    std::shared_ptr<narutoClient> snc (nc);
+    clientFree(snc);
     delete nc;
 }
 
-void ConnectWorker::clientFree(std::shared_ptr<narutoClient>& nc) { clientFree(nc.get()); }
+void ConnectWorker::clientFree(std::shared_ptr<narutoClient>& nc) {
+    if (!nc) return;
+    nc->free();
+    conn_nums--;
+    LOG(INFO) << "connect worker: peer " << nc->remoteAddr()  <<  " " << nc->connect->errmsg();
+}
 
 void ConnectWorker::onAsync(ev::async& watcher, int events) {
     auto worker = static_cast<ConnectWorker*>(watcher.data);
@@ -74,10 +62,10 @@ void ConnectWorker::onAsync(ev::async& watcher, int events) {
 
         worker->conns.pop_front();
 
-        nc->cw_io = std::make_shared<ev::io>();
-        nc->cw_io->set<naruto::narutoClient, &naruto::narutoClient::onRead>(nc);
-        nc->cw_io->set(worker->loop);
-        nc->cw_io->start(nc->connect->fd(), ev::READ);
+        nc->cw_rio = std::make_shared<ev::io>();
+        nc->cw_rio->set<naruto::narutoClient, &naruto::narutoClient::onRead>(nc);
+        nc->cw_rio->set(worker->loop);
+        nc->cw_rio->start(nc->connect->fd(), ev::READ);
         worker->conn_nums++;
     }
 }

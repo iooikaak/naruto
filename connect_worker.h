@@ -43,7 +43,6 @@ public:
     ev::async stop_async_watcher;
     std::deque<narutoClient*> conns;
     uint64_t conn_nums;
-private:
 };
 
 extern int worker_num;

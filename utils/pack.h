@@ -32,9 +32,9 @@ public:
     /*
      * 从 @pack 解析到 @msg,返回消息的类型，如果解析失败返回 -1
      * */
-    static uint64_t deSerialize(utils::Bytes& pack, ::google::protobuf::Message& msg);
+    static uint16_t deSerialize(utils::Bytes& pack, ::google::protobuf::Message& msg);
 
-    static uint64_t deSerialize(const unsigned char* data, size_t n, ::google::protobuf::Message& msg);
+    static uint16_t deSerialize(const unsigned char* data, size_t n, ::google::protobuf::Message& msg);
 };
 
 }
