@@ -14,6 +14,7 @@
 void naruto::command::CommandSlaveof::exec(naruto::narutoClient *client) {
     replication::command_slaveof cmd;
     auto type = utils::Pack::deSerialize(client->rbuf, cmd);
+    LOG(INFO) << "Command slave of " << cmd.DebugString();
     if (type != client::Type::SLAVEOF) return;
 
     replica->setReplState(replState::CONNECT);
@@ -21,7 +22,6 @@ void naruto::command::CommandSlaveof::exec(naruto::narutoClient *client) {
     replica->setMasterHost(cmd.ip());
     replica->setIsMaster(false);
 
-    client->flag |= (unsigned)narutoClient::flags::SLAVE;
     client->lastinteraction = std::chrono::steady_clock::now();
     client::command_reply reply;
     reply.set_errcode(0);

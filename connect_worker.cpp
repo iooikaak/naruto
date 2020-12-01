@@ -10,7 +10,7 @@
 
 namespace naruto{
 
-ConnectWorker::ConnectWorker(): loop(), async_watcher(),conns(0),tid(0){}
+ConnectWorker::ConnectWorker(): loop(), async(), conns(0), tid(0){}
 
 ConnectWorker::~ConnectWorker() {
 //    LOG(INFO) << "~ConnectWorker stop, close conns..." << tid;
@@ -40,19 +40,6 @@ void ConnectWorker::run(int id) {
 //    LOG(INFO) << "connect worker run end......" << tid;
 }
 
-void ConnectWorker::clientFree(narutoClient *nc) {
-    std::shared_ptr<narutoClient> snc (nc);
-    clientFree(snc);
-    delete nc;
-}
-
-void ConnectWorker::clientFree(std::shared_ptr<narutoClient>& nc) {
-    if (!nc) return;
-    nc->free();
-    conn_nums--;
-    LOG(INFO) << "connect worker: peer " << nc->remoteAddr()  <<  " " << nc->connect->errmsg();
-}
-
 void ConnectWorker::onAsync(ev::async& watcher, int events) {
     auto worker = static_cast<ConnectWorker*>(watcher.data);
     while (!worker->conns.empty()){
@@ -76,7 +63,7 @@ void ConnectWorker::onStopAsync(ev::async &watcher, int events) {
     cw->loop.break_loop(ev::ALL);
 }
 
-void ConnectWorker::stop() { stop_async_watcher.send(); }
+void ConnectWorker::stop() { stop_async.send(); }
 
 
 int worker_num = (int)(sysconf(_SC_NPROCESSORS_CONF) * 2) - 1;;

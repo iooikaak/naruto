@@ -32,14 +32,13 @@ namespace naruto{
 class Naruto{
 public:
     void initializer();
-    ~Naruto();
     void onAccept(ev::io&, int);
+    void onAcceptRc(ev::io&, int);
     static void onSignal(ev::sig&, int);
-
-    // 向集群中的所有断线或者未连接节点发送消息
-    // 遍历所有节点，检查是否需要将某个节点标记为下线
     void onCron(ev::timer&, int);
     void start();
+
+    ~Naruto();
 private:
     void _init_workers();
     void _init_cron();
@@ -48,66 +47,41 @@ private:
     void _listen();
 
     // 处理信号，任务线程执行频率
-    bool _cluster_enable;
-    ev::io accept_watcher_;
+    std::string run_id_;
+    bool cluster_enable_;
+    ev::io ct_rio_;
+    ev::io rc_rio_;
+
     ev::sig sigint_;
     ev::sig sigterm_;
     ev::sig sigkill_;
     ev::timer timer_watcher_;
-    ev::default_loop _loop{};
     std::shared_ptr<Cluster> cluster_;
 
-    // 本服务器运行时的ID，每次重启都会变化，运行中则不会变
-    // 唯一标识一个运行中的实例
-    std::string _run_id;
-
     // TCP
-    int _port;
-    int _fd;
-    int _tcp_backlog;
+    int fd_;
+    int rc_fd_;
+    int tcp_backlog_;
 
-    // Client
-    // 一个链表，保存了所有客户端状态结构
-    std::list<std::shared_ptr<narutoClient>> _clents;
-
-    // 链表，保存了所有待关闭的客户端
-    std::list<std::shared_ptr<narutoClient>> _slaves;
-
-    bool _clients_paused; // 暂停客户端
-    mstime_t _clients_pause_end_time;
-
-    // RDB / AOF
-    bool _loading;
-    off_t _loading_total_bytes;
-    off_t _loading_loaded_bytes;
-
-    time_t _loading_start_time;
-    off_t _loading_process_events_interval_bytes;
+    bool clients_paused_; // 暂停客户端
+    mstime_t clients_pause_end_time_;
 
     // stat
-    int _connect_nums;
+    int connect_nums_;
     // 服务器启动时间
-    time_t _stat_start_time;
+    time_t stat_start_time_;
     // 已处理命令的数量
-    long long _stat_num_commands;
+    long long stat_num_commands_;
     // 服务器接到的连接请求数量
-    long long _stat_num_connections;
+    long long stat_num_connections_;
     // 已过期的键数量
-    long long _stat_expire_keys;
+    long long stat_expire_keys_;
     // 成功查找键的次数
-    long long _stat_keyspace_hits;
+    long long stat_keyspace_hits_;
     // 查找键失败的次数
-    long long _stat_keyspace_miss;
+    long long stat_keyspace_miss_;
     // 已使用内存峰值
-    size_t _stat_peak_memory;
-    // 服务器因为客户端数量过多而拒绝客户端连接的次数
-    long long _stat_rejected_conn;
-    // 执行 full sync 的次数
-    long long _stat_sync_full;
-    // PSYNC 成功执行的次数
-    long long _stat_sync_partial_ok;
-    // PSYNC 执行失败的次数
-    long long _stat_sync_partial_err;
+    size_t stat_peak_memory_;
 };
 
 extern Naruto* server;

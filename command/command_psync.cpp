@@ -103,8 +103,8 @@ void naruto::command::CommandPsync::exec(naruto::narutoClient *client) {
         }
     }
 
-    client->flag &= (unsigned) narutoClient::flags::SLAVE;
-    client->sendMsg(reply, type);
+    client->flag |= (unsigned) narutoClient::flags::SLAVE;
+    client->write(reply, type);
 }
 
 void naruto::command::CommandPsync::execMsg(uint16_t flag, uint16_t type, const unsigned char *msg, size_t n) {

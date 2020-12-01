@@ -25,22 +25,20 @@ namespace naruto{
 
 class ConnectWorker {
 public:
-    ConnectWorker();
-    ~ConnectWorker();
+    explicit ConnectWorker();
     void run(int id);
-    void clientFree(narutoClient* nc);
-    void clientFree(std::shared_ptr<narutoClient>& nc);
+    void stop();
+    ~ConnectWorker();
+
     static void onAsync(ev::async& watcher, int events);
     static void onStopAsync(ev::async& watcher, int events);
-
-    void stop();
 
     int tid;
     ev::dynamic_loop loop;
     // 用户触发新连接到来
-    ev::async async_watcher;
+    ev::async async;
     // 用于触发停止worker线程
-    ev::async stop_async_watcher;
+    ev::async stop_async;
     std::deque<narutoClient*> conns;
     uint64_t conn_nums;
 };

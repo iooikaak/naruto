@@ -147,29 +147,24 @@ void naruto::Replication::_remove_bgsave_tmp_file(pid_t childpid) {
     unlink(tmpfile.c_str());
 }
 
-void naruto::Replication::release(std::shared_ptr<narutoClient>& nc) {
-    if (!nc) return;
-    nc->free();
-
-    if (nc->flag & (unsigned)narutoClient::flags::MASTER){
-        cacheMaster();
-    }
-
-    if (nc->flag & (unsigned)narutoClient::flags::SLAVE){
-        statSlave();
-        slaves_.remove(nc.get());
-    }
-    master_ = nullptr;
+void naruto::Replication::addSlave(naruto::narutoClient *nc) {
+    if (nc == nullptr) return;
+    LOG(INFO) << "Add slave.....";
+    slaves_.push_back(nc);
 }
 
-void naruto::Replication::addSlave(naruto::narutoClient *nc) { slaves_.push_back(nc); }
+//void naruto::Replication::removeSlave(const naruto::narutoClient *nc) {
+//    if (nc == nullptr) return;
+//    slaves_.remove(nc);
+//}
 
 void naruto::Replication::stop() {
     for(const auto& v : slaves_){
-        v->free();
+        v->close();
     }
     if (master_){
-        master_->free();
+        master_->close();
+        master_= nullptr;
     }
     _backlog_flush();
 }
@@ -190,7 +185,7 @@ void naruto::Replication::onReplCron(ev::timer& watcher, int event) {
         _undo_connect_master();
     }
 
-    LOG(INFO) << "onReplCron...1";
+//    LOG(INFO) << "onReplCron...1";
     // dump db 传送超时
     if (!master_host_.empty() && repl_state_ == replState::TRANSFOR
         && last_transfer.count() > repl_timeout_ms){
@@ -199,60 +194,62 @@ void naruto::Replication::onReplCron(ev::timer& watcher, int event) {
     }
 
 
-    LOG(INFO) << "onReplCron...2";
+//    LOG(INFO) << "onReplCron...2";
     // 从服务器曾经连接上主服务器，但现在超时
     if (!master_host_.empty() && repl_state_ == replState::CONNECTED){
         auto last_interaction = duration_cast<milliseconds>(repl_unixtime_ - master_->lastinteraction);
         if (last_interaction.count() > repl_timeout_ms){
             LOG(WARNING) <<"MASTER timeout: no data nor PING received...";
-            release(master_);
+            master_->close();
+            cacheMaster();
         }
     }
 
-    LOG(INFO) << "onReplCron...3";
+//    LOG(INFO) << "onReplCron...3";
     // 尝试连接主服务器
     if (!master_host_.empty() && repl_state_ == replState::CONNECT){ _connect_master(); }
-    LOG(INFO) << "onReplCron...4";
+//    LOG(INFO) << "onReplCron...4";
 
-    // 定期向主服务器发送 ACK 命令
+    // 定期向主服务器发送心跳
     if (!master_host_.empty() && master_ && repl_state_ == replState::CONNECTED){ _heartbeat(); }
 
-    LOG(INFO) << "onReplCron...5";
+//    LOG(INFO) << "onReplCron...5";
+
 
     // ====================== master 情况 ===========================
+    //    LOG(INFO) << "onReplCron...6";
+    // 断开超时从服务器
+    slaves_.remove_if([this](narutoClient* nc){
+        LOG(INFO) << "Remove slave....0";
+        auto interval = duration_cast<milliseconds>(repl_unixtime_ - nc->lastinteraction);
+        if (nc->connect->broken() ||
+            (nc->repl_state == replState::CONNECTED && interval.count() > repl_timeout_sec_*1000)){
+            LOG(INFO) << "Remove slave....1";
+            return true;
+        }
+        LOG(INFO) << "Remove slave....2";
+        return false;
+    });
+
     // 如果服务器有从服务器，定时向它们发送 PING 。
     // 这样从服务器就可以实现显式的超时判断机制，
     // 即使 TCP 连接未断开也是如此。
     if ((cronloops_ % repl_ping_slave_period_) == 0 && !slaves_.empty()){
         replication::command_ping ping;
         ping.set_ip("127.0.0.1");
+        LOG(INFO) << "Send ping to slave size-->>>" << slaves_.size();
         for (const auto& slave : slaves_){
-            LOG(INFO) << "send ping to slave 1-->>>" << slave->connect->remoteAddr();
+            LOG(INFO) << "Send ping to slave 1-->>>" << slave->remoteAddr();
             slave->sendMsg(ping, client::PING);
-            LOG(INFO) << "send ping to slave 2-->>>" << slave->connect->remoteAddr();
         }
     }
-
-    LOG(INFO) << "onReplCron...6";
-    // 断开超时从服务器
-    auto it = slaves_.begin();
-    while (it != slaves_.end()){
-        LOG(INFO) << "onReplCron...6-1";
-        auto interval = duration_cast<milliseconds>(repl_unixtime_ - (*it)->lastinteraction);
-        if ((*it)->repl_state == replState::CONNECTED && interval.count() > repl_timeout_ms){
-            slaves_.erase(it);
-            workers[master_->worker_id].clientFree(*it);
-        }
-        it++;
-    }
-
-    LOG(INFO) << "onReplCron...7";
+//    LOG(INFO) << "onReplCron...7";
     _merge_backlog_feed_slaves();
 }
 
 // 定时把复制的一些持久状态保存到文件，重启时需要加载
 void naruto::Replication::onReplConfFlushCron(ev::timer& watcher, int event) {
-    if (master_ && !master_->repl_run_id.empty()){ // slave
+    if (master_ && !master_->repl_run_id.empty() && !master_->repl_aof_file_name.empty()){ // slave
         repl_conf_.master_run_id = master_->repl_run_id;
         repl_conf_.master_aof_name = master_->repl_aof_file_name;
         repl_conf_.master_aof_off = master_->repl_aof_off;
@@ -407,13 +404,14 @@ void naruto::Replication::onSyncWithMaster(ev::io & watcher, int event) {
     // 向主服务器发送一个非阻塞的 PING
     // 因为接下来的 RDB 文件发送非常耗时，所以我们想确认主服务器真的能访问
     if (repl_state_ == replState::CONNECTING){
-        LOG(INFO) << "Repl state CONNECTING, send PING to master";
+        LOG(INFO) << "Repl state CONNECTING";
         repl_state_ = replState::RECEIVE_PONG;
         repl_ev_io_w_->stop();
 
         replication::command_ping ping;
         ping.set_ip("1111");
         master_->write(ping, client::PING);
+        LOG(INFO) << "Repl state CONNECTING, send PING to master";
         // 返回，等待 PONG 到达
         return;
     }
@@ -580,14 +578,15 @@ void naruto::Replication::_connect_master() {
     // 连接并监听主服务的读写事件
     master_ = std::make_shared<narutoClient>();
     master_->connect = std::make_shared<naruto::connection::Connect>(ops);
-
+    master_->worker_id = worker_num;
     if (master_->connect->connect() != CONNECT_RT_OK){
         LOG(ERROR) << "Fail connecting to MASTER " << ops.host << ":" << ops.port << " errmsg:"
                    << master_->connect->errmsg();
         return;
     }
+    master_->remote_addr = master_->connect->remoteAddr();
 
-
+    master_->flag |= (unsigned)narutoClient::flags::MASTER;
     repl_ev_io_r_ = std::make_shared<ev::io>();
     repl_ev_io_r_->set<Replication, &Replication::onSyncWithMaster>(this);
     repl_ev_io_r_->set(ev::get_default_loop());
@@ -616,13 +615,11 @@ void naruto::Replication::_abort_sync_transfer() {
 }
 
 void naruto::Replication::_heartbeat() {
-    LOG(INFO) << "_heartbeat.......0";
-    if (master_ != nullptr){
-        LOG(INFO) << "_heartbeat.......1";
-        replication::command_ping ping;
-        ping.set_ip("127.0.0.1");
-        master_->sendMsg(ping , client::PING);
-    }
+    if (!master_ || master_->connect->broken()) return;
+    LOG(INFO) << "heartbeat.......";
+    replication::command_ping ping;
+    ping.set_ip("127.0.0.1");
+    master_->sendMsg(ping , client::PING);
 }
 
 int naruto::Replication::_slave_try_partial_resynchronization(int fd) {

@@ -140,8 +140,8 @@ public:
 
     void backlogFeed(int tid, const ::google::protobuf::Message&, uint16_t type);
     void backlogFeed(int tid, utils::Bytes& pack);
-    void release(std::shared_ptr<narutoClient>&);
     void addSlave(narutoClient*);
+
     void cacheMaster();
     void discardCacheMaster();
     void statSlave(); // close slave 时记录一些统计数据

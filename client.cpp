@@ -17,7 +17,7 @@ DECLARE_string(repl_dir);
 DECLARE_double(repl_aof_interval);
 
 naruto::narutoClient::narutoClient() {
-    flag &=(unsigned)flags::NONE;
+    flag |=(unsigned)flags::NONE;
     worker_id = -1;
     repl_state = replState::NONE;
     repl_run_id = "";
@@ -42,7 +42,7 @@ void naruto::narutoClient::onRead(ev::io &watcher, int events) {
         rbuf.clear();
         connect->recv(rbuf);
     }catch (utils::Error& e){
-        free();
+        close();
         return;
     }
 
@@ -76,14 +76,14 @@ void naruto::narutoClient::onSendBulkToSlave(ev::io& watcher, int event) {
 
     if ((buflen = repl_db_f->gcount()) <= 0){
         LOG(ERROR) << "Read error sending DB to slave: " << ((buflen == 0) ? "premature EOF" : strerror(errno));
-        workers[worker_id].clientFree(this);
+        close();
         return;
     }
 
     if ((nwritten = ::write(connect->fd(), buf, buflen)) == -1){
         if (errno != EAGAIN){
             LOG(WARNING) << "Write error sending DB to slave: " << strerror(errno);
-            workers[worker_id].clientFree(this);
+            close();
         }
         return;
     }
@@ -154,41 +154,38 @@ void naruto::narutoClient::onSendIncrToSlave(ev::timer& watcher, int event) {
     sendMsg(multi, client::MULTI);
 }
 
-void naruto::narutoClient::free() const {
-    LOG(INFO) << "client free " << remoteAddr()  <<  " " << connect->errmsg();
+void naruto::narutoClient::close() const {
+    LOG(INFO) << "client close " << remoteAddr()  <<  " errmsg " << connect->errmsg();
     // 停止 io 事件
-    if (cw_rio)
-        cw_rio->stop();
-    if (repl_rio)
-        repl_rio->stop();
-    if (repl_tio)
-        repl_tio->stop();
-    if (connect)
-        connect->close();
+    if (cw_rio) cw_rio->stop();
+    if (repl_rio) repl_rio->stop();
+    if (repl_tio) repl_tio->stop();
+    if (connect) connect->close();
+    if (repl_db_f) repl_db_f->close();
 }
 
 void naruto::narutoClient::onWrite(ev::io &watcher, int events) {
-    watcher.stop();
     if (wbuf.size() == 0) return;
-
     try {
         connect->send(wbuf);
         wbuf.clear();
     } catch (std::exception& e) {
+        close();
         LOG(ERROR) << "Connect to " << remoteAddr() << " fail " << e.what();
-        workers[worker_id].clientFree(this);
     }
+    watcher.stop();
 }
 
 void naruto::narutoClient::sendMsg(const ::google::protobuf::Message & msg, uint16_t type) {
     wio.set<narutoClient, &narutoClient::onWrite>(this);
-
-    if ((flag & (unsigned)flags::SLAVE) || flag & (unsigned)flags::MASTER){
+    LOG(INFO) << "sendMsg worker_id=" << worker_id;
+    if (worker_id == worker_num){ // repl or cluster
         wio.set(ev::get_default_loop());
+        LOG(INFO) << "sendMsg-->>1";
     }else{
         wio.set(workers[worker_id].loop);
+        LOG(INFO) << "sendMsg-->>2";
     }
-
     wio.start(connect->fd(), ev::WRITE);
     utils::Pack::serialize(msg, type, wbuf);
 }
@@ -216,4 +213,4 @@ uint64_t naruto::narutoClient::read(::google::protobuf::Message& cmd) const {
     return utils::Pack::deSerialize(pack, cmd);
 }
 
-std::string naruto::narutoClient::remoteAddr() const { return ip + ":" + port; }
+std::string naruto::narutoClient::remoteAddr() const { return remote_addr; }

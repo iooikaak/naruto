@@ -3,29 +3,31 @@
 //
 
 #include "connection_pool.h"
+
+#include <utility>
 #include "utils/errors.h"
 
 namespace naruto::connection{
 
-ConnectionPool::ConnectionPool(const ConnectionPoolOptions &pool_opts,
-                               const ConnectOptions &opts) : _pool_opts(pool_opts), _opts(opts) {
-    if (_pool_opts.max_conns == 0){
+ConnectionPool::ConnectionPool(ConnectionPoolOptions pool_opts,
+                               ConnectOptions opts) : pool_opts_(pool_opts), opts_(std::move(opts)) {
+    if (pool_opts_.max_conns == 0){
         naruto::utils::throw_err(CONNECT_ERROR_OTHER, "can not create an empty pool");
     }
 }
 
-Connect ConnectionPool::fetch() {
-    LOG(INFO) << "ConnectionPool _used_connections:" << _used_connections << " _pool size:" << _pool.size();
-    std::unique_lock<std::mutex> lock(_mutex);
-    if (_pool.empty()){
-        if (_used_connections == _pool_opts.max_conns){
+std::shared_ptr<Connect> ConnectionPool::fetch() {
+    LOG(INFO) << "ConnectionPool _used_connections:" << used_connections_ << " _pool size:" << pool_.size();
+    std::unique_lock<std::mutex> lock(mutex_);
+    if (pool_.empty()){
+        if (used_connections_ >= pool_opts_.max_conns){
             _wait_for_connect(lock);
         }else{
             try {
-                auto connection = _create();
-                connection.update_last_active();
-                ++_used_connections;
-                return connection;
+                auto conn = _create();
+                conn->update_last_active();
+                ++used_connections_;
+                return conn;
             }catch (const naruto::utils::Error& e){
                 throw;
             }
@@ -34,69 +36,67 @@ Connect ConnectionPool::fetch() {
 
     auto connection = _fetch();
     lock.unlock();
-
-    auto connection_lifetime = _pool_opts.connection_lifetime;
-    if (_need_reconnect(connection, connection_lifetime)){
+    if (_need_reconnect(connection)){
+        connection->close();
         try {
-            connection.reconnect();
+            connection->reconnect();
         }catch (const naruto::utils::Error& e){
-            release(std::move(connection));
+            LOG(ERROR) << "ConnectPool fetch bad connect and reconnect Fail "<< e.what();
             throw;
         }
     }
-    connection.update_last_active();
-    return std::move(connection);
+    connection->update_last_active();
+    return connection;
 }
 
-void ConnectionPool::release(Connect connection) {
+void ConnectionPool::release(std::shared_ptr<Connect> connection) {
     {
-        std::lock_guard<std::mutex> lock(_mutex);
-        _pool.push_back(std::move(connection));
+        std::lock_guard<std::mutex> lock(mutex_);
+        pool_.push_back(std::move(connection));
     }
-    _cv.notify_one();
+    cv_.notify_one();
+    LOG(INFO) << "ConnectionPool size " << pool_.size();
 }
 
-bool ConnectionPool::_need_reconnect(const Connect &conn, const std::chrono::milliseconds &lifetime) const {
-    if (conn.broken()){ return true ;}
+bool ConnectionPool::_need_reconnect(const std::shared_ptr<Connect> &conn) const {
+    if (conn->broken()){ return true ;}
 
-    if (lifetime > std::chrono::milliseconds(0)){
+    if (pool_opts_.connection_lifetime > std::chrono::milliseconds(0)){
         auto now = std::chrono::steady_clock::now();
-        if ((now - conn.last_active()) > lifetime ){
+        if ((now - conn->last_active()) > pool_opts_.connection_lifetime  ){
             return true;
         }
     }
     return false;
 }
 
-Connect ConnectionPool::_fetch() {
-    assert(!_pool.empty());
-    auto connection = std::move(_pool.front());
-    _pool.pop_front();
-    return connection;
+std::shared_ptr<Connect> ConnectionPool::_fetch() {
+    assert(!pool_.empty());
+    auto c = pool_.front();
+    pool_.pop_front();
+    return c;
 }
 
-Connect ConnectionPool::_create() {
-    LOG(INFO) << "_create----1";
-    auto conn =  Connect(_opts);
-    LOG(INFO) << "_create----2";
-    if (conn.connect() != CONNECT_RT_OK)
-        naruto::utils::throw_err(conn.errcode(), conn.errmsg());
+std::shared_ptr<Connect> ConnectionPool::_create() {
+    auto conn = std::make_shared<Connect>(opts_);
+    if (conn->connect() != CONNECT_RT_OK)
+        naruto::utils::throw_err(conn->errcode(), conn->errmsg());
     return conn;
 }
 
 void ConnectionPool::_wait_for_connect(std::unique_lock<std::mutex>& lock) {
-    LOG(INFO) << "_wait_for_connect..." << _pool_opts.wait_timeout.count();
-    auto timeout = _pool_opts.wait_timeout;
+    LOG(INFO) << "_wait_for_connect..." << pool_opts_.wait_timeout.count();
+    auto timeout = pool_opts_.wait_timeout;
     if (timeout > std::chrono::milliseconds(0)){
-        if (_cv.wait_for(lock, timeout, [this]{
-            return !(this->_pool.empty());
+        if (cv_.wait_for(lock, timeout, [this]{
+            return !(this->pool_.empty());
         })){
             naruto::utils::throw_err(CONNECT_ERROR_OTHER, "fetch a connection time out in " +
                                                           std::to_string(timeout.count()) + " milliseconds");
         }
     }else{
-        _cv.wait(lock, [this] {
-            return !(this->_pool.empty());
+        cv_.wait(lock, [this] {
+            return !(this->pool_.empty());
         });
     }
 }

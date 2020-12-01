@@ -8,17 +8,12 @@
 #include "utils/bytes.h"
 
 // 定义 FD 无效值
-#define FD_INVALID -1
+#define FD_INVALID (-1)
 
 // 定义成员函数返回值
 #define CONNECT_RT_OK 0
-#define CONNECT_RT_ERR -1
-#define CONNECT_RT_CLOSE -2
-
-// 定义连接类型
-#define CONNECT_FLAGS_INIT 0x00 // 初始化
-#define CONNECT_FLAGS_BLOCK 0x1  // 阻塞
-#define CONNECT_FLAGS_CONNECTED 0x2 // 已连接
+#define CONNECT_RT_ERR (-1)
+#define CONNECT_RT_CLOSE (-2)
 
 #define CONNECT_RETRIES 10
 #define CONNECT_READ_BUF_SIZE (1024*16)
@@ -47,6 +42,16 @@ public:
 
 class Connect {
 public:
+    enum class flags : unsigned {
+        BLOCK = (1<<0),
+        NO_BLOCK = (1<<1)
+    };
+    enum class status : unsigned {
+        INIT = (1<<0),
+        CONNECTED = (1<<1),
+        CLOSE = (1<<2)
+    };
+public:
     explicit Connect(int fd);
     explicit Connect(ConnectOptions);
 
@@ -55,16 +60,17 @@ public:
 
     Connect(Connect&&) = default;
     Connect& operator = (Connect&&) = default;
-
+    ~Connect();
     int connect();
 
     void reset() noexcept;
-
+    int send(const char*, size_t);
     void send(naruto::utils::Bytes&);
     void recv(naruto::utils::Bytes&);
-    std::string remoteAddr();
+    std::string remoteAddr() const;
+    std::string addr() const; // 连接地址
 
-    int fd();
+    int fd() const;
     void setOps(const ConnectOptions&);
 
     bool broken() const noexcept;
@@ -95,22 +101,22 @@ private:
     int _set_connect_timeout();
 
     void _set_error(int type, const std::string& prefix);
-    int _write_pack(naruto::utils::Bytes&);
-    int _read_pack(naruto::utils::Bytes&);
+    int write_(naruto::utils::Bytes &pack);
+    int read_(naruto::utils::Bytes &pack);
 
-    struct sockaddr* _addr;
-    size_t _addrlen;
+    struct sockaddr* addr_;
+    size_t addrlen_;
 
-    int _err{};
-    std::string _errmsg;
+    int err_;
+    std::string errmsg_;
 
-    int _fd;
-    int _flags;
-
+    int fd_;
+    unsigned flag_{};
+    status status_ {};
     char _ibuf[CONNECT_READ_BUF_SIZE]{};
 
-    ConnectOptions _opts;
-    std::chrono::time_point<std::chrono::steady_clock> _last_active{};
+    ConnectOptions opts_;
+    std::chrono::steady_clock::time_point _last_active{};
 };
 
 }

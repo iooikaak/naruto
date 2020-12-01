@@ -14,20 +14,23 @@ naruto::kunai::Kunai::Kunai(const naruto::kunai::Options &opts) {
 void naruto::kunai::Kunai::execute(google::protobuf::Message &msg,
                               int type, google::protobuf::Message &reply) {
     auto conn = pool_->fetch();
+    LOG(INFO) << "execute-->>1";
     utils::Bytes pack;
     utils::Pack::serialize(msg, type, pack);
-    conn.send(pack);
-
+    conn->send(pack);
+    LOG(INFO) << "execute-->>2";
     pack.clear();
-
-    conn.recv(pack);
+    LOG(INFO) << "execute-->>3";
+    conn->recv(pack);
+    LOG(INFO) << "execute-->>4";
     utils::Pack::deSerialize(pack, reply);
+    LOG(INFO) << "execute-->>5";
     pool_->release(std::move(conn));
+    LOG(INFO) << "execute-->>6";
 }
 
 client::command_hget_reply
 naruto::kunai::Kunai::hget(const std::string &key, std::initializer_list<std::string> fileds) {
-    auto conn = pool_->fetch();
     client::command_hget hget;
     hget.set_key(key);
     for(const auto& v : fileds){

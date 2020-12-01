@@ -11,8 +11,6 @@
 #include "net.h"
 
 int naruto::utils::Net::listen(int port, int tcp_backlog) {
-    LOG(INFO) << "net listen port:" << port << " tcp_backlog:" << tcp_backlog;
-
     struct sockaddr_in addr{};
     int addr_len = sizeof(addr);
     int sd;
@@ -21,24 +19,23 @@ int naruto::utils::Net::listen(int port, int tcp_backlog) {
         return -1;
     }
 
-    LOG(INFO) << "net listen bind sd:" << sd;
     bzero(&addr, sizeof(addr));
     addr.sin_family = AF_INET;
     addr.sin_port = htons(port);
     addr.sin_addr.s_addr = INADDR_ANY;
 
     if (setSocketReuseAddr(sd) == -1){
-        LOG(ERROR) << "_listen _set_socket error:" << strerror(errno);
+        LOG(ERROR) << "listen _set_socket error:" << strerror(errno);
         return -1;
     }
 
     if (::bind(sd, (const struct sockaddr*)&addr, addr_len) != 0){
-        LOG(ERROR) << "_listen bind error:" << strerror(errno);
+        LOG(ERROR) << "listen bind error:" << strerror(errno);
         return -1;
     }
 
     if (::listen(sd, tcp_backlog) < 0){
-        LOG(ERROR) << "_listen error:" << strerror(errno);
+        LOG(ERROR) << "listen error:" << strerror(errno);
         return -1;
     }
     return sd;

@@ -36,7 +36,7 @@ public:
 
     uint64_t read(::google::protobuf::Message& msg) const; // 同步
     void write(const ::google::protobuf::Message& msg, uint16_t type) const; // 同步
-    void free() const;
+    void close() const;
     std::string remoteAddr() const;
 
     int worker_id;
@@ -44,8 +44,7 @@ public:
     std::shared_ptr<ev::io> repl_rio; // slave 接收 master 增量复制io
     std::shared_ptr<ev::timer> repl_tio; // master 定时发送增量数据
 
-    std::string ip;
-    std::string port;
+    std::string remote_addr;
     std::shared_ptr<connection::Connect> connect;
     unsigned int flag;
     ev::io wio;

@@ -15,6 +15,14 @@ static bool valid_port(const char* flagname, int value){
 }
 DEFINE_validator(port,&valid_port); /* NOLINT */
 
+DEFINE_int32(rc_port, 7291, "peers listen port"); /* NOLINT */
+static bool valid_rc_port(const char* flagname, int value){
+    LOG(INFO) << "argument peers port:" << value;
+    return true;
+}
+DEFINE_validator(rc_port,&valid_rc_port); /* NOLINT */
+
+
 DEFINE_int32(cron_interval,1, "server time cron seconds"); /* NOLINT */
 static bool valid_cron_interval(const char* flagname, int value){
     LOG(INFO) << "argument cron_interval:" << value;

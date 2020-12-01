@@ -5,8 +5,7 @@
 
 #include "errors.h"
 
-namespace naruto{
-namespace utils{
+namespace naruto::utils{
 
 void throw_err(int err_type, const std::string& errmsg){
     switch (err_type)
@@ -33,5 +32,4 @@ void throw_err(int err_type, const std::string& errmsg){
     }
 }
 
-}
 }

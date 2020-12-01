@@ -23,39 +23,41 @@
 namespace naruto::connection{
 
 Connect::Connect(int fd) {
-    _fd = fd;
-    LOG(INFO) << "new connect fd:" << _fd;
-    _flags = CONNECT_FLAGS_CONNECTED;
-    _addr = nullptr;
-    _addrlen = 0;
-    _err = CONNECT_RT_OK;
-    _errmsg = "";
-    _opts = ConnectOptions();
+    fd_ = fd;
+    LOG(INFO) << "new connect fd:" << fd_;
+    flag_ |= (unsigned)flags::NO_BLOCK;
+    status_ = status::INIT;
+    addr_ = nullptr;
+    addrlen_ = 0;
+    err_ = CONNECT_RT_OK;
+    errmsg_ = "";
+    opts_ = ConnectOptions();
     memset(_ibuf,0,CONNECT_READ_BUF_SIZE);
 }
 
-Connect::Connect(ConnectOptions opts) : _opts(std::move(opts)) {
-    _fd = -1;
-    _addr = nullptr;
-    _addrlen = 0;
-    _err = CONNECT_RT_OK;
-    _errmsg = "";
-    _flags = CONNECT_FLAGS_INIT;
+Connect::Connect(ConnectOptions opts) : opts_(std::move(opts)) {
+    fd_ = -1;
+    addr_ = nullptr;
+    addrlen_ = 0;
+    err_ = CONNECT_RT_OK;
+    errmsg_ = "";
+    flag_ |= (unsigned)flags::NO_BLOCK;
     memset(_ibuf,0,CONNECT_READ_BUF_SIZE);
 }
+
+Connect::~Connect() { if (addr_ != nullptr) free(addr_); }
 
 int Connect::connect() {
-    if (_flags & CONNECT_FLAGS_CONNECTED) return CONNECT_RT_OK;
+    if (status_ == status::CONNECTED) return CONNECT_RT_OK;
 
     int client_fd;
     struct sockaddr_in addr{};
     memset(&addr, 0, sizeof(addr));
     addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = inet_addr(_opts.host.c_str());
+    addr.sin_addr.s_addr = inet_addr(opts_.host.c_str());
+    addr.sin_port = htons(opts_.port);
 
-    addr.sin_port = htons(_opts.port);
-
-    int blocking = (_flags & CONNECT_FLAGS_BLOCK);
+    unsigned blocking = (flag_ & (unsigned)flags::BLOCK);
     int retry_times = 0;
 
     if ((client_fd = ::socket(PF_INET, SOCK_STREAM, 0)) < 0){
@@ -86,24 +88,24 @@ int Connect::connect() {
         return CONNECT_RT_ERR;
     }
 
-    _fd = client_fd;
+    fd_ = client_fd;
 
     if (_set_blocking(false) != CONNECT_RT_OK){
         _set_error(CONNECT_ERROR_OTHER, "_set_blocking");
         return CONNECT_RT_ERR;
     }
 
-    _flags |= CONNECT_FLAGS_CONNECTED;
-    _addr = (struct sockaddr*) malloc(sizeof(struct sockaddr));
-    memcpy(_addr, (sockaddr*)&addr, sizeof(struct sockaddr));
+    status_ = status::CONNECTED;
+    addr_ = (struct sockaddr*) malloc(sizeof(struct sockaddr));
+    memcpy(addr_, (sockaddr*)&addr, sizeof(struct sockaddr));
 
-    LOG(INFO) << "connected port:" << _opts.port;
+    LOG(INFO) << "connected port " << opts_.port;
     return _set_connect_timeout();
 }
 
-void Connect::setOps(const ConnectOptions & ops) { _opts = ops; }
+void Connect::setOps(const ConnectOptions & ops) { opts_ = ops; }
 
-std::string Connect::remoteAddr() {
+std::string Connect::remoteAddr() const {
     sockaddr_in sa{};
     socklen_t len = sizeof(sa);
     ::getpeername(fd(), (struct sockaddr*)&sa, &len);
@@ -112,14 +114,16 @@ std::string Connect::remoteAddr() {
     return std::string(ip) + ":" + std::to_string(port);
 }
 
-void Connect::reset() noexcept { _err = 0; _errmsg.clear(); }
+std::string Connect::addr() const { return opts_.host + ":" + std::to_string(opts_.port); }
+
+void Connect::reset() noexcept { err_ = 0; errmsg_.clear(); }
 
 // 重连
 void Connect::reconnect(){
-    Connect conn(_opts);
+    Connect conn(opts_);
 
     if (conn.connect() != CONNECT_RT_OK)
-        naruto::utils::throw_err(_err, _errmsg);
+        naruto::utils::throw_err(err_, errmsg_);
 
     assert(!conn.broken());
 
@@ -127,32 +131,32 @@ void Connect::reconnect(){
     swap(*this, conn);
 }
 
-int Connect::fd() { return _fd; }
+int Connect::fd() const { return fd_; }
 
-auto Connect::last_active() const ->
-std::chrono::time_point<std::chrono::steady_clock> { return _last_active; }
+auto Connect::last_active() const -> std::chrono::steady_clock::time_point { return _last_active; }
 
 void Connect::update_last_active() noexcept { _last_active = std::chrono::steady_clock::now(); }
 
 void swap(Connect &lc, Connect &rc) noexcept {
-    std::swap(lc._flags, rc._flags);
-    std::swap(lc._fd, rc._fd);
-    std::swap(lc._addrlen, rc._addrlen);
-    std::swap(lc._addr, rc._addr);
-    std::swap(lc._err,rc._err);
-    std::swap(lc._errmsg,rc._errmsg);
-    std::swap(lc._opts,rc._opts);
+    std::swap(lc.flag_, rc.flag_);
+    std::swap(lc.fd_, rc.fd_);
+    std::swap(lc.addrlen_, rc.addrlen_);
+    memcpy(lc.addr_, rc.addr_, sizeof(struct sockaddr));
+    std::swap(lc.err_, rc.err_);
+    std::swap(lc.errmsg_, rc.errmsg_);
+    std::swap(lc.status_, rc.status_);
+    std::swap(lc.opts_, rc.opts_);
     std::swap(lc._last_active, rc._last_active);
 }
 
 int Connect::_set_connect_timeout(){
-    timeval read_timeout = utils::Basic::to_timeval(_opts.read_timeout);
-    timeval write_timeout = utils::Basic::to_timeval(_opts.write_timeout);
-    if (setsockopt(_fd, SOL_SOCKET, SO_RCVTIMEO, &read_timeout, sizeof(read_timeout))){
+    timeval read_timeout = utils::Basic::to_timeval(opts_.read_timeout);
+    timeval write_timeout = utils::Basic::to_timeval(opts_.write_timeout);
+    if (setsockopt(fd_, SOL_SOCKET, SO_RCVTIMEO, &read_timeout, sizeof(read_timeout))){
         _set_error(CONNECT_ERROR_IO,"setsockopt(SO_RCVTIMEO)");
         return CONNECT_RT_ERR;
     }
-    if (setsockopt(_fd, SOL_SOCKET, SO_SNDTIMEO, &write_timeout, sizeof(write_timeout))){
+    if (setsockopt(fd_, SOL_SOCKET, SO_SNDTIMEO, &write_timeout, sizeof(write_timeout))){
         _set_error(CONNECT_ERROR_IO,"setsockopt(SO_SNDTIMEO)");
         return CONNECT_RT_ERR;
     }
@@ -160,7 +164,7 @@ int Connect::_set_connect_timeout(){
 }
 
 long Connect::_connect_timeout_msec(){
-    long msec = std::chrono::duration_cast<std::chrono::microseconds>(_opts.connect_timeout).count();
+    long msec = std::chrono::duration_cast<std::chrono::microseconds>(opts_.connect_timeout).count();
     if (msec < 0 || msec > INT_MAX){
         msec = INT_MAX;
     }
@@ -169,7 +173,7 @@ long Connect::_connect_timeout_msec(){
 
 int Connect::_wait_ready(long msec){
     struct pollfd wfd[1];
-    wfd[0].fd = _fd;
+    wfd[0].fd = fd_;
     wfd[0].events = POLLOUT;
 
     if (errno != EINPROGRESS){
@@ -199,7 +203,7 @@ int Connect::_wait_ready(long msec){
 }
 
 int Connect::_check_connect_done(int* completed){
-    int rc = ::connect(_fd, reinterpret_cast<const struct sockaddr*>(_addr), _addrlen);
+    int rc = ::connect(fd_, const_cast<const struct sockaddr*>(addr_), addrlen_);
     if (rc == 0){
         *completed = 1;
         return CONNECT_RT_OK;
@@ -225,7 +229,7 @@ int Connect::_check_socket_error(){
     int errno_saved = errno;
     socklen_t errlen = sizeof(err);
 
-    if (getsockopt(_fd, SOL_SOCKET, SO_ERROR, &err, &errlen) == -1){
+    if (getsockopt(fd_, SOL_SOCKET, SO_ERROR, &err, &errlen) == -1){
         _set_error(CONNECT_ERROR_IO, "getsockopt(SO_ERROR)");
         return CONNECT_RT_ERR;
     }
@@ -244,7 +248,7 @@ int Connect::_check_socket_error(){
 
 int Connect::_set_blocking(bool blocking){
     int flags;
-    if ((flags = fcntl(_fd, F_GETFL)) == -1){
+    if ((flags = fcntl(fd_, F_GETFL)) == -1){
         _set_error(CONNECT_ERROR_IO, "fcntl(F_GETFL)");
         close();
         return CONNECT_RT_ERR;
@@ -252,11 +256,10 @@ int Connect::_set_blocking(bool blocking){
     if (blocking){
         flags &= ~O_NONBLOCK; // 阻塞
     }else{
-        std::cout << "_set_blocking O_NONBLOCK" << std::endl;
         flags |= O_NONBLOCK; // 非阻塞
     }
 
-    if (fcntl(_fd, F_SETFL, flags) == -1){
+    if (fcntl(fd_, F_SETFL, flags) == -1){
         _set_error(CONNECT_ERROR_IO,"fcntl(F_SETFL)");
         close();
         return CONNECT_RT_ERR;
@@ -265,105 +268,114 @@ int Connect::_set_blocking(bool blocking){
 }
 
 void Connect::close() {
-    if (_fd != FD_INVALID){
-        ::close(_fd);
-        _fd = FD_INVALID;
+    if (fd_ != FD_INVALID){
+        ::close(fd_);
+        fd_ = FD_INVALID;
     }
+    status_ = status::CLOSE;
 }
 
 // 立即写
 void Connect::send(naruto::utils::Bytes & pack) {
-    if (_write_pack(pack) != CONNECT_RT_OK)
-        naruto::utils::throw_err(_err, _errmsg);
+    if (write_(pack) != CONNECT_RT_OK)
+        naruto::utils::throw_err(err_, errmsg_);
 }
 
 void Connect::recv(naruto::utils::Bytes & pack) {
-    if (_read_pack(pack) != CONNECT_RT_OK)
-        naruto::utils::throw_err(_err, _errmsg);
+    if (read_(pack) != CONNECT_RT_OK)
+        naruto::utils::throw_err(err_, errmsg_);
 }
 
-bool Connect::broken() const noexcept { return _err != CONNECT_RT_OK; }
+bool Connect::broken() const noexcept {
+    return (err_ != CONNECT_RT_OK) || (status_ != status::CONNECTED);
+}
 
-std::string Connect::errmsg() const { return _errmsg; }
+std::string Connect::errmsg() const { return errmsg_; }
 
-int Connect::errcode() const { return _err; }
+int Connect::errcode() const { return err_; }
 
 void Connect::_set_error(int type, const std::string &prefix) {
-    _err = type;
+    err_ = type;
     char buf[128] = {0};
     strerror_r(errno, buf, sizeof(buf));
-    _errmsg.clear();
+    errmsg_.clear();
     if (!prefix.empty()){
-        _errmsg.append(prefix).append(":");
+        errmsg_.append(prefix).append(":");
     }
-    _errmsg.append(buf);
+    errmsg_.append(buf);
 }
 
-int Connect::_write_pack(naruto::utils::Bytes & pack) {
-    bool done = false;
-    int size = pack.size();
-    char* buf = (char*) pack.data();
-    int next_len = size;
+int Connect::send(const char * buf, size_t n) {
+    long size = n;
+    long next_len = size;
     ssize_t send_size = 0;
-    do{
-        if (_err) return CONNECT_RT_ERR;
-        ssize_t n = ::send(_fd, &buf[send_size], next_len, 0);
-        if (n < 0){
+    while (true){
+        if (err_) return CONNECT_RT_ERR;
+        ssize_t writed = ::send(fd_, &buf[send_size], next_len, 0);
+        if (writed == 0) {
+            _set_error(CONNECT_RT_CLOSE, "connect closed");
+            return CONNECT_RT_CLOSE;
+        } else if (writed < 0){
             // 阻塞或者中断
-            if ((errno == EWOULDBLOCK && !(_flags & CONNECT_FLAGS_BLOCK)) || errno == EINTR){
+            if ((errno == EWOULDBLOCK &&
+                    !(flag_ & (unsigned)flags::BLOCK)) || errno == EINTR){
                 /* Try again later */
             }else{
                 _set_error(CONNECT_ERROR_IO, "send(buf)");
                 return CONNECT_RT_ERR;
             }
-        } else if ( n > 0 ){
-            send_size += n;
+        }else{
+            send_size += writed;
             if (send_size == size){
-                done = true;
+                break;
             }else{
                 next_len = size - send_size;
             }
         }
-    }while(!done);
+    }
     return CONNECT_RT_OK;
 }
 
-int Connect::_read_pack(naruto::utils::Bytes & pack) {
+int Connect::write_(naruto::utils::Bytes & pack) {
+    return send((const char*)pack.data(), pack.size());
+}
+
+int Connect::read_(naruto::utils::Bytes& pack) {
     pack.clear();
-    bool done = false;
-    ssize_t readed_num = 0;
+    ssize_t readn = 0;
     size_t next_len = PACK_HEAD_LEN;
-    do{
-        readed_num = ::recv(_fd, _ibuf, next_len, 0);
-        if (readed_num == -1){
-            if ((errno == EWOULDBLOCK && !(_flags & CONNECT_FLAGS_BLOCK)) || errno == EINTR){
+    while (true){
+        if (err_) return CONNECT_RT_ERR;
+        readn = ::recv(fd_, _ibuf, next_len, 0);
+        if (readn == 0){
+            _set_error(CONNECT_RT_CLOSE, "connect closed");
+            return CONNECT_RT_CLOSE;
+        } else if (readn < 0){ // TODO: 阻塞
+            LOG(INFO) << "1";
+            if ((errno == EWOULDBLOCK && !(flag_ & (unsigned)flags::BLOCK)) || errno == EINTR){
                 /* Try again later */
-            }else if (errno == ETIMEDOUT && (_flags & CONNECT_FLAGS_BLOCK)){
+                LOG(INFO) << "2";
+            }else if (errno == ETIMEDOUT && (flag_ & (unsigned)flags::BLOCK)){
+                LOG(INFO) << "3";
                 _set_error(CONNECT_ERROR_TIMEOUT, "_read_pack timeout");
                 return CONNECT_RT_ERR;
             }else{
+                LOG(INFO) << "4-->>" << fd_ << " errno-->>"<< errno;
                 _set_error(CONNECT_ERROR_IO,"_read_pack");
                 return CONNECT_RT_ERR;
             }
-        }else if (readed_num == 0){
-            _set_error(CONNECT_ERROR_EOF, "server closed the connection");
-            return CONNECT_RT_ERR;
-
-        }else if (readed_num > 0){ // 只读一个完整的包，不多读
-            pack.putBytes((uint8_t*)_ibuf, readed_num);
+        }else { // 只读一个完整的包，不多读
+            pack.putBytes((uint8_t*)_ibuf, readn);
             if (pack.size()  >= PACK_HEAD_LEN){
                 uint32_t length = pack.getInt(0);
-                if (pack.size() == length){ // 拿到了完成的包
-                    done = true;
-                }
+                if (pack.size() == length) break; // 拿到了完成的包
                 next_len = length - pack.size();
                 if (next_len > CONNECT_READ_BUF_SIZE) next_len = CONNECT_READ_BUF_SIZE;
             }else{
-                next_len = PACK_HEAD_LEN - readed_num;
+                next_len = PACK_HEAD_LEN - readn;
             }
         }
-    }while (!done);
-
+    }
     return CONNECT_RT_OK;
 }
 
