@@ -31,7 +31,7 @@ public:
     void onSendIncrToSlave(ev::timer&, int);
 
     void sendMsg(const ::google::protobuf::Message& msg, uint16_t type); // 异步
-    uint16_t sendMsg(const ::google::protobuf::Message& question, uint16_t type,::google::protobuf::Message& answer);
+    uint16_t sendMsg(const ::google::protobuf::Message& question, uint16_t type,::google::protobuf::Message& answer) const;
     uint64_t recvMsg(::google::protobuf::Message& msg);
 
     uint64_t read(::google::protobuf::Message& msg) const; // 同步

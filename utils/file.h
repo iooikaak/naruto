@@ -15,6 +15,8 @@ class File {
 public:
     static void listAof(const std::string&dir, std::vector<std::string>&, const std::string& after = "");
     static std::string nextAof(const std::string& aofname);
+    // 如果 aofname 的下一个文件存在，则 aofname = next aof
+    static bool hasNextAof(const std::string& dir, std::string& aofname);
     static int parseFileName(const std::string &);
 
     static void loadFile(const std::string& filename,  uint64_t offset, const std::function<void(uint16_t,uint16_t,const unsigned char*, size_t)>&);

@@ -5,6 +5,7 @@ enum synctype{
   NF = 0;
   FULLSYNC = 1;
   PARTSYNC = 2;
+  TRYSYNC = 3;
 }
 
 message command_slaveof{

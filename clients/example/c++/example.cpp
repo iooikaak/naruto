@@ -35,13 +35,13 @@ void test02(){
     naruto::kunai::Kunai c(opts);
     auto reply = c.slaveof("127.0.0.1",7291);
     LOG(INFO) <<"reply:" << reply.DebugString();
-    std::this_thread::sleep_for(std::chrono::seconds(5));
-
-    auto reply1 = c.hget("test_1",{"field_1"});
-    LOG(INFO) << "reply:" << "\n" << reply1.DebugString();
+//    std::this_thread::sleep_for(std::chrono::seconds(5));
+//
+//    auto reply1 = c.hget("test_1",{"field_1"});
+//    LOG(INFO) << "reply:" << "\n" << reply1.DebugString();
 }
 
 int main(int argc, char* argv[]){
-    test01();
-//    test02();
+//    test01();
+    test02();
 }

@@ -25,7 +25,7 @@ namespace naruto::connection{
 Connect::Connect(int fd) {
     fd_ = fd;
     LOG(INFO) << "new connect fd:" << fd_;
-    flag_ |= (unsigned)flags::NO_BLOCK;
+    flag_ |= (unsigned)flags::BLOCK;
     status_ = status::INIT;
     addr_ = nullptr;
     addrlen_ = 0;
@@ -41,7 +41,7 @@ Connect::Connect(ConnectOptions opts) : opts_(std::move(opts)) {
     addrlen_ = 0;
     err_ = CONNECT_RT_OK;
     errmsg_ = "";
-    flag_ |= (unsigned)flags::NO_BLOCK;
+    flag_ |= (unsigned)flags::BLOCK;
     memset(_ibuf,0,CONNECT_READ_BUF_SIZE);
 }
 
@@ -90,7 +90,7 @@ int Connect::connect() {
 
     fd_ = client_fd;
 
-    if (_set_blocking(false) != CONNECT_RT_OK){
+    if (_set_blocking(true) != CONNECT_RT_OK){
         _set_error(CONNECT_ERROR_OTHER, "_set_blocking");
         return CONNECT_RT_ERR;
     }
@@ -254,8 +254,10 @@ int Connect::_set_blocking(bool blocking){
         return CONNECT_RT_ERR;
     }
     if (blocking){
+        LOG(INFO) << "阻塞";
         flags &= ~O_NONBLOCK; // 阻塞
     }else{
+        LOG(INFO) << "非阻塞";
         flags |= O_NONBLOCK; // 非阻塞
     }
 
@@ -311,7 +313,7 @@ int Connect::send(const char * buf, size_t n) {
     ssize_t send_size = 0;
     while (true){
         if (err_) return CONNECT_RT_ERR;
-        ssize_t writed = ::send(fd_, &buf[send_size], next_len, 0);
+        ssize_t writed = ::send(fd_, &buf[send_size], next_len, MSG_WAITALL);
         if (writed == 0) {
             _set_error(CONNECT_RT_CLOSE, "connect closed");
             return CONNECT_RT_CLOSE;
@@ -346,22 +348,18 @@ int Connect::read_(naruto::utils::Bytes& pack) {
     size_t next_len = PACK_HEAD_LEN;
     while (true){
         if (err_) return CONNECT_RT_ERR;
-        readn = ::recv(fd_, _ibuf, next_len, 0);
+        readn = ::recv(fd_, _ibuf, next_len, MSG_WAITALL);
         if (readn == 0){
             _set_error(CONNECT_RT_CLOSE, "connect closed");
             return CONNECT_RT_CLOSE;
-        } else if (readn < 0){ // TODO: 阻塞
-            LOG(INFO) << "1";
+        } else if (readn < 0){
             if ((errno == EWOULDBLOCK && !(flag_ & (unsigned)flags::BLOCK)) || errno == EINTR){
                 /* Try again later */
-                LOG(INFO) << "2";
             }else if (errno == ETIMEDOUT && (flag_ & (unsigned)flags::BLOCK)){
-                LOG(INFO) << "3";
-                _set_error(CONNECT_ERROR_TIMEOUT, "_read_pack timeout");
+                _set_error(CONNECT_ERROR_TIMEOUT, "read_(timeout)");
                 return CONNECT_RT_ERR;
             }else{
-                LOG(INFO) << "4-->>" << fd_ << " errno-->>"<< errno;
-                _set_error(CONNECT_ERROR_IO,"_read_pack");
+                _set_error(CONNECT_ERROR_IO,"read_(io)");
                 return CONNECT_RT_ERR;
             }
         }else { // 只读一个完整的包，不多读

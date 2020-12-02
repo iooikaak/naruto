@@ -46,6 +46,14 @@ std::string naruto::utils::File::nextAof(const std::string &aofname) {
     return "naruto.aof."+ std::to_string(idx + 1);
 }
 
+bool naruto::utils::File::hasNextAof(const std::string &dir, std::string &aofname) {
+    std::string next = nextAof(aofname);
+    if (next.empty()) return false;
+    if (size(dir + "/" + next) == -1) return false;
+    aofname = next;
+    return true;
+}
+
 int naruto::utils::File::parseFileName(const std::string & v) {
     auto pos = v.find_last_of('.');
     if (pos == std::string::npos){
@@ -94,7 +102,6 @@ void naruto::utils::File::saveJson(nlohmann::json &j, const std::string &filenam
 int64_t naruto::utils::File::size(const std::string &filename) {
     std::ifstream in(filename, std::ios::in);
     if (!in.is_open()) return -1;
-
     in.seekg(0, std::ios::end);
     auto pos = in.tellg();
     in.close();

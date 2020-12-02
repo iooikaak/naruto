@@ -149,7 +149,6 @@ void naruto::Replication::_remove_bgsave_tmp_file(pid_t childpid) {
 
 void naruto::Replication::addSlave(naruto::narutoClient *nc) {
     if (nc == nullptr) return;
-    LOG(INFO) << "Add slave.....";
     slaves_.push_back(nc);
 }
 
@@ -220,14 +219,11 @@ void naruto::Replication::onReplCron(ev::timer& watcher, int event) {
     //    LOG(INFO) << "onReplCron...6";
     // 断开超时从服务器
     slaves_.remove_if([this](narutoClient* nc){
-        LOG(INFO) << "Remove slave....0";
         auto interval = duration_cast<milliseconds>(repl_unixtime_ - nc->lastinteraction);
         if (nc->connect->broken() ||
             (nc->repl_state == replState::CONNECTED && interval.count() > repl_timeout_sec_*1000)){
-            LOG(INFO) << "Remove slave....1";
             return true;
         }
-        LOG(INFO) << "Remove slave....2";
         return false;
     });
 
@@ -237,9 +233,8 @@ void naruto::Replication::onReplCron(ev::timer& watcher, int event) {
     if ((cronloops_ % repl_ping_slave_period_) == 0 && !slaves_.empty()){
         replication::command_ping ping;
         ping.set_ip("127.0.0.1");
-        LOG(INFO) << "Send ping to slave size-->>>" << slaves_.size();
         for (const auto& slave : slaves_){
-            LOG(INFO) << "Send ping to slave 1-->>>" << slave->remoteAddr();
+            if (slave->repl_state != replState::CONNECTED) continue;
             slave->sendMsg(ping, client::PING);
         }
     }
@@ -260,14 +255,11 @@ void naruto::Replication::onReplConfFlushCron(ev::timer& watcher, int event) {
     repl_conf_.toJson((FLAGS_repl_dir + "/" + FLAGS_repl_conf_filename));
 }
 
-void naruto::Replication::onBgsave(ev::timer& watcher, int event) {
-    if (database::buckets->size() == 0){
-        LOG(INFO) << "Bgsave database empty,give up bgsave.";
-        return;
-    }
+void naruto::Replication::onBgsave(ev::timer& watcher, int event) { bgsave(); }
 
+void naruto::Replication::bgsave() {
+    if (database::buckets->size() == 0)return;
     if (bgsave_child_pid_ != -1) return;
-
     bgsave_last_try_ = std::chrono::steady_clock::now();
     pid_t childpid;
     if ((childpid = ::fork()) == 0){ // child
@@ -277,8 +269,7 @@ void naruto::Replication::onBgsave(ev::timer& watcher, int event) {
         _exit(ret >= 0 ? 0 : ret);
     } else {
         if (childpid == -1){
-            bgsave_last_status_ = -1;
-            LOG(INFO) << "Can't save in background, fork: " << strerror(errno);
+            LOG(INFO) << "Can't save in background fork " << strerror(errno);
             return;
         }
 
@@ -304,8 +295,7 @@ void naruto::Replication::onBgsaveFinish(ev::child& child, int events) {
     std::string tempfile = _bgsave_file_name(child.pid);
     std::string db_name = FLAGS_repl_dir + "/" + FLAGS_repl_database_filename;
     if (::rename(tempfile.c_str(), db_name.c_str()) == -1){
-        LOG(ERROR) << "Error trying to rename " << tempfile
-                   << " to " << db_name << " the temporary DB file: " << strerror(errno);
+        LOG(ERROR) << "Error trying to rename " << tempfile << " to " << db_name << " the temporary DB file: " << strerror(errno);
         _remove_bgsave_tmp_file(child.pid);
     }else{
         auto end = steady_clock::now();
@@ -377,18 +367,11 @@ void naruto::Replication::onReadSyncBulkPayload(ev::io& watcher, int event) {
 
 void naruto::Replication::onSyncWithMaster(ev::io & watcher, int event) {
     if (repl_state_ == replState::NONE) {
-        ::close(watcher.fd);
+        master_->close();
         return;
     }
-    if (event & ev::READ)
-        LOG(INFO) << "onSyncWithMaster ev::READ";
-    if (event & ev::WRITE)
-        LOG(INFO) << "onSyncWithMaster ev::WRITE";
 
-    int tryret, dfd, maxtries = 5;
-    int sockerr = 0;
-    int type = 0;
-
+    int tryret=0 ,sockerr = 0;
     socklen_t errlen = sizeof(sockerr);
     // 检查套接字错误
     if (getsockopt(watcher.fd, SOL_SOCKET, SO_ERROR, &sockerr, &errlen) == -1)
@@ -435,8 +418,7 @@ void naruto::Replication::onSyncWithMaster(ev::io & watcher, int event) {
     if (tryret == 0) return;
 
 error:
-    ::close(watcher.fd);
-    if (repl_transfer_f_) repl_transfer_f_->close();
+    master_->close();
     repl_state_ = replState::CONNECT;
 }
 
@@ -692,6 +674,10 @@ int naruto::Replication::_slave_try_partial_resynchronization(int fd) {
         master_->repl_rio->set<naruto::narutoClient, &naruto::narutoClient::onRead>(master_.get());
         master_->repl_rio->set(ev::get_default_loop());
         master_->repl_rio->start(master_->connect->fd(), ev::READ);
+
+    } else if (reply.psync_type() == replication::TRYSYNC){
+        LOG(WARNING) << "MASTER <-> SLAVE sync: Master is something wrong try SYNC next time.";
+        return -1;
     }else {
         LOG(ERROR) << "Unexpected sync type to PSYNC from master " << reply.psync_type();
         return -1;

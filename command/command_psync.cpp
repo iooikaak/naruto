@@ -63,23 +63,30 @@ void naruto::command::CommandPsync::exec(naruto::narutoClient *client) {
         }
         case 2: // 全量同步
         {
-            std::string dbname = FLAGS_repl_dir + "/" + FLAGS_repl_database_filename;
-            int64_t size = utils::File::size(dbname);
-            reply.set_psync_type(replication::FULLSYNC);
-            reply.set_repl_database_size(size);
-            reply.set_repl_aof_file_name(rc.db_dump_aof_name);
-            reply.set_repl_aof_off(rc.db_dump_aof_off);
-            client->repl_state = replState::TRANSFOR;
-            client->repl_dbsize = size;
-            client->repl_dboff = 0;
-            client->repl_db_f = std::make_shared<std::ifstream>(dbname, std::ios::in);
-            client->repl_aof_file_name = rc.db_dump_aof_name;
-            client->repl_aof_off = rc.db_dump_aof_off;
+            if (rc.db_dump_aof_name.empty()){
+                reply.set_psync_type(replication::TRYSYNC);
+                client->repl_state = replState::WAIT_BGSAVE;
+                // 触发一次bgsave
+                replica->bgsave();
+            }else{
+                std::string dbname = FLAGS_repl_dir + "/" + FLAGS_repl_database_filename;
+                int64_t size = utils::File::size(dbname);
+                reply.set_psync_type(replication::FULLSYNC);
+                reply.set_repl_database_size(size);
+                reply.set_repl_aof_file_name(rc.db_dump_aof_name);
+                reply.set_repl_aof_off(rc.db_dump_aof_off);
+                client->repl_state = replState::TRANSFOR;
+                client->repl_dbsize = size;
+                client->repl_dboff = 0;
+                client->repl_db_f = std::make_shared<std::ifstream>(dbname, std::ios::in);
+                client->repl_aof_file_name = rc.db_dump_aof_name;
+                client->repl_aof_off = rc.db_dump_aof_off;
 
-            auto* w = new ev::io;
-            w->set<narutoClient, &narutoClient::onSendBulkToSlave>(client);
-            w->set(ev::get_default_loop());
-            w->start(client->connect->fd(), ev::WRITE);
+                auto* w = new ev::io;
+                w->set<narutoClient, &narutoClient::onSendBulkToSlave>(client);
+                w->set(ev::get_default_loop());
+                w->start(client->connect->fd(), ev::WRITE);
+            }
             break;
         }
         case 3: // 部分同步

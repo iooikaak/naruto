@@ -106,13 +106,17 @@ void naruto::narutoClient::onSendBulkToSlave(ev::io& watcher, int event) {
 }
 
 void naruto::narutoClient::onSendIncrToSlave(ev::timer& watcher, int event) {
-    LOG(INFO) << "onSendIncrToSlave----->>0";
     if (repl_aof_file_name.empty()) return;
-    LOG(INFO) << "onSendIncrToSlave---1-->>" << repl_aof_file_name;
-
     std::string aofname = FLAGS_repl_dir + "/" + repl_aof_file_name;
     std::ifstream in(aofname, std::ios::in|std::ios::binary);
     if (!in.is_open()) return;
+    if (in.peek() == EOF){ // 文件为空
+        if (utils::File::hasNextAof(FLAGS_repl_dir, repl_aof_file_name)){
+            repl_aof_off = 0;
+        }
+        return;
+    }
+
     in.seekg(repl_aof_off, std::ios::beg);
     in.peek();
     int64_t total = 0;
@@ -136,13 +140,15 @@ void naruto::narutoClient::onSendIncrToSlave(ev::timer& watcher, int event) {
             s[body_size] = '\0';
             multi.mutable_commands()->Add(s);
         }
-
         if (total >= TRANSFER_BUF_LEN) break;
     }
+
     LOG(INFO) << "onSendIncrToSlave----->>4";
     if (in.eof()){
-        repl_aof_file_name = utils::File::nextAof(repl_aof_file_name);
-        repl_aof_off = 0;
+        // 文件有数据并且读到了文件结尾，且有下一个aof文件，则更新slave复制信息
+        if (utils::File::hasNextAof(FLAGS_repl_dir,repl_aof_file_name)){
+            repl_aof_off = 0;
+        }
     }else{
         repl_aof_off = in.tellg();
     }
@@ -178,20 +184,17 @@ void naruto::narutoClient::onWrite(ev::io &watcher, int events) {
 
 void naruto::narutoClient::sendMsg(const ::google::protobuf::Message & msg, uint16_t type) {
     wio.set<narutoClient, &narutoClient::onWrite>(this);
-    LOG(INFO) << "sendMsg worker_id=" << worker_id;
     if (worker_id == worker_num){ // repl or cluster
         wio.set(ev::get_default_loop());
-        LOG(INFO) << "sendMsg-->>1";
     }else{
         wio.set(workers[worker_id].loop);
-        LOG(INFO) << "sendMsg-->>2";
     }
     wio.start(connect->fd(), ev::WRITE);
     utils::Pack::serialize(msg, type, wbuf);
 }
 
 uint16_t naruto::narutoClient::sendMsg(const ::google::protobuf::Message &question, uint16_t type,
-                                       ::google::protobuf::Message &answer) {
+                                       ::google::protobuf::Message &answer) const {
     write(question, type);
     return read(answer);
 }
