@@ -61,13 +61,10 @@ void Naruto::onAccept(ev::io& watcher, int events) {
     // 唤醒worker
     LOG(INFO) << "onAccept OK! dispatch connect, client_sd=" << client->connect->fd() << " watcher.fd=" << watcher.fd
         << " addr:" << client->remote_addr;
-
     int index = connect_nums_ % worker_num;
     client->worker_id = index; // record work id
-
     workers[index].conns.push_back(client);
     workers[index].async.send();
-
     connect_nums_++;
 }
 

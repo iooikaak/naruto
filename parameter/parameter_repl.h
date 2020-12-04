@@ -10,6 +10,7 @@
 // ======================== replication ========================
 // 复制积压缓冲大小
 #define DEFAULT_REPL_BACK_LOG_SIZE (10*1024*1024)
+#define DEFAULT_REPL_AOF_ROTATE_SIZE (500 * 1024 * 1024)
 DEFINE_int32(repl_back_log_size, DEFAULT_REPL_BACK_LOG_SIZE, "repl back log fize"); /* NOLINT */
 static bool valid_repl_back_log_size(const char* flagname, int value){
     return value > 0;
@@ -38,7 +39,7 @@ static bool valid_repl_ping_slave_period(const char* flagname, double value){
 DEFINE_validator(repl_ping_slave_period,&valid_repl_ping_slave_period); /* NOLINT */
 
 // aof 文件大小
-DEFINE_int32(repl_aof_rotate_size, 10, "aof file rotate size"); /* NOLINT */
+DEFINE_int32(repl_aof_rotate_size, DEFAULT_REPL_AOF_ROTATE_SIZE, "aof file rotate size"); /* NOLINT */
 static bool valid_repl_aof_rotate_size(const char* flagname, int value){
     return value > 1;
 }

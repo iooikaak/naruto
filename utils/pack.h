@@ -29,6 +29,8 @@ public:
     static void serialize( const ::google::protobuf::Message& msg, uint16_t type, utils::Bytes& pack);
 
     static void serialize(const ::google::protobuf::Message& msg, uint16_t type, std::ostream* out);
+
+    static void serialize(const unsigned char* msg, size_t n, uint16_t type, utils::Bytes& pack);
     /*
      * 从 @pack 解析到 @msg,返回消息的类型，如果解析失败返回 -1
      * */

@@ -40,7 +40,6 @@ std::shared_ptr<naruto::database::element> naruto::database::Buckets::get(const 
 }
 
 void naruto::database::Buckets::put(const std::string & key, const std::string & field , std::shared_ptr<element> v) {
-//    LOG(INFO) << "database put...";
     return buckets_[hash_(key) % bucket_size_]->put(key, field, v);
 }
 
@@ -73,25 +72,28 @@ void naruto::database::Buckets::parse(uint16_t flag, uint16_t type, const unsign
         element->create = time_point<system_clock, milliseconds>(milliseconds(feature.second.create()));
         element->lru = time_point<system_clock, milliseconds>(milliseconds(feature.second.lru()));
         element->expire = time_point<system_clock, milliseconds>(milliseconds(feature.second.expire()));
-        switch (feature.second.type()) {
-            case tensorflow::MAP:
-                element->ptr = std::make_shared<database::Map>();
-                break;
-            case tensorflow::INT:
-                element->ptr = std::make_shared<database::Number<int64_t>>();
-                break;
-            case tensorflow::INT_LIST:
-                element->ptr = std::make_shared<database::ListObject<int64_t>>();
-                break;
-            case tensorflow::BYTES:
-                element->ptr = std::make_shared<database::String>();
-                break;
-            case tensorflow::BYTES_LIST:
-                element->ptr = std::make_shared<database::ListObject<std::string>>();
-                break;
-            default:
-                continue;
+
+        if (feature.second.has_int64_value()){ // int64
+            element->ptr = std::make_shared<database::Number<int64_t>>();
+        } else if (feature.second.has_int64_list()){
+            element->ptr = std::make_shared<database::ListObject<int64_t>>();
+
+        }else if (feature.second.has_float_value()){ // float
+            element->ptr = std::make_shared<database::Number<float>>();
+        }else if (feature.second.has_float_list()){
+            element->ptr = std::make_shared<database::ListObject<float>>();
+
+        }else if (feature.second.has_bytes_value()){ // bytes
+            element->ptr = std::make_shared<database::String>();
+        } else if (feature.second.has_bytes_list()){
+            element->ptr = std::make_shared<database::ListObject<std::string>>();
+
+        }else if (feature.second.has_bytes_map()){ // bytes map
+            element->ptr = std::make_shared<database::Map>();
+        }else{
+            continue;
         }
+
         element->ptr->deSeralize(feature.second);
         put(features.id(), feature.first, element);
     }

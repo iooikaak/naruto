@@ -1,0 +1,29 @@
+//
+// Created by kwins on 2020/11/26.
+//
+
+#include "command_aof.h"
+#include "client.h"
+#include "protocol/client.pb.h"
+#include "replication.h"
+#include "commands.h"
+
+void naruto::command::CommandAof::exec(naruto::narutoClient *client) {
+    client::command_aof commandAof;
+    utils::Pack::deSerialize(client->rbuf, commandAof);
+    for (int i = 0; i < commandAof.commands_size(); ++i) {
+        auto type = commandAof.types(i);
+        auto msg = (const unsigned char*)commandAof.commands(i).c_str();
+        auto n = commandAof.commands(i).size();
+        commands->fetch(type)->execMsg(0, type, msg, n);
+        replica->backlogFeed(client->worker_id, msg, n, type);
+    }
+    client->repl_aof_file_name = commandAof.aof_name();
+    client->repl_aof_off = commandAof.aof_off();
+    LOG(INFO) << "CommandMulti commands size=" << commandAof.commands_size()
+     << " master_aof_name=" << client->repl_aof_file_name << " master_aof_off=" << client->repl_aof_off;
+}
+
+client::command_reply naruto::command::CommandAof::execMsg(uint16_t flag, uint16_t type, const unsigned char *msg, size_t n) {
+    return client::command_reply{};
+}

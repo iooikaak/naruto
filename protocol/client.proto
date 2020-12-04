@@ -9,11 +9,19 @@ message command_reply{
   string errmsg = 2;
 }
 
+message command_data{
+  oneof kind{
+    tensorflow.Float float_v = 1;
+    tensorflow.Int64 int64_v = 2;
+    tensorflow.Bytes bytes_v = 3;
+  }
+}
+
 message command_hset{
     string key = 1;
-    repeated string fields = 2;
-    repeated tensorflow.Feature values = 3;
-    repeated int64 ttls = 4;
+    string field = 2;
+    int64 ttl = 3;
+    command_data value = 4;
 }
 
 message command_hget{
@@ -26,10 +34,15 @@ message command_hget_reply{
   repeated tensorflow.Feature features = 2;
 }
 
-message command_multi{
+message command_aof{
   string aof_name = 1;
   int64 aof_off = 2;
   repeated int32 types = 3;
   repeated bytes commands = 4;
 }
 
+message command_hincr{
+  string key = 1;
+  string field = 2;
+  command_data value = 3;
+}

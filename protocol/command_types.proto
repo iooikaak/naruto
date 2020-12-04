@@ -12,4 +12,5 @@ enum Type{
   SLAVEOF = 7;
   HSET = 8;
   HGET = 9;
+  HINCR = 10;
 }

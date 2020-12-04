@@ -19,6 +19,16 @@ void naruto::utils::Pack::serialize(const ::google::protobuf::Message &msg, uint
     msg.SerializeToOstream(out);
 }
 
+void naruto::utils::Pack::serialize(const unsigned char *msg, size_t n, uint16_t type, naruto::utils::Bytes &pack) {
+    uint32_t body_size = n;
+    uint32_t pack_size = PACK_HEAD_LEN + body_size;
+    uint16_t flag = 0;
+    pack.putInt(pack_size);
+    pack.putShort(flag);
+    pack.putShort(type);
+    pack.putBytes((uint8_t*)msg, n);
+}
+
 uint16_t naruto::utils::Pack::deSerialize(naruto::utils::Bytes &pack, ::google::protobuf::Message &msg) {
     auto len = pack.getInt(PACK_HEAD_SIZE_INDEX);
     auto type =  pack.getShort(PACK_HEAD_TYPE_INDEX);

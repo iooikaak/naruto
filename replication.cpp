@@ -28,7 +28,7 @@ void naruto::Replication::initializer() {
     bgsave_child_pid_ = -1;
     repl_timeout_sec_ = FLAGS_repl_timeout_sec;
     repl_pos_ = 0;
-    repl_merge_size_ = worker_num;
+    repl_merge_size_ = worker_num + 1; // 包括主线程
     repl_command_incr_.store(0);
     back_log_.reserve(FLAGS_repl_back_log_size);
     master_repl_offset_ = 0;
@@ -46,13 +46,9 @@ void naruto::Replication::initializer() {
     aof_off_before_bgsave_ = -1;
     saveparams_.push_back(saveparam{
             .ms=std::chrono::milliseconds(5),
-            .changes=10,
+            .changes=1,
     });
 
-    saveparams_.push_back(saveparam{
-            .ms=std::chrono::milliseconds(100),
-            .changes=100,
-    });
     aof_file_ = std::make_shared<sink::RotateFileStream>(FLAGS_repl_dir, FLAGS_repl_aof_rotate_size);
     _init();
 }
@@ -69,7 +65,7 @@ void naruto::Replication::_init() {
               ;
     for (int i = 0; i < 2; ++i) {
         repl_[i] = std::make_shared<repl_workers>();
-        repl_[i]->resize(worker_num);
+        repl_[i]->resize(worker_num + 1);
     }
 
     // load database
@@ -84,6 +80,11 @@ void naruto::Replication::_init() {
     repl_conf_.fromJson(replname);
     if (repl_conf_.run_id.empty()){
         repl_conf_.run_id = utils::Basic::genRandomID();;
+    }
+    master_host_ = repl_conf_.master_ip;
+    master_port_ = repl_conf_.master_port;
+    if (!master_host_.empty() && master_port_ > 0){
+        repl_state_ = replState::CONNECT;
     }
     LOG(INFO) << "Replica load conf success.";
     LOG(INFO) << repl_conf_;
@@ -140,7 +141,7 @@ naruto::replState naruto::Replication::getReplState() const { return repl_state_
 
 void naruto::Replication::setReplState(naruto::replState repl_state) { repl_state_ = repl_state; }
 
-const naruto::replConf& naruto::Replication::getReplConf() const { return repl_conf_;}
+naruto::replConf& naruto::Replication::getReplConf() { return repl_conf_;}
 
 void naruto::Replication::_remove_bgsave_tmp_file(pid_t childpid) {
     std::string tmpfile = _bgsave_file_name(childpid);
@@ -151,11 +152,6 @@ void naruto::Replication::addSlave(naruto::narutoClient *nc) {
     if (nc == nullptr) return;
     slaves_.push_back(nc);
 }
-
-//void naruto::Replication::removeSlave(const naruto::narutoClient *nc) {
-//    if (nc == nullptr) return;
-//    slaves_.remove(nc);
-//}
 
 void naruto::Replication::stop() {
     for(const auto& v : slaves_){
@@ -242,9 +238,10 @@ void naruto::Replication::onReplCron(ev::timer& watcher, int event) {
     _merge_backlog_feed_slaves();
 }
 
-// 定时把复制的一些持久状态保存到文件，重启时需要加载
-void naruto::Replication::onReplConfFlushCron(ev::timer& watcher, int event) {
+void naruto::Replication::replConfFlush() {
     if (master_ && !master_->repl_run_id.empty() && !master_->repl_aof_file_name.empty()){ // slave
+        repl_conf_.master_ip = master_host_;
+        repl_conf_.master_port = master_port_;
         repl_conf_.master_run_id = master_->repl_run_id;
         repl_conf_.master_aof_name = master_->repl_aof_file_name;
         repl_conf_.master_aof_off = master_->repl_aof_off;
@@ -252,13 +249,19 @@ void naruto::Replication::onReplConfFlushCron(ev::timer& watcher, int event) {
     } else {
         repl_conf_.is_master = true;
     }
-    repl_conf_.toJson((FLAGS_repl_dir + "/" + FLAGS_repl_conf_filename));
+    repl_conf_.toJson(FLAGS_repl_dir + "/" + FLAGS_repl_conf_filename);
 }
+
+// 定时把复制的一些持久状态保存到文件，重启时需要加载
+void naruto::Replication::onReplConfFlushCron(ev::timer& watcher, int event) { replConfFlush();}
 
 void naruto::Replication::onBgsave(ev::timer& watcher, int event) { bgsave(); }
 
 void naruto::Replication::bgsave() {
-    if (database::buckets->size() == 0)return;
+    if (database::buckets->size() == 0) {
+        LOG(INFO) << "Bgsave buckets is empty.";
+        return;
+    }
     if (bgsave_child_pid_ != -1) return;
     bgsave_last_try_ = std::chrono::steady_clock::now();
     pid_t childpid;
@@ -422,6 +425,20 @@ error:
     repl_state_ = replState::CONNECT;
 }
 
+void naruto::Replication::backlogFeed(int tid, const unsigned char *s, size_t n, uint16_t type) {
+    auto repl = repl_[repl_pos_.load()];
+    LOG(INFO) << "backlogFeed--->>0-->>tid=" << tid;
+    // 写到复制积压缓冲区
+    auto& local_repl = (*repl)[tid];
+    auto command_id = repl_command_incr_.load();
+    repl_command_incr_++;
+    // 把 repl_command_incr_ 写在包的前面用于后续多路归并，八字节
+    local_repl.putLong(command_id);
+    LOG(INFO) << "backlogFeed--->>1";
+    utils::Pack::serialize(s, n, type, local_repl);
+    LOG(INFO) << "backlogFeed--->>2";
+}
+
 void naruto::Replication::backlogFeed(int tid, const ::google::protobuf::Message & msg, uint16_t type) {
     auto repl = repl_[repl_pos_.load()];
 
@@ -446,7 +463,7 @@ void naruto::Replication::backlogFeed(int tid, utils::Bytes& pack) {
 }
 
 void naruto::Replication::_backlog_feed(const unsigned char* data, size_t size) {
-//    client::command_hget_int cmd;
+//    client::command_hset cmd;
 //    utils::Pack::deSerialize(data, size, cmd);
 //
 //    LOG(INFO) << "_backlog_feed:" << cmd.DebugString();
@@ -461,36 +478,20 @@ void naruto::Replication::_backlog_feed(const unsigned char* data, size_t size) 
         ptr++;
         len--;
     }
-
-    // 判断是否将 aof 刷到文件
-    auto interval = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - last_flush_aof_time_);
-    bool is_save = false;
-    for (auto condition : saveparams_){
-        if (interval > condition.ms && dirty_ > condition.changes){
-            is_save = true;
-            break;
-        }
-    }
-//    if (changes_ == 100000){
-//        LOG(INFO) << " changes_ flush spends" << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - repl_transfer_lastio_).count() << "ms";
-//    }
-    // aof flush
-    if (is_save){ _backlog_flush(); }
 }
 
 void naruto::Replication::_backlog_flush() {
-    if (back_log_.size() == 0) return;
-
+    if (back_log_.empty()) return;
     aof_file_->write((const char*)&back_log_[0], back_log_.size());
     aof_file_->flush();
     master_flush_repl_offset_ += back_log_.size();
     last_flush_aof_time_ = std::chrono::steady_clock::now();
     back_log_.clear();
     dirty_ = 0;
+    replConfFlush();
 }
 
 void naruto::Replication::_merge_backlog_feed_slaves() {
-//    LOG(INFO) << "_merge_backlog_feed_slaves...1";
     auto cur_pos = repl_pos_.load();
     auto next_pos = 1 - cur_pos;
     for (int i = 0; i < repl_merge_size_; ++i) {
@@ -504,7 +505,10 @@ void naruto::Replication::_merge_backlog_feed_slaves() {
     id_list.reserve(repl_merge_size_);
 
     for (int j = 0; j < repl_merge_size_; ++j) {
-        if (p[j] < repl_data->at(j).size()){
+//        if (repl_data->at(j).size() > 0){
+//            LOG(INFO) << "repl slot " << j << " size " << repl_data->at(j).size() << " p[j]=" << p[j] ;
+//        }
+        if (repl_data->at(j).size() >0 && p[j] < repl_data->at(j).size()){
             id_list.push_back(indexLog{
                     .tid = j,
                     .id = repl_data->at(j).getLong(p[j]),
@@ -513,14 +517,15 @@ void naruto::Replication::_merge_backlog_feed_slaves() {
         }
     }
 
-//    LOG(INFO) << "_merge_backlog_feed_slaves...2";
+//    LOG(INFO) << "_merge_backlog_feed_slaves...2-->id_list size " << id_list.size();
     while (!id_list.empty()){
         std::sort(id_list.begin(), id_list.end(), [](const indexLog& l, const indexLog& r){
             return l.id < r.id;
         });
-//        for (int i = 0; i < repl_merge_size_; ++i) {
-//            LOG(INFO) << "id_list[" << i << "].tid=" << id_list[i].tid << " id=" << id_list[i].id;
+//        for(const auto& v: id_list){
+//            LOG(INFO) << "id_list tid=" << v.tid << " id=" << v.id;
 //        }
+
         // 找到最小的
         auto min_i = id_list.at(0).tid;
         auto pos = p[min_i];
@@ -543,6 +548,8 @@ void naruto::Replication::_merge_backlog_feed_slaves() {
             p.at(min_i) += sizeof(uint64_t);
         }
     }
+    // flush
+    _backlog_flush();
 }
 
 void naruto::Replication::_undo_connect_master() {

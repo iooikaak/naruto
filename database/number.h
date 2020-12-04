@@ -37,7 +37,10 @@ public:
 
     T get() const{ return data_.load(); }
 
-    void set(T v){ data_.store(v); }
+    void set(T v){
+        LOG(INFO) << "Number set -->>" << v;
+        data_.store(v);
+    }
 
     void incr(T v){ data_ += v; }
 

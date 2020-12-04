@@ -47,13 +47,14 @@ void naruto::narutoClient::onRead(ev::io &watcher, int events) {
     }
 
     uint32_t pack_size = rbuf.getInt();
-    uint8_t version = rbuf.get();
-    uint8_t flag = rbuf.get();
+    uint16_t fg = rbuf.getShort();
     uint16_t type = rbuf.getShort();
 
-    LOG(INFO) << "onRead------>> work:" << worker_id << " recv:" << remoteAddr() << " pack_size:"
-              << pack_size << " version:" << (unsigned)version << " flag:"
-              << (unsigned)flag << " type:" << (unsigned)type;
+    LOG(INFO) << "onRead------>> workid:"<< worker_id
+                << " recv:" << remoteAddr()
+                << " pack_size:" << pack_size
+                << " flag:"<< (unsigned)fg
+                << " type:" << client::Type_descriptor()->FindValueByNumber(type)->name();
 
     command::commands->fetch(type)->exec(this);
     switch ((client::Type)type) {
@@ -107,6 +108,10 @@ void naruto::narutoClient::onSendBulkToSlave(ev::io& watcher, int event) {
 
 void naruto::narutoClient::onSendIncrToSlave(ev::timer& watcher, int event) {
     if (repl_aof_file_name.empty()) return;
+    LOG(INFO) << "onSendIncrToSlave----->>2-->>"
+            << " repl_aof_file_name " << repl_aof_file_name
+            << " repl_aof_off " << repl_aof_off;
+
     std::string aofname = FLAGS_repl_dir + "/" + repl_aof_file_name;
     std::ifstream in(aofname, std::ios::in|std::ios::binary);
     if (!in.is_open()) return;
@@ -114,50 +119,54 @@ void naruto::narutoClient::onSendIncrToSlave(ev::timer& watcher, int event) {
         if (utils::File::hasNextAof(FLAGS_repl_dir, repl_aof_file_name)){
             repl_aof_off = 0;
         }
+        in.close();
         return;
     }
 
     in.seekg(repl_aof_off, std::ios::beg);
     in.peek();
-    int64_t total = 0;
-    client::command_multi multi;
+    int64_t readed = 0, pack_nums = 0;
+    client::command_aof multi;
     char temp[4096];
     utils::Bytes buffer;
-    LOG(INFO) << "onSendIncrToSlave----->>2";
+
     while (!in.eof()){
-        LOG(INFO) << "onSendIncrToSlave----->>3";
         in.read(temp, sizeof(temp));
         buffer.putBytes((uint8_t*)temp, in.gcount());
-        auto pack_size = buffer.getInt();
-        auto body_size = pack_size - PACK_HEAD_LEN;
-        buffer.getShort();
-        auto type = buffer.getShort();
-        if (buffer.size() >= pack_size){
-            char s[body_size + 1];
-            buffer.getBytes((uint8_t*)s, body_size);
-            total += (int64_t)body_size;
+        readed += (int64_t)in.gcount();
+
+        while (buffer.bytesRemaining() > PACK_SIZE_LEN){
+            uint32_t pack_size = buffer.getInt();
+            if (buffer.bytesRemaining() < pack_size - sizeof(pack_size)){
+                break; // 读取不够一个包
+            }
+            uint16_t fg = buffer.getShort();
+            uint16_t type = buffer.getShort();
+
+            unsigned body_size = pack_size - PACK_HEAD_LEN;
+            char msg[body_size + 1];
+            buffer.getBytes((uint8_t*)msg, body_size);
+            msg[body_size] = '\0';
             multi.mutable_types()->Add(type);
-            s[body_size] = '\0';
-            multi.mutable_commands()->Add(s);
+            multi.mutable_commands()->Add(msg);
+            pack_nums++;
         }
-        if (total >= TRANSFER_BUF_LEN) break;
+        if (readed >= TRANSFER_BUF_LEN) break;
     }
 
-    LOG(INFO) << "onSendIncrToSlave----->>4";
-    if (in.eof()){
-        // 文件有数据并且读到了文件结尾，且有下一个aof文件，则更新slave复制信息
-        if (utils::File::hasNextAof(FLAGS_repl_dir,repl_aof_file_name)){
-            repl_aof_off = 0;
-        }
+    if (in.eof() && utils::File::hasNextAof(FLAGS_repl_dir,repl_aof_file_name)){
+        repl_aof_off = 0;
     }else{
-        repl_aof_off = in.tellg();
+        repl_aof_off +=  readed;
     }
+
     in.close();
     if (buffer.size() == 0) return;
 
     multi.set_aof_name(repl_aof_file_name);
     multi.set_aof_off(repl_aof_off);
     sendMsg(multi, client::MULTI);
+    LOG(INFO) << "onSendIncrToSlave----->>10-->>send size=" << readed << " pack_nums=" << pack_nums;
 }
 
 void naruto::narutoClient::close() const {

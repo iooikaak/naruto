@@ -6,6 +6,7 @@
 #define NARUTO_COMMAND_H
 
 #include <google/protobuf/message.h>
+#include "protocol/client.pb.h"
 
 namespace naruto{
 
@@ -16,7 +17,9 @@ namespace command {
 class Command {
 public:
     virtual void exec(narutoClient* client) = 0;
-    virtual void execMsg(uint16_t flag, uint16_t type, const unsigned char* msg, size_t n) = 0;
+    virtual client::command_reply execMsg(uint16_t flag, uint16_t type, const unsigned char* msg, size_t n){
+        return client::command_reply{};
+    };
     virtual ~Command() = default;
 };
 

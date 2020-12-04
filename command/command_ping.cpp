@@ -15,7 +15,3 @@ void naruto::command::CommandPing::exec(naruto::narutoClient *client) {
     client->lastinteraction = std::chrono::steady_clock::now();
     client->sendMsg(pong, client::Type::PONG);
 }
-
-void naruto::command::CommandPing::execMsg(uint16_t flag, uint16_t type, const unsigned char *msg, size_t n) {
-
-}

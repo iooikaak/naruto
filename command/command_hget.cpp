@@ -10,6 +10,7 @@
 #include "database/buckets.h"
 
 void naruto::command::CommandHget::exec(naruto::narutoClient *client) {
+    LOG(INFO) << "CommandHget.....0";
     client::command_hget hget;
     auto type = utils::Pack::deSerialize(client->rbuf, hget);
 
@@ -24,8 +25,4 @@ void naruto::command::CommandHget::exec(naruto::narutoClient *client) {
         }
     }
     client->sendMsg(reply, type);
-}
-
-void naruto::command::CommandHget::execMsg(uint16_t flag, uint16_t type, const unsigned char *msg, size_t n) {
-
 }
