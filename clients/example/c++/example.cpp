@@ -11,14 +11,14 @@
 void test01(){
     naruto::connection::ConnectOptions options;
     options.host = "127.0.0.1";
-    options.port = 7292;
+//    options.port = 7292;
     naruto::connection::ConnectionPoolOptions pool_opts;
     naruto::kunai::Options opts;
     opts.poolops = pool_opts;
     opts.connops = options;
     naruto::kunai::Kunai c(opts);
 //    for (int i = 0; i < 100000; ++i) {
-        auto reply = c.hget("test_4",{"field_0"});
+        auto reply = c.hget("test_0",{"field_0"});
         LOG(INFO) << "reply:" << "\n" << reply.DebugString();
 //        std::this_thread::sleep_for(std::chrono::milliseconds(100));
 //    }
@@ -49,9 +49,10 @@ void test03(){
     opts.poolops = pool_opts;
     opts.connops = options;
     naruto::kunai::Kunai c(opts);
-    int64_t count = 10000;
+    int64_t count = 1;
     for (int64_t i = 0; i < count; ++i) {
-        c.hset("test_" + std::to_string(i), "field_" + std::to_string(i), i);
+//        c.hset("test_" + std::to_string(i), "field_" + std::to_string(i), i+5);
+        c.hset("test_" + std::to_string(i), "field_" + std::to_string(i), "xxx_" +std::to_string(i));
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
@@ -59,6 +60,6 @@ void test03(){
 int main(int argc, char* argv[]){
 //    test01();
 //    test02();
-    test02();
+//    test02();
     test03();
 }

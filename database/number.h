@@ -21,6 +21,14 @@ class Number : public object{
 public:
     explicit Number(T v = 0) : data_(v){}
 
+    tensorflow::Type type() override {
+        return tensorflow::INT;
+    }
+
+    std::string typeName() override {
+        return tensorflow::Type_descriptor()->FindValueByNumber(type())->name();
+    }
+
     void serialize(tensorflow::Feature& feature) override{
         feature.set_type(tensorflow::INT);
         feature.mutable_int64_value()->set_value(data_);
@@ -54,6 +62,14 @@ template <>
 class Number<float> : public object{
 public:
     explicit Number(float v = 0) : data_(v){}
+
+    tensorflow::Type type() override {
+        return tensorflow::FLOAT;
+    }
+
+    std::string typeName() override {
+        return tensorflow::Type_descriptor()->FindValueByNumber(type())->name();
+    }
 
     void serialize(tensorflow::Feature& feature) override{
         std::shared_lock lock(mutex_);

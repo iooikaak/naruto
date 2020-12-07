@@ -14,6 +14,10 @@ class String : public ::naruto::database::object {
 public:
     explicit String(std::string v = "") : data_(std::move(v)) {}
 
+    tensorflow::Type type() override;
+
+    std::string typeName() override;
+
     void serialize(tensorflow::Feature&) override;
 
     void deSeralize(const tensorflow::Feature&) override;

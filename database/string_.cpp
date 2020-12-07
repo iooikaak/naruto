@@ -21,3 +21,11 @@ void naruto::database::String::deSeralize(const tensorflow::Feature& feature) {
 std::string naruto::database::String::get() { return data_; }
 
 void naruto::database::String::set(const std::string &value) { data_ = value; }
+
+tensorflow::Type naruto::database::String::type() {
+    return tensorflow::Type::BYTES;
+}
+
+std::string naruto::database::String::typeName() {
+    return tensorflow::Type_descriptor()->FindValueByNumber(type())->name();
+}

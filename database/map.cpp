@@ -50,3 +50,11 @@ void naruto::database::Map::put(const std::string &field, const std::string &v) 
     data_.insert(std::make_pair(field, v));
 }
 
+tensorflow::Type naruto::database::Map::type() {
+    return tensorflow::Type::MAP;
+}
+
+std::string naruto::database::Map::typeName() {
+    return tensorflow::Type_descriptor()->FindValueByNumber(type())->name();
+}
+

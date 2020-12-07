@@ -16,6 +16,8 @@ namespace naruto::database {
 class object {
 public:
     // 对象类型
+    virtual tensorflow::Type type() = 0;
+    virtual std::string typeName() = 0;
     virtual void serialize(tensorflow::Feature&) = 0;
     virtual void deSeralize(const tensorflow::Feature&) = 0;
     virtual void debugString() = 0;

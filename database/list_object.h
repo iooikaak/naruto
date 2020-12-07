@@ -95,6 +95,14 @@ class ListObject : public object, public listBase<T> {
 public:
     explicit ListObject(const std::vector<T>& data = {}) : listBase<T>(data){}
 
+    tensorflow::Type type() override {
+        return tensorflow::Type::UNKNOW;
+    }
+
+    std::string typeName() override {
+        return tensorflow::Type_descriptor()->FindValueByNumber(type())->name();
+    }
+
     void serialize(tensorflow::Feature& v) override{}
 
     void deSeralize(const tensorflow::Feature& v) override{}
@@ -106,6 +114,14 @@ template <>
 class ListObject<int64_t> : public object, public listBase<int64_t>{
 public:
     explicit ListObject(const std::vector<int64_t>& data = {}) : listBase<int64_t>(data){}
+
+    tensorflow::Type type() override {
+        return tensorflow::INT_LIST;
+    }
+
+    std::string typeName() override {
+        return tensorflow::Type_descriptor()->FindValueByNumber(type())->name();
+    }
 
     void serialize(tensorflow::Feature &feature) override {
         feature.set_type(tensorflow::INT_LIST);
@@ -131,6 +147,14 @@ class ListObject<float> : public object, public listBase<float>{
 public:
     explicit ListObject(const std::vector<float>& data = {}) : listBase<float>(data){}
 
+    tensorflow::Type type() override {
+        return tensorflow::FLOAT_LIST;
+    }
+
+    std::string typeName() override {
+        return tensorflow::Type_descriptor()->FindValueByNumber(type())->name();
+    }
+
     void serialize(tensorflow::Feature &feature) override {
         feature.set_type(tensorflow::FLOAT_LIST);
         for(const auto& v : data_){
@@ -154,7 +178,13 @@ class ListObject<std::string> : public object, public listBase<std::string>{
 public:
     explicit ListObject(const std::vector<std::string>& data = {}) : listBase<std::string>(data){}
 
-//    data::TYPE type() override { return data::STRING_LIST;}
+    tensorflow::Type type() override {
+        return tensorflow::BYTES_LIST;
+    }
+
+    std::string typeName() override {
+        return tensorflow::Type_descriptor()->FindValueByNumber(type())->name();
+    }
 
     void serialize(tensorflow::Feature &feature) override {
         feature.set_type(tensorflow::BYTES_LIST);

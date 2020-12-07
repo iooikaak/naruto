@@ -15,6 +15,11 @@ namespace naruto::database {
 class Map : public ::naruto::database::object{
 public:
     explicit Map(const std::unordered_map<std::string, std::string>& data = {});
+
+    tensorflow::Type type() override;
+
+    std::string typeName() override;
+
     void serialize(tensorflow::Feature&) override;
 
     void deSeralize(const tensorflow::Feature&) override;

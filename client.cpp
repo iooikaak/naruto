@@ -57,13 +57,6 @@ void naruto::narutoClient::onRead(ev::io &watcher, int events) {
                 << " type:" << client::Type_descriptor()->FindValueByNumber(type)->name();
 
     command::commands->fetch(type)->exec(this);
-    switch ((client::Type)type) {
-        case client::HSET:
-            replica->backlogFeed(worker_id, rbuf);
-            break;
-        default:
-            break;
-    }
 }
 
 void naruto::narutoClient::onSendBulkToSlave(ev::io& watcher, int event) {

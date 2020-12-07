@@ -11,6 +11,7 @@
 #include "database/buckets.h"
 #include "database/number.h"
 #include "database/string_.h"
+#include "replication.h"
 
 void naruto::command::CommandHset::exec(naruto::narutoClient *client) {
     LOG(INFO) << "CommandHset.....0";
@@ -19,6 +20,9 @@ void naruto::command::CommandHset::exec(naruto::narutoClient *client) {
     auto type = client->rbuf.getShort();
 
     auto reply = execMsg(flag, type, &client->rbuf.data()[PACK_HEAD_LEN], (len - PACK_HEAD_LEN));
+    if (reply.errcode() == 0){
+        replica->backlogFeed(client->worker_id, client->rbuf);
+    }
     client->sendMsg(reply, client::HSET);
 }
 
@@ -45,32 +49,21 @@ naruto::command::CommandHset::execMsg(uint16_t flag, uint16_t type, const unsign
     }
 
     client::command_reply reply;
-    if (hset.value().has_bytes_v()){
+    reply.set_errcode(0);
+    if (hset.value().has_bytes_v() &&data->ptr->type() == tensorflow::Type::BYTES){
         auto element = data->cast<database::String>();
-        if (!element){
-            reply.set_errcode(1);
-            reply.set_errmsg("data type not string");
-        }else{
-            element->set(hset.value().bytes_v().value());
-        }
-    } else if (hset.value().has_float_v()){
+        element->set(hset.value().bytes_v().value());
+
+    } else if (hset.value().has_float_v() && data->ptr->type() == tensorflow::Type::FLOAT){
         auto element = data->cast<database::Number<float>>();
-        if (!element){
-            reply.set_errcode(1);
-            reply.set_errmsg("data type not float");
-        }else{
-            element->set(hset.value().float_v().value());
-        }
-    } else if (hset.value().has_int64_v()){
+        element->set(hset.value().float_v().value());
+
+    } else if (hset.value().has_int64_v() && data->ptr->type() == tensorflow::Type::INT){
         auto element = data->cast<database::Number<int64_t>>();
-        if (!element){
-            LOG(INFO) << "1";
-            reply.set_errcode(1);
-            reply.set_errmsg("data type not int64");
-        }else{
-            LOG(INFO) << "2";
-            element->set(hset.value().int64_v().value());
-        }
+        element->set(hset.value().int64_v().value());
+    }else{
+        reply.set_errcode(1);
+        reply.set_errmsg("data type is " + data->ptr->typeName());
     }
     data->lru = std::chrono::system_clock::now();
     return reply;

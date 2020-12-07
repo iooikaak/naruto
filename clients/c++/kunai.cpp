@@ -54,6 +54,8 @@ void naruto::kunai::Kunai::hset(const std::string &key, const std::string &field
     execute(hset, client::Type::HSET, reply);
     if (reply.errcode() != 0){
         LOG(ERROR) << "Kunai hset error (code:" << reply.errcode() << " errmsg:" << reply.errmsg() << ")";
+    }else{
+        LOG(INFO) << "Reponse " << reply.DebugString();
     }
 }
 
@@ -67,7 +69,7 @@ void naruto::kunai::Kunai::hset(const std::string &key, const std::string &field
     if (reply.errcode() != 0){
         LOG(ERROR) << "Kunai hset error (code:" << reply.errcode() << " errmsg:" << reply.errmsg() << ")";
     }else{
-        LOG(INFO) << reply.DebugString();
+        LOG(INFO) << "Reponse " << reply.DebugString();
     }
 }
 
