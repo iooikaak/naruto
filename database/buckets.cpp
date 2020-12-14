@@ -5,6 +5,7 @@
 #include "buckets.h"
 
 #include "utils/pack.h"
+#include "utils/crc.h"
 #include "number.h"
 #include "map.h"
 #include "string_.h"
@@ -36,15 +37,15 @@ int naruto::database::Buckets::dump(const std::string& filename) {
 }
 
 std::shared_ptr<naruto::database::element> naruto::database::Buckets::get(const std::string & key, const std::string & field) {
-    return buckets_[hash_(key) % bucket_size_]->get(key, field);
+    return buckets_[hash(key)]->get(key, field);
 }
 
 void naruto::database::Buckets::put(const std::string & key, const std::string & field , std::shared_ptr<element> v) {
-    return buckets_[hash_(key) % bucket_size_]->put(key, field, v);
+    return buckets_[hash(key)]->put(key, field, v);
 }
 
 void naruto::database::Buckets::del(const std::string & key, const std::string & field) {
-    buckets_[hash_(key) % bucket_size_]->del(key, field);
+    buckets_[hash(key)]->del(key, field);
 }
 
 int naruto::database::Buckets::size() {
@@ -60,7 +61,7 @@ void naruto::database::Buckets::flush() {
 }
 
 void naruto::database::Buckets::parse(uint16_t flag, uint16_t type, const unsigned char * msg, size_t body_size) {
-    if (type != client::Type::OBJECT) return;
+    if (type != cmdtype::Type::REPL_OBJECT) return;
 
     tensorflow::Features features;
     features.ParseFromArray(msg, int(body_size));
@@ -157,8 +158,12 @@ void naruto::database::bucket::dump(std::ostream* out) {
             v.second->ptr->serialize(feature);
             (*features.mutable_feature())[v.first] = std::move(feature);
         }
-        utils::Pack::serialize(features, client::Type::OBJECT, out);
+        utils::Pack::serialize(features, cmdtype::Type::REPL_OBJECT, out);
     }
+}
+
+int naruto::database::Buckets::hash(const std::string &key) {
+    return utils::Crc::crc16(key.c_str(), key.size()) % SLOTS_SIZE;
 }
 
 std::shared_ptr<naruto::database::Buckets> naruto::database::buckets = std::make_shared<naruto::database::Buckets>();

@@ -49,17 +49,16 @@ void test03(){
     opts.poolops = pool_opts;
     opts.connops = options;
     naruto::kunai::Kunai c(opts);
-    int64_t count = 1;
+    int64_t count = 1000;
     for (int64_t i = 0; i < count; ++i) {
-//        c.hset("test_" + std::to_string(i), "field_" + std::to_string(i), i+5);
-        c.hset("test_" + std::to_string(i), "field_" + std::to_string(i), "xxx_" +std::to_string(i));
+        c.hset("test_" + std::to_string(i), "field_" + std::to_string(i), i+5);
+//        c.hset("test_" + std::to_string(i), "field_" + std::to_string(i), "xxx_" +std::to_string(i));
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
 
 int main(int argc, char* argv[]){
 //    test01();
-//    test02();
 //    test02();
     test03();
 }

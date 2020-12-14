@@ -4,16 +4,17 @@
 
 #include "command_hset.h"
 
-#include "client.h"
+#include "link/client_link.h"
 #include "protocol/client.pb.h"
 #include "protocol/command_types.pb.h"
 #include "utils/pack.h"
 #include "database/buckets.h"
 #include "database/number.h"
 #include "database/string_.h"
-#include "replication.h"
+#include "replication/replication.h"
 
-void naruto::command::CommandHset::exec(naruto::narutoClient *client) {
+void naruto::command::CommandHset::exec(void *link) {
+    auto client = static_cast<link::clientLink*>(link);
     LOG(INFO) << "CommandHset.....0";
     auto len =  client->rbuf.getInt();
     auto flag = client->rbuf.getShort();
@@ -21,9 +22,9 @@ void naruto::command::CommandHset::exec(naruto::narutoClient *client) {
 
     auto reply = execMsg(flag, type, &client->rbuf.data()[PACK_HEAD_LEN], (len - PACK_HEAD_LEN));
     if (reply.errcode() == 0){
-        replica->backlogFeed(client->worker_id, client->rbuf);
+        replica::replptr->backlogFeed(client->worker_id, client->rbuf);
     }
-    client->sendMsg(reply, client::HSET);
+    client->sendMsg(reply, cmdtype::CLIENT_HSET);
 }
 
 client::command_reply

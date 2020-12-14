@@ -13,7 +13,7 @@ namespace naruto::command {
 
 class CommandAof : public Command{
 public:
-    void exec(narutoClient *client) override;
+    void exec(void *link) override;
 
     client::command_reply execMsg(uint16_t flag, uint16_t type, const unsigned char *msg, size_t n) override;
 

@@ -62,3 +62,7 @@ timeval naruto::utils::Basic::to_timeval(const std::chrono::milliseconds & durat
     tv.tv_usec = (duration.count() % 1000) * 1000;
     return tv;
 }
+
+int64_t naruto::utils::Basic::to_ms(const std::chrono::system_clock::time_point &time) {
+    return std::chrono::duration_cast<std::chrono::milliseconds>(time.time_since_epoch()).count();
+}

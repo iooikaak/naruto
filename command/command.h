@@ -8,22 +8,17 @@
 #include <google/protobuf/message.h>
 #include "protocol/client.pb.h"
 
-namespace naruto{
-
-class narutoClient;
-
-namespace command {
+namespace naruto::command {
 
 class Command {
 public:
-    virtual void exec(narutoClient* client) = 0;
+    virtual void exec(void* client) = 0;
     virtual client::command_reply execMsg(uint16_t flag, uint16_t type, const unsigned char* msg, size_t n){
         return client::command_reply{};
     };
     virtual ~Command() = default;
 };
 
-}
 }
 
 

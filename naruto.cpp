@@ -4,10 +4,9 @@
 #include "naruto.h"
 
 #include <fstream>
-#include "client.h"
+#include "link/client_link.h"
+#include "replication/replica_link.h"
 #include "parameter/parameter.h"
-#include "connect_worker.h"
-#include "replication.h"
 
 namespace naruto{
 
@@ -34,7 +33,7 @@ Naruto::~Naruto() { delete [] workers; }
 
 void Naruto::start() {
     this->initializer();
-    replica->initializer();
+    replica::replptr->initializer();
     _init_workers();
     _init_signal();
     _init_cron();
@@ -55,14 +54,11 @@ void Naruto::onAccept(ev::io& watcher, int events) {
     }
 
     // 创建新的client连接
-    auto client = new narutoClient();
-    client->connect = std::make_shared<connection::Connect>(client_sd);
-    client->remote_addr = client->connect->remoteAddr();
+    int index = connect_nums_ % worker_num;
+    auto client = new link::clientLink(index,client_sd);
     // 唤醒worker
     LOG(INFO) << "onAccept OK! dispatch connect, client_sd=" << client->connect->fd() << " watcher.fd=" << watcher.fd
         << " addr:" << client->remote_addr;
-    int index = connect_nums_ % worker_num;
-    client->worker_id = index; // record work id
     workers[index].conns.push_back(client);
     workers[index].async.send();
     connect_nums_++;
@@ -81,18 +77,15 @@ void Naruto::onAcceptRc(ev::io &watcher, int event) {
     }
 
     // 创建新的client连接
-    auto client = new narutoClient();
-    client->connect = std::make_shared<connection::Connect>(client_sd);
-    client->worker_id = worker_num; // record work id
-    client->remote_addr = client->connect->remoteAddr();
+    auto client = new replica::replicaLink(client_sd);
     // 唤醒worker
     LOG(INFO) << "onAcceptRc OK! dispatch connect, client_sd=" << client->connect->fd() << " watcher.fd=" << watcher.fd
               << " addr:" << client->connect->remoteAddr();
 
-    client->cw_rio = std::make_shared<ev::io>();
-    client->cw_rio->set<naruto::narutoClient, &naruto::narutoClient::onRead>(client);
-    client->cw_rio->set(ev::get_default_loop());
-    client->cw_rio->start(client->connect->fd(), ev::READ);
+    client->c_rio = std::make_shared<ev::io>();
+    client->c_rio->set<replica::replicaLink, &replica::replicaLink::onRead>(client);
+    client->c_rio->set(ev::get_default_loop());
+    client->c_rio->start(client->connect->fd(), ev::READ);
     connect_nums_++;
 }
 
@@ -112,7 +105,7 @@ void Naruto::onSignal(ev::sig& signal, int) {
     LOG(INFO) << "onSignal start...2";
     // 关闭cluster工作线程
     s->cluster_->stop();
-    replica->stop();
+    replica::replptr->stop();
 
     std::unique_lock<std::mutex> lck(mux);
     while (exit_success_workers < worker_num){

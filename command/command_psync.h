@@ -11,7 +11,7 @@ namespace naruto::command {
 
 class CommandPsync : public Command {
 public:
-    void exec(narutoClient *client) override;
+    void exec(void* link) override;
     ~CommandPsync() override = default;
 };
 

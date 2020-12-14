@@ -31,7 +31,7 @@ naruto::kunai::Kunai::hget(const std::string &key, std::initializer_list<std::st
         hget.add_fields(v);
     }
     client::command_hget_reply reply;
-    execute(hget, client::Type::HGET, reply);
+    execute(hget, cmdtype::Type::CLIENT_HGET, reply);
     return reply;
 }
 
@@ -41,7 +41,7 @@ client::command_reply naruto::kunai::Kunai::slaveof(const std::string &ip, int p
     sof.set_port(port);
 
     client::command_reply reply;
-    execute(sof, client::Type::SLAVEOF, reply);
+    execute(sof, cmdtype::Type::REPL_SLAVEOF, reply);
     return reply;
 }
 
@@ -51,7 +51,7 @@ void naruto::kunai::Kunai::hset(const std::string &key, const std::string &field
     hset.set_field(field);
     hset.mutable_value()->mutable_bytes_v()->set_value(v);
     client::command_reply reply;
-    execute(hset, client::Type::HSET, reply);
+    execute(hset, cmdtype::Type::CLIENT_HSET, reply);
     if (reply.errcode() != 0){
         LOG(ERROR) << "Kunai hset error (code:" << reply.errcode() << " errmsg:" << reply.errmsg() << ")";
     }else{
@@ -65,7 +65,7 @@ void naruto::kunai::Kunai::hset(const std::string &key, const std::string &field
     hset.set_field(field);
     hset.mutable_value()->mutable_int64_v()->set_value(v);
     client::command_reply reply;
-    execute(hset, client::Type::HSET, reply);
+    execute(hset, cmdtype::Type::CLIENT_HSET, reply);
     if (reply.errcode() != 0){
         LOG(ERROR) << "Kunai hset error (code:" << reply.errcode() << " errmsg:" << reply.errmsg() << ")";
     }else{
@@ -79,7 +79,7 @@ void naruto::kunai::Kunai::hset(const std::string &key, const std::string &field
     hset.set_field(field);
     hset.mutable_value()->mutable_float_v()->set_value(v);
     client::command_reply reply;
-    execute(hset, client::Type::HSET, reply);
+    execute(hset, cmdtype::Type::CLIENT_HSET, reply);
     if (reply.errcode() != 0){
         LOG(ERROR) << "Kunai hset error (code:" << reply.errcode() << " errmsg:" << reply.errmsg() << ")";
     }
@@ -91,7 +91,7 @@ void naruto::kunai::Kunai::hincr(const std::string &key, const std::string &fiel
     hincr.set_field(field);
     hincr.mutable_value()->mutable_float_v()->set_value(v);
     client::command_reply reply;
-    execute(hincr, client::Type::HINCR, reply);
+    execute(hincr, cmdtype::Type::CLIENT_HINCR, reply);
     if (reply.errcode() != 0){
         LOG(ERROR) << "Kunai hincr error (code:" << reply.errcode() << " errmsg:" << reply.errmsg() << ")";
     }
@@ -103,7 +103,7 @@ void naruto::kunai::Kunai::hincr(const std::string &key, const std::string &fiel
     hincr.set_field(field);
     hincr.mutable_value()->mutable_int64_v()->set_value(v);
     client::command_reply reply;
-    execute(hincr, client::Type::HINCR, reply);
+    execute(hincr, cmdtype::Type::CLIENT_HINCR, reply);
     if (reply.errcode() != 0){
         LOG(ERROR) << "Kunai hincr error (code:" << reply.errcode() << " errmsg:" << reply.errmsg() << ")";
     }

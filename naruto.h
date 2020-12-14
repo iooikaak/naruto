@@ -24,7 +24,7 @@
 #include "types.h"
 #include "cluster.h"
 #include "utils/net.h"
-#include "replication.h"
+#include "replication/replication.h"
 #include "connect_worker.h"
 
 namespace naruto{

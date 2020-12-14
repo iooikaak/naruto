@@ -13,7 +13,7 @@ namespace naruto::command {
 
 class CommandHset : public Command{
 public:
-    void exec(narutoClient *client) override;
+    void exec(void *link) override;
     client::command_reply execMsg(uint16_t,uint16_t,const unsigned char*, size_t) override;
     ~CommandHset() override = default;
 };

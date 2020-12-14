@@ -1,6 +1,8 @@
 syntax="proto3";
 package cluster;
 
+import "client.proto";
+
 // 消息发送者信息
 message command_header{
     // 消息发送者的配置纪元
@@ -9,11 +11,6 @@ message command_header{
     // 如果消息发送者是一个主节点，那么这里记录的是消息发送者的配置纪元
     // 如果消息发送者是一个从节点，那么这里记录的是消息发送者正在复制的主节点的配置纪元
     int64 config_epoch = 2;
-
-    // 节点的复制偏移量
-    // 如果是 主节点 则为复制偏移量
-    // 如果是从节点 则为已经处理的 复制偏移量
-    int64 offset = 3;
 
     // 消息发送者的名字（ID）
     string sender_name = 4;
@@ -33,6 +30,12 @@ message command_header{
 
     // 消息发送者所处集群的状态
     int32 state = 9;
+
+    // 节点的复制偏移量
+    // 如果是 主节点 则为复制偏移量
+    // 如果是从节点 则为已经处理的 复制偏移量
+//    string repl_aof_file_name = 10;
+//    int64 offset = 11;
 }
 
 message gossip{
@@ -72,4 +75,40 @@ message command_update{
     int64 config_epoch = 2;
     string node_name = 3;
     repeated bool slots = 4;
+}
+
+message command_meet{
+    string ip = 1;
+    int32 port = 2;
+}
+
+message command_nodes{
+    int64 filter_flags = 1;
+}
+
+message command_node_data{
+    string addr = 1;
+    int64 ctime = 2;
+    string name = 3;
+    int64 flags = 4;
+    repeated string flags_name = 5;
+    int64 config_epoch = 6;
+    repeated bool slots = 7;
+    int64 numslots = 8;
+    int64 numslaves = 9;
+    int64 ping_sent = 10;
+    int64 pong_received = 11;
+    int64 fail_time = 12;
+    int64 voted_time = 13;
+    int64 repl_offset_time = 14;
+    string repl_aof_name = 15;
+    int64 repl_offset = 16;
+    repeated string migrating_slots_to = 17;
+    repeated string importing_slots_from = 18;
+    string slave_of = 19;
+}
+
+message command_nodes_reply{
+    client.command_reply state = 1;
+    repeated command_node_data nodes = 2;
 }

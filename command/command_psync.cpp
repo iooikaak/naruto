@@ -4,21 +4,21 @@
 
 #include "command_psync.h"
 
-#include "client.h"
 #include "utils/pack.h"
 #include "utils/file.h"
-#include "replication.h"
+#include "replication/replication.h"
 #include "protocol/replication.pb.h"
 
 DECLARE_string(repl_dir);
 DECLARE_string(repl_database_filename);
 DECLARE_double(repl_aof_interval);
 
-void naruto::command::CommandPsync::exec(naruto::narutoClient *client) {
+void naruto::command::CommandPsync::exec(void* link) {
+    auto client = static_cast<replica::replicaLink*>(link);
     replication::command_psync psync;
     auto type = utils::Pack::deSerialize(client->rbuf, psync);
 
-    const auto& rc = replica->getReplConf();
+    const auto& rc = replica::replptr->getReplConf();
 
     replication::command_psync_reply reply;
     reply.set_errcode(0);
@@ -49,14 +49,14 @@ void naruto::command::CommandPsync::exec(naruto::narutoClient *client) {
         case 1: // 还没有生成DB，使用第一个aof文件
         {
             reply.set_psync_type(replication::PARTSYNC);
-            client->repl_state = replState::CONNECTED;
+            client->repl_state = replica::replState::CONNECTED;
             client->repl_aof_off = 0;
             client->repl_aof_file_name = "naruto.aof.0";
             reply.set_repl_aof_off(client->repl_aof_off);
             reply.set_repl_aof_file_name(client->repl_aof_file_name);
 
             client->repl_tio = std::make_shared<ev::timer>();
-            client->repl_tio->set<narutoClient, &narutoClient::onSendIncrToSlave>(client);
+            client->repl_tio->set<replica::replicaLink, &replica::replicaLink::onSendIncrToSlave>(client);
             client->repl_tio->set(ev::get_default_loop());
             client->repl_tio->start(FLAGS_repl_aof_interval, FLAGS_repl_aof_interval);
             break;
@@ -65,9 +65,9 @@ void naruto::command::CommandPsync::exec(naruto::narutoClient *client) {
         {
             if (rc.db_dump_aof_name.empty()){
                 reply.set_psync_type(replication::TRYSYNC);
-                client->repl_state = replState::WAIT_BGSAVE;
+                client->repl_state = replica::replState::WAIT_BGSAVE;
                 // 触发一次bgsave
-                replica->bgsave();
+                replica::replptr->bgsave();
             }else{
                 std::string dbname = FLAGS_repl_dir + "/" + FLAGS_repl_database_filename;
                 int64_t size = utils::File::size(dbname);
@@ -75,7 +75,7 @@ void naruto::command::CommandPsync::exec(naruto::narutoClient *client) {
                 reply.set_repl_database_size(size);
                 reply.set_repl_aof_file_name(rc.db_dump_aof_name);
                 reply.set_repl_aof_off(rc.db_dump_aof_off);
-                client->repl_state = replState::TRANSFOR;
+                client->repl_state = replica::replState::TRANSFOR;
                 client->repl_dbsize = size;
                 client->repl_dboff = 0;
                 client->repl_db_f = std::make_shared<std::ifstream>(dbname, std::ios::in);
@@ -83,7 +83,7 @@ void naruto::command::CommandPsync::exec(naruto::narutoClient *client) {
                 client->repl_aof_off = rc.db_dump_aof_off;
 
                 auto* w = new ev::io;
-                w->set<narutoClient, &narutoClient::onSendBulkToSlave>(client);
+                w->set<replica::replicaLink, &replica::replicaLink::onSendBulkToSlave>(client);
                 w->set(ev::get_default_loop());
                 w->start(client->connect->fd(), ev::WRITE);
             }
@@ -92,14 +92,14 @@ void naruto::command::CommandPsync::exec(naruto::narutoClient *client) {
         case 3: // 部分同步
         {
             reply.set_psync_type(replication::PARTSYNC);
-            client->repl_state = replState::CONNECTED;
+            client->repl_state = replica::replState::CONNECTED;
             client->repl_aof_file_name = psync.repl_aof_file_name();
             client->repl_aof_off = psync.repl_aof_off();
             reply.set_repl_aof_file_name(client->repl_aof_file_name);
             reply.set_repl_aof_off(client->repl_aof_off);
 
             client->repl_tio = std::make_shared<ev::timer>();
-            client->repl_tio->set<narutoClient, &narutoClient::onSendIncrToSlave>(client);
+            client->repl_tio->set<replica::replicaLink, &replica::replicaLink::onSendIncrToSlave>(client);
             client->repl_tio->set(ev::get_default_loop());
             client->repl_tio->start(FLAGS_repl_aof_interval, FLAGS_repl_aof_interval);
             break;
@@ -110,6 +110,6 @@ void naruto::command::CommandPsync::exec(naruto::narutoClient *client) {
         }
     }
 
-    client->flag |= (unsigned) narutoClient::flags::SLAVE;
+    client->flag |= (unsigned) replica::replicaLink::flags::SLAVE;
     client->write(reply, type);
 }

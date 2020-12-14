@@ -4,12 +4,13 @@
 
 #include "command_hget.h"
 
-#include "client.h"
+#include "link/client_link.h"
 #include "protocol/client.pb.h"
 #include "utils/pack.h"
 #include "database/buckets.h"
 
-void naruto::command::CommandHget::exec(naruto::narutoClient *client) {
+void naruto::command::CommandHget::exec(void *link) {
+    auto client = static_cast<link::clientLink*>(link);
     LOG(INFO) << "CommandHget.....0";
     client::command_hget hget;
     auto type = utils::Pack::deSerialize(client->rbuf, hget);

@@ -4,13 +4,14 @@
 
 #include "command_nf.h"
 
-#include "client.h"
+#include "link//client_link.h"
 #include "protocol/client.pb.h"
 #include "protocol/command_types.pb.h"
 
-void naruto::command::CommandNF::exec(naruto::narutoClient *client) {
+void naruto::command::CommandNF::exec(void *link) {
+    auto client = static_cast<link::clientLink*>(link);
     client::command_reply reply;
     reply.set_errcode(1);
     reply.set_errmsg("Command Not Found");
-    client->sendMsg(reply, client::Type::NF);
+    client->sendMsg(reply, cmdtype::Type::NF);
 }

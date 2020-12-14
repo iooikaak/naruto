@@ -11,6 +11,9 @@ include_directories(unittest)
 include_directories(connection)
 include_directories(command)
 include_directories(database)
+include_directories(link)
+include_directories(replication)
+include_directories(cluster)
 include_directories(third_party)
 include_directories(/usr/local/include)
 
@@ -27,6 +30,9 @@ aux_source_directory(connection CONNECTION_SRC)
 aux_source_directory(database DATABASE_SRC)
 aux_source_directory(command COMMAND_SRC)
 aux_source_directory(sink SINK_SRC)
+aux_source_directory(link LINK_SRC)
+aux_source_directory(cluster CLUSTER_SRC)
+aux_source_directory(replication REPLICA_SRC)
 list(REMOVE_ITEM NARUTO_SRC ./main.cpp)
 
 #aux_source_directory(. NARUTO_SRC)
@@ -52,7 +58,10 @@ add_executable(naruto main.cpp
         ${UTILS_SRC}
         ${PROTOCOL_SRC}
         ${CONNECTION_SRC}
-        ${SINK_SRC})
+        ${SINK_SRC}
+        ${REPLICA_SRC}
+        ${LINK_SRC}
+        ${CLUSTER_SRC})
 
 add_executable(ut ./unittest/ut_main.cpp
         ${DATABASE_SRC}
@@ -61,4 +70,7 @@ add_executable(ut ./unittest/ut_main.cpp
         ${UTILS_SRC}
         ${PROTOCOL_SRC}
         ${CONNECTION_SRC}
-        ${SINK_SRC})
+        ${SINK_SRC}
+        ${REPLICA_SRC}
+        ${LINK_SRC}
+        ${CLUSTER_SRC})

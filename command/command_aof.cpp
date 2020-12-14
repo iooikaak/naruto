@@ -3,12 +3,14 @@
 //
 
 #include "command_aof.h"
-#include "client.h"
+#include "replication/replica_link.h"
 #include "protocol/client.pb.h"
-#include "replication.h"
+#include "replication/replication.h"
 #include "commands.h"
+#include "utils/pack.h"
 
-void naruto::command::CommandAof::exec(naruto::narutoClient *client) {
+void naruto::command::CommandAof::exec(void *link) {
+    auto client = static_cast<replica::replicaLink*>(link);
     client::command_aof commandAof;
     utils::Pack::deSerialize(client->rbuf, commandAof);
     for (int i = 0; i < commandAof.commands_size(); ++i) {
@@ -16,7 +18,7 @@ void naruto::command::CommandAof::exec(naruto::narutoClient *client) {
         auto msg = (const unsigned char*)commandAof.commands(i).c_str();
         auto n = commandAof.commands(i).size();
         commands->fetch(type)->execMsg(0, type, msg, n);
-        replica->backlogFeed(client->worker_id, msg, n, type);
+        replica::replptr->backlogFeed(client->worker_id, msg, n, type);
     }
     client->repl_aof_file_name = commandAof.aof_name();
     client->repl_aof_off = commandAof.aof_off();

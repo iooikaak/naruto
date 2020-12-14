@@ -16,6 +16,7 @@ class Basic {
 public:
     static std::string genRandomID(unsigned int len = DEFAULT_RUN_ID_LEN);
     static timeval to_timeval(const std::chrono::milliseconds&);
+    static int64_t to_ms(const std::chrono::system_clock::time_point& time);
 };
 
 }

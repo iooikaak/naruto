@@ -6,8 +6,6 @@
 
 #include "connect_worker.h"
 
-#include "replication.h"
-
 namespace naruto{
 
 ConnectWorker::ConnectWorker(): loop(), async(), conns(0), tid(0){}
@@ -44,15 +42,15 @@ void ConnectWorker::onAsync(ev::async& watcher, int events) {
     auto worker = static_cast<ConnectWorker*>(watcher.data);
     while (!worker->conns.empty()){
         // 这里的连接包含了slave的连接
-        narutoClient* nc = worker->conns.front();
+        link::clientLink* nc = worker->conns.front();
         if (!nc) return;
 
         worker->conns.pop_front();
 
-        nc->cw_rio = std::make_shared<ev::io>();
-        nc->cw_rio->set<naruto::narutoClient, &naruto::narutoClient::onRead>(nc);
-        nc->cw_rio->set(worker->loop);
-        nc->cw_rio->start(nc->connect->fd(), ev::READ);
+        nc->c_rio = std::make_shared<ev::io>();
+        nc->c_rio->set<link::clientLink, &link::clientLink::onRead>(nc);
+        nc->c_rio->set(worker->loop);
+        nc->c_rio->start(nc->connect->fd(), ev::READ);
         worker->conn_nums++;
     }
 }

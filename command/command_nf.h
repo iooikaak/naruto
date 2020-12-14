@@ -13,7 +13,7 @@ namespace naruto::command{
 class CommandNF : public Command {
 public:
 
-    void exec(narutoClient *client) override;
+    void exec(void *client) override;
 
     ~CommandNF() override = default;
 };

@@ -16,7 +16,7 @@
 #include "protocol/features.pb.h"
 #include "protocol/client.pb.h"
 
-#define DEFAULT_BUCKET_SIZE 16
+#define SLOTS_SIZE 16384
 #define DEFAULT_BUCKET_ELEMENT_SIZE 50000
 #define DEFAULT_BUCKET_ELEMENT_COLUMN_SIZE 10
 
@@ -57,7 +57,7 @@ private:
 
 class Buckets {
 public:
-    explicit Buckets(int size = DEFAULT_BUCKET_SIZE);
+    explicit Buckets(int size = SLOTS_SIZE);
     Buckets(const Buckets&) = delete;
     Buckets&operator=(const Buckets&) = delete;
 
@@ -70,9 +70,9 @@ public:
     int size();
     void flush();
 
-private:
+    static int hash(const std::string&key);
 
-    std::hash<std::string> hash_;
+private:
     int bucket_size_;
     std::vector<std::shared_ptr<bucket>> buckets_;
 };

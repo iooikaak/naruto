@@ -3,6 +3,7 @@
 .idea
 cmake-build-debug
 test
+notuse
 naruto.db
 CmakeFiles
 cmake_install.cmake

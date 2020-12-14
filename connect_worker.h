@@ -12,12 +12,11 @@
 #include <arpa/inet.h>
 #include <list>
 #include <glog/logging.h>
-
-#include "client.h"
 #include "global.h"
 #include "utils/errors.h"
 #include "utils/bytes.h"
 #include "connection/connection.h"
+#include "link/client_link.h"
 
 // ConnectWorker 对应一个工作线程
 // 每个线程会并行处理客户端 io
@@ -39,7 +38,7 @@ public:
     ev::async async;
     // 用于触发停止worker线程
     ev::async stop_async;
-    std::deque<narutoClient*> conns;
+    std::deque<link::clientLink*> conns;
     uint64_t conn_nums;
 };
 

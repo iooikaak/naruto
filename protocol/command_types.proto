@@ -1,16 +1,42 @@
 syntax="proto3";
-package client;
+package cmdtype;
 
 enum Type{
   NF = 0;
-  OBJECT = 1;
-  MULTI = 2;
-  PING = 3;
-  PONG = 4;
-  ACK = 5;
-  PSYNC = 6;
-  SLAVEOF = 7;
-  HSET = 8;
-  HGET = 9;
-  HINCR = 10;
+  // replicate
+  REPL_OBJECT = 1;
+  REPL_MULTI = 2;
+  REPL_PING = 3;
+  REPL_PONG = 4;
+  REPL_ACK = 5;
+  REPL_PSYNC = 6;
+  REPL_SLAVEOF = 7;
+
+  // cluster
+  CLUSTER_MEET = 1001; // 将给定地址的节点添加到当前节点所处的集群里面
+  CLUSTER_INFO_NODES = 1002;
+  CLUSTER_SLOTS_FLUSH = 1003;
+  CLUSTER_SLOTS_ADD = 1004;
+  CLUSTER_SLOTS_DEL = 1005;
+  CLUSTER_SLOTS_MIGRATING = 1006;
+  CLUSTER_SLOTS_IMPORTING = 1007;
+  CLUSTER_SLOTS_NODE = 1008; // 将未指派 slot 指派给 node id 指定的节点
+  CLUSTER_SLOTS_STABLE = 1009; // 取消对槽 slot 的迁移或者导入
+  CLUSTER_INFO = 1010;
+  CLUSTER_SAVE_CONF = 1011;
+  CLUSTER_KEY_SLOT = 1012;
+  CLUSTER_COUNT_KEYS_IN_SLOT = 1013;
+  CLUSTER_GET_KEYS_IN_SLOT = 1014;
+  CLUSTER_FORGET = 1015;
+  CLUSTER_REPLICATE = 1016;
+  CLUSTER_INFO_SLAVES = 1017;
+  CLUSTER_FAILOVER = 1018;
+  CLUSTER_SET_EPOCH = 1019;
+  CLUSTER_RESET = 1020; // 集群重置
+  CLUSTER_PING = 1021;
+
+  // client
+  CLIENT_HSET = 2000;
+  CLIENT_HGET = 2001;
+  CLIENT_HINCR = 2002;
 }
